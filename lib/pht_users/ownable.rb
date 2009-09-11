@@ -1,0 +1,1 @@
+../../../pht_users/lib/pht_users/ownable.rb

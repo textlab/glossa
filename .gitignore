@@ -1,0 +1,13 @@
+*.log
+tmp
+db/*.sqlite3
+config/database.yml
+*~
+*#
+public/javascripts/appscripts.js
+doc
+.idea
+obs_reset_app
+start.sh
+restart.sh
+
