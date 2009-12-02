@@ -21,6 +21,8 @@ Rails::Initializer.run do |config|
   # config.gem "aws-s3", :lib => "aws/s3"
   config.gem "binarylogic-authlogic", :source => "http://gems.github.com", :lib => "authlogic"
   config.gem "be9-acl9", :source => "http://gems.github.com", :lib => "acl9"
+  config.gem "rspec", :lib => false, :version => ">= 1.2.0"
+  config.gem "rspec-rails", :lib => false, :version => ">= 1.2.0"  
 
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named
