@@ -1,1 +1,0 @@
-../../../pht_users/app/models/pht_company.rb
