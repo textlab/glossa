@@ -12,14 +12,15 @@
 ActiveRecord::Schema.define(:version => 20091203091352) do
 
   create_table "corpus", :force => true do |t|
-    t.string   "name"
+    t.string   "name",       :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "language_configs", :force => true do |t|
     t.integer  "corpus_id"
-    t.string   "name"
+    t.string   "name",       :null => false
+    t.string   "tagger"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
