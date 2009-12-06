@@ -9,10 +9,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091203091352) do
+ActiveRecord::Schema.define(:version => 20091206124203) do
 
-  create_table "corpus", :force => true do |t|
+  create_table "corpora", :force => true do |t|
     t.string   "name",       :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "corpora_metadata_categories", :force => true do |t|
+    t.integer  "corpus_id",            :null => false
+    t.integer  "metadata_category_id", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -21,6 +28,14 @@ ActiveRecord::Schema.define(:version => 20091203091352) do
     t.integer  "corpus_id"
     t.string   "name",       :null => false
     t.string   "tagger"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "metadata_categories", :force => true do |t|
+    t.string   "name",       :null => false
+    t.string   "fieldtype",  :null => false
+    t.string   "selector"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

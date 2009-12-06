@@ -25,4 +25,8 @@ describe Corpus do
   it "should have zero or more language configs" do
     @new_corpus.should respond_to(:language_configs)
   end
+
+  it "has and belongs to many metadata categories" do
+    @new_corpus.should respond_to(:metadata_categories)
+  end
 end

@@ -1,6 +1,6 @@
 class CreateCorpus < ActiveRecord::Migration
   def self.up
-    create_table :corpus do |t|
+    create_table :corpora do |t|
       t.string :name, :null => false
 
       t.timestamps
