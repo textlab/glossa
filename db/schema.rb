@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091206173444) do
+ActiveRecord::Schema.define(:version => 20091209231651) do
 
   create_table "corpora", :force => true do |t|
     t.string   "name",       :null => false
@@ -20,6 +20,12 @@ ActiveRecord::Schema.define(:version => 20091206173444) do
   create_table "corpora_metadata_categories", :force => true do |t|
     t.integer  "corpus_id",            :null => false
     t.integer  "metadata_category_id", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "corpus_texts", :force => true do |t|
+    t.integer  "corpus_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
