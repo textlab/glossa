@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091209231651) do
+ActiveRecord::Schema.define(:version => 20091210093443) do
 
   create_table "corpora", :force => true do |t|
     t.string   "name",       :null => false
@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(:version => 20091209231651) do
   end
 
   create_table "searches", :force => true do |t|
-    t.string   "query"
+    t.string   "query",         :null => false
     t.boolean  "is_regexp"
     t.string   "search_within"
     t.integer  "page_size"
@@ -56,6 +56,13 @@ ActiveRecord::Schema.define(:version => 20091209231651) do
     t.string   "context_type"
     t.integer  "left_context"
     t.integer  "right_context"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "subcorpora", :force => true do |t|
+    t.integer  "corpus_id"
+    t.string   "name",       :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

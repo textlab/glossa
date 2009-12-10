@@ -16,4 +16,8 @@ describe CorpusText do
   it "should belong to a corpus" do
     @new_corpus_text.errors.full_messages.should include("Corpus can't be blank")
   end
+
+  it "should have and belong to many subcorpora" do
+    @new_corpus_text.should respond_to(:subcorpora)
+  end
 end
