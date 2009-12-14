@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091210094952) do
+ActiveRecord::Schema.define(:version => 20091214154419) do
 
   create_table "corpora", :force => true do |t|
     t.string   "name",       :null => false
@@ -42,6 +42,17 @@ ActiveRecord::Schema.define(:version => 20091210094952) do
     t.string   "name",       :null => false
     t.string   "fieldtype",  :null => false
     t.string   "selector"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "preference_collections", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "page_size"
+    t.string   "context_type"
+    t.integer  "left_context"
+    t.integer  "right_context"
+    t.integer  "skip_total"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
