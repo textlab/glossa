@@ -1,7 +1,7 @@
 class CreateSearches < ActiveRecord::Migration
   def self.up
     create_table :searches do |t|
-      t.string :query, :null => false
+      t.string :queries, :null => false
       t.boolean :is_regexp
       t.string :search_within
       t.integer :page_size

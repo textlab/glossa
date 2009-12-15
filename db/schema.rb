@@ -58,7 +58,7 @@ ActiveRecord::Schema.define(:version => 20091215075615) do
   end
 
   create_table "searches", :force => true do |t|
-    t.string   "query",         :null => false
+    t.string   "queries",       :null => false
     t.boolean  "is_regexp"
     t.string   "search_within"
     t.integer  "page_size"

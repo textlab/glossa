@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-query = [{
+queries = [{
         :language_config => 2,
         :form => 'man',
         :options => {:word => ['lemma form', 'case sensitive'], :pos => 'noun'}
@@ -13,7 +13,7 @@ query = [{
 describe Search do
   before(:each) do
     @valid_attributes = {
-            :query => query,
+            :queries => queries,
             :is_regexp => false,
             :search_within => "value for search_within",
             :page_size => 1,
