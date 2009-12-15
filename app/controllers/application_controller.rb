@@ -27,25 +27,6 @@ class ApplicationController < ActionController::Base
 
   rescue_from 'Acl9::AccessDenied', :with => :access_denied
 
-  def current_user
-    # In development mode, we provide the username in the query string in order not to require Cosign.
-    # In other modes, we expect the username to be provided by Cosign in the REMOTE_USER environment variable
-    unless @current_user || RAILS_ENV == 'development'
-      if RAILS_ENV == 'development'
-        if params.has_key?(:user)
-          session[:current_username] = params[:user]
-        end
-        current_username = session[:current_username]
-      else
-        current_username = request.env['REMOTE_USER']
-      end
-      unless current_username.blank?
-        @current_user = PhtUser.find_by_username(current_username)
-      end
-    end
-    @current_user
-  end
-
   # Used by ExtJs to limit the scope in which database queries are performed
   def model_scope
     current_user.pht_company
@@ -54,6 +35,16 @@ class ApplicationController < ActionController::Base
   ########
   private
   ########
+
+  def current_user_session
+    return @current_user_session if defined?(@current_user_session)
+    @current_user_session = UserSession.find
+  end
+
+  def current_user
+    return @current_user if defined?(@current_user)
+    @current_user = current_user_session && current_user_session.user
+  end
 
   def access_denied
     render :text => 'Access denied', :status => 401
