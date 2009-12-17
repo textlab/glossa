@@ -5,6 +5,7 @@ class CreateSearches < ActiveRecord::Migration
       t.boolean :is_regexp
       t.string :search_within
       t.integer :page_size
+      t.integer :max_results
       t.boolean :randomize
       t.boolean :skip_total
       t.string :context_type

@@ -1,27 +1,27 @@
 require 'spec_helper'
 
-queries = [{
-        :language_config => 2,
-        :form => 'man',
-        :options => {:word => ['lemma form', 'case sensitive'], :pos => 'noun'}
-}, {
-        :language_config => 1,
-        :form => 'mann',
-        :options => {:number => 'pl'}
-}]
+queries = <<END
+[{"language_config_id": 2, "form": "man", "options": {"word": ["lemma form", "case sensitive"], "pos": "noun"}}, \
+{"language_config_id": 1, "form": "mann", "options": {"number": "pl"}}]
+END
+
+search_options = <<END
+{"is_regexp": false, "search_within": "s", "page_size": 20, "max_results": 2000, "randomize": false, "skip_total": }
+END
 
 describe Search do
   before(:each) do
     @valid_attributes = {
             :queries => queries,
             :is_regexp => false,
-            :search_within => "value for search_within",
-            :page_size => 1,
+            :search_within => "s",
+            :page_size => 20,
+            :max_results => 2000,
             :randomize => false,
             :skip_total => false,
-            :context_type => "value for context_type",
-            :left_context => 1,
-            :right_context => 1
+            :context_type => "word",
+            :left_context => 7,
+            :right_context => 7
     }
   end
 
