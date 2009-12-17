@@ -23,4 +23,8 @@ describe LanguageConfig do
   it "should belong to a language config type" do
     @new_language_config.errors.full_messages.should include("Language config type can't be blank")
   end
+
+  it "should have zero or more corpus texts" do
+    @new_language_config.should respond_to(:corpus_texts)
+  end
 end
