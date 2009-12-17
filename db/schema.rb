@@ -74,6 +74,7 @@ ActiveRecord::Schema.define(:version => 20091217175945) do
   end
 
   create_table "searches", :force => true do |t|
+    t.integer  "user_id"
     t.text     "queries",            :null => false
     t.text     "search_options"
     t.text     "metadata_selection"
