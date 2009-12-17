@@ -14,6 +14,10 @@ describe Subcorpus do
     Subcorpus.create!(@valid_attributes)
   end
 
+  it "should belong to a corpus" do
+    @new_subcorpus.errors.full_messages.should include("Corpus can't be blank")
+  end
+
   it "should have and belong to many corpus texts" do
     @new_subcorpus.should respond_to(:corpus_texts)
   end
