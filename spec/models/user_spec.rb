@@ -27,4 +27,8 @@ describe User do
     u.destroy
     PreferenceCollection.count.should == 0
   end
+
+  it "should have zero or more searches" do
+    @new_user.should respond_to(:searches)
+  end
 end
