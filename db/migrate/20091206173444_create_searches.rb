@@ -1,16 +1,9 @@
 class CreateSearches < ActiveRecord::Migration
   def self.up
     create_table :searches do |t|
-      t.string :queries, :null => false
-      t.boolean :is_regexp
-      t.string :search_within
-      t.integer :page_size
-      t.integer :max_results
-      t.boolean :randomize
-      t.boolean :skip_total
-      t.string :context_type
-      t.integer :left_context
-      t.integer :right_context
+      t.text :queries, :null => false
+      t.text :search_options
+      t.text :metadata_selection
 
       t.timestamps
     end
