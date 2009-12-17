@@ -17,9 +17,9 @@ END
 describe Search do
   before(:each) do
     @valid_attributes = {
-            :queries => queries,
-            :search_options => search_options,
-            :metadata_selection => metadata_selection
+            :queries => JSON.parse(queries),
+            :search_options => JSON.parse(search_options),
+            :metadata_selection => JSON.parse(metadata_selection)
     }
   end
 
