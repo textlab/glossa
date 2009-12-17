@@ -1,4 +1,4 @@
-class CreateCorpus < ActiveRecord::Migration
+class CreateCorpora < ActiveRecord::Migration
   def self.up
     create_table :corpora do |t|
       t.string :name, :null => false
@@ -9,6 +9,6 @@ class CreateCorpus < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :corpus
+    drop_table :corpora
   end
 end

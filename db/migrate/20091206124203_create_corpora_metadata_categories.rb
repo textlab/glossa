@@ -1,4 +1,4 @@
-class CreateCorpusMetadataCategories < ActiveRecord::Migration
+class CreateCorporaMetadataCategories < ActiveRecord::Migration
   def self.up
     create_table :corpora_metadata_categories do |t|
       t.integer :corpus_id, :null => false

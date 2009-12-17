@@ -1,6 +1,6 @@
 class CorpusText < ActiveRecord::Base
-  belongs_to :corpus
-  validates_presence_of :corpus_id
+  belongs_to :language_config
+  validates_presence_of :language_config_id
 
   has_and_belongs_to_many :subcorpora
 end

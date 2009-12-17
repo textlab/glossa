@@ -11,7 +11,6 @@ describe Corpus do
 
   it "should create a new instance given valid attributes" do
     c = Corpus.create!(@valid_attributes)
-    c.language_configs.create!(:name => 'Norwegian, written, Constraint Grammar')
   end
 
   it "should require a name" do
@@ -24,10 +23,6 @@ describe Corpus do
   # that they have a corpus_id, which they won't have until the corpus has been saved...
   it "should have zero or more language configs" do
     @new_corpus.should respond_to(:language_configs)
-  end
-
-  it "should have zero or more corpus texts" do
-    @new_corpus.should respond_to(:corpus_texts)
   end
 
   it "has and belongs to many metadata categories" do

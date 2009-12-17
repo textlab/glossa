@@ -9,11 +9,18 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091215075615) do
+ActiveRecord::Schema.define(:version => 20091217175945) do
 
   create_table "corpora", :force => true do |t|
     t.string   "name",             :null => false
     t.integer  "default_max_hits"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "corpora_language_configs", :force => true do |t|
+    t.integer  "corpus_id",          :null => false
+    t.integer  "language_config_id", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -26,14 +33,22 @@ ActiveRecord::Schema.define(:version => 20091215075615) do
   end
 
   create_table "corpus_texts", :force => true do |t|
-    t.integer  "corpus_id"
+    t.integer  "language_config_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "language_config_types", :force => true do |t|
+    t.string   "name"
+    t.string   "tagger"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "language_configs", :force => true do |t|
     t.integer  "corpus_id"
-    t.string   "name",       :null => false
+    t.integer  "language_config_type_id"
+    t.string   "name",                    :null => false
     t.string   "tagger"
     t.datetime "created_at"
     t.datetime "updated_at"

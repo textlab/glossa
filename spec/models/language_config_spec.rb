@@ -4,6 +4,7 @@ describe LanguageConfig do
   before(:each) do
     @valid_attributes = {
             :corpus_id => 1,
+            :language_config_type_id => 1,
             :name => "Norwegian bokmål, written, Constraint Grammar",
             :tagger => :obt
     }
@@ -19,11 +20,7 @@ describe LanguageConfig do
     @new_language_config.errors.full_messages.should include("Corpus can't be blank")
   end
 
-  it "should require a name" do
-    @new_language_config.errors.full_messages.should include("Name can't be blank")
-  end
-
-  it "may use a tagger" do
-    @new_language_config.should respond_to(:tagger)
+  it "should belong to a language config type" do
+    @new_language_config.errors.full_messages.should include("Language config type can't be blank")
   end
 end
