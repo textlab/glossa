@@ -25,17 +25,20 @@ ActiveRecord::Schema.define(:version => 20091218160939) do
     t.datetime "updated_at"
   end
 
-  create_table "corpora_metadata_categories", :force => true do |t|
-    t.integer  "corpus_id",            :null => false
-    t.integer  "metadata_category_id", :null => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table "corpora_metadata_categories", :id => false, :force => true do |t|
+    t.integer "corpus_id",            :null => false
+    t.integer "metadata_category_id", :null => false
   end
 
   create_table "corpus_texts", :force => true do |t|
     t.integer  "language_config_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "corpus_texts_subcorpora", :id => false, :force => true do |t|
+    t.integer "corpus_text_id", :null => false
+    t.integer "subcorpus_id",   :null => false
   end
 
   create_table "language_config_types", :force => true do |t|
