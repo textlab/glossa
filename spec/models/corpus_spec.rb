@@ -25,6 +25,10 @@ describe Corpus do
     @new_corpus.should respond_to(:language_configs)
   end
 
+  it "should have zero or more subcorpora" do
+    @new_corpus.should respond_to(:subcorpora)
+  end
+
   it "has and belongs to many metadata categories" do
     @new_corpus.should respond_to(:metadata_categories)
   end
