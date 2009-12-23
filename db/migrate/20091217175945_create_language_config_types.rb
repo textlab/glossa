@@ -1,7 +1,7 @@
 class CreateLanguageConfigTypes < ActiveRecord::Migration
   def self.up
     create_table :language_config_types do |t|
-      t.string :name
+      t.string :name, :null => false
       t.string :tagger
 
       t.timestamps

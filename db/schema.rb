@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(:version => 20091218163937) do
   end
 
   create_table "language_config_types", :force => true do |t|
-    t.string   "name"
+    t.string   "name",       :null => false
     t.string   "tagger"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -56,8 +56,6 @@ ActiveRecord::Schema.define(:version => 20091218163937) do
   create_table "language_configs", :force => true do |t|
     t.integer  "corpus_id"
     t.integer  "language_config_type_id"
-    t.string   "name",                    :null => false
-    t.string   "tagger"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
