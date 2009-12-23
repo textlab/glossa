@@ -4,9 +4,7 @@ describe LanguageConfig do
   before(:each) do
     @valid_attributes = {
             :corpus_id => 1,
-            :language_config_type_id => 1,
-            :name => "Norwegian bokmål, written, Constraint Grammar",
-            :tagger => :obt
+            :language_config_type_id => 1
     }
     @new_language_config = LanguageConfig.new
     @new_language_config.valid?
