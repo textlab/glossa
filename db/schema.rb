@@ -100,6 +100,7 @@ ActiveRecord::Schema.define(:version => 20091218163937) do
 
   create_table "subcorpora", :force => true do |t|
     t.integer  "corpus_id"
+    t.integer  "user_id"
     t.string   "name",       :null => false
     t.datetime "created_at"
     t.datetime "updated_at"

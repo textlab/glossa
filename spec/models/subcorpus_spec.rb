@@ -4,6 +4,7 @@ describe Subcorpus do
   before(:each) do
     @valid_attributes = {
       :corpus_id => 1,
+      :user_id => 1,
       :name => "value for name"
     }
     @new_subcorpus = Subcorpus.new
@@ -16,6 +17,10 @@ describe Subcorpus do
 
   it "should belong to a corpus" do
     @new_subcorpus.errors.full_messages.should include("Corpus can't be blank")
+  end
+
+  it "should belong to a user" do
+    @new_subcorpus.errors.full_messages.should include("User can't be blank")
   end
 
   it "should have and belong to many corpus texts" do
