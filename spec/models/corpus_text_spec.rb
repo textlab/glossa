@@ -17,6 +17,10 @@ describe CorpusText do
     @new_corpus_text.errors.full_messages.should include("Language config can't be blank")
   end
 
+  it "may have segments" do
+    @new_corpus_text.should respond_to(:segments)
+  end
+
   it "should have and belong to many subcorpora" do
     @new_corpus_text.should respond_to(:subcorpora)
   end
