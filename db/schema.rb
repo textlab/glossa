@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(:version => 20091223175749) do
 
   create_table "corpus_texts", :force => true do |t|
     t.integer  "language_config_id"
+    t.string   "uri"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -69,12 +70,11 @@ ActiveRecord::Schema.define(:version => 20091223175749) do
   end
 
   create_table "metadata_values", :force => true do |t|
-    t.integer "metadata_category_id"
     t.integer "corpus_text_id"
+    t.integer "metadata_category_id"
     t.string  "type"
     t.text    "text_value"
     t.integer "integer_value"
-    t.date    "date_value"
     t.boolean "boolean_value"
   end
 
