@@ -28,7 +28,7 @@ describe User do
     PreferenceCollection.count.should == 0
   end
 
-  it "should have zero or more searches" do
+  it "may have searches" do
     @new_user.should respond_to(:searches)
   end
 end

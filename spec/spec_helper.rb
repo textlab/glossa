@@ -1,7 +1,7 @@
 # This file is copied to ~/spec when you run 'ruby script/generate rspec'
 # from the project root directory.
 ENV["RAILS_ENV"] ||= 'test'
-require File.expand_path(File.join(File.dirname(__FILE__),'..','config','environment'))
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
 require 'spec/autorun'
 require 'spec/rails'
 
@@ -10,14 +10,14 @@ require 'spec/rails'
 
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
-Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].each {|f| require f}
+Dir[File.expand_path(File.join(File.dirname(__FILE__), 'support', '**', '*.rb'))].each {|f| require f}
 
 Spec::Runner.configure do |config|
   # If you're not using ActiveRecord you should remove these
   # lines, delete config/database.yml and disable :active_record
   # in your config/boot.rb
   config.use_transactional_fixtures = true
-  config.use_instantiated_fixtures  = false
+  config.use_instantiated_fixtures = false
   config.fixture_path = RAILS_ROOT + '/spec/fixtures/'
 
   # == Fixtures
@@ -52,3 +52,48 @@ Spec::Runner.configure do |config|
   #
   # For more information take a look at Spec::Runner::Configuration and Spec::Runner
 end
+
+####################################
+# Our own spec helper code follows
+####################################
+
+class ApplicationController < ActionController::Base
+  # Fake the current_user method for testing
+  def current_user
+    # Used to test code behaviour when no user is logged in. Test code should call controller.set_no_user
+    # before running the code that should be tested.
+    if @no_user
+      @no_user = false
+      return nil
+    end
+    User.first || User.create!(:username => 'test', :email => 'test@test.no',
+                               :password => 'test', :password_confirmation => 'test')
+  end
+
+  def set_no_user
+    @no_user = true
+  end
+end
+
+
+#### Sample search data
+
+sample_queries = <<-END
+[{"language_config_id": 2, "terms": [{"form": "man", "options": {"word": ["lemma form", "case sensitive"], "pos": "noun"}}]}, \
+{"language_config_id": 1, "terms": [{"form": "mann", "options": {"number": "pl"}}]}]
+END
+
+sample_search_options = <<-END
+{"is_regexp": false, "search_within": "s", "page_size": 20, "max_results": 2000, \
+"randomize": false, "skip_total": false, "context_type": "word", "left_context": 7, "right_context": 7}
+END
+
+sample_metadata_selection = <<-END
+{"publisher": "Kunnskapsforlaget", "category": "AV0%"}
+END
+
+SAMPLE_SEARCH_DATA = {
+        :queries => sample_queries,
+        :search_options => sample_search_options,
+        :metadata_selection => sample_metadata_selection
+}

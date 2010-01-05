@@ -8,7 +8,6 @@ describe MetadataValue do
       :type => "value for type",
       :text_value => "value for text_value",
       :integer_value => 1,
-      :date_value => Date.today,
       :boolean_value => false
     }
     @new_metadata_value = MetadataValue.new

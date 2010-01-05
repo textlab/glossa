@@ -15,7 +15,7 @@ describe MetadataCategory do
     MetadataCategory.create!(@valid_attributes)
   end
 
-  it "should belong to zero or more corpora" do
+  it "may belong to corpora" do
     @new_metadata_category.should respond_to(:corpora)
   end
 

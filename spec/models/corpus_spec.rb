@@ -21,11 +21,11 @@ describe Corpus do
   # but unfortunately we have to create a corpus without language configs first, since
   # langauge configs are saved when the corpus is saved and the language configs validate
   # that they have a corpus_id, which they won't have until the corpus has been saved...
-  it "should have zero or more language configs" do
+  it "may have language configs" do
     @new_corpus.should respond_to(:language_configs)
   end
 
-  it "should have zero or more subcorpora" do
+  it "may have subcorpora" do
     @new_corpus.should respond_to(:subcorpora)
   end
 
