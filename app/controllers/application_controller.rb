@@ -3,6 +3,7 @@
 
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
+  helper_method :application_root
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
   # Scrub sensitive parameters from your log
@@ -30,6 +31,16 @@ class ApplicationController < ActionController::Base
   # Used by ExtJs to limit the scope in which database queries are performed
   def model_scope
     current_user.pht_company
+  end
+
+  # Returns the path on which the application is mounted (e.g., '/myapp' or simply '/')
+  def application_root
+    path = request.env['REQUEST_PATH']
+    if path
+      path.ends_with?('/') ? path[0..-2] : path[0..-1]
+    else
+      ''
+    end
   end
 
   ########
