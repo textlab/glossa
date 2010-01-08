@@ -5,6 +5,8 @@ describe DeletedHit do
     @valid_attributes = {
       :search_id => 1
     }
+    @new_deleted_hit = DeletedHit.new
+    @new_deleted_hit.valid?
   end
 
   it "should create a new instance given valid attributes" do
@@ -12,7 +14,6 @@ describe DeletedHit do
   end
 
   it "should belong to a search" do
-    @valid_attributes[:search_id] = nil
-    DeletedHit.new(@valid_attributes).should_not be_valid
+    @new_deleted_hit.errors.full_messages.should include("Search can't be blank")
   end
 end
