@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Search do
   before(:each) do
     @valid_attributes = {
-            :user_id => 1,
+            :owner_id => 1,
             :queries => JSON.parse(SAMPLE_SEARCH_DATA[:queries]),
             :search_options => JSON.parse(SAMPLE_SEARCH_DATA[:search_options]),
             :metadata_selection => JSON.parse(SAMPLE_SEARCH_DATA[:metadata_selection])
@@ -17,6 +17,6 @@ describe Search do
   end
 
   it "should belong to a user" do
-    @new_search.errors.full_messages.should include("User can't be blank")
+    @new_search.errors.full_messages.should include("Owner can't be blank")
   end
 end
