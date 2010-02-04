@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100108140812) do
+ActiveRecord::Schema.define(:version => 20100204180538) do
 
   create_table "aligned_segments", :id => false, :force => true do |t|
     t.integer "segment_id",         :null => false
@@ -118,6 +118,17 @@ ActiveRecord::Schema.define(:version => 20100108140812) do
     t.string   "name",       :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "user_groups", :force => true do |t|
+    t.string   "name",       :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_groups_users", :id => false, :force => true do |t|
+    t.integer "user_group_id", :null => false
+    t.integer "user_id",       :null => false
   end
 
   create_table "users", :force => true do |t|

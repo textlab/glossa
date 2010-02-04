@@ -4,7 +4,7 @@ describe User do
   before(:each) do
     @valid_attributes = {
       :username => "test",
-      :email => "test@test.no",
+      :email => "test@test.com",
       :password => "test",
       :password_confirmation => "test"
     }
@@ -14,6 +14,10 @@ describe User do
 
   it "should create a new instance given valid attributes" do
     User.create!(@valid_attributes)
+  end
+
+  it "may belong to many user groups" do
+    @new_user.should respond_to(:user_groups)
   end
 
   it "should have a preference collection" do

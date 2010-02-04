@@ -25,4 +25,8 @@ if RAILS_ENV == 'development'
   year.value = 1867
   year.save!
 
+  user = User.create!(:username => 'testuser', :email => 'test@test.com',
+                      :password => 'test', :password_confirmation => 'test')
+  user_group = UserGroup.create!(:name => 'MyCorpusGroup')
+  user_group.users << user
 end
