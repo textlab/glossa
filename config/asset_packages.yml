@@ -1,0 +1,8 @@
+--- 
+javascripts: 
+- base: 
+  - post_ext_init
+  - application
+stylesheets: 
+- base: 
+  - ext-all
