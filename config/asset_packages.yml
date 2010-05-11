@@ -2,7 +2,18 @@
 javascripts: 
 - base: 
   - post_ext_init
+  - App/GlossaViewport.ui
+  - App/GlossaViewport
+  - App/Search/IntervalFieldSet.ui
+  - App/Search/IntervalFieldSet
+  - App/Search/LanguageBar.ui
+  - App/Search/LanguageBar
+  - App/Search/SearchPanel.ui
+  - App/Search/SearchPanel
+  - App/Search/QueryTermFieldSet.ui
+  - App/Search/QueryTermFieldSet
   - application
 stylesheets: 
 - base: 
   - ext-all
+  - application
