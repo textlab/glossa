@@ -47,4 +47,54 @@ describe SimpleCQP do
 
     line_nums.should == [7, 23, 6698, 8371]
   end
+
+  it "should return the correct lexicon for an attribute in a given corpus" do
+    ctx = CQPQueryContext.new(:registry => $test_registry,
+                              :corpus => "ENGLISH")
+    cqp = SimpleCQP.new ctx
+
+    result = cqp.attribute_lexicon "pos"
+
+    result.count.should == 39
+
+    result.should include "IN"
+    result.should include "DT"
+    result.should include "NN"
+    result.should include "NNP"
+    result.should include ","
+    result.should include "."
+    result.should include "VB"
+    result.should include "TO"
+    result.should include "NNPS"
+    result.should include "("
+    result.should include "RB"
+    result.should include ")"
+    result.should include "PRP"
+    result.should include ":"
+    result.should include "VBP"
+    result.should include "JJ"
+    result.should include "WP"
+    result.should include "VBD"
+    result.should include "CC"
+    result.should include "VBZ"
+    result.should include "EX"
+    result.should include "VBN"
+    result.should include "WDT"
+    result.should include "PRP$"
+    result.should include "NNS"
+    result.should include "MD"
+    result.should include "WRB"
+    result.should include "VBG"
+    result.should include "CD"
+    result.should include "RP"
+    result.should include "FW"
+    result.should include "JJR"
+    result.should include "WP$"
+    result.should include "PDT"
+    result.should include "POS"
+    result.should include "JJS"
+    result.should include "RBS"
+    result.should include "UH"
+    result.should include "RBR"
+  end
 end

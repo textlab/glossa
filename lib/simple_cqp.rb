@@ -10,8 +10,9 @@
 $temp_dir = "/Users/stinky/Documents/tekstlab/temp/"
 
 class SimpleCQP
-  # This should be a configuration setting
+  # These should be configuration settings
   @@cqp_bin = '/Users/stinky/Documents/tekstlab/cwb/bin/cqp'
+  @@cwb_lexdecode_bin = '/Users/stinky/Documents/tekstlab/cwb/bin/cwb-lexdecode'
 
   attr_accessor :query_file, :result_file, :error_file
   
@@ -165,6 +166,21 @@ class SimpleCQP
       :size => result[0].split.last.to_i,
       :charset => result[1].split.last
     }
+  end
+  
+  # Finds all values used for a given attribute in the corpus set in the context.
+  #
+  # attribute - A string specifying an attribute encoded in the corpus.
+  #
+  # Returns an array of attribute values as strings.
+  def attribute_lexicon(attribute)
+    pipe = IO.popen "#{@@cwb_lexdecode_bin} -r #{@context.registry} -P #{attribute} #{@context.corpus}"
+    
+    # TODO: handle errors
+    result = pipe.readlines.each { |line| line.strip! }
+    pipe.close
+
+    return result
   end
   
   # Executes a CQP query
