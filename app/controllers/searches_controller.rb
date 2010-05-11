@@ -23,6 +23,8 @@ class SearchesController < ApplicationController
     query_id = params[:queryId]
     case_insensitive = params[:caseInsensitive]
 
+    cwb_settings = read_cwb_settings
+
     query_id = query_id.to_f
 
     # a 0 id sent by the app means no id is given
@@ -30,7 +32,8 @@ class SearchesController < ApplicationController
       query_id = nil
     end
 
-    context = CQPQueryContext.new(:query_string => query,
+    context = CQPQueryContext.new(:registry => cwb_settings['registry'],
+                                  :query_string => query,
                                   :id => query_id,
                                   :corpus => corpus,
                                   :case_insensitive => (case_insensitive == "true"))
@@ -50,8 +53,10 @@ class SearchesController < ApplicationController
   # non restful endpoint for CQP/CWB corpora list requests
   def corpora_list
     id = params[:id]
-
-    context = CQPQueryContext.new
+    
+    cwb_settings = read_cwb_settings
+    
+    context = CQPQueryContext.new(:registry => cwb_settings['registry'])
     cqp = SimpleCQP.new context
     corpora = cqp.list_corpora
 
@@ -64,6 +69,11 @@ class SearchesController < ApplicationController
   def destroy
   end
   
+  # helper that  reads CWB/CQP settings from a config file
+  def read_cwb_settings
+    return YAML.load_file("#{RAILS_ROOT}/config/cwb.yml")[RAILS_ENV]
+  end
+
   # helper that format CQP result lines to JSON
   def lines_to_json(result)
     result.collect { |i| { :line => i }}

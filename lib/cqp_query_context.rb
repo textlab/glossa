@@ -1,9 +1,6 @@
 # This class contains all settings relevant to a CQP query and is
 # necessary when constructing a SimpleCQP instance.
 
-# should be a setting
-$registry = "/Users/stinky/Documents/tekstlab/glossa-arabisk-test-corpus/reg/"
-
 class CQPQueryContext
   attr_accessor :corpus, :context, :context_type, :alignment, :cutoff,
     :attributes, :structures, :registry, :id, :query_string, :case_insensitive
@@ -28,7 +25,7 @@ class CQPQueryContext
 
     # registry path as a string
     # must be set for all CQP operations
-    @registry = opts[:registry] || $registry
+    @registry = opts[:registry] || nil
     
     @case_insensitive = opts[:case_insensitive] || nil
   end
