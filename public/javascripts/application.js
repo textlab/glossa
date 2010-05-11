@@ -3,6 +3,7 @@
 
 // Prototype interface to CWB corpora.
 
+/*
 var input;
 var result;
 var queryId = 0;
@@ -64,7 +65,10 @@ function buttonHandler() {
 		}});
 }
 
+*/
 Ext.onReady(function() {
+/*
+<<<<<<< HEAD
 		var viewPort = new Ext.Viewport({
 				id: 'rootView',
 				items: [{
@@ -120,4 +124,10 @@ Ext.onReady(function() {
 		});
 
 		viewPort.show();
+=======
+*/
+  new App.GlossaViewport({renderTo: Ext.getBody()});
+/*
+>>>>>>> extjs
+*/
 });
