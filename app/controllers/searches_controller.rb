@@ -65,6 +65,20 @@ class SearchesController < ApplicationController
       :success => true
     }
   end
+  
+  # non restful endpoint for CQP/CWB corpus info requests
+  def corpus_info
+    corpus = params[:corpus]
+
+    cwb_settings = read_cwb_settings
+    
+    context = CQPQueryContext.new(:registry => cwb_settings['registry'])
+    cqp = SimpleCQP.new context, :cqp_path => cwb_settings['cwb_bin_path']
+    
+    corpus_info = cqp.corpus_info corpus
+
+    render :json => corpus_info
+  end
 
   def destroy
   end

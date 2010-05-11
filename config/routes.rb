@@ -40,6 +40,7 @@ ActionController::Routing::Routes.draw do |map|
   # non restful routes for CQP/CWB query endpoints
   map.connect '/searches/corpora_list', :controller => 'searches', :action => 'corpora_list'
   map.connect '/searches/query', :controller => 'searches', :action => 'query'
+  map.connect '/searches/corpus_info', :controller => 'searches', :action => 'corpus_info'
 
   # See how all your routes lay out with "rake routes"
 

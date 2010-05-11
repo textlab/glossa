@@ -84,14 +84,13 @@ Ext.onReady(function() {
 											minChars: 1,
 											listeners: {
 													select: function(combo, record, index) {
-															var newValue = record.get('corpus');
-															Ext.ComponentMgr.get('corpusInfo').setText("Corpus info (" + newValue + "):");
+															updateCorpusInfo(record.get('corpus'));
 													}
 											}
 										},
 										new Ext.form.Label({
 											id: 'corpusInfo',
-											text: 'Corpus info:'
+											text: 'No corpus.'
 										}),
 										{
 												xtype: 'checkbox',
@@ -121,3 +120,18 @@ Ext.onReady(function() {
 
 		viewPort.show();
 });
+
+function updateCorpusInfo(corpus) {
+		Ext.ComponentMgr.get('corpusInfo').setText("Corpus " + corpus + ", ");
+
+		Ext.Ajax.request({
+				url: urlRoot + 'searches/corpus_info',
+				params: { corpus: corpus },
+				success: function(response, opts) {
+						var label = Ext.ComponentMgr.get('corpusInfo');
+						var obj = Ext.decode(response.responseText);
+
+						label.setText(label.text + 'size: ' + obj.size + ', charset: ' + obj.charset + '.');
+				}
+		});
+}
