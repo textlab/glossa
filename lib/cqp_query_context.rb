@@ -25,7 +25,9 @@ class CQPQueryContext
 
     # registry path as a string
     # must be set for all CQP operations
-    @registry = opts[:registry] || nil
+    @registry = opts[:registry] ||
+      (CQPQueryContext.const_defined?('DEFAULT_REGISTRY') && DEFAULT_REGISTRY)
+    Rails.logger.warn('WARNING: No registry specified!') unless @registry
     
     @case_insensitive = opts[:case_insensitive] || nil
   end
