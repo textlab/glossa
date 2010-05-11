@@ -3,14 +3,9 @@
 
 // Prototype interface to CWB corpora.
 
-// NOTE: this must be set, should be a configuration setting
-// TODO: remove this
-var serverUrl = 'http://localhost:3000/'
-
 var input;
 var result;
 var queryId = 0;
-var debug = null;
 
 var cols = new Ext.grid.ColumnModel([
 		{ id: 'lineCol',
@@ -22,7 +17,7 @@ var resultFields = ['line'];
 
 var store = new Ext.data.JsonStore({
 		fields: resultFields,
- 		url: serverUrl + 'searches/query',
+ 		url: urlRoot + 'searches/query',
 		totalProperty: 'querySize',
 		root: 'data',
 		id: 'resultStore'
@@ -31,7 +26,7 @@ var store = new Ext.data.JsonStore({
 var corporaListStore = new Ext.data.JsonStore({
 		id: 'corporaListStore',
 		fields: [ 'corpus' ],
-		url: serverUrl + 'searches/corpora_list',
+		url: urlRoot + 'searches/corpora_list',
 		root: 'data',
 		autoLoad: true
 });
