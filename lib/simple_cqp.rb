@@ -10,10 +10,6 @@
 $temp_dir = "/Users/stinky/Documents/tekstlab/temp/"
 
 class SimpleCQP
-  # These should be configuration settings
-  @@cqp_cmd = 'cqp'
-  @@cwb_lexdecode_cmd = 'cwb-lexdecode'
-
   attr_accessor :query_file, :result_file, :error_file
   
   # The initializer may run a CQP query to store a dump
@@ -32,9 +28,9 @@ class SimpleCQP
   # Options:
   # :cqp_path - Path to CWB/CQP binaries.
   def initialize(query_context, opts={})
-    @cqp_path = opts[:cqp_path] + '/' || ""
-    @cqp_bin = @cqp_path + @@cqp_cmd
-    @cwb_lexdecode_bin = @cqp_path + @@cwb_lexdecode_cmd
+    @cqp_path = opts.has_key?(:cqp_path) ? opts[:cqp_path] + '/' : ""
+    @cqp_bin = @cqp_path + CQP_CMD
+    @cwb_lexdecode_bin = @cqp_path + CWB_LEXDECODE_CMD
     
     @context = query_context
 
