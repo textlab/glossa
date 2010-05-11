@@ -13,8 +13,59 @@ class SearchesController < ApplicationController
 #    unless params[:data].has_ke
 #    current_user.searches.create!(params[:data]) if current_user
   end
+  
+  # Non restful endpoint for CQP/CWB queries
+  def query
+    query = params[:query]
+    start = params[:start]
+    limit = params[:limit]
+    corpus = params[:corpus]
+    query_id = params[:queryId]
+    case_insensitive = params[:caseInsensitive]
+
+    query_id = query_id.to_f
+
+    # a 0 id sent by the app means no id is given
+    if query_id == 0
+      query_id = nil
+    end
+
+    context = CQPQueryContext.new(:query_string => query,
+                                  :id => query_id,
+                                  :corpus => corpus,
+                                  :case_insensitive => (case_insensitive == "true"))
+    
+    cqp = SimpleCQP.new context
+    @result = cqp.result(start.to_i, start.to_i + limit.to_i - 1)
+    @result = @result.collect { |line| CGI.escapeHTML line }
+
+    render :json => {
+      :queryId => context.id,
+      :data => lines_to_json(@result),
+      :querySize => cqp.query_size,
+      :success => true
+    }
+  end
+  
+  # non restful endpoint for CQP/CWB corpora list requests
+  def corpora_list
+    id = params[:id]
+
+    context = CQPQueryContext.new
+    cqp = SimpleCQP.new context
+    corpora = cqp.list_corpora
+
+    render :json => {
+      :data => corpora.collect { |c| { :corpus => c } },
+      :success => true
+    }
+  end
 
   def destroy
   end
-
+  
+  # helper that format CQP result lines to JSON
+  def lines_to_json(result)
+    result.collect { |i| { :line => i }}
+  end
 end
