@@ -11,8 +11,8 @@ $temp_dir = "/Users/stinky/Documents/tekstlab/temp/"
 
 class SimpleCQP
   # These should be configuration settings
-  @@cqp_bin = '/Users/stinky/Documents/tekstlab/cwb/bin/cqp'
-  @@cwb_lexdecode_bin = '/Users/stinky/Documents/tekstlab/cwb/bin/cwb-lexdecode'
+  @@cqp_cmd = 'cqp'
+  @@cwb_lexdecode_cmd = 'cwb-lexdecode'
 
   attr_accessor :query_file, :result_file, :error_file
   
@@ -28,7 +28,14 @@ class SimpleCQP
   #
   # query_context - A CQPQueryContext instance with the necessary
   #                 CQP and query settings.
-  def initialize(query_context)
+  #
+  # Options:
+  # :cqp_path - Path to CWB/CQP binaries.
+  def initialize(query_context, opts={})
+    @cqp_path = opts[:cqp_path] + '/' || ""
+    @cqp_bin = @cqp_path + @@cqp_cmd
+    @cwb_lexdecode_bin = @cqp_path + @@cwb_lexdecode_cmd
+    
     @context = query_context
 
     # if this is a "search query" and we are not passed an id
@@ -174,7 +181,7 @@ class SimpleCQP
   #
   # Returns an array of attribute values as strings.
   def attribute_lexicon(attribute)
-    pipe = IO.popen "#{@@cwb_lexdecode_bin} -r #{@context.registry} -P #{attribute} #{@context.corpus}"
+    pipe = IO.popen "#{@cwb_lexdecode_bin} -r #{@context.registry} -P #{attribute} #{@context.corpus}"
     
     # TODO: handle errors
     result = pipe.readlines.each { |line| line.strip! }
@@ -208,7 +215,7 @@ class SimpleCQP
     end
     
     # Execute the query, all input/output from/to temporary files
-    pipe = IO.popen("#{@@cqp_bin} -c -r #{@context.registry} < #{query_file} 1> #{result_file} 2> #{error_file}")
+    pipe = IO.popen("#{@cqp_bin} -c -r #{@context.registry} < #{query_file} 1> #{result_file} 2> #{error_file}")
     pipe.close
     
     # Check the error file and potentially raise an error

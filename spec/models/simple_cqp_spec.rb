@@ -1,12 +1,16 @@
+require 'yaml'
+
 require 'simple_cqp'
 require 'cqp_query_context'
 
 $test_registry = "test/cwb_test_data/reg"
 
+$cwb_settings = YAML.load_file("config/cwb.yml")["test"]
+
 describe SimpleCQP do 
   it "should return all corpora in the registry" do
     ctx = CQPQueryContext.new :registry => $test_registry
-    cqp = SimpleCQP.new ctx
+    cqp = SimpleCQP.new ctx, :cqp_path => $cwb_settings['cwb_bin_path']
 
     corpora = cqp.list_corpora
 
@@ -18,7 +22,7 @@ describe SimpleCQP do
 
   it "should provide size and charset for a given corpora" do
     ctx = CQPQueryContext.new :registry => $test_registry
-    cqp = SimpleCQP.new ctx
+    cqp = SimpleCQP.new ctx, :cqp_path => $cwb_settings['cwb_bin_path']
     
     info = cqp.corpus_info "ENGLISH"
     info[:size].should == 14092
@@ -27,7 +31,7 @@ describe SimpleCQP do
 
   it "should execute queries without raising errors" do
     ctx = CQPQueryContext.new :registry => $test_registry, :corpus => "ENGLISH"
-    cqp = SimpleCQP.new ctx
+    cqp = SimpleCQP.new ctx, :cqp_path => $cwb_settings['cwb_bin_path']
 
     result = cqp.execute_query ".EOL.;\n"
     result.should == ["-::-EOL-::-"]
@@ -38,7 +42,7 @@ describe SimpleCQP do
                               :corpus => "ENGLISH",
                               :query_string => 'beneficent',
                               :case_insensitive => true)
-    cqp = SimpleCQP.new ctx
+    cqp = SimpleCQP.new ctx, :cqp_path => $cwb_settings['cwb_bin_path']
 
     cqp.query_size.should == 4
     
@@ -51,7 +55,7 @@ describe SimpleCQP do
   it "should return the correct lexicon for an attribute in a given corpus" do
     ctx = CQPQueryContext.new(:registry => $test_registry,
                               :corpus => "ENGLISH")
-    cqp = SimpleCQP.new ctx
+    cqp = SimpleCQP.new ctx, :cqp_path => $cwb_settings['cwb_bin_path']
 
     result = cqp.attribute_lexicon "pos"
 

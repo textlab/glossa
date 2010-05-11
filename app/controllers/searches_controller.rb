@@ -38,7 +38,7 @@ class SearchesController < ApplicationController
                                   :corpus => corpus,
                                   :case_insensitive => (case_insensitive == "true"))
     
-    cqp = SimpleCQP.new context
+    cqp = SimpleCQP.new context, :cqp_path => cwb_settings['cwb_bin_path']
     @result = cqp.result(start.to_i, start.to_i + limit.to_i - 1)
     @result = @result.collect { |line| CGI.escapeHTML line }
 
@@ -57,7 +57,7 @@ class SearchesController < ApplicationController
     cwb_settings = read_cwb_settings
     
     context = CQPQueryContext.new(:registry => cwb_settings['registry'])
-    cqp = SimpleCQP.new context
+    cqp = SimpleCQP.new context, :cqp_path => cwb_settings['cwb_bin_path']
     corpora = cqp.list_corpora
 
     render :json => {

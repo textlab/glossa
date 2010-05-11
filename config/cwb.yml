@@ -1,3 +1,8 @@
 # config/cwb.yml
 development:
   registry: "/Users/stinky/Documents/tekstlab/glossa-arabisk-test-corpus/reg/"
+  cwb_bin_path: '/Users/stinky/Documents/tekstlab/cwb/bin/'
+
+test:
+  registry: "/Users/stinky/Documents/tekstlab/glossa-arabisk-test-corpus/reg/"
+  cwb_bin_path: '/Users/stinky/Documents/tekstlab/cwb/bin/'
