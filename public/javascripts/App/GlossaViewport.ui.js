@@ -18,7 +18,7 @@ App.GlossaViewportUi = Ext.extend(Ext.Viewport, {
       {
       id: 'north-panel',
       xtype: 'panel',
-      title: '<img align="right" alt="Tekstlab-hjemmeside" border="0" src="http://www.tekstlab.uio.no/scandiasyn/base/images/tl_grey_115x18.gif?1237567305">',
+      title: '<img align="right" alt="Tekstlab-hjemmeside" border="0" src="' + urlRoot + 'images/tllogo_110x24_bw_glowwhite.png">',
       region: 'north',
       width: 100,
       height: 65,
