@@ -29,25 +29,6 @@ App.GlossaViewportUi = Ext.extend(Ext.Viewport, {
         autoEl: {
           html: 'Glossa'
         }
-      }, {
-        xtype: 'spacer',
-        flex: 9
-      }, {
-        xtype: 'container',
-        flex: 1,
-        layout: 'hbox',
-        layoutConfig: {
-          align: 'middle'
-        },
-        items: [{
-          xtype: 'button',
-          text: 'Hei',
-          flex: 1
-        }, {
-          xtype: 'button',
-          text: 'Du',
-          flex: 1
-        }]
       }]
     },
     {
