@@ -8,18 +8,8 @@ App.Search.LanguageBar = Ext.extend(App.Search.LanguageBarUi, {
     this.languageBarNo = globalLanguageBarNo;
 
     this.buildToolbar();
-
-    this.add({
-      xtype: 'querytermfieldset',
-      title: 'Word 1'
-    });
-    this.add({
-      xtype: 'intervalfieldset'
-    });
-    this.add({
-      xtype: 'querytermfieldset',
-      title: 'Word 2'
-    });
+    this.setupSubcomponents();
+    this.setupEvents();
   },
 
   buildToolbar: function() {
@@ -48,6 +38,47 @@ App.Search.LanguageBar = Ext.extend(App.Search.LanguageBarUi, {
       cls: 'x-btn-text-icon',
       icon: 'images/delete.png'
     });
+  },
+
+  setupSubcomponents: function() {
+    this.nWords = 1;
+    this.insert(0, {
+      xtype: 'querytermfieldset',
+      title: 'Word ' + this.nWords
+    });
+  },
+
+  setupEvents: function() {
+    this.addWordButton.on('click', function() {
+      this.addWord();
+    }, this);
+    this.deleteWordButton.on('click', function() {
+      this.deleteWord();
+    }, this);
+  },
+
+  addWord: function() {
+    this.nWords++;
+    this.insert(this.items.getCount() - 1, {
+      xtype: 'intervalfieldset'
+    });
+    this.insert(this.items.getCount() - 1, {
+      xtype: 'querytermfieldset',
+      title: 'Word ' + this.nWords
+    });
+    this.doLayout();
+    this.deleteWordButton.enable();
+  },
+
+  deleteWord: function() {
+    this.nWords--;
+    this.remove(this.items.itemAt(this.items.getCount() - 2));
+    this.remove(this.items.itemAt(this.items.getCount() - 2));
+    this.doLayout();
+
+    if(this.items.getCount() == 2) {
+      this.deleteWordButton.disable();
+    }
   }
 });
 

@@ -10,12 +10,12 @@ App.Search.SearchPanelUi = Ext.extend(Ext.form.FormPanel, {
       icon: urlRoot + 'images/add.png',
       cls: 'x-btn-text-icon',
       ref: '../addLanguageButton'
-    }, '-', {
-      text: 'Save search',
-      icon: urlRoot + 'images/disk.png'
-    }, {
-      text: 'Saved searches',
-      icon: urlRoot + 'images/folder_explore.png'
+    //}, '-', {
+      //text: 'Save search',
+      //icon: urlRoot + 'images/disk.png'
+    //}, {
+      //text: 'Saved searches',
+      //icon: urlRoot + 'images/folder_explore.png'
     }, '-', {
       text: 'Reset form',
       icon: urlRoot + 'images/cancel.png'
