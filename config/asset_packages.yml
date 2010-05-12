@@ -16,4 +16,5 @@ javascripts:
 stylesheets: 
 - base: 
   - ext-all
+  - xtheme-gray
   - application
