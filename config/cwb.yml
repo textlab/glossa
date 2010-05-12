@@ -4,5 +4,5 @@ development:
   cwb_bin_path: '/Users/stinky/Documents/tekstlab/cwb/bin/'
 
 test:
-  registry: "/Users/stinky/Documents/tekstlab/glossa-arabisk-test-corpus/reg/"
+  registry: "test/cwb_test_data/reg"
   cwb_bin_path: '/Users/stinky/Documents/tekstlab/cwb/bin/'

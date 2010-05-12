@@ -3,13 +3,11 @@ require 'yaml'
 require 'simple_cqp'
 require 'cqp_query_context'
 
-$test_registry = "test/cwb_test_data/reg"
-
 $cwb_settings = YAML.load_file("config/cwb.yml")["test"]
 
 describe SimpleCQP do 
   it "should return all corpora in the registry" do
-    ctx = CQPQueryContext.new :registry => $test_registry
+    ctx = CQPQueryContext.new :registry => $cwb_settings['registry']
     cqp = SimpleCQP.new ctx, :cqp_path => $cwb_settings['cwb_bin_path']
 
     corpora = cqp.list_corpora
@@ -21,7 +19,7 @@ describe SimpleCQP do
   end
 
   it "should provide size and charset for a given corpora" do
-    ctx = CQPQueryContext.new :registry => $test_registry
+    ctx = CQPQueryContext.new :registry => $cwb_settings['registry']
     cqp = SimpleCQP.new ctx, :cqp_path => $cwb_settings['cwb_bin_path']
     
     info = cqp.corpus_info "ENGLISH"
@@ -30,7 +28,7 @@ describe SimpleCQP do
   end
 
   it "should execute queries without raising errors" do
-    ctx = CQPQueryContext.new :registry => $test_registry, :corpus => "ENGLISH"
+    ctx = CQPQueryContext.new :registry => $cwb_settings['registry'], :corpus => "ENGLISH"
     cqp = SimpleCQP.new ctx, :cqp_path => $cwb_settings['cwb_bin_path']
 
     result = cqp.execute_query ".EOL.;\n"
@@ -38,9 +36,9 @@ describe SimpleCQP do
   end
 
   it "should return the correct corpora lines for a simple query" do
-    ctx = CQPQueryContext.new(:registry => $test_registry,
+    ctx = CQPQueryContext.new(:registry => $cwb_settings['registry'],
                               :corpus => "ENGLISH",
-                              :query_string => 'beneficent',
+                              :query_spec => [{ :type => :word, :string => 'beneficent' }],
                               :case_insensitive => true)
     cqp = SimpleCQP.new ctx, :cqp_path => $cwb_settings['cwb_bin_path']
 
@@ -53,7 +51,7 @@ describe SimpleCQP do
   end
 
   it "should return the correct lexicon for an attribute in a given corpus" do
-    ctx = CQPQueryContext.new(:registry => $test_registry,
+    ctx = CQPQueryContext.new(:registry => $cwb_settings['registry'],
                               :corpus => "ENGLISH")
     cqp = SimpleCQP.new ctx, :cqp_path => $cwb_settings['cwb_bin_path']
 
@@ -100,5 +98,22 @@ describe SimpleCQP do
     result.should include "RBS"
     result.should include "UH"
     result.should include "RBR"
+  end
+
+  it "should generate correct CQP queries given a more complex query spec" do
+    spec = [{:type => :word, :string => "lord", :attributes => { :pos => "NNP" }},
+            {:type => :interval, :min =>0, :max=>3},
+            {:type => :word, :string => "worlds"}]
+
+    ctx = CQPQueryContext.new(:registry => $cwb_settings['registry'],
+                              :corpus => "ENGLISH",
+                              :query_spec => spec,
+                              :case_insensitive => true)
+    cqp = SimpleCQP.new ctx, :cqp_path => $cwb_settings['cwb_bin_path']
+    
+    cqp.query_size.should == 2
+    result = cqp.result 0, 2
+    line_nums = result.collect { |line| line.match("^\\s*(\\d+):")[1].to_i }
+    line_nums.should == [17, 5339]
   end
 end

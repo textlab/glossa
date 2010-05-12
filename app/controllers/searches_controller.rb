@@ -33,7 +33,7 @@ class SearchesController < ApplicationController
     end
 
     context = CQPQueryContext.new(:registry => cwb_settings['registry'],
-                                  :query_string => query,
+                                  :query_spec => [{ :type => :word, :string => query }],
                                   :id => query_id,
                                   :corpus => corpus,
                                   :case_insensitive => (case_insensitive == "true"))

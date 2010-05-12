@@ -36,7 +36,7 @@ class SimpleCQP
 
     # if this is a "search query" and we are not passed an id
     # we run the query and dump the results for future use
-    if @context.id.nil? and @context.query_string
+    if @context.id.nil? and @context.query_spec
       @context.id = run_query
     end
   end
@@ -59,13 +59,15 @@ class SimpleCQP
     dump_file = SimpleCQP.make_temp_file "dump", id
 
     subcorpus = "simple.#{id}"
+    # build query from spec
+    query_string = build_cqp_query @context.query_spec
 
     query_op = StringIO.new
  
-    query_op << "set DataDirectory \"#{$temp_dir}\";"
-    query_op << "#{@context.corpus};"
-    query_op << "#{subcorpus} = '#{@context.query_string}' #{"%c" if @context.case_insensitive};"
-    query_op << "dump #{subcorpus} > \"#{dump_file}\";"
+    query_op << "set DataDirectory \"#{$temp_dir}\";\n"
+    query_op << "#{@context.corpus};\n"
+    query_op << "#{subcorpus} = #{query_string};\n"
+    query_op << "dump #{subcorpus} > \"#{dump_file}\";\n"
     
     execute_query query_op.string
     
@@ -364,5 +366,61 @@ class SimpleCQP
   # Returns true if the line contains error content.
   def self.error_content_line?(line)
     line.match("^\t")
+  end
+  
+  # Generates a CQP query from a query spec - see comments
+  # in cqp_query_context.rb.
+  #
+  # query_spec - An array of hashes that is a valid query spec.
+  #
+  # Returns the corresponding CQP query as a string.
+  def build_cqp_query(query_spec)
+    # generate clause strings for each sub-specification
+    clauses = query_spec.collect do |spec|
+      if spec[:type] == :word
+        build_cqp_word_query spec
+      elsif spec[:type] == :interval
+        build_cqp_interval_query spec
+      else
+        raise RuntimeError
+      end
+    end
+
+    return clauses.join(' ')
+  end
+  
+  # Builds an interval clause from an interval sub-specification.
+  # Used by the build_cqp_query method.
+  #
+  # interval_spec - A hash that is a valid interval spec.
+  #
+  # Returns the corresponding clause as a string.
+  def build_cqp_interval_query(interval_spec)
+    raise RuntimeError if interval_spec[:type] != :interval
+    
+    return "[]{#{interval_spec[:min]}, #{interval_spec[:max]}}"
+  end
+  
+  # Builds a word clause from a word sub-specification.
+  # Used by the build_cqp_query method.
+  #
+  # word_spec - A hash that is a valid word spec.
+  #
+  # Returns the corresponding clause as a string.
+  def build_cqp_word_query(word_spec)
+    raise RuntimeError if word_spec[:type] != :word
+
+    # start with the word subclause
+    clauses = ["(word='#{word_spec[:string]}'#{'%c' if @context.case_insensitive})"]
+
+    # add attribute subclauses if we have any
+    if not word_spec[:attributes].nil?
+      word_spec[:attributes].each_pair do |attr, val|
+        clauses << "(#{attr.to_s}='#{val}')"
+      end
+    end
+
+    # add surrounding brackets and conjunction operators
+    return "[" + clauses.join(" & ") + "]"
   end
 end
