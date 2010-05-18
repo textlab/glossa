@@ -371,10 +371,35 @@ class SimpleCQP
   # Generates a CQP query from a query spec - see comments
   # in cqp_query_context.rb.
   #
-  # query_spec - An array of hashes that is a valid query spec.
+  # query_spec - A hash with corpora symbols as keys and valid
+  #   corpora specific query sub specs as values.
   #
   # Returns the corresponding CQP query as a string.
   def build_cqp_query(query_spec)
+    other_clauses = query_spec.each_pair.find_all do |corpus, sub_spec|
+      [corpus, sub_spec] if corpus.to_s.upcase != @context.corpus
+    end
+
+    main_spec = query_spec.each_pair.find { |corpus, sub_spec| corpus.to_s.upcase == @context.corpus } [1]
+
+    full_clause = StringIO.new
+    full_clause << build_cqp_corpus_query(main_spec)
+
+    other_clauses.each do |clause|
+      full_clause << " :#{clause[0].to_s.upcase} #{build_cqp_corpus_query clause[1]}"
+    end
+
+    return full_clause.string
+  end
+  
+  # Generates a CQP corpus sub query from a sub spec - see
+  # comments in cqp_query_context.rb.
+  #
+  # query_spec - An array of hashes that is a valid query sub
+  #   sub spec for a corpus specific part of a query.
+  #
+  # Returns the corresponding CQP query as a string.
+  def build_cqp_corpus_query(query_spec)
     # generate clause strings for each sub-specification
     clauses = query_spec.collect do |spec|
       if spec[:type] == :word
@@ -395,6 +420,9 @@ class SimpleCQP
   # interval_spec - A hash that is a valid interval spec.
   #
   # Returns the corresponding clause as a string.
+
+  # TODO support ?, *, within s
+  
   def build_cqp_interval_query(interval_spec)
     raise RuntimeError if interval_spec[:type] != :interval
     

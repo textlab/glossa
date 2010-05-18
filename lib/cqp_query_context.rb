@@ -3,9 +3,11 @@
 
 # Query spec
 #
-# This is an array of word or interval specifications that generates
-# a CQP query in the same sequence. Each specification is a hash with
-# the :type key specifying if it's a :word or :interval specification.
+# A spec is hash that contains corpora symbols as keys and corpora
+# sub specs as values. A sub spec is an array of word or interval
+# specifications that generates a CQP query in the same sequence. Each
+# specification is a hash with the :type key specifying if it's a :word
+# or :interval specification.
 #
 # Word:
 # :type => :word
@@ -18,14 +20,23 @@
 # :min => Low end of the interval as an integer
 # :max => High end of the interval as an integer
 #
-# Example:
+# Examples:
 #
-# [{:type => :word, :string => "lord", :attributes => { :pos => "NNP" }},
-#  {:type => :interval, :min =>0, :max=>3},
-#  {:type => :word, :string => "worlds"}]
+# { :english => [{:type => :word, :string => "lord", :attributes => { :pos => "NNP" }},
+#                {:type => :interval, :min =>0, :max=>3},
+#                {:type => :word, :string => "worlds"}]}
 #
-# Generates the following CQP query (with :case_insensitive set):
+# Generates the following CQP query (with :case_insensitive
+# and :corpus => "ENGLISH" set):
 # [(word='lord'%c) & (pos='NNP')] []{0, 3} [(word='worlds'%c)]
+#
+# The following spec
+# { :english => [{ :type => :word, :string => 'the' }],
+#   :arabic_u => [{ :type => :word, :string => 'fy' }],
+#   :arabic_v => [{ :type => :word, :string => 'fiy' }]}
+#
+# Generates the following CQP query (with :corpus => "ENGLISH" set):
+# "[(word='the')] :ARABIC_U [(word='fy')] :ARABIC_V [(word='fiy')]",
 
 class CQPQueryContext
   attr_accessor :corpus, :context, :context_type, :alignment, :cutoff,
