@@ -65,10 +65,7 @@ function buttonHandler() {
 		}});
 }
 
-*/
 Ext.onReady(function() {
-/*
-<<<<<<< HEAD
 		var viewPort = new Ext.Viewport({
 				id: 'rootView',
 				items: [{
@@ -123,12 +120,6 @@ Ext.onReady(function() {
 		});
 
 		viewPort.show();
-=======
-*/
-  new App.GlossaViewport({renderTo: Ext.getBody()});
-/*
->>>>>>> extjs
-*/
 });
 
 function updateCorpusInfo(corpus) {
@@ -145,3 +136,10 @@ function updateCorpusInfo(corpus) {
 				}
 		});
 }
+*/
+
+var vp;
+
+Ext.onReady(function() {
+  vp = new App.GlossaViewport({renderTo: Ext.getBody()});
+});
