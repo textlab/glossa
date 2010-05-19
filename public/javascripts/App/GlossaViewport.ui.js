@@ -33,20 +33,9 @@ App.GlossaViewportUi = Ext.extend(Ext.Viewport, {
     },
     {
       xtype: 'tabpanel',
+      ref: 'centerTabpanel',
       activeTab: 0,
-      region: 'center',
-      items: [
-        this.createSearchPanel(),
-        // dummies
-        {
-          title: 'Results 1',
-          closable: true
-        },
-        {
-          title: 'Results 2',
-          closable: true
-        }
-      ]
+      region: 'center'
     },
     {
       xtype: 'panel',
