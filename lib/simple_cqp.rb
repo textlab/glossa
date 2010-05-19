@@ -29,8 +29,9 @@ class SimpleCQP
   # :cqp_path - Path to CWB/CQP binaries.
   def initialize(query_context, opts={})
     @cqp_path = opts.has_key?(:cqp_path) ? opts[:cqp_path] + '/' : ""
-    @cqp_bin = @cqp_path + CQP_CMD
-    @cwb_lexdecode_bin = @cqp_path + CWB_LEXDECODE_CMD
+    # problems sourcing bin names from initializers (glossa.rb)
+    @cqp_bin = @cqp_path + 'cqp'
+    @cwb_lexdecode_bin = @cqp_path + 'cwb-lexdecode'
     
     @context = query_context
 
@@ -402,9 +403,9 @@ class SimpleCQP
   def build_cqp_corpus_query(query_spec)
     # generate clause strings for each sub-specification
     clauses = query_spec.collect do |spec|
-      if spec[:type] == :word
+      if spec['type'] == 'word'
         build_cqp_word_query spec
-      elsif spec[:type] == :interval
+      elsif spec['type'] == 'interval'
         build_cqp_interval_query spec
       else
         raise RuntimeError
@@ -424,9 +425,9 @@ class SimpleCQP
   # TODO support ?, *, within s
   
   def build_cqp_interval_query(interval_spec)
-    raise RuntimeError if interval_spec[:type] != :interval
+    raise RuntimeError if interval_spec['type'] != 'interval'
     
-    return "[]{#{interval_spec[:min]}, #{interval_spec[:max]}}"
+    return "[]{#{interval_spec['min']}, #{interval_spec['max']}}"
   end
   
   # Builds a word clause from a word sub-specification.
@@ -436,15 +437,15 @@ class SimpleCQP
   #
   # Returns the corresponding clause as a string.
   def build_cqp_word_query(word_spec)
-    raise RuntimeError if word_spec[:type] != :word
+    raise RuntimeError if word_spec['type'] != 'word'
 
     # start with the word subclause
-    clauses = ["(word='#{word_spec[:string]}'#{'%c' if @context.case_insensitive})"]
+    clauses = ["(word='#{word_spec['string']}'#{'%c' if @context.case_insensitive})"]
 
     # add attribute subclauses if we have any
-    if not word_spec[:attributes].nil?
-      word_spec[:attributes].each_pair do |attr, val|
-        clauses << "(#{attr.to_s}='#{val}')"
+    if not word_spec['attributes'].nil?
+      word_spec['attributes'].each_pair do |attr, val|
+        clauses << "(#{attr}='#{val}')"
       end
     end
 

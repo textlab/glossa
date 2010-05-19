@@ -32,8 +32,10 @@ class SearchesController < ApplicationController
       query_id = nil
     end
 
+    query = ActiveSupport::JSON.decode query
+
     context = CQPQueryContext.new(:registry => cwb_settings['registry'],
-                                  :query_spec => [{ :type => :word, :string => query }],
+                                  :query_spec => query,
                                   :id => query_id,
                                   :corpus => corpus,
                                   :case_insensitive => (case_insensitive == "true"))

@@ -38,7 +38,7 @@ describe SimpleCQP do
   it "should return the correct corpora lines for a simple query" do
     ctx = CQPQueryContext.new(:registry => $cwb_settings['registry'],
                               :corpus => "ENGLISH",
-                              :query_spec => { :english => [{ :type => :word, :string => 'beneficent' }]},
+                              :query_spec => { :english => [{ 'type' => 'word', 'string' => 'beneficent' }]},
                               :case_insensitive => true)
     cqp = SimpleCQP.new ctx, :cqp_path => $cwb_settings['cwb_bin_path']
 
@@ -101,9 +101,9 @@ describe SimpleCQP do
   end
 
   it "should generate correct CQP queries given a more complex query spec" do
-    spec = { :english => [{:type => :word, :string => "lord", :attributes => { :pos => "NNP" }},
-                          {:type => :interval, :min =>0, :max=>3},
-                          {:type => :word, :string => "worlds"}]}
+    spec = { :english => [{'type' => 'word', 'string' => "lord", 'attributes' => { :pos => "NNP" }},
+                          {'type' => 'interval', 'min' =>0, 'max'=>3},
+                          {'type' => 'word', 'string' => "worlds"}]}
     
     ctx = CQPQueryContext.new(:registry => $cwb_settings['registry'],
                               :corpus => "ENGLISH",
@@ -118,13 +118,13 @@ describe SimpleCQP do
   end
 
   it "should return the correct clause for a query word sub spec" do
-    spec = { :type => :word, :string => 'the', :attributes => { :pos => 'DT' } }
+    spec = { 'type' => 'word', 'string' => 'the', 'attributes' => { :pos => 'DT' } }
     ctx = CQPQueryContext.new
     cqp = SimpleCQP.new ctx
     clause = cqp.build_cqp_word_query spec
     clause.should == "[(word='the') & (pos='DT')]"
 
-    spec = { :type => :word, :string => 'the' }
+    spec = { 'type' => 'word', 'string' => 'the' }
     ctx = CQPQueryContext.new :case_insensitive => true
     cqp = SimpleCQP.new ctx
     clause = cqp.build_cqp_word_query spec
@@ -135,15 +135,15 @@ describe SimpleCQP do
     ctx = CQPQueryContext.new
     cqp = SimpleCQP.new ctx
     
-    spec = { :type => :interval, :min => 1, :max => 3 }
+    spec = { 'type' => 'interval', 'min' => 1, 'max' => 3 }
     clause = cqp.build_cqp_interval_query spec
     clause.should == "[]{1, 3}"
 
-    spec = { :type => :interval, :min => 0, :max => 0 }
+    spec = { 'type' => 'interval', 'min' => 0, 'max' => 0 }
     clause = cqp.build_cqp_interval_query spec
     clause.should == "[]{0, 0}"
 
-    spec = { :type => :interval, :min => 1, :max => 1 }
+    spec = { 'type' => 'interval', 'min' => 1, 'max' => 1 }
     clause = cqp.build_cqp_interval_query spec
     clause.should == "[]{1, 1}"
   end
@@ -151,11 +151,11 @@ describe SimpleCQP do
   it "should return a correct clause for a corpus specific sub spec" do
     ctx = CQPQueryContext.new
     cqp = SimpleCQP.new ctx
-    spec = [{ :type => :word, :string => 'the'},
-            { :type => :interval, :min => 0, :max => 0},
-            { :type => :word, :string => 'lord'},
-            { :type => :interval, :min => 1, :max => 3},
-            { :type => :word, :string => 'worlds'}]
+    spec = [{ 'type' => 'word', 'string' => 'the'},
+            { 'type' => 'interval', 'min' => 0, 'max' => 0},
+            { 'type' => 'word', 'string' => 'lord'},
+            { 'type' => 'interval', 'min' => 1, 'max' => 3},
+            { 'type' => 'word', 'string' => 'worlds'}]
     clause = cqp.build_cqp_corpus_query spec
     clause.should == "[(word='the')] []{0, 0} [(word='lord')] []{1, 3} [(word='worlds')]"
   end
@@ -164,21 +164,21 @@ describe SimpleCQP do
     ctx = CQPQueryContext.new :corpus => "ENGLISH"
     cqp = SimpleCQP.new ctx
 
-    spec = { :english => [{ :type => :word, :string => 'the' }]}
+    spec = { :english => [{ 'type' => 'word', 'string' => 'the' }]}
     clause = cqp.build_cqp_query spec
     clause.should == "[(word='the')]"
 
     spec = {
-      :english => [{ :type => :word, :string => 'the' }],
-      :arabic_u => [{ :type => :word, :string => 'fy' }]}
+      :english => [{ 'type' => 'word', 'string' => 'the' }],
+      :arabic_u => [{ 'type' => 'word', 'string' => 'fy' }]}
     
     clause = cqp.build_cqp_query spec
     clause.should == "[(word='the')] :ARABIC_U [(word='fy')]"
 
     spec = {
-      :english => [{ :type => :word, :string => 'the' }],
-      :arabic_u => [{ :type => :word, :string => 'fy' }],
-      :arabic_v => [{ :type => :word, :string => 'fiy' }]}
+      :english => [{ 'type' => 'word', 'string' => 'the' }],
+      :arabic_u => [{ 'type' => 'word', 'string' => 'fy' }],
+      :arabic_v => [{ 'type' => 'word', 'string' => 'fiy' }]}
 
     clause = cqp.build_cqp_query spec
     # sequence of aligned corpora doesn't matter

@@ -10,30 +10,30 @@
 # or :interval specification.
 #
 # Word:
-# :type => :word
-# :string => The word string
-# :attributes => A hash with the attribute name as a symbol for the key
+# 'type' => 'word
+# 'string' => The word string
+# 'attributes' => A hash with the attribute name as a string for the key
 #   and the attribute value as the hash value in string form.
 #
 # Interval:
-# :type => :interval
-# :min => Low end of the interval as an integer
-# :max => High end of the interval as an integer
+# 'type' => 'interval
+# 'min' => Low end of the interval as an integer
+# 'max' => High end of the interval as an integer
 #
 # Examples:
 #
-# { :english => [{:type => :word, :string => "lord", :attributes => { :pos => "NNP" }},
-#                {:type => :interval, :min =>0, :max=>3},
-#                {:type => :word, :string => "worlds"}]}
+# { 'english' => [{'type' => 'word', 'string' => "lord", 'attributes' => { 'pos' => "NNP" }},
+#                 {'type' => 'interval', 'min' => 0, 'max' => 3},
+#                 {'type' => 'word', 'string' => "worlds"}]}
 #
 # Generates the following CQP query (with :case_insensitive
 # and :corpus => "ENGLISH" set):
 # [(word='lord'%c) & (pos='NNP')] []{0, 3} [(word='worlds'%c)]
 #
 # The following spec
-# { :english => [{ :type => :word, :string => 'the' }],
-#   :arabic_u => [{ :type => :word, :string => 'fy' }],
-#   :arabic_v => [{ :type => :word, :string => 'fiy' }]}
+# { 'english' => [{ 'type' => 'word', 'string' => 'the' }],
+#   'arabic_u' => [{ 'type' => 'word', 'string' => 'fy' }],
+#   'arabic_v' => [{ 'type' => 'word', 'string' => 'fiy' }]}
 #
 # Generates the following CQP query (with :corpus => "ENGLISH" set):
 # "[(word='the')] :ARABIC_U [(word='fy')] :ARABIC_V [(word='fiy')]",
