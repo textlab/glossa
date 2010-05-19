@@ -21,7 +21,8 @@ App.Search.SearchCriteriaPanelUi = Ext.extend(Ext.form.FormPanel, {
       icon: urlRoot + 'images/cancel.png'
     }, '-', {
       text: '<b>Search</b>',
-      icon: urlRoot + 'images/zoom.png'
+      icon: urlRoot + 'images/zoom.png',
+      ref: '../searchButton'
     }]
   },
 

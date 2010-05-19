@@ -2,7 +2,7 @@ App.Search.SearchCriteriaPanel = Ext.extend(App.Search.SearchCriteriaPanelUi, {
   initComponent: function() {
 		// keeps track of gui language bars for query building
 		this.languageBars = [];
-			
+
     App.Search.SearchCriteriaPanel.superclass.initComponent.call(this);
     this.setupSubcomponents();
   },
@@ -13,6 +13,7 @@ App.Search.SearchCriteriaPanel = Ext.extend(App.Search.SearchCriteriaPanelUi, {
     this.add(this.createLanguageBar());
 
     this.addLanguageButton.on('click', this.onAddLanguageClicked, this);
+    this.searchButton.on('click', this.onSearchClicked, this);
   },
 
 	// creates and register a LanguageBar gui component
@@ -46,9 +47,13 @@ App.Search.SearchCriteriaPanel = Ext.extend(App.Search.SearchCriteriaPanelUi, {
 	},
 
   /* Event handlers */
-  
+
   onAddLanguageClicked: function() {
     this.add(this.createLanguageBar);
+  },
+
+  onSearchClicked: function() {
+    console.log(this.getQuerySpec());
   }
 });
 Ext.reg("searchcriteriapanel", App.Search.SearchCriteriaPanel);
