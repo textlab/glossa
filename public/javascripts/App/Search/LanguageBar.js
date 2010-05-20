@@ -44,14 +44,7 @@ App.Search.LanguageBar = Ext.extend(App.Search.LanguageBarUi, {
       triggerAction: 'all',
       lazyRender:true,
       mode: 'local',
-      store: new Ext.data.ArrayStore({
-        id: 0,
-        fields: [
-          'myId',
-          'displayText'
-        ],
-        data: [[1, 'Norwegian'], [2, 'English']]
-      }),
+			store: App.Controller.languageStore,
       valueField: 'displayText',
       displayField: 'displayText'
     });
