@@ -67,6 +67,12 @@ class CQPQueryContext
     Rails.logger.warn('WARNING: No registry specified!') unless @registry
     
     @case_insensitive = opts[:case_insensitive] || nil
+    
+    # if no alignments are specified and the context is for a query we set the
+    # alignments automatically to the additional corpora set in the query
+    if @alignment.count == 0 and @query_spec
+      @alignment = alignment_from_query
+    end
   end
 
   def left_context
@@ -79,5 +85,13 @@ class CQPQueryContext
 
   def context_type
     return @context_type.to_s
+  end
+  
+  # extract additional aligned corpora from the query
+  def alignment_from_query
+    alignments = @query_spec.each_key.collect { |k| k.downcase }
+    alignments.delete(@corpus.downcase)
+
+    return alignments
   end
 end

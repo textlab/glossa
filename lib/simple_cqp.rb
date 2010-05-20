@@ -103,9 +103,38 @@ class SimpleCQP
     full_query_op << "undump #{subcorpus} < \"#{dump_file}\";\n"
     full_query_op << "cat #{subcorpus} #{from} #{to};\n"
 
-    return execute_query(full_query_op.string)
+    result = execute_query(full_query_op.string)
+
+    return SimpleCQP.group_result_by_alignment result, @context.alignment
   end
-  
+
+  # Groups the result into arrays of lines corresponding to the
+  # alignments of the query.
+  # result    - the result from a query, an array of strings.
+  # alignment - the alignments used by the query, an array of strings
+  #   specifying CWB corpora.
+  # Returns the grouped result, an array of arrays containing the strings
+  # of results from each corpora ordered as they are returned from CQP
+  # (this should be main corpora followed by aligned corpora in the same
+  # order as in @context.alignment).
+  def self.group_result_by_alignment(result, alignment)
+    group_size = alignment.length + 1
+    
+    # sanity checking of the passed results
+    raise RuntimeError if (result.length % group_size) != 0
+    
+    i = 0
+    groups = []
+
+    while i < result.length
+      group = result[i...(group_size + i)]
+      groups << group
+      i += group_size
+    end
+
+    return groups
+  end
+
   # Gives the number of results in the query run by this instance
   #
   # Returns the number of results as an integer

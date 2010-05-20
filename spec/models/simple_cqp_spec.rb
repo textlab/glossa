@@ -38,14 +38,14 @@ describe SimpleCQP do
   it "should return the correct corpora lines for a simple query" do
     ctx = CQPQueryContext.new(:registry => $cwb_settings['registry'],
                               :corpus => "ENGLISH",
-                              :query_spec => { :english => [{ 'type' => 'word', 'string' => 'beneficent' }]},
+                              :query_spec => { 'english' => [{ 'type' => 'word', 'string' => 'beneficent' }]},
                               :case_insensitive => true)
     cqp = SimpleCQP.new ctx, :cqp_path => $cwb_settings['cwb_bin_path']
 
     cqp.query_size.should == 4
     
     result = cqp.result(0, 4)
-    line_nums = result.collect { |line| line.match("^\\s*(\\d+):")[1].to_i }
+    line_nums = result.collect { |line| line[0].match("^\\s*(\\d+):")[1].to_i }
 
     line_nums.should == [7, 23, 6698, 8371]
   end
@@ -101,7 +101,7 @@ describe SimpleCQP do
   end
 
   it "should generate correct CQP queries given a more complex query spec" do
-    spec = { :english => [{'type' => 'word', 'string' => "lord", 'attributes' => { :pos => "NNP" }},
+    spec = { 'english' => [{'type' => 'word', 'string' => "lord", 'attributes' => { :pos => "NNP" }},
                           {'type' => 'interval', 'min' =>0, 'max'=>3},
                           {'type' => 'word', 'string' => "worlds"}]}
     
@@ -113,7 +113,7 @@ describe SimpleCQP do
     
     cqp.query_size.should == 2
     result = cqp.result 0, 2
-    line_nums = result.collect { |line| line.match("^\\s*(\\d+):")[1].to_i }
+    line_nums = result.collect { |line| line[0].match("^\\s*(\\d+):")[1].to_i }
     line_nums.should == [17, 5339]
   end
 
@@ -164,25 +164,34 @@ describe SimpleCQP do
     ctx = CQPQueryContext.new :corpus => "ENGLISH"
     cqp = SimpleCQP.new ctx
 
-    spec = { :english => [{ 'type' => 'word', 'string' => 'the' }]}
+    spec = { 'english' => [{ 'type' => 'word', 'string' => 'the' }]}
     clause = cqp.build_cqp_query spec
     clause.should == "[(word='the')]"
 
     spec = {
-      :english => [{ 'type' => 'word', 'string' => 'the' }],
-      :arabic_u => [{ 'type' => 'word', 'string' => 'fy' }]}
+      'english' => [{ 'type' => 'word', 'string' => 'the' }],
+      'arabic_u' => [{ 'type' => 'word', 'string' => 'fy' }]}
     
     clause = cqp.build_cqp_query spec
     clause.should == "[(word='the')] :ARABIC_U [(word='fy')]"
 
     spec = {
-      :english => [{ 'type' => 'word', 'string' => 'the' }],
-      :arabic_u => [{ 'type' => 'word', 'string' => 'fy' }],
-      :arabic_v => [{ 'type' => 'word', 'string' => 'fiy' }]}
+      'english' => [{ 'type' => 'word', 'string' => 'the' }],
+      'arabic_u' => [{ 'type' => 'word', 'string' => 'fy' }],
+      'arabic_v' => [{ 'type' => 'word', 'string' => 'fiy' }]}
 
     clause = cqp.build_cqp_query spec
     # sequence of aligned corpora doesn't matter
     ["[(word='the')] :ARABIC_U [(word='fy')] :ARABIC_V [(word='fiy')]",
      "[(word='the')] :ARABIC_V [(word='fiy')] :ARABIC_U [(word='fy')]"].should include clause
+  end
+
+  it "should group results by the number of alignments in a query" do
+    alignment = ['a', 'b']
+    result = ['1', '2', '3', '4', '5', '6']
+
+    groups = SimpleCQP.group_result_by_alignment result, alignment
+
+    groups.should == [['1', '2', '3'], ['4', '5', '6']]
   end
 end

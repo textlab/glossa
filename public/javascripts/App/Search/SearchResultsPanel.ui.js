@@ -1,6 +1,11 @@
 App.Search.SearchResultsPanelUi = Ext.extend(Ext.grid.GridPanel, {
   title: 'Search results',
-  columns: [{header: 'Result', dataIndex: 'line'}],
+  columns: [{
+			xtype: 'templatecolumn',
+			header: 'Result',
+			dataIndex: 'line',
+			tpl: new Ext.XTemplate('<tpl for="line">{.}<br></tpl>')
+	}],
 	store: new Ext.data.JsonStore({
 		fields: ['line'],
  		url: urlRoot + 'searches/query',
@@ -11,7 +16,6 @@ App.Search.SearchResultsPanelUi = Ext.extend(Ext.grid.GridPanel, {
     xtype: 'paging'
   },
 
-
   initComponent: function() {
     App.Search.SearchResultsPanelUi.superclass.initComponent.call(this);
 
@@ -20,4 +24,3 @@ App.Search.SearchResultsPanelUi = Ext.extend(Ext.grid.GridPanel, {
 		this.getBottomToolbar().bindStore(this.getStore());
   }
 });
-

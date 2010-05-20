@@ -42,7 +42,6 @@ class SearchesController < ApplicationController
     
     cqp = SimpleCQP.new context, :cqp_path => cwb_settings['cwb_bin_path']
     @result = cqp.result(start.to_i, start.to_i + limit.to_i - 1)
-    @result = @result.collect { |line| CGI.escapeHTML line }
 
     render :json => {
       :queryId => context.id,
@@ -92,6 +91,6 @@ class SearchesController < ApplicationController
 
   # helper that format CQP result lines to JSON
   def lines_to_json(result)
-    result.collect { |i| { :line => i }}
+    result.collect { |line| { :line => line.collect { |alignment| CGI.escapeHTML alignment } }}
   end
 end
