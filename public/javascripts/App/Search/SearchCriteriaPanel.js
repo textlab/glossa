@@ -28,6 +28,10 @@ App.Search.SearchCriteriaPanel = Ext.extend(App.Search.SearchCriteriaPanelUi, {
 			this.languageBars.push(bar);
 	},
 
+	deregisterLanguageBar: function(bar) {
+			this.languageBars.remove(bar);
+	},
+
 	// returns an object/hash that specifies the query constructed
 	// in this SearchCriteriaPanel
 	getQuerySpec: function() {
@@ -49,7 +53,10 @@ App.Search.SearchCriteriaPanel = Ext.extend(App.Search.SearchCriteriaPanelUi, {
   /* Event handlers */
 
   onAddLanguageClicked: function() {
-    this.add(this.createLanguageBar);
+		var bar = this.createLanguageBar();
+		bar.getTopToolbar().deleteLanguageButton.enable();
+    this.add(bar);
+		this.doLayout();
   },
 
   onSearchClicked: function() {
@@ -59,7 +66,12 @@ App.Search.SearchCriteriaPanel = Ext.extend(App.Search.SearchCriteriaPanelUi, {
 		var corpus = this.languageBars[0].getSelectedLanguage();
 			
     App.Controller.search(corpus, spec);
-  }
+  },
+
+	removeLanguageBar: function(bar) {
+		this.deregisterLanguageBar(bar);
+		this.remove(bar);
+	}
 });
 Ext.reg("searchcriteriapanel", App.Search.SearchCriteriaPanel);
 

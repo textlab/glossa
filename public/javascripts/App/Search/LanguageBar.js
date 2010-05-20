@@ -55,7 +55,9 @@ App.Search.LanguageBar = Ext.extend(App.Search.LanguageBarUi, {
     toolbar.addButton({
       text: 'Delete language',
       cls: 'x-btn-text-icon',
-      icon: 'images/delete.png'
+      icon: 'images/delete.png',
+			disabled: true,
+			ref: 'deleteLanguageButton'
     });
   },
 
@@ -75,6 +77,10 @@ App.Search.LanguageBar = Ext.extend(App.Search.LanguageBarUi, {
     this.deleteWordButton.on('click', function() {
       this.deleteWord();
     }, this);
+
+		this.getTopToolbar().deleteLanguageButton.on('click', function() {
+			this.deleteSelf();
+		}, this);
   },
 
   addWord: function() {
@@ -108,7 +114,11 @@ App.Search.LanguageBar = Ext.extend(App.Search.LanguageBarUi, {
     if(this.items.getCount() == 2) {
       this.deleteWordButton.disable();
     }
-  }
+  },
+
+	deleteSelf: function() {
+		this.ownerCt.removeLanguageBar(this);
+	}
 });
 
 Ext.reg("languagebar", App.Search.LanguageBar);
