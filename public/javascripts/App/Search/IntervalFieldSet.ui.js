@@ -9,12 +9,14 @@ App.Search.IntervalFieldSetUi = Ext.extend(Ext.form.FieldSet, {
             {
                 xtype: 'numberfield',
                 fieldLabel: 'Min',
-                anchor: '100%'
+                anchor: '100%',
+								value: 0
             },
             {
                 xtype: 'numberfield',
                 fieldLabel: 'Max',
-                anchor: '100%'
+                anchor: '100%',
+								value: 0
             }
         ];
         App.Search.IntervalFieldSetUi.superclass.initComponent.call(this);
