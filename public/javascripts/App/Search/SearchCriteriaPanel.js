@@ -53,7 +53,12 @@ App.Search.SearchCriteriaPanel = Ext.extend(App.Search.SearchCriteriaPanelUi, {
   },
 
   onSearchClicked: function() {
-    console.log(this.getQuerySpec());
+		var spec = this.getQuerySpec();
+
+		// first language is the basis of the query
+		var corpus = this.languageBars[0].getSelectedLanguage();
+			
+    App.Controller.search(corpus, spec);
   }
 });
 Ext.reg("searchcriteriapanel", App.Search.SearchCriteriaPanel);

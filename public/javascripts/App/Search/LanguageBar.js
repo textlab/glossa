@@ -32,7 +32,11 @@ App.Search.LanguageBar = Ext.extend(App.Search.LanguageBarUi, {
 
 			Ext.each(this.fieldSets, function(f, i) { specs.push(f.getQuerySpec()); });
 
-			return [this.getTopToolbar().items.first().getValue(), specs];
+			return [this.getSelectedLanguage(), specs];
+	},
+
+	getSelectedLanguage: function() {
+			return this.getTopToolbar().languageCombo.getValue();
 	},
 
   buildToolbar: function() {
