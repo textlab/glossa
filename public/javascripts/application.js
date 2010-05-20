@@ -144,6 +144,15 @@ Ext.onReady(function() {
   vp = new App.GlossaViewport({renderTo: Ext.getBody()});
 });
 
+
+var corporaListStore = new Ext.data.JsonStore({
+		id: 'corporaListStore',
+		fields: [ 'corpus' ],
+		url: urlRoot + 'searches/corpora_list',
+		root: 'data',
+		autoLoad: true
+});
+
 Ext.ns('App');
 
 // Sets up a singleton controller for the gui
@@ -151,14 +160,15 @@ Ext.ns('App');
 (function() {
 		var Controller = Ext.extend(Object, {
 				// store for LanguageBar language combo box
-				languageStore: new Ext.data.ArrayStore({
-						id: 0,
-						fields: [
-								'myId',
-								'displayText'
-						],
-						data: [[1, 'Norwegian'], [2, 'English']]
-      })
+				languageStore: new Ext.data.JsonStore({
+						id: 'corporaListStore',
+						fields: [ 'corpus' ],
+						url: urlRoot + 'searches/corpora_list',
+						root: 'data',
+						autoLoad: true
+				}),
+				languageValueField: 'corpus',
+				languageDisplayField: 'corpus'
 		});
 
 		App.Controller = new Controller();

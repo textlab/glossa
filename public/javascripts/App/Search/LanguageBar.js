@@ -45,8 +45,8 @@ App.Search.LanguageBar = Ext.extend(App.Search.LanguageBarUi, {
       lazyRender:true,
       mode: 'local',
 			store: App.Controller.languageStore,
-      valueField: 'displayText',
-      displayField: 'displayText'
+      valueField: App.Controller.languageValueField,
+      displayField: App.Controller.languageDisplayField
     });
     toolbar.addButton({
       text: 'Delete language',
