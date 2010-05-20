@@ -168,8 +168,7 @@ Ext.ns('App');
 						store.setBaseParam('caseInsensitive', false);
 		
 						store.load({ params: {
-								start: 0,
-								limit: 5
+								start: 0
 						}});
 				},
 
