@@ -6,9 +6,6 @@
 
 # TODO avoid dumping really large queries by checking size
 
-# This should be a configuration setting
-$temp_dir = "/Users/stinky/Documents/tekstlab/temp/"
-
 class SimpleCQP
   attr_accessor :query_file, :result_file, :error_file
   
@@ -30,8 +27,8 @@ class SimpleCQP
   def initialize(query_context, opts={})
     @cqp_path = opts.has_key?(:cqp_path) ? opts[:cqp_path] + '/' : ""
     # problems sourcing bin names from initializers (glossa.rb)
-    @cqp_bin = @cqp_path + 'cqp'
-    @cwb_lexdecode_bin = @cqp_path + 'cwb-lexdecode'
+    @cqp_bin = @cqp_path + CQP_CMD
+    @cwb_lexdecode_bin = @cqp_path + CWB_LEXDECODE_CMD
     
     @context = query_context
 
@@ -65,7 +62,7 @@ class SimpleCQP
 
     query_op = StringIO.new
  
-    query_op << "set DataDirectory \"#{$temp_dir}\";\n"
+    query_op << "set DataDirectory \"#{TEMP_DIR}\";\n"
     query_op << "#{@context.corpus};\n"
     query_op << "#{subcorpus} = #{query_string};\n"
     query_op << "dump #{subcorpus} > \"#{dump_file}\";\n"
@@ -317,7 +314,7 @@ class SimpleCQP
   def self.make_temp_file(name, id = nil)
     id = make_id if id.nil?
 
-    return "#{$temp_dir}#{name}-#{id}"
+    return "#{TEMP_DIR}#{name}-#{id}"
   end
   
   # Creates an id string based on the current time with
