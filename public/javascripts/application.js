@@ -158,8 +158,8 @@ Ext.ns('App');
 				// perform a search
 				// used by search button handlers
 				search: function(corpus, spec) {
-						console.log(spec);
-						console.log(corpus);
+						// reset the queryId before getting a new result
+						this.resultGrid.queryId = '0';
 
 						var store = this.resultGrid.getStore();
 

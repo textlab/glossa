@@ -4,7 +4,8 @@ App.Search.SearchResultsPanelUi = Ext.extend(Ext.grid.GridPanel, {
 			xtype: 'templatecolumn',
 			header: 'Result',
 			dataIndex: 'line',
-			tpl: new Ext.XTemplate('<tpl for="line">{.}<br></tpl>')
+			tpl: new Ext.XTemplate('<tpl for="line">{.}<br></tpl>'),
+			width: 650
 	}],
 	store: new Ext.data.JsonStore({
 		fields: ['line'],
