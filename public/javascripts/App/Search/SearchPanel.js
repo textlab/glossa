@@ -2,11 +2,6 @@ App.Search.SearchPanel = Ext.extend(App.Search.SearchPanelUi, {
   nSearchPanels: 0,
 	resultPagerSize: 15,
 
-	// keep references to the criteria and results handler so that
-	// the search function can access them
-	searchCriteriaPanel: null,
-	searchResultsPanel: null,
-
   initComponent: function() {
     if(this.constructor.prototype.nSearchPanels > 0) {
       Ext.apply(this, Ext.apply(this.initialConfig, {closable: true}));

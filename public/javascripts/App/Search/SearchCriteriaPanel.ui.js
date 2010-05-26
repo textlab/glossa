@@ -25,6 +25,7 @@ App.Search.SearchCriteriaPanelUi = Ext.extend(Ext.form.FormPanel, {
       ref: '../searchButton'
     }]
   },
+  ref: 'searchCriteriaPanel',
 
   initComponent: function() {
     App.Search.SearchCriteriaPanelUi.superclass.initComponent.call(this);

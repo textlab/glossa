@@ -17,6 +17,7 @@ App.Search.SearchResultsPanelUi = Ext.extend(Ext.grid.GridPanel, {
   bbar: {
     xtype: 'paging'
   },
+  ref: 'searchResultsPanel',
 
   initComponent: function() {
     App.Search.SearchResultsPanelUi.superclass.initComponent.call(this);

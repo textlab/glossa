@@ -8,10 +8,6 @@ App.Search.SearchPanelUi = Ext.extend(Ext.TabPanel, {
       new App.Search.SearchResultsPanel()
     ];
 
-		// set up references to the subpanels
-		this.searchCriteriaPanel = this.items[0];
-		this.searchResultsPanel = this.items[1];
-		
     App.Search.SearchPanelUi.superclass.initComponent.call(this);
   }
 });
