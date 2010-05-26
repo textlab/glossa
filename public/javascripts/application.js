@@ -168,13 +168,16 @@ Ext.ns('App');
 						store.setBaseParam('caseInsensitive', false);
 		
 						store.load({ params: {
-								start: 0
+								start: 0,
+								limit: this.resultPagerSize
 						}});
 				},
 
 				// the search result panel sets a reference to
 				// itself here
-				resultGrid: null
+				resultGrid: null,
+
+				resultPagerSize: 15
 		});
 
 		App.Controller = new Controller();

@@ -22,5 +22,6 @@ App.Search.SearchResultsPanelUi = Ext.extend(Ext.grid.GridPanel, {
 		// connect pager to the grids datastore
 		// bindStore() undocumented ?
 		this.getBottomToolbar().bindStore(this.getStore());
+		this.getBottomToolbar().pageSize = App.Controller.resultPagerSize;
   }
 });
