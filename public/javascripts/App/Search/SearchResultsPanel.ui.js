@@ -12,6 +12,7 @@ App.Search.SearchResultsPanelUi = Ext.extend(Ext.grid.GridPanel, {
     xtype: 'paging'
   },
   ref: 'searchResultsPanel',
+  disabled: true,
 
   initComponent: function() {
     // Remember to create a new store for each results panel
