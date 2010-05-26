@@ -36,6 +36,8 @@ App.GlossaViewportUi = Ext.extend(Ext.Viewport, {
         items: [{
           xtype: 'button',
           text: 'Add search',
+          icon: urlRoot + 'images/add.png',
+          cls: 'x-btn-text-icon',
           ref: '../../addSearchButton'
         }]
       }]
