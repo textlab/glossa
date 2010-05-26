@@ -22,7 +22,9 @@ App.GlossaViewport = Ext.extend(App.GlossaViewportUi, {
   },
 
   addSearchPanel: function() {
-    this.centerTabpanel.add(this.createSearchPanel());
+    var newSearchPanel = this.createSearchPanel();
+    this.centerTabpanel.add(newSearchPanel);
+    this.centerTabpanel.setActiveTab(newSearchPanel.id);
   },
 
   // function that has to be called when adding or deleting a SearchPanel
