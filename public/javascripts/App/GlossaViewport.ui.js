@@ -26,9 +26,18 @@ App.GlossaViewportUi = Ext.extend(Ext.Viewport, {
       collapsible: false,
       items: [{
         xtype: 'box',
+        style: 'float: left',
         autoEl: {
           html: 'Glossa'
         }
+      }, {
+        xtype: 'container',
+        style: 'float: right; padding-top: 5px',
+        items: [{
+          xtype: 'button',
+          text: 'Add search',
+          ref: '../../addSearchButton'
+        }]
       }]
     },
     {

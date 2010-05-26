@@ -6,12 +6,23 @@ App.GlossaViewport = Ext.extend(App.GlossaViewportUi, {
     App.GlossaViewport.superclass.initComponent.call(this);
 
     this.setupSubcomponents();
+    this.setupEventHandlers();
   },
 
   setupSubcomponents: function() {
-    // Add an initial search panel
-    this.centerTabpanel.add(this.createSearchPanel());
+    // Add an initial search panel which will not be closable
+    this.addSearchPanel();
     this.doLayout();
+  },
+
+  setupEventHandlers: function() {
+    this.addSearchButton.on('click', function() {
+      this.addSearchPanel();
+    }, this);
+  },
+
+  addSearchPanel: function() {
+    this.centerTabpanel.add(this.createSearchPanel());
   },
 
   // function that has to be called when adding or deleting a SearchPanel
