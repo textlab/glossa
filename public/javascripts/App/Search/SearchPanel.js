@@ -21,6 +21,9 @@ App.Search.SearchPanel = Ext.extend(App.Search.SearchPanelUi, {
 	// perform a search
 	// used by search button handlers
 	search: function(corpus, spec) {
+    // Switch to the results panel
+    this.setActiveTab(this.searchResultsPanel.id);
+
 		// reset the queryId before getting a new result
 		this.searchResultsPanel.queryId = '0';
 			
