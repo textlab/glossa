@@ -2,13 +2,13 @@ App.Search.SearchResultsPanel = Ext.extend(App.Search.SearchResultsPanelUi, {
   initComponent: function() {
 		var queryId = '0';
 
+    App.Search.SearchResultsPanel.superclass.initComponent.call(this);
+
 		// store references to the grid in the store and the proxy so that they
 		// can update the queryId in their event handlers
 		this.store.searchResultPanel = this;
 		this.store.proxy.searchResultPanel = this;
 		
-    App.Search.SearchResultsPanel.superclass.initComponent.call(this);
-
 		App.Controller.resultGrid = this;
 
 		this.store.proxy.on('beforeload', function(proxy, params) {
