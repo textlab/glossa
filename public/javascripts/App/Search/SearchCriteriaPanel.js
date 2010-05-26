@@ -65,7 +65,7 @@ App.Search.SearchCriteriaPanel = Ext.extend(App.Search.SearchCriteriaPanelUi, {
 		// first language is the basis of the query
 		var corpus = this.languageBars[0].getSelectedLanguage();
 			
-    App.Controller.search(corpus, spec);
+    this.ownerCt.search(corpus, spec);
   },
 
 	removeLanguageBar: function(bar) {
