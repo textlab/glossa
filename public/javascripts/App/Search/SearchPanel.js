@@ -6,8 +6,11 @@ App.Search.SearchPanel = Ext.extend(App.Search.SearchPanelUi, {
 	// the search function can access them
 	searchCriteriaPanel: null,
 	searchResultsPanel: null,
-		
+
   initComponent: function() {
+    if(this.constructor.prototype.nSearchPanels > 0) {
+      Ext.apply(this, Ext.apply(this.initialConfig, {closable: true}));
+    }
     App.Search.SearchPanel.superclass.initComponent.call(this);
 
     this.constructor.prototype.nSearchPanels++;
