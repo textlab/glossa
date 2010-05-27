@@ -155,29 +155,6 @@ Ext.ns('App');
 				languageValueField: 'corpus',
 				languageDisplayField: 'corpus',
 
-				// perform a search
-				// used by search button handlers
-				search: function(corpus, spec) {
-						// reset the queryId before getting a new result
-						this.resultGrid.queryId = '0';
-
-						var store = this.resultGrid.getStore();
-
-						store.setBaseParam('query', Ext.encode(spec));
-						store.setBaseParam('corpus', corpus);
-						store.setBaseParam('caseInsensitive', false);
-		
-						store.load({ params: {
-								start: 0,
-								limit: this.resultPagerSize
-						}});
-				},
-
-				// the search result panel sets a reference to
-				// itself here
-				resultGrid: null,
-
-				resultPagerSize: 15
 		});
 
 		App.Controller = new Controller();
