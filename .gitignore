@@ -2,6 +2,7 @@
 tmp
 db/*.sqlite3
 config/database.yml
+config/cwb.yml
 *~
 *#
 public/javascripts/appscripts.js
