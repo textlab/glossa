@@ -16,12 +16,12 @@ class SearchesController < ApplicationController
   
   # Non restful endpoint for CQP/CWB queries
   def query
-    query = params[:query]
-    start = params[:start]
-    limit = params[:limit]
-    corpus = params[:corpus]
+    queries = params[:queries]
+    corpus = params[:queries].first[:corpus].upcase
     query_id = params[:queryId]
     case_insensitive = params[:caseInsensitive]
+    start = params[:start]  # may be undefined if paging is not used
+    limit = params[:limit]  # may be undefined if paging is not used
 
     cwb_settings = read_cwb_settings
 
@@ -32,15 +32,13 @@ class SearchesController < ApplicationController
       query_id = nil
     end
 
-    query = ActiveSupport::JSON.decode query
-
     context = CQPQueryContext.new(:registry => cwb_settings['registry'],
-                                  :query_spec => query,
+                                  :query_spec => queries,
                                   :id => query_id,
                                   :corpus => corpus,
                                   :case_insensitive => (case_insensitive == "true"))
     
-    cqp = SimpleCQP.new context, :cqp_path => cwb_settings['cwb_bin_path']
+    cqp = SimpleCQP.new(context, :cqp_path => cwb_settings['cwb_bin_path'])
     @result = cqp.result(start.to_i, start.to_i + limit.to_i - 1)
 
     render :json => {
@@ -91,6 +89,9 @@ class SearchesController < ApplicationController
 
   # helper that format CQP result lines to JSON
   def lines_to_json(result)
-    result.collect { |line| { :line => line.collect { |alignment| CGI.escapeHTML alignment } }}
+    result.collect do |line|
+      { :guid => line.first.match(/^\d+/)[0],
+        :line => line.collect { |alignment| CGI.escapeHTML alignment } }
+    end
   end
 end

@@ -86,7 +86,7 @@ class SimpleCQP
   # Returns the results produced by CQP as an array of strings.
   # NOTE: the index parameters are passed directly to the
   # CQP CAT command.
-  def result(from, to)
+  def result(from = nil, to = nil)
     subcorpus = "simple.#{@context.id}"
     # Dump file is identified by the contexts id
     dump_file = SimpleCQP.make_temp_file "dump", @context.id
@@ -98,7 +98,11 @@ class SimpleCQP
     full_query_op << "set LeftContext #{@context.left_context} #{@context.context_type};\n"
     full_query_op << "set RightContext #{@context.right_context} #{@context.context_type};\n"
     full_query_op << "undump #{subcorpus} < \"#{dump_file}\";\n"
-    full_query_op << "cat #{subcorpus} #{from} #{to};\n"
+    if from && to
+      full_query_op << "cat #{subcorpus} #{from} #{to};\n"
+    else
+      full_query_op << "cat #{subcorpus};\n"
+    end
 
     result = execute_query(full_query_op.string)
 
@@ -398,16 +402,14 @@ class SimpleCQP
   # Generates a CQP query from a query spec - see comments
   # in cqp_query_context.rb.
   #
-  # query_spec - A hash with corpora symbols as keys and valid
-  #   corpora specific query sub specs as values.
+  # query_spec - An array with corpus names and valid
+  #   corpora specific query sub specs.
   #
   # Returns the corresponding CQP query as a string.
   def build_cqp_query(query_spec)
-    other_clauses = query_spec.each_pair.find_all do |corpus, sub_spec|
-      [corpus, sub_spec] if corpus.to_s.upcase != @context.corpus
-    end
+    other_clauses = query_spec.select { |query| query[:corpus].to_s.upcase != @context.corpus }
 
-    main_spec = query_spec.each_pair.find { |corpus, sub_spec| corpus.to_s.upcase == @context.corpus } [1]
+    main_spec = query_spec.find { |query| query[:corpus].to_s.upcase == @context.corpus }
 
     full_clause = StringIO.new
     full_clause << build_cqp_corpus_query(main_spec)
@@ -428,14 +430,10 @@ class SimpleCQP
   # Returns the corresponding CQP query as a string.
   def build_cqp_corpus_query(query_spec)
     # generate clause strings for each sub-specification
-    clauses = query_spec.collect do |spec|
-      if spec['type'] == 'word'
-        build_cqp_word_query spec
-      elsif spec['type'] == 'interval'
-        build_cqp_interval_query spec
-      else
-        raise RuntimeError
-      end
+    clauses = []
+    query_spec[:terms].collect do |spec|
+      clauses << build_cqp_interval_query(spec)
+      clauses << build_cqp_word_query(spec)
     end
 
     return clauses.join(' ')
@@ -450,10 +448,14 @@ class SimpleCQP
 
   # TODO support ?, *, within s
   
-  def build_cqp_interval_query(interval_spec)
-    raise RuntimeError if interval_spec['type'] != 'interval'
-    
-    return "[]{#{interval_spec['min']}, #{interval_spec['max']}}"
+  def build_cqp_interval_query(query_term)
+    min = query_term['min']
+    max = query_term['max']
+    return '' unless min || max
+
+    min = '0' if min.nil?
+    max = '' if max.nil?
+    "[]{#{min}, #{max}}"
   end
   
   # Builds a word clause from a word sub-specification.
@@ -462,15 +464,13 @@ class SimpleCQP
   # word_spec - A hash that is a valid word spec.
   #
   # Returns the corresponding clause as a string.
-  def build_cqp_word_query(word_spec)
-    raise RuntimeError if word_spec['type'] != 'word'
-
+  def build_cqp_word_query(query_term)
     # start with the word subclause
-    clauses = ["(word='#{word_spec['string']}'#{'%c' if @context.case_insensitive})"]
+    clauses = ["(word='#{query_term['string']}'#{'%c' if @context.case_insensitive})"]
 
     # add attribute subclauses if we have any
-    if not word_spec['attributes'].nil?
-      word_spec['attributes'].each_pair do |attr, val|
+    if query_term['attributes']
+      query_term['attributes'].each_pair do |attr, val|
         clauses << "(#{attr}='#{val}')"
       end
     end

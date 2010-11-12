@@ -4,36 +4,30 @@
 # Query spec
 #
 # A spec is hash that contains corpora symbols as keys and corpora
-# sub specs as values. A sub spec is an array of word or interval
+# sub specs as values. A sub spec is an array of query word
 # specifications that generates a CQP query in the same sequence. Each
-# specification is a hash with the :type key specifying if it's a :word
-# or :interval specification.
-#
-# Word:
-# 'type' => 'word
-# 'string' => The word string
+# specification is a hash that contains the keys :string, :attributes,
+# :min, and :max, where the last three may be nil.
+# 'string' => The word string (word form or lemma)
 # 'attributes' => A hash with the attribute name as a string for the key
 #   and the attribute value as the hash value in string form.
-#
-# Interval:
-# 'type' => 'interval
-# 'min' => Low end of the interval as an integer
-# 'max' => High end of the interval as an integer
+# 'min' => Low end of the preceding interval as an integer
+# 'max' => High end of the preceding interval as an integer
 #
 # Examples:
 #
-# { 'english' => [{'type' => 'word', 'string' => "lord", 'attributes' => { 'pos' => "NNP" }},
-#                 {'type' => 'interval', 'min' => 0, 'max' => 3},
-#                 {'type' => 'word', 'string' => "worlds"}]}
+# { 'english' => [{'min' => nil, 'max' => nil, 'string' => "lord",
+#                   'attributes' => { 'pos' => "NNP" }},
+#                 {'min' => 0, 'max' => 3, 'string' => "worlds"}]}
 #
 # Generates the following CQP query (with :case_insensitive
 # and :corpus => "ENGLISH" set):
 # [(word='lord'%c) & (pos='NNP')] []{0, 3} [(word='worlds'%c)]
 #
 # The following spec
-# { 'english' => [{ 'type' => 'word', 'string' => 'the' }],
-#   'arabic_u' => [{ 'type' => 'word', 'string' => 'fy' }],
-#   'arabic_v' => [{ 'type' => 'word', 'string' => 'fiy' }]}
+# { 'english' => [{ 'min' => nil, 'max' => nil, 'string' => 'the' }],
+#   'arabic_u' => [{ 'min' => nil, 'max' => nil, 'string' => 'fy' }],
+#   'arabic_v' => [{ 'min' => nil, 'max' => nil, 'string' => 'fiy' }]}
 #
 # Generates the following CQP query (with :corpus => "ENGLISH" set):
 # "[(word='the')] :ARABIC_U [(word='fy')] :ARABIC_V [(word='fiy')]",
@@ -50,7 +44,7 @@ class CQPQueryContext
     @query_spec = opts[:query_spec] || nil
     # corpus identifier as a string as used by CQP
     @corpus = opts[:corpus] || nil
-    
+
     @context = opts[:context] || [7, 7]
     @context_type = opts[:context_type] || :words
 
@@ -65,9 +59,9 @@ class CQPQueryContext
     @registry = opts[:registry] ||
       (CQPQueryContext.const_defined?('DEFAULT_REGISTRY') && DEFAULT_REGISTRY)
     Rails.logger.warn('WARNING: No registry specified!') unless @registry
-    
+
     @case_insensitive = opts[:case_insensitive] || nil
-    
+
     # if no alignments are specified and the context is for a query we set the
     # alignments automatically to the additional corpora set in the query
     if @alignment.count == 0 and @query_spec
@@ -86,10 +80,10 @@ class CQPQueryContext
   def context_type
     return @context_type.to_s
   end
-  
+
   # extract additional aligned corpora from the query
   def alignment_from_query
-    alignments = @query_spec.each_key.collect { |k| k.downcase }
+    alignments = @query_spec.map { |query| query['corpus'].downcase }
     alignments.delete(@corpus.downcase)
 
     return alignments
