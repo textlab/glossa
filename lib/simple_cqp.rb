@@ -97,6 +97,8 @@ class SimpleCQP
     @context.alignment.each { |a| full_query_op << "show +#{a};\n" }
     full_query_op << "set LeftContext #{@context.left_context} #{@context.context_type};\n"
     full_query_op << "set RightContext #{@context.right_context} #{@context.context_type};\n"
+    full_query_op << %Q(set LD '<span class="search-result">';\n)
+    full_query_op << %Q(set RD '</span>';\n)
     full_query_op << "undump #{subcorpus} < \"#{dump_file}\";\n"
     if from && to
       full_query_op << "cat #{subcorpus} #{from} #{to};\n"

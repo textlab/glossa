@@ -90,8 +90,7 @@ class SearchesController < ApplicationController
   # helper that format CQP result lines to JSON
   def lines_to_json(result)
     result.collect do |line|
-      { :guid => line.first.match(/^\d+/)[0],
-        :line => line.collect { |alignment| CGI.escapeHTML alignment } }
+      { :guid => line.first.match(/^\d+/)[0], :line => line }
     end
   end
 end
