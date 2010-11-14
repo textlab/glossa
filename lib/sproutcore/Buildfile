@@ -1,0 +1,9 @@
+# ===========================================================================
+# Project:   Glossa
+# Copyright: ©2010 My Company, Inc.
+# ===========================================================================
+
+# Add initial buildfile information here
+config :all, :required => :sproutcore
+
+proxy '/searches', :to => 'localhost:3000'
