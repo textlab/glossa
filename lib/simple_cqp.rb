@@ -409,9 +409,9 @@ class SimpleCQP
   #
   # Returns the corresponding CQP query as a string.
   def build_cqp_query(query_spec)
-    other_clauses = query_spec.select { |query| query[:corpus].to_s.upcase != @context.corpus }
-
-    main_spec = query_spec.find { |query| query[:corpus].to_s.upcase == @context.corpus }
+    main_spec, other_clauses = query_spec.partition do |query|
+      query[:corpus].to_s.upcase == @context.corpus
+    end
 
     full_clause = StringIO.new
     full_clause << build_cqp_corpus_query(main_spec)
@@ -431,14 +431,20 @@ class SimpleCQP
   #
   # Returns the corresponding CQP query as a string.
   def build_cqp_corpus_query(query_spec)
-    # generate clause strings for each sub-specification
+    query_spec = query_spec.to_a unless query_spec.is_a?(Array)
     clauses = []
-    query_spec[:terms].collect do |spec|
-      clauses << build_cqp_interval_query(spec)
-      clauses << build_cqp_word_query(spec)
+
+    # generate clause strings for each sub-specification
+    query_spec.each do |subspec|
+      terms = []
+      subspec[:terms].collect do |term|
+        terms << build_cqp_interval_query(term)
+        terms << build_cqp_word_query(term)
+      end
+      clauses << '(' + terms.join(' ') + ')'
     end
 
-    return clauses.join(' ')
+    return clauses.join(' | ')
   end
   
   # Builds an interval clause from an interval sub-specification.

@@ -2,8 +2,8 @@
   float: left;
 }
 
-.gray-border {
-  border: 1px #888 solid;
+.gray-bottom-border {
+  border-bottom: 2px #777 solid;
 }
 
 .group-heading {
