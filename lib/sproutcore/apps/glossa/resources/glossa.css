@@ -1,3 +1,10 @@
+.appname {
+  font-size: 30px !important;
+  line-height: 29px !important;
+  color: #444444;
+  text-shadow: 0px 2px 2px white;
+}
+
 .float-left {
   float: left;
 }
