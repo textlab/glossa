@@ -1,5 +1,14 @@
-.appname {
-  font-size: 30px !important;
+/* Id selectors */
+
+#glossa-name {
+  font-size: 12px;
+  vertical-align: sub;
+}
+
+/* Class selectors */
+
+.corpusname {
+  font-size: 20px !important;
   line-height: 29px !important;
   color: #444444;
   text-shadow: 0px 2px 2px white;
