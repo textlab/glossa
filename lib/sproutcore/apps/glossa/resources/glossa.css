@@ -22,6 +22,17 @@
   text-shadow: 0px 1px 1px white;
 }
 
+.sc-view .sc-text-field-view {
+  background-color: #f8f8f8;
+}
+
+/* Override the background colour in the Ace theme */
+.sc-main {
+  /*background: -moz-linear-gradient(top, #ffffff, #dddddd);*/
+  /*background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ffffff), to(#dddddd));*/
+  background: #eeeeee;
+}
+
 .search-result {
   font-weight: bold;
 }
