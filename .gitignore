@@ -1,6 +1,7 @@
 *.log
 tmp
 lib/sproutcore/tmp
+lib/sproutcore/frameworks/sproutcore
 db/*.sqlite3
 config/database.yml
 config/cwb.yml
