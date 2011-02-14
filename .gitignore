@@ -2,6 +2,7 @@
 tmp
 lib/sproutcore/tmp
 lib/sproutcore/frameworks/sproutcore
+lib/sproutcore/frameworks/ki
 db/*.sqlite3
 config/database.yml
 config/cwb.yml
