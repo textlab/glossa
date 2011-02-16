@@ -6,28 +6,6 @@ class ApplicationController < ActionController::Base
   helper_method :application_root
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
-  # Scrub sensitive parameters from your log
-  filter_parameter_logging :password, :password_confirmation
-
-  access_control do
-    ###########################################################################################
-    # Setup some default access rules. May be overridden or extended in descendant controllers
-    ###########################################################################################
-
-    # Everyone is allowed to view objects
-    allow all, :to => [:show]
-
-    # Admin can do anything
-    #allow :admin
-    allow all
-
-    # Logged-in users can create objectss
-    allow logged_in, :to => [:index, :new, :create]
-
-  end
-
-  rescue_from 'Acl9::AccessDenied', :with => :access_denied
-
   # Used by ExtJs to limit the scope in which database queries are performed
   def model_scope
     current_user.pht_company

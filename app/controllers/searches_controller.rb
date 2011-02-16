@@ -84,7 +84,7 @@ class SearchesController < ApplicationController
   
   # helper that  reads CWB/CQP settings from a config file
   def read_cwb_settings
-    return YAML.load_file("#{RAILS_ROOT}/config/cwb.yml")[RAILS_ENV]
+    return YAML.load_file("#{Rails.root}/config/cwb.yml")[Rails.env]
   end
 
   # helper that format CQP result lines to JSON

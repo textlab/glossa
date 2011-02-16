@@ -1,4 +1,4 @@
-if RAILS_ENV == 'development'
+if Rails.env == 'development'
   corpus = Corpus.create!(:name => 'The Oslo Corpus of Tagged Norwegian Texts')
 
   corpus.metadata_categories.create!(:name => 'title', :fieldtype => 'text')

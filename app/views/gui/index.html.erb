@@ -1,8 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xml:lang='en' xmlns='http://www.w3.org/1999/xhtml'>
+<!DOCTYPE html>
+<html>
 <head>
   <title>Glossa</title>
-  <%= stylesheet_link_merged :base %>
   <script type="text/javascript">
       //<![CDATA[
       var urlRoot = '<%= application_root %>';
@@ -11,7 +10,5 @@
   </script>
 </head>
 <body>
-  <%= javascript_include_tag 'ext/ext-base' + possibly_debug_suffix, 'ext/ext-all' + possibly_debug_suffix %>
-  <%= javascript_include_merged :base %>
 </body>
 </html>
