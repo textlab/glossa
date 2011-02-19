@@ -1,0 +1,17 @@
+/* Modifications to the SourceListView styles in the Ace theme */
+
+.sc-theme .sc-view.ace.sc-collection-view.sc-source-list {
+  background-color: #d9dfe6
+}
+
+.sc-theme .sc-view.ace.sc-collection-view.sc-source-list .sc-list-item-view label {
+	font-size: 12px;
+}
+
+.sc-theme .sc-view.ace.sc-collection-view.sc-source-list .sc-collection-item.sel {
+  /*border-top: 1px #658BBD solid;*/
+  /*border-bottom: 1px #658BBD solid;*/
+  border-top: 1px #719bd3 solid;
+  border-bottom: 1px #719bd3 solid;
+}
+

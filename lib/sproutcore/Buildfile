@@ -4,6 +4,7 @@
 # ===========================================================================
 
 # Add initial buildfile information here
-config :all, :required => :sproutcore, :theme => 'sproutcore/ace'
+config :all, :required => [:sproutcore, :ki, 'sproutcore/ace'],
+  :theme => 'sproutcore/ace', :css_theme => 'ace'
 
 proxy '/searches', :to => 'localhost:3000'
