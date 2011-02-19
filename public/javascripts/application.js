@@ -54,11 +54,11 @@ var lineGrid = new Ext.grid.GridPanel({
 
 function buttonHandler() {
 		queryId = 0;
-		
+
 		store.setBaseParam('query', Ext.get('input').getValue());
 		store.setBaseParam('corpus', Ext.get('corporaSelection').getValue());
 		store.setBaseParam('caseInsensitive', Ext.get('caseInsensitive').getValue())
-		
+
 		store.load({ params: {
 				start: 0,
 				limit: 5
@@ -153,7 +153,7 @@ Ext.ns('App');
 						autoLoad: true
 				}),
 				languageValueField: 'corpus',
-				languageDisplayField: 'corpus',
+				languageDisplayField: 'corpus'
 
 		});
 
