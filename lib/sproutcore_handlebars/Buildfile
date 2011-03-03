@@ -1,0 +1,9 @@
+# ===========================================================================
+# Project:   Glossa
+# Copyright: ©2011 My Company, Inc.
+# ===========================================================================
+
+# Add initial buildfile information here
+config :all, :required => ["sproutcore/core_foundation", "sproutcore/datastore", "sproutcore/foundation"],
+       :theme => "sproutcore/empty_theme"
+
