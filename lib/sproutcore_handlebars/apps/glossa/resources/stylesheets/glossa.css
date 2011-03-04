@@ -13,6 +13,12 @@ body {
 
 /* Id selectors */
 
+#glossa-logo {
+    position: relative;
+    right: 10px;
+    padding-top: 3px;
+}
+
 #glossa-name {
     position: relative;
     left: 10px;
@@ -21,3 +27,14 @@ body {
     top: 3px;
     color: #222;
 }
+
+/* Class selectors */
+
+.float-left {
+    float: left;
+}
+
+.float-right {
+    float: right;
+}
+
