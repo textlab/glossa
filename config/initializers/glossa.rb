@@ -1,5 +1,5 @@
-require 'lib/cqp_query_context'
-require 'lib/simple_cqp'
+require 'cqp_query_context'
+require 'simple_cqp'
 
 # Default registry which is used unless the search request specifies otherwise
 #CQPQueryContext::DEFAULT_REGISTRY = /path/to/registry

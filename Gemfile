@@ -32,7 +32,7 @@ gem 'mysql2'
 
 group :development do
   # Use mongrel instead of WEBrick in development
-  gem 'mongrel'
+  gem "mongrel", ">= 1.2.0.pre2"
 end
 
 group :test do
