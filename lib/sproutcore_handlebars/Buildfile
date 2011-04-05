@@ -4,6 +4,10 @@
 # ===========================================================================
 
 # Add initial buildfile information here
-config :all, :required => ["sproutcore/core_foundation", "sproutcore/datastore", "sproutcore/foundation"],
+#config :all, :required => ["sproutcore/core_foundation", "sproutcore/datastore"],
+config :all, :required => ["sproutcore"],
        :theme => "sproutcore/empty_theme"
+
+proxy '/searches', :to => 'localhost:3000'
+proxy '/corpora', :to => 'localhost:3000'
 

@@ -2,11 +2,10 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
-  helper :all # include all helpers, all the time
   helper_method :application_root
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
-  # Used by ExtJs to limit the scope in which database queries are performed
+  # Used by Sproutcore to limit the scope in which database queries are performed
   def model_scope
     current_user.pht_company
   end
