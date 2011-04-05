@@ -17,14 +17,3 @@
 }
 
 /* Classes */
-
-.tl-toolbar {
-    height: 36px;
-    border-bottom: 1px solid #888;
-    @include gradDark(#d9d9d9);
-};
-
-.tl-topbar {
-    @extend .tl-toolbar;
-    height: 30px;
-}
