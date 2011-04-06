@@ -1,3 +1,12 @@
+GIT
+  remote: https://github.com/threefunkymonkeys/authlogic.git
+  revision: bd1058667bdccda7c8e4b4be5b2ded5abaa1ccf9
+  specs:
+    authlogic (2.1.6)
+      activerecord (>= 3.0.0)
+      activesupport
+      bcrypt-ruby
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -29,6 +38,7 @@ GEM
       activesupport (= 3.0.6)
     activesupport (3.0.6)
     arel (2.0.9)
+    bcrypt-ruby (2.1.4)
     builder (2.1.2)
     daemons (1.0.10)
     diff-lcs (1.1.2)
@@ -88,6 +98,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  authlogic!
   mongrel (>= 1.2.0.pre2)
   mysql2
   rails (= 3.0.6)
