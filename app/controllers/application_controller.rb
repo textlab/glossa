@@ -2,8 +2,14 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
+  include Permissions
+
   helper_method :application_root
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
+
+  ########
+  private
+  ########
 
   # Used by Sproutcore to limit the scope in which database queries are performed
   def model_scope
@@ -19,10 +25,6 @@ class ApplicationController < ActionController::Base
       ''
     end
   end
-
-  ########
-  private
-  ########
 
   def current_user_session
     return @current_user_session if defined?(@current_user_session)

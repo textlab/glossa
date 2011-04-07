@@ -13,14 +13,14 @@
 # actions in your controllers using the +allow_for+ decorator-like method
 # call (see below).
 #
-# You can also call "default_permissions :allow" in particular controllers
+# You can also call "default_permission :allow" in particular controllers
 # to specify that all actions of the controller should be accessible
 # to everyone by default, and then use the +allow_for+ and +deny_for+
 # decorator-like methods to protect selected actions when needed. This makes
 # sense, for instance, if you have an intranet application which should
 # mostly only be accessible for logged-in users, but there are one or more
 # areas of the app that should be open to anonymous users. These areas can
-# then be handled by controllers where "default_permissions :allow" has been
+# then be handled by controllers where "default_permission :allow" has been
 # specified (but certain actions can still be protected by +allow_for+ or
 # +deny_for+ calls).
 #
@@ -36,8 +36,8 @@
 #
 # Finally, if your application is mostly open to anyone, but has certain areas
 # that should only be accessible for users with certain roles, you can override
-# the "factory setting" by calling "default_permissions :allow" in your
-# ApplicationController and then calling "default_permissions :deny" in those
+# the "factory setting" by calling "default_permission :allow" in your
+# ApplicationController and then calling "default_permission :deny" in those
 # controllers that handle the protected areas.
 #
 # As mentioned above, each action method definition in a controller can be
@@ -105,36 +105,74 @@
 
 module Permissions
   def self.included(base)
+    base.class_eval do
+      # +default_perm+ needs to be inherited from the superclass unless it
+      # is specifically set for a particular controller. Class variables won't
+      # work, since their values are shared by the entire class hierarchy, but
+      # Rails' convenient +class_attribute+ method is perfect for this.
+      class_attribute :default_perm
+      self.default_perm = :deny
+    end
     base.extend ClassMethods
-
     base.send(:before_filter, :check_action_permissions)
-  end
-
-  def check_action_permissions
-    puts current_user
   end
 
   module ClassMethods
     def default_permission(permission)
-      @default_permission = permission
+      self.default_perm = permission
     end
 
     def allow_for(roles)
-      @latest_allowed = roles
+      roles = [roles] unless roles.is_a?(Array)
+      @latest_allowed = roles  # will be used by the +method_added+ hook
     end
 
     def deny_for(roles)
-      @latest_denied = roles
+      roles = [roles] unless roles.is_a?(Array)
+      @latest_denied = roles  # will be used by the +method_added+ hook
     end
 
     def method_added(method_name)
+      # +allowed_roles+ and +denied_roles+ are specific to each individual
+      # controller and should not be inherited. They are therefore suitably
+      # defined as instance variables on the class. Furthermore, they cannot
+      # be defined by Permissions#included, since the module will only be
+      # included into the base controller. Hence, we should define them here
+      # as needed.
       @allowed_roles ||= {}
-      @allowed_roles[method_name] = @latest_allowed if @latest_allowed
+
+      # Calculate the set of roles that are allowed to call this action, based
+      # on default_perm and the set of roles given to the immediately preceding
+      # call to +allow_for+ (if any).
+      @allowed_roles[method_name] = allowed_set(@latest_allowed)
+
+      # Make sure any roles set by +allow_for+ are not carried over to the next action.
       @latest_allowed = nil
 
+      # Same procedure for denied roles.
       @denied_roles ||= {}
-      @denied_roles[method_name] = @latest_denied if @latest_denied
+      @denied_roles[method_name] = denied_set(@latest_denied)
       @latest_denied = nil
     end
+
+    ########
+    private
+    ########
+
+    def allowed_set(allowed_for_method)
+      if self.default_perm == :allow
+        allowed_for_method ? allowed_for_method.to_set : Set.new([:all])
+      end
+    end
+
+    def denied_set(denied_for_method)
+    end
+  end
+
+  ########
+  private
+  ########
+
+  def check_action_permissions
   end
 end
