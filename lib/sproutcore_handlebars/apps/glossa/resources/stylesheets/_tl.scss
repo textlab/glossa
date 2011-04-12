@@ -1,19 +1,30 @@
-/* CSS for the common template views created by the Text Laboratory, University of Oslo */
+// CSS for the common template views created by the Text Laboratory, University of Oslo
 
-/* Mixins */
+///////////
+// Mixins
+///////////
 
-/* Gradient that goes from a given color to a 20% lighter one */
+// Absolutely positioned box
+@mixin absoluteBox($vertical_offset, $height, $is_offset_from_top: true, $left: 0px, $right: 0px) {
+    position: absolute;
+    @if $is_offset_from_top { top: $vertical_offset; }
+    @else { bottom: $vertical_offset; }
+    height: $height;
+    left: $left;
+    right: $right;
+}
+
+// Gradient that goes from a given color to a 20% lighter one
 @mixin gradLight($startColor) {
   background: -webkit-gradient(linear, left top, left bottom, from($startColor), to(lighten($startColor, 20%)));
   background: -moz-linear-gradient(top,  $startColor,  lighten($startColor, 20%));
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$startColor', endColorstr='lighten($startColor, 20%)');
 }
 
-/* Gradient that goes from a given color to a 20% darker one */
+// Gradient that goes from a given color to a 20% darker one
 @mixin gradDark($startColor) {
   background: -webkit-gradient(linear, left top, left bottom, from($startColor), to(darken($startColor, 20%)));
   background: -moz-linear-gradient(top,  $startColor,  darken($startColor, 20%));
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$startColor', endColorstr='darken($startColor, 20%)');
 }
 
-/* Classes */

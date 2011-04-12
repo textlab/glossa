@@ -1,0 +1,125 @@
+@import "compass/css3/text-shadow";
+
+/////////////
+// Variables
+/////////////
+
+// View heights
+$header-height: 21px;
+$main-statusbar-height: $header-height;
+$app-header-height: 18px;
+$top-toolbar-height: 35px;
+
+// Offset calculations for absolutely positioned views
+$top-toolbar-top: $app-header-height + 2;  // add borders
+$main-split-view-top: $top-toolbar-top + $top-toolbar-height;
+$main-split-view-bottom: $main-statusbar-height + 2;  // add borders
+
+/////////////
+// Mixins
+/////////////
+
+/////////////
+// CSS rules
+/////////////
+
+#app-header {
+    @include absoluteBox(0px, $app-header-height);
+}
+
+#app-logo {
+    float: right;
+}
+
+#app-name {
+    font-size: 18px;
+    @include text-shadow(#ccc, 1px, 1px, 1px);
+    margin: 5px;
+    float: left;
+}
+
+#credits-short {
+    width: 300px;
+    text-align: center;
+    margin: 3px auto;
+    font-size: 10px;
+
+    a {
+        color: #00e;
+    }
+}
+
+/* The glossa div creates a "namespace" that lets us override
+   CSS attributes that SproutCore sets on elements within an element
+   with an sc-view class (which the outermost "application" div has). */
+#glossa {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+
+    a {
+        text-decoration: none;
+    }
+
+    .panel-header {
+        height: $header-height;
+        padding: 0px 5px;
+    }
+
+    .title {
+        float: left;
+        margin-top: 3px;
+    }
+
+    ul {
+        margin: 0px;
+    }
+}
+
+#logged-in {
+    float: left;
+    position: relative;
+    left: 40px;
+    top: 10px;
+
+    div {
+        float: left;
+    }
+}
+
+#logout-link {
+    position: relative;
+    left: 20px;
+}
+
+#main-center-panel {
+    float: left;
+    position: relative;
+    right: 0px;
+}
+
+#main-left-sidebar {
+    width: 200px;
+    height: 100%;
+    float: left;
+    background-color: blue;
+}
+
+#main-split-view {
+    position: absolute;
+    left: 0px;
+    top: $main-split-view-top;
+    right: 0px;
+    bottom: $main-split-view-bottom;
+    background-color: yellow;
+}
+
+#main-statusbar {
+    @include absoluteBox(0px, $main-statusbar-height, false);
+}
+
+#top-toolbar {
+    @include absoluteBox($top-toolbar-top, $top-toolbar-height)
+}

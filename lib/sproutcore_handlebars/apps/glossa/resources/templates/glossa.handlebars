@@ -1,0 +1,39 @@
+<!-- begin app header -->
+<div id="app-header" class="ui-widget-header">
+    <img id="app-logo" src="http://localhost:3000/images/tl_grey_115x18.gif?1243616978" alt="Tekstlab">
+</div>
+<!-- end app header -->
+<!-- begin top toolbar -->
+<div id="top-toolbar">
+    <div id="app-name">Glossa</div>
+    {{#view Glossa.LoggedInView id="logged-in"}}
+    <div>You are logged in as {{content.username}}</div>
+    <a href="" id="logout-link">Log out</a>
+    {{/view}}
+</div>
+<!-- end top toolbar -->
+<!-- begin main split view -->
+<div id="main-split-view">
+    <!-- begin main left sidebar -->
+    <div id="main-left-sidebar">
+        {{#collection "Glossa.MetadataListView" class="ui-widget-content"}}
+        <span>{{content.name}}</span>
+        {{/collection}}
+    </div>
+    <!-- end main left sidebar -->
+    <!-- begin main center panel -->
+    <div id="main-center-panel">
+        <div class="ui-widget-content">
+
+        </div>
+    </div>
+    <!-- end main center panel -->
+</div>
+<!-- end main split view -->
+<div id="main-statusbar" class="ui-widget-header">
+    <div id="credits-short">
+        Developed by <a href="http://www.hf.uio.no/tekstlab" target="_blank">The Text Laboratory</a>,
+        <a href="http://www.uio.no" target="_blank">University of Oslo</a>
+    </div>
+</div>
+
