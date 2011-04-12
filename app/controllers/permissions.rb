@@ -122,14 +122,12 @@ module Permissions
       self.default_perm = permission
     end
 
-    def allow_for(roles)
-      roles = [roles] unless roles.is_a?(Array)
-      @latest_allowed = roles  # will be used by the +method_added+ hook
+    def allow_for(*roles)
+      @latest_allowed = Array(roles).flatten.map(&:to_sym)  # will be used by the +method_added+ hook
     end
 
-    def deny_for(roles)
-      roles = [roles] unless roles.is_a?(Array)
-      @latest_denied = roles  # will be used by the +method_added+ hook
+    def deny_for(*roles)
+      @latest_denied = Array(roles).flatten.map(&:to_sym)   # will be used by the +method_added+ hook
     end
 
     def method_added(method_name)
