@@ -2,66 +2,71 @@
 # Copyright 2011 The Text Laboratory, University of Oslo
 # Author: Anders Nøklestad
 
-# Include this module into controllers that need access control.
+# Include this module into controllers that need access control. The module
+# provides the controller and its subclasses with three class methods:
+# +default_allowed+, +allow_for+, and +deny_for+. Each of these methods takes
+# one or more role names as its argument(s). In addition to names of actual
+# roles, the methods accept the following pseudo-role names: :all, :none,
+# :logged_in, and :anonymous (i.e. not logged in).
+#
 # When the module is included into a controller, its default behaviour
 # is to deny everybody access to all actions in the controller and all
-# controllers that inherit from it.
+# controllers that inherit from it. Thus, if you include the module in your
+# ApplicationController, all actions in all of the controllers in your
+# application will be protected. From there on you can use the +default_allowed+
+# method at the top of a controller class definition to specify a set of roles that
+# should have access to all the actions in the controller by default, and you can
+# use the +allow_for+ and +deny_for+ decorator-like methods to specify
+# access to individual actions (see examples below).
+
+# One common scenario is that you have an intranet application that should mostly
+# only be accessible for logged-in users, but there may be one or more
+# areas that should be open to anonymous users. You would then call
+# "default_allowed :logged_in" in your ApplicationController and
+# "default_allowed :anonymous" in those controllers that handle publicly
+# available areas. +allow_for+ and +deny_for+ may additionally be used to regulate
+# access to individual actions in any of the controllers.
 #
-# Thus, if you include the module in your ApplicationController, all
-# actions in all of the controllers in your application will be protected.
-# From there on you can specify which roles have access to particular
-# actions in your controllers using the +allow_for+ decorator-like method
-# call (see below).
+# Another common scenario is that you have a site which is mostly open to the public
+# but contains certain areas that should only be accessible to logged-in users or
+# even users with a special admin role. In this case, you can call
+# "default_allowed :all" in your ApplicationController and use
+# "default_allowed :logged_in", "default_allowed :admin", "allow_for :admin" etc.
+# to protect certain controllers or individual actions in your controller subclasses.
 #
-# You can also call "default_permission :allow" in particular controllers
-# to specify that all actions of the controller should be accessible
-# to everyone by default, and then use the +allow_for+ and +deny_for+
-# decorator-like methods to protect selected actions when needed. This makes
-# sense, for instance, if you have an intranet application which should
-# mostly only be accessible for logged-in users, but there are one or more
-# areas of the app that should be open to anonymous users. These areas can
-# then be handled by controllers where "default_permission :allow" has been
-# specified (but certain actions can still be protected by +allow_for+ or
-# +deny_for+ calls).
+# Note that a call to +allow_for+ restricts access to the listed roles, regardless
+# of the default permissions of the controller. In other words, even if you have
+# specified "default_allowed :all" at the top of your controller, a call to
+# "allow_for :admin" will still deny access to the following action to anyone but
+# admins.
 #
-# A call to +allow_for+ only grants access to the listed roles, regardless
-# of whether the default permission of the controller is :allow or :deny.
-# On the other hand, +deny_for+ is only useful if the default permission is
-# :allow; it has no effect if the default permission is :deny. (The alternative
-# interpretation, that a call to +deny_for+ would grant access to all roles
-# not listed even if the default permission is :deny, is considered too insecure,
-# since it would automatically grant access to any new roles created in the
-# system. If you want to deny access to anonymous users and allow
-# everyone else, use "allow_for :logged-in" instead.)
+# On the other hand, +deny_for+ is only useful if the list of roles given is more
+# restrictive than the default set of allowed roles for the controller. Thus, if
+# you have specified "default_allowed :admin" for your controller, a call to
+# "deny_for :member" does not have any effect, since the +member+ role was not part
+# of the default set of allowed roles anyway. In other words, a call to +deny_for+
+# does not automatically grant access to all roles that are not listed in the
+# +deny_for+ call!
 #
-# Finally, if your application is mostly open to anyone, but has certain areas
-# that should only be accessible for users with certain roles, you can override
-# the "factory setting" by calling "default_permission :allow" in your
-# ApplicationController and then calling "default_permission :deny" in those
-# controllers that handle the protected areas.
+# As an example, let us look at some of the controllers you might define as part of
+# a forum application:
 #
-# As mentioned above, each action method definition in a controller can be
-# preceded by a call to +allow_for+ or +deny_for+ to specify which roles can
-# or cannot access this action. Each of these methods takes a single argument,
-# which can either be the name of a single role or an array of roles. Role names
-# should be specified as symbols. The special symbol :all can be used to specify
-# that everybody should be allowed access to the action. Furthermore, the symbols
-# :logged_in and :anonymous can be used to refer to logged-in and non-logged-in
-# users, respectively.
-#
-# Example:
-#
+# # We have a site that is mostly open to anyone without having to log in, so set
+# # the default access to :all in the ApplicationController.
 # class ApplicationController < ActionController::Base
 #
-#   default_permission :allow   # overrides the "factory setting" of :deny
+#   default_allowed :all   # overrides the "factory setting" of :none
 #
 # end
 #
 #
+# # Most discussion-related actions should be accessible to anyone without having
+# # to log in, so inherit the default permissions from ApplicationController, but
+# # restrict some of the actions.
 # class DiscussionsController < ApplicationController
 #
 #   def view_post         # accessible to anyone because of inheritance of
-#     ....                # ApplicationController's default permission
+#     ....                # ApplicationController's default permissions
 #   end
 #
 #   allow_for :logged_in  # only accessible to logged-in users
@@ -74,7 +79,7 @@
 #     ....
 #   end
 #
-#   allow_for [:admin, :superadmin]   # only accessible to admins
+#   allow_for :admin, :superadmin        # only accessible to admins
 #   def delete_topic
 #     ....
 #   end
@@ -82,21 +87,21 @@
 # end
 #
 #
+# # This controller handles administrative tasks, which should by default only
+# # be accessible to admins and superadmins - some even only to superadmins. However,
+# # even this controller may contain actions that should be accessible to anyone.
 # class AdminController < ApplicationController
 #
-#   default_permission :deny  # overrides the default setting found in the ApplicationController
+#   default_allowed :admin, :superadmin  # overrides the default permissions that were
+#                                        # set in the ApplicationController
 #
 #   allow_for :all            # this particular action is accessible to anyone
 #   def show_public_info
 #     ....
 #   end
 #
-#   allow_for [:admin, :superadmin]   # only accessible to admins
-#   def create_new_document
-#     ....
-#   end
-#
-#   def useless   # not accessible to anyone - needs an allow_for specification!
+#   allow_for :superadmin     # only accessible to superadmins, not to ordinary admins
+#   def create_new_forum
 #     ....
 #   end
 #
