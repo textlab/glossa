@@ -40,3 +40,14 @@ module Glossa
     config.filter_parameters += [:password, :password_confirmation]
   end
 end
+
+# Define Object#in ourselves until we upgrade to Rails 3.1
+if 1.respond_to?(:in?)
+  raise "AN: +in?+ method now included in Rails - remove our own definition!!!"
+end
+
+class Object
+  def in?(another_object)
+    another_object.include?(self)
+  end
+end
