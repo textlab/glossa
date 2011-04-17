@@ -117,8 +117,8 @@
 module Permissions
 
   # Some useful role sets
-  NOBODY = Set.new([:none])
-  EVERYBODY = Set.new([:anonymous, :all])
+  NOBODY = [:none].to_set
+  EVERYBODY = [:anonymous, :all].to_set
 
   def self.included(base)
     base.class_eval do
@@ -137,17 +137,21 @@ module Permissions
   end
 
   def check_action_permissions
-    allowed_roles = self.class.allowed_roles_for(params[:action])
+    roles = self.class.roles_for(params[:action])
 
     if current_user.nil?
-      # User is not logged in
-      denied = (allowed_roles & EVERYBODY).empty?
+      # User is not logged in and hence has no actual role. Allow if :all or :anonymous
+      # are mentioned in the set of allowed roles and not in the set of denied roles.
+      allowed = !(roles[:allowed] & EVERYBODY).empty? && (roles[:denied] & EVERYBODY).empty?
     else
-      # User is logged in
-      denied = (allowed_roles & Set.new([:logged_in, current_user.role.name.to_sym])).empty?
+      # User is logged in and hence has a role. Add :logged_in and :all to this role
+      # and allow if at least one of these is mentioned in the set of allowed roles
+      # and none of them in the set of denied roles.
+      user_roles = [current_user.role.name.to_sym, :logged_in, :all].to_set
+      allowed = !(roles[:allowed] & user_roles).empty? && (roles[:denied] & user_roles).empty?
     end
 
-    raise AccessDenied if denied
+    raise AccessDenied unless allowed
 
   end
 
@@ -179,26 +183,31 @@ module Permissions
     end
 
     def method_added(method_name)
-      # +@allowed_roles+ is specific to each individual controller and should
+      # +@roles+ is specific to each individual controller and should
       # not be inherited. It is therefore suitably defined as an instance
       # variable on the class. Furthermore, it cannot be defined by
       # Permissions#included, since the module will only be included into the
       # base controller. Hence, we should define it here as needed.
-      @allowed_roles ||= {}
+      @roles ||= {}
 
-      # Calculate the set of roles that are allowed to call this action, based
-      # on the default set of allowed roles for the controller and the set of
-      # roles given to any preceding call to +allow_for+, +also_allow_for+, or
-      # +deny_for+.
-      @allowed_roles[method_name.to_sym] = calculate_allowed_set
+      # Register the set of roles that are listed as being allowed to call this action,
+      # based on the default set of allowed roles for the controller and the set of
+      # roles given to any preceding call to +allow_for+ or +also_allow_for+.
+      # Also register the set of denied roles given to +deny_for+ (if any). Both
+      # of these will be used by the +check_action_permissions+ filter to determine
+      # if the current user can access this action.
+      @roles[method_name.to_sym] = {
+          allowed: calculate_allowed_set,
+          denied: @latest_denied || Set.new
+      }
 
       # Make sure any roles set by +allow_for+, +also_allow_for+, or +deny_for+
       # are not carried over to the next action.
       @latest_allowed = @latest_also_allowed = @latest_denied = nil
     end
 
-    def allowed_roles_for(action)
-      @allowed_roles[action.to_sym] || Set.new([:none])
+    def roles_for(action)
+      @roles[action.to_sym] || { allowed: [:none].to_set, denied: Set.new }
     end
 
     ########
@@ -206,14 +215,12 @@ module Permissions
     ########
 
     def set_with(roles)
-      Set.new(Array(roles).flatten.map(&:to_sym))
+      Array(roles).flatten.map(&:to_sym).to_set
     end
 
     def calculate_allowed_set
-      return @latest_allowed if @latest_allowed
-      return def_allowed - @latest_denied if @latest_denied
-      return def_allowed + @latest_also_allowed if @latest_also_allowed
-      def_allowed
+      @latest_allowed ||
+          (@latest_also_allowed ? def_allowed + @latest_also_allowed : def_allowed)
     end
   end
 
