@@ -28,3 +28,17 @@
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$startColor', endColorstr='darken($startColor, 20%)');
 }
 
+///////////
+// Classes
+///////////
+
+// Begin BorderLayoutView classes
+
+.tl-border-layout {
+    position: relative; // to enable positioning of regions relative to this element
+    width: 100%;
+    height: 100%;
+}
+
+// End BorderLayoutView classes
+

@@ -4,27 +4,14 @@
 // Variables
 /////////////
 
-// View heights
 $header-height: 21px;
-$main-statusbar-height: $header-height;
-$app-header-height: 18px;
-$top-toolbar-height: 35px;
-
-// Offset calculations for absolutely positioned views
-$top-toolbar-top: $app-header-height + 2;  // add borders
-$main-split-view-top: $top-toolbar-top + $top-toolbar-height;
-$main-split-view-bottom: $main-statusbar-height + 2;  // add borders
-
-/////////////
-// Mixins
-/////////////
 
 /////////////
 // CSS rules
 /////////////
 
 #app-header {
-    @include absoluteBox(0px, $app-header-height);
+    height: 18px;
 }
 
 #app-logo {
@@ -82,7 +69,7 @@ $main-split-view-bottom: $main-statusbar-height + 2;  // add borders
     float: left;
     position: relative;
     left: 40px;
-    top: 10px;
+    top: 12px;
 
     div {
         float: left;
@@ -95,31 +82,18 @@ $main-split-view-bottom: $main-statusbar-height + 2;  // add borders
 }
 
 #main-center-panel {
-    float: left;
-    position: relative;
-    right: 0px;
+    background-color: red;
 }
 
 #main-left-sidebar {
     width: 200px;
-    height: 100%;
-    float: left;
     background-color: blue;
 }
 
-#main-split-view {
-    position: absolute;
-    left: 0px;
-    top: $main-split-view-top;
-    right: 0px;
-    bottom: $main-split-view-bottom;
-    background-color: yellow;
+#main-north-region {
+    height: 53px;
 }
 
 #main-statusbar {
-    @include absoluteBox(0px, $main-statusbar-height, false);
-}
-
-#top-toolbar {
-    @include absoluteBox($top-toolbar-top, $top-toolbar-height)
+    height: 21px;
 }
