@@ -81,11 +81,11 @@ $header-height: 21px;
     left: 20px;
 }
 
-#main-center-panel {
+#main-center-region {
     background-color: red;
 }
 
-#main-left-sidebar {
+#main-west-region {
     width: 200px;
     background-color: blue;
 }
@@ -94,6 +94,6 @@ $header-height: 21px;
     height: 53px;
 }
 
-#main-statusbar {
+#main-south-region {
     height: 21px;
 }
