@@ -1,1 +1,9 @@
-ASDFASDFA
+{{view Glossa.CorpusSelectView}}
+
+{{#each content}}
+<div class="metadata-category-name">{{name}}</div>:
+<div class="metadata-category-buttons" {{bindAttr id="name"}}>
+<input type="radio" {{bindAttr id="id1" name="name"}} checked="checked"><label {{bindAttr for="id1"}}>All</label>
+<input type="radio" {{bindAttr id="id2" name="name"}}><label {{bindAttr for="id2"}}>Select</label>
+</div>
+{{/each}}

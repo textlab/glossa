@@ -25,6 +25,11 @@ $header-height: 21px;
     float: left;
 }
 
+#corpus-select {
+    width: 210px;
+    margin-bottom: 10px;
+}
+
 #credits-short {
     width: 300px;
     text-align: center;
@@ -45,9 +50,29 @@ $header-height: 21px;
     top: 0px;
     right: 0px;
     bottom: 0px;
+    font-size: 10px;
 
     a {
         text-decoration: none;
+    }
+
+    .metadata-category-buttons {
+        float: right;
+    }
+    .metadata-category-name {
+        font-size: 12px;
+        font-weight: bold;
+        float: left;
+    }
+
+    .metadata-list {
+        li {
+            padding-bottom: 15px;
+        }
+    }
+
+    select {
+        font-size: 12px;
     }
 
     .panel-header {
@@ -60,6 +85,11 @@ $header-height: 21px;
         margin-top: 3px;
     }
 
+    // Make the buttons a little smaller than the jQuery UI default
+    .ui-button-text-only .ui-button-text {
+        padding: .2em .8em;
+    }
+
     ul {
         margin: 0px;
     }
@@ -70,6 +100,7 @@ $header-height: 21px;
     position: relative;
     left: 40px;
     top: 12px;
+    font-size: 12px;
 
     div {
         float: left;
@@ -86,8 +117,8 @@ $header-height: 21px;
 }
 
 #main-west-region {
-    width: 200px;
-    background-color: blue;
+    width: 210px;
+    padding: 10px;
 }
 
 #main-north-region {

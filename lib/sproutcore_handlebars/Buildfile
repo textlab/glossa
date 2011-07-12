@@ -4,8 +4,16 @@
 # ===========================================================================
 
 # Add initial buildfile information here
-config :all, :required => ["sproutcore/core_foundation", "sproutcore/datastore"],
-       :theme => "sproutcore/empty_theme"
+config :all, :required => ["sproutcore/core_foundation", "sproutcore/datastore",
+  "sproutcore/statechart"],
+  :theme => "sproutcore/empty_theme"
+
+# To see individual javascript files:
+mode :debug do
+  %w[sproutcore sproutcore/runtime sproutcore/datastore].each do |target|
+    config target, :combine_javascript => false
+  end
+end
 
 proxy '/searches', :to => 'localhost:3000'
 proxy '/corpora', :to => 'localhost:3000'
