@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.7'
+gem 'rails', '3.0.9'
 # NOTE! We can use the latest version of mysql2 when Rails 3.1 is released
 gem 'mysql2', "~> 0.2.6"
 
