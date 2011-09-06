@@ -2,7 +2,7 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
-  include Permissions
+  #include Permissions
 
   helper_method :application_root
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
@@ -11,9 +11,9 @@ class ApplicationController < ActionController::Base
   private
   ########
 
-  # Used by Sproutcore to limit the scope in which database queries are performed
+  # Used by the ExtJs module to limit the scope in which database queries are performed
   def model_scope
-    current_user.pht_company
+    current_user
   end
 
   # Returns the path on which the application is mounted (e.g., '/myapp' or simply '/')

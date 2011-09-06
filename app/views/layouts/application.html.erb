@@ -2,13 +2,17 @@
 <html>
 <head>
   <title>Glossa</title>
-  <%= stylesheet_link_tag :all %>
-  <%= javascript_include_tag :defaults %>
   <%= csrf_meta_tag %>
+
+  <%= stylesheet_link_tag 'extjs/resources/css/ext-all' %>
+
+  <script type="text/javascript">
+    var urlRoot = '<%= application_root %>';
+    var authenticityToken = '<%= form_authenticity_token %>';
+  </script>
+
+  <%= javascript_include_tag 'extjs/ext-all-debug', 'app' %>
 </head>
 <body>
-
-<%= yield %>
-
 </body>
 </html>

@@ -15,6 +15,7 @@ lib/sproutcore_handlebars/.sass-cache
 lib/sproutcore_handlebars/frameworks/sproutcore
 lib/sproutcore_handlebars/frameworks/ki
 public/javascripts/appscripts.js
+public/javascripts/extjs
 doc
 .idea
 obs_reset_app
