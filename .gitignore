@@ -21,3 +21,4 @@ doc
 obs_reset_app
 start.sh
 restart.sh
+.sass-cache/
