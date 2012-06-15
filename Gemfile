@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.0'
+gem 'rails', '3.2.6'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -10,9 +10,9 @@ gem 'mysql2'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails', "  ~> 3.1.0"
-  gem 'coffee-rails', "~> 3.1.0"
-  gem 'uglifier'
+  gem 'sass-rails',   '~> 3.2.5'
+  gem 'coffee-rails', '~> 3.2.2'
+  gem 'uglifier',     '>= 1.0.3'
 end
 
 #gem 'jquery-rails'
@@ -34,7 +34,7 @@ end
 gem 'devise'
 
 # Squeel Query DSL
-gem "squeel"
+gem 'squeel'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
@@ -44,7 +44,7 @@ gem "squeel"
 # end
 
 group :development do
-  # Use mongrel instead of WEBrick in development
-  gem "mongrel", ">= 1.2.0.pre2"
+  # Use thin instead of WEBrick in development
+  gem 'thin'
   gem 'sqlite3'
 end
