@@ -11,11 +11,6 @@ class ApplicationController < ActionController::Base
   private
   ########
 
-  # Used by the ExtJs module to limit the scope in which database queries are performed
-  def model_scope
-    current_user
-  end
-
   # Returns the path on which the application is mounted (e.g., '/myapp' or simply '/')
   def application_root
     path = request.env['REQUEST_PATH']
