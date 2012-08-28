@@ -1,3 +1,3 @@
-Glossa.ApplicationController = Ember.ObjectController.extend
+App.ApplicationController = Ember.ObjectController.extend
   # Implement your controller here.
 

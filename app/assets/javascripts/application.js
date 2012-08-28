@@ -8,3 +8,5 @@
 // GO AFTER THE REQUIRES BELOW.
 //= require jquery
 //= require bootstrap-2.1.0/bootstrap
+//= require ember
+//= require ember/app

@@ -7,8 +7,8 @@
 #= require_tree ./routes
 #= require_self
 
-router = Glossa.router = Glossa.Router.create
+router = App.router = App.Router.create
   location: 'hash'
 
-Glossa.initialize(router)
+App.initialize(router)
 

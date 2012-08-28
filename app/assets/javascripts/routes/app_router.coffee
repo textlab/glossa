@@ -1,4 +1,4 @@
-Glossa.Router = Ember.Router.extend
+App.Router = Ember.Router.extend
   root: Ember.State.extend
     index: Ember.State.extend
       route: '/'
