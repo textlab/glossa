@@ -1,3 +1,2 @@
-App.ApplicationController = Ember.ObjectController.extend
-  # Implement your controller here.
+App.ApplicationController = Ember.Controller.extend()
 

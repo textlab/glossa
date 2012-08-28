@@ -1,6 +1,8 @@
 App.Router = Ember.Router.extend
-  root: Ember.State.extend
-    index: Ember.State.extend
+  enableLogging: <%= Rails.env == 'development' %>
+
+  root: Ember.Route.create
+    index: Ember.Route.create
       route: '/'
 
       # You'll likely want to connect a view here.
