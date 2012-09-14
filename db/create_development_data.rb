@@ -13,15 +13,15 @@ if Rails.env == 'development'
 
   text = config.corpus_texts.create!(:uri => 'peer_gynt.txt')
 
-  title = TextMetadataValue.create!(:corpus_text => text, :metadata_category => MetadataCategory.find_by_name('title'))
+  title = MetadataValueText.create!(:corpus_text => text, :metadata_category => MetadataCategory.find_by_name('title'))
   title.value = 'Peer Gynt'
   title.save!
 
-  author = TextMetadataValue.create!(:corpus_text => text, :metadata_category => MetadataCategory.find_by_name('author'))
+  author = MetadataValueText.create!(:corpus_text => text, :metadata_category => MetadataCategory.find_by_name('author'))
   author.value = 'Henrik Ibsen'
   author.save!
 
-  year = IntegerMetadataValue.create!(:corpus_text => text, :metadata_category => MetadataCategory.find_by_name('publishing_year'))
+  year = MetadataValueInteger.create!(:corpus_text => text, :metadata_category => MetadataCategory.find_by_name('publishing_year'))
   year.value = 1867
   year.save!
 end

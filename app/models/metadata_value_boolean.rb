@@ -1,4 +1,4 @@
-class BooleanMetadataValue < MetadataValue
+class MetadataValueBoolean < MetadataValue
   def value
     boolean_value
   end

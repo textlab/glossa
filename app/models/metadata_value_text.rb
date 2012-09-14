@@ -1,4 +1,4 @@
-class TextMetadataValue < MetadataValue
+class MetadataValueText < MetadataValue
   def value
     text_value
   end

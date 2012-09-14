@@ -1,4 +1,4 @@
-class IntegerMetadataValue < MetadataValue
+class MetadataValueInteger < MetadataValue
   def value
     integer_value
   end
