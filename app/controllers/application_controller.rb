@@ -2,7 +2,6 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
-  #include Permissions
 
   helper_method :application_root
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
