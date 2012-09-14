@@ -24,9 +24,4 @@ if Rails.env == 'development'
   year = IntegerMetadataValue.create!(:corpus_text => text, :metadata_category => MetadataCategory.find_by_name('publishing_year'))
   year.value = 1867
   year.save!
-
-  user = User.create!(:username => 'testuser', :email => 'test@test.com',
-                      :password => 'test', :password_confirmation => 'test')
-  user_group = UserGroup.create!(:name => 'MyCorpusGroup')
-  user_group.users << user
 end

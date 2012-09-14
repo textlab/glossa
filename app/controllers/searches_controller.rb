@@ -9,11 +9,8 @@ class SearchesController < ApplicationController
       render :json => {:success => false, :message => 'Queries parameter is missing'}, :status => :bad_request
       return
     end
-
-#    unless params[:data].has_ke
-#    current_user.searches.create!(params[:data]) if current_user
   end
-  
+
   # Non restful endpoint for CQP/CWB queries
   def query
     queries = params[:queries]
@@ -37,7 +34,7 @@ class SearchesController < ApplicationController
                                   :id => query_id,
                                   :corpus => corpus,
                                   :case_insensitive => (case_insensitive == "true"))
-    
+
     cqp = SimpleCQP.new(context, :cqp_path => cwb_settings['cwb_bin_path'])
     @result = cqp.result(start.to_i, start.to_i + limit.to_i - 1)
 
@@ -48,13 +45,13 @@ class SearchesController < ApplicationController
       :success => true
     }
   end
-  
+
   # non restful endpoint for CQP/CWB corpora list requests
   def corpora_list
     id = params[:id]
-    
+
     cwb_settings = read_cwb_settings
-    
+
     context = CQPQueryContext.new(:registry => cwb_settings['registry'])
     cqp = SimpleCQP.new context, :cqp_path => cwb_settings['cwb_bin_path']
     corpora = cqp.list_corpora
@@ -64,16 +61,16 @@ class SearchesController < ApplicationController
       :success => true
     }
   end
-  
+
   # non restful endpoint for CQP/CWB corpus info requests
   def corpus_info
     corpus = params[:corpus]
 
     cwb_settings = read_cwb_settings
-    
+
     context = CQPQueryContext.new(:registry => cwb_settings['registry'])
     cqp = SimpleCQP.new context, :cqp_path => cwb_settings['cwb_bin_path']
-    
+
     corpus_info = cqp.corpus_info corpus
 
     render :json => corpus_info
@@ -81,7 +78,7 @@ class SearchesController < ApplicationController
 
   def destroy
   end
-  
+
   # helper that  reads CWB/CQP settings from a config file
   def read_cwb_settings
     return YAML.load_file("#{Rails.root}/config/cwb.yml")[Rails.env]

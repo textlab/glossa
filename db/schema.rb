@@ -11,12 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100204180538) do
-
-  create_table "aligned_segments", :id => false, :force => true do |t|
-    t.integer "segment_id",         :null => false
-    t.integer "aligned_segment_id", :null => false
-  end
+ActiveRecord::Schema.define(:version => 20100108140812) do
 
   create_table "corpora", :force => true do |t|
     t.string   "name",             :null => false
@@ -32,21 +27,11 @@ ActiveRecord::Schema.define(:version => 20100204180538) do
     t.datetime "updated_at",         :null => false
   end
 
-  create_table "corpora_metadata_categories", :id => false, :force => true do |t|
-    t.integer "corpus_id",            :null => false
-    t.integer "metadata_category_id", :null => false
-  end
-
   create_table "corpus_texts", :force => true do |t|
     t.integer  "language_config_id"
     t.string   "uri"
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
-  end
-
-  create_table "corpus_texts_subcorpora", :id => false, :force => true do |t|
-    t.integer "corpus_text_id", :null => false
-    t.integer "subcorpus_id",   :null => false
   end
 
   create_table "deleted_hits", :force => true do |t|
@@ -101,44 +86,6 @@ ActiveRecord::Schema.define(:version => 20100204180538) do
     t.text     "contents",       :null => false
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
-  end
-
-  create_table "subcorpora", :force => true do |t|
-    t.integer  "corpus_id"
-    t.integer  "user_id"
-    t.string   "name",       :null => false
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  create_table "user_groups", :force => true do |t|
-    t.string   "name",       :null => false
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  create_table "user_groups_users", :id => false, :force => true do |t|
-    t.integer "user_group_id", :null => false
-    t.integer "user_id",       :null => false
-  end
-
-  create_table "users", :force => true do |t|
-    t.string   "username",                           :null => false
-    t.string   "email",                              :null => false
-    t.string   "crypted_password",                   :null => false
-    t.string   "password_salt",                      :null => false
-    t.string   "persistence_token",                  :null => false
-    t.string   "single_access_token",                :null => false
-    t.string   "perishable_token",                   :null => false
-    t.integer  "login_count",         :default => 0, :null => false
-    t.integer  "failed_login_count",  :default => 0, :null => false
-    t.datetime "last_request_at"
-    t.datetime "current_login_at"
-    t.datetime "last_login_at"
-    t.string   "current_login_ip"
-    t.string   "last_login_ip"
-    t.datetime "created_at",                         :null => false
-    t.datetime "updated_at",                         :null => false
   end
 
 end
