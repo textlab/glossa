@@ -56,9 +56,7 @@ Glossa::Application.routes.draw do
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id(.:format)))'
 
-  resource :user_session
-
-  root :to => 'gui#index'
+  root :to => 'home#index'
 
   # non restful routes for CQP/CWB query endpoints
   match '/searches/corpora_list' => 'searches#corpora_list'

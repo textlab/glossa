@@ -1,4 +1,4 @@
-class GuiController < ApplicationController
+class HomeController < ApplicationController
 
   def index
     if Rails.env == 'development' && params.has_key?(:user)
