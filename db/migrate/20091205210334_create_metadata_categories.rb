@@ -1,6 +1,7 @@
 class CreateMetadataCategories < ActiveRecord::Migration
   def self.up
     create_table :metadata_categories do |t|
+      t.belongs_to :corpus
       t.string :name, :null => false
       t.string :fieldtype, :null => false
       t.string :selector

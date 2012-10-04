@@ -1,5 +1,6 @@
 class MetadataCategory < ActiveRecord::Base
-  has_and_belongs_to_many :corpora
+  belongs_to :corpus
+  has_many :metadata_values, dependent: :destroy
 
   validates_presence_of :name
   validates_presence_of :fieldtype

@@ -58,6 +58,14 @@ Glossa::Application.routes.draw do
 
   root :to => 'home#index'
 
+  resources :corpora do
+    resources :metadata_categories do
+      member do
+        get 'values'
+      end
+    end
+  end
+
   # non restful routes for CQP/CWB query endpoints
   match '/searches/corpora_list' => 'searches#corpora_list'
   match '/searches/query' => 'searches#query'

@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(:version => 20100108140812) do
   end
 
   create_table "metadata_categories", :force => true do |t|
+    t.integer  "corpus_id"
     t.string   "name",       :null => false
     t.string   "fieldtype",  :null => false
     t.string   "selector"
@@ -63,7 +64,6 @@ ActiveRecord::Schema.define(:version => 20100108140812) do
   end
 
   create_table "metadata_values", :force => true do |t|
-    t.integer "corpus_text_id"
     t.integer "metadata_category_id"
     t.string  "type"
     t.text    "text_value"
