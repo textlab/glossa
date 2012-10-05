@@ -8,6 +8,7 @@ gem 'rails', '3.2.8'
 gem 'pg'
 gem 'pg_array_parser'
 gem 'postgres_ext'
+gem 'pg_power'
 gem 'oj'
 gem 'turbo-sprockets-rails3'
 
