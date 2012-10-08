@@ -2,15 +2,14 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.2.8'
 
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
-
+# PostgreSQL gems
 gem 'pg'
 gem 'pg_array_parser'
 gem 'postgres_ext'
 gem 'pg_power'
-gem 'oj'
-gem 'turbo-sprockets-rails3'
+
+gem 'oj'  # more efficient parsing and generation of JSON
+gem 'turbo-sprockets-rails3'  # faster precompiling of assets
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -31,11 +30,6 @@ gem 'jquery-rails'
 # To use debugger
 # gem 'ruby-debug'
 
-# Bundle the extra gems:
-# gem 'bj'
-# gem 'nokogiri'
-# gem 'sqlite3-ruby', :require => 'sqlite3'
-# gem 'aws-s3', :require => 'aws/s3'
 gem 'devise'
 
 # Squeel Query DSL
@@ -59,5 +53,4 @@ gem 'page_wrapper'
 group :development do
   # Use thin instead of WEBrick in development
   gem 'thin'
-  gem 'sqlite3'
 end
