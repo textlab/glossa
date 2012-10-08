@@ -11,20 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100108140812) do
+ActiveRecord::Schema.define(:version => 20121008165021) do
+
 
   create_table "corpora", :force => true do |t|
     t.string   "name",             :null => false
     t.integer  "default_max_hits"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
-  end
-
-  create_table "corpora_language_configs", :force => true do |t|
-    t.integer  "corpus_id",          :null => false
-    t.integer  "language_config_id", :null => false
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
   end
 
   create_table "corpus_texts", :force => true do |t|
@@ -40,20 +34,6 @@ ActiveRecord::Schema.define(:version => 20100108140812) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "language_config_types", :force => true do |t|
-    t.string   "name",       :null => false
-    t.string   "tagger"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  create_table "language_configs", :force => true do |t|
-    t.integer  "corpus_id"
-    t.integer  "language_config_type_id"
-    t.datetime "created_at",              :null => false
-    t.datetime "updated_at",              :null => false
-  end
-
   create_table "metadata_categories", :force => true do |t|
     t.integer  "corpus_id"
     t.string   "name",       :null => false
@@ -61,6 +41,7 @@ ActiveRecord::Schema.define(:version => 20100108140812) do
     t.string   "selector"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "type"
   end
 
   create_table "metadata_values", :force => true do |t|
@@ -78,14 +59,6 @@ ActiveRecord::Schema.define(:version => 20100108140812) do
     t.text     "metadata_selection"
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
-  end
-
-  create_table "segments", :force => true do |t|
-    t.integer  "corpus_text_id"
-    t.string   "s_id"
-    t.text     "contents",       :null => false
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
   end
 
 end

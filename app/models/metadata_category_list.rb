@@ -1,0 +1,3 @@
+class MetadataCategoryList < MetadataCategory
+
+end

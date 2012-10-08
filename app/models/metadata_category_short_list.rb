@@ -1,0 +1,3 @@
+class MetadataCategoryShortList < MetadataCategory
+
+end

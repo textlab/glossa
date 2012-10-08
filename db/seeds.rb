@@ -8,23 +8,11 @@
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Mayor.create(:name => 'Daley', :city => cities.first)
 
-language_config_type = LanguageConfigType.create!(
-  :name => "Norwegian bokmål, written, The Oslo-Bergen Tagger",
-  :tagger => 'obt'
-)
 corpus = Corpus.create!(:name => 'The Oslo Corpus of Tagged Norwegian Texts')
 
 corpus.metadata_categories.create!(:name => 'title', :fieldtype => 'text')
 corpus.metadata_categories.create!(:name => 'author', :fieldtype => 'text')
 corpus.metadata_categories.create!(:name => 'publishing_year', :fieldtype => 'integer')
-
-# language_config_type = LanguageConfigType.create!(
-#   :name => "Norwegian bokmål, written, The Oslo-Bergen Tagger",
-#   :tagger => 'obt'
-#   )
-# config = corpus.language_configs.create!(:language_config_type => language_config_type)
-
-# text = config.corpus_texts.create!(:uri => 'peer_gynt.txt')
 
 title = MetadataValueText.create!(:metadata_category => MetadataCategory.find_by_name('title'))
 title.value = 'Peer Gynt'
