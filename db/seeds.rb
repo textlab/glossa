@@ -10,18 +10,12 @@
 
 corpus = Corpus.create!(:name => 'The Oslo Corpus of Tagged Norwegian Texts')
 
-corpus.metadata_categories.create!(:name => 'title', :fieldtype => 'text')
-corpus.metadata_categories.create!(:name => 'author', :fieldtype => 'text')
-corpus.metadata_categories.create!(:name => 'publishing_year', :fieldtype => 'integer')
+title_cat = MetadataCategoryList.create!(corpus: corpus, name: 'title', value_type: 'text')
+author_cat = MetadataCategoryList.create!(corpus: corpus, name: 'author', value_type: 'text')
+publ_year_cat = MetadataCategoryList.create!(corpus: corpus, name: 'publishing_year', value_type: 'integer')
+sex_cat = MetadataCategoryShortList.create!(corpus: corpus, name: 'author_sex', value_type: 'text')
 
-title = MetadataValueText.create!(:metadata_category => MetadataCategory.find_by_name('title'))
-title.value = 'Peer Gynt'
-title.save!
-
-author = MetadataValueText.create!(:metadata_category => MetadataCategory.find_by_name('author'))
-author.value = 'Henrik Ibsen'
-author.save!
-
-year = MetadataValueInteger.create!(:metadata_category => MetadataCategory.find_by_name('publishing_year'))
-year.value = 1867
-year.save!
+MetadataValueText.create!(metadata_category: title_cat, value: 'Peer Gynt')
+MetadataValueText.create!(metadata_category: author_cat, value: 'Henrik Ibsen')
+MetadataValueInteger.create!(metadata_category: publ_year_cat, value: 1867)
+MetadataValueText.create!(metadata_category: sex_cat, value: 'male')
