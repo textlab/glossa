@@ -3,5 +3,5 @@ class MetadataCategory < ActiveRecord::Base
   has_many :metadata_values, dependent: :destroy
 
   validates_presence_of :name
-  validates_presence_of :fieldtype
+  validates_presence_of :value_type
 end

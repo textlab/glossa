@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121008165021) do
+ActiveRecord::Schema.define(:version => 20121009170823) do
 
 
   create_table "corpora", :force => true do |t|
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(:version => 20121008165021) do
   create_table "metadata_categories", :force => true do |t|
     t.integer  "corpus_id"
     t.string   "name",       :null => false
-    t.string   "fieldtype",  :null => false
+    t.string   "value_type", :null => false
     t.string   "selector"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
