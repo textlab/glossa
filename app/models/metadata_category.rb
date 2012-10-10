@@ -6,10 +6,7 @@ class MetadataCategory < ActiveRecord::Base
   validates_presence_of :value_type
 
   def as_json(options = {})
-    std_opts = {  only: [:name, :value_type],
-                  methods: :category_type,
-                  root: false
-               }
+    std_opts = { only: [:name, :value_type], methods: :category_type }
     super(std_opts.merge(options))
   end
 
