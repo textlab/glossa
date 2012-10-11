@@ -8,14 +8,14 @@
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Mayor.create(:name => 'Daley', :city => cities.first)
 
-corpus = Corpus.create!(:name => 'The Oslo Corpus of Tagged Norwegian Texts')
+corpus = Corpus.create!(:name => 'Leksikografisk bokmålskorpus')
 
 title_cat = MetadataCategoryList.create!(corpus: corpus, name: 'title', value_type: 'text')
 author_cat = MetadataCategoryList.create!(corpus: corpus, name: 'author', value_type: 'text')
 publ_year_cat = MetadataCategoryList.create!(corpus: corpus, name: 'publishing_year', value_type: 'integer')
 sex_cat = MetadataCategoryShortList.create!(corpus: corpus, name: 'author_sex', value_type: 'text')
 
-MetadataValueText.create!(metadata_category: title_cat, value: 'Peer Gynt')
-MetadataValueText.create!(metadata_category: author_cat, value: 'Henrik Ibsen')
-MetadataValueInteger.create!(metadata_category: publ_year_cat, value: 1867)
-MetadataValueText.create!(metadata_category: sex_cat, value: 'male')
+MetadataValueText.create!(metadata_category: title_cat, text: 'Peer Gynt')
+MetadataValueText.create!(metadata_category: author_cat, text: 'Henrik Ibsen')
+MetadataValueInteger.create!(metadata_category: publ_year_cat, text: 1867)
+MetadataValueText.create!(metadata_category: sex_cat, text: 'male')
