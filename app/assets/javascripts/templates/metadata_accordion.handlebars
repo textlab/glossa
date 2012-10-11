@@ -1,0 +1,20 @@
+<div class="accordion">
+  {{#each category in content}}
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <a {{bindAttr href="category.collapsibleHref"}} class="accordion-toggle" data-toggle="collapse" data-parent="metadata-accordion">
+          {{category.name}}
+        </a>
+      </div>
+      <div {{bindAttr id="category.collapsibleId"}} class="accordion-body collapse">
+        <div class="accordion-inner">
+          <select multiple="multiple" style="width:180px">
+            {{#each value in category.values}}
+              <option {{bindAttr value="value.id"}}>{{value.text}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+    </div>
+  {{/each}}
+</div>

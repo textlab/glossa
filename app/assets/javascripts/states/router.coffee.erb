@@ -5,9 +5,5 @@ App.Router = Ember.Router.extend
     index: Ember.Route.create
       route: '/'
 
-      # You'll likely want to connect a view here.
-      # connectOutlets: function(router) {
-      #   router.get('applicationController').connectOutlet(App.MainView);
-      # }
-
-      # Layout your routes here...
+      connectOutlets: (router) ->
+        router.get('applicationController').connectOutlet('leftSidebar', 'metadataAccordion')

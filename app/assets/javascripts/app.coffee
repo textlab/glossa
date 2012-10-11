@@ -7,5 +7,14 @@
 #= require_tree ./templates
 #= require_tree ./states
 
-App.ready = ->
-  App.Corpus.find(1)
+App.reopen
+  ready: ->
+    @loadData()
+    @connectControllers()
+
+  loadData: ->
+    corpus = App.Corpus.find(1)  # testing
+    App.set('router.selectedCorpusController.content', corpus)
+
+  connectControllers: ->
+    App.get('router.metadataAccordionController').connectControllers('selectedCorpus')

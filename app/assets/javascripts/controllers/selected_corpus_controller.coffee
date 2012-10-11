@@ -1,0 +1,1 @@
+App.SelectedCorpusController = Em.ObjectController.extend()
