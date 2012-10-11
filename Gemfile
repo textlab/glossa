@@ -4,9 +4,9 @@ gem 'rails', '3.2.8'
 
 # PostgreSQL gems
 gem 'pg'
-gem 'pg_array_parser'
-gem 'postgres_ext'
-gem 'pg_power'
+# gem 'pg_array_parser'
+# gem 'postgres_ext'
+# gem 'pg_power'
 
 gem 'oj'  # more efficient parsing and generation of JSON
 gem 'turbo-sprockets-rails3'  # faster precompiling of assets
@@ -38,10 +38,10 @@ gem 'squeel'
 gem 'ember-rails'
 
 # Kaminari gem for Rails pagination
-gem 'kaminari'
+# gem 'kaminari'
 
 # page_wrapper gem for Ember/Rails pagination
-gem 'page_wrapper'
+# gem 'page_wrapper'
 
 gem 'hirb'
 
