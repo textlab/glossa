@@ -7,5 +7,5 @@
 #= require_tree ./templates
 #= require_tree ./states
 
-App.initialize()
-
+App.ready = ->
+  App.Corpus.find(1)

@@ -1,0 +1,2 @@
+module CorporaHelper
+end
