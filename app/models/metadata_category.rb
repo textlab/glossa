@@ -5,9 +5,11 @@ class MetadataCategory < ActiveRecord::Base
   validates_presence_of :name
   validates_presence_of :value_type
 
-  def as_json(options = {})
+  # Customize the hash representation used by to_json (overriding as_json does
+  # not work with associations)
+  def serializable_hash(options = {})
     std_opts = { only: [:name, :value_type], methods: :category_type }
-    super(std_opts.merge(options))
+    super(std_opts.merge(options || {}))
   end
 
   def category_type
