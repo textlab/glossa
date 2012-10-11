@@ -1,9 +1,9 @@
 class MetadataValueInteger < MetadataValue
-  def value
-    integer_value
+  def text
+    integer_value.to_s
   end
 
-  def value=(val)
-    self.integer_value = val
+  def text=(val)
+    self.integer_value = val.to_i
   end
 end

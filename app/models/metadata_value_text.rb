@@ -1,9 +1,9 @@
 class MetadataValueText < MetadataValue
-  def value
+  def text
     text_value
   end
 
-  def value=(val)
-    self.text_value = val
+  def text=(val)
+    self.text_value = val.to_s
   end
 end
