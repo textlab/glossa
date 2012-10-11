@@ -49,5 +49,3 @@ module Glossa
     config.filter_parameters += [:password, :password_confirmation]
   end
 end
-
-ActiveRecord::Base.include_root_in_json = false
