@@ -6,4 +6,10 @@ App.Router = Ember.Router.extend
       route: '/'
 
       connectOutlets: (router) ->
-        router.get('applicationController').connectOutlet('leftSidebar', 'metadataAccordion')
+        appController = router.get('applicationController')
+
+        appController.connectOutlet('leftSidebar', 'metadataAccordion')
+        appController.connectOutlet
+          outletName: 'corpusInfo'
+          viewClass: App.CorpusInfoView
+          controller: router.get('selectedCorpusController')
