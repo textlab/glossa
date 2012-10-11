@@ -4,6 +4,5 @@
  * the top of the compiled file, but it's generally better to create a new file per style scope.
  *= require_self
  *= require bootswatch/spacelab_21.08.12/bootstrap.min
- *= require bootstrap-2.1.0/bootstrap-responsive
  *= require home
 */
