@@ -1,5 +1,5 @@
 App.MetadataCategory = DS.Model.extend
-  name: DS.attr('string')
+  localizedName: DS.attr('string')
 
   values: DS.hasMany('App.MetadataValue', embedded: true)
 

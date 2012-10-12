@@ -13,7 +13,6 @@
 
 ActiveRecord::Schema.define(:version => 20121009170823) do
 
-
   create_table "corpora", :force => true do |t|
     t.string   "name",             :null => false
     t.integer  "default_max_hits"
