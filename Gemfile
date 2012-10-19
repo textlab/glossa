@@ -21,6 +21,8 @@ end
 
 gem 'jquery-rails'
 
+gem "active_model_serializers", :git => "git://github.com/josevalim/active_model_serializers.git"
+
 # Use unicorn as the web server
 # gem 'unicorn'
 
@@ -55,4 +57,7 @@ gem 'hirb'
 group :development do
   # Use thin instead of WEBrick in development
   gem 'thin'
+
+  gem 'pry'
+  gem 'pry-doc'
 end
