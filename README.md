@@ -24,7 +24,7 @@ Installation of R in openSUSE is described [here](http://cran.r-project.org/bin/
 
 #### Installing the R package rcqp
 
-* Check that your server fulfills the requirements listed under *Prerequisites* in [the rcqp installation instructions](http://cran.r-project.org/web/packages/rcqp/INSTALL). Most notably you need to have [Glib 2](http://www.gtk.org/download.html) and [pcre](http://www.pcre.org/) installed.
+* Check that your server fulfills the requirements listed under *Prerequisites* in [the rcqp installation instructions](http://cran.r-project.org/web/packages/rcqp/INSTALL). Most notably you need to have Glib 2 and pcre installed.
 
 * Download and unzip the package sources (the plyr package is required by rcqp):
 
