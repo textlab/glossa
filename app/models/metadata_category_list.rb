@@ -1,2 +1,0 @@
-class MetadataCategoryList < MetadataCategory
-end

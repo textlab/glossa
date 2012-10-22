@@ -1,3 +1,0 @@
-class MetadataCategoryBoolean < MetadataCategory
-
-end

@@ -10,10 +10,33 @@
 
 corpus = Corpus.create!(:name => 'Leksikografisk bokmålskorpus')
 
-title_cat = MetadataCategoryList.create!(corpus: corpus, name: ':title', value_type: 'text')
-author_cat = MetadataCategoryList.create!(corpus: corpus, name: ':author', value_type: 'text')
-publ_year_cat = MetadataCategoryList.create!(corpus: corpus, name: ':publishing_year', value_type: 'integer')
-sex_cat = MetadataCategoryShortList.create!(corpus: corpus, name: ':author_sex', value_type: 'text')
+title_cat = MetadataCategory.create!(
+  corpus: corpus,
+  name: ':title',
+  category_type: 'list',
+  value_type: 'text'
+)
+
+author_cat = MetadataCategory.create!(
+  corpus: corpus,
+  name: ':author',
+  category_type: 'list',
+  value_type: 'text'
+)
+
+publ_year_cat = MetadataCategory.create!(
+  corpus: corpus,
+  name: ':publishing_year',
+  category_type: 'list',
+  value_type: 'integer'
+)
+
+sex_cat = MetadataCategory.create!(
+  corpus: corpus,
+  name: ':author_sex',
+  category_type: 'shortlist',
+  value_type: 'text'
+)
 
 MetadataValueText.create!(metadata_category: title_cat, text: 'Peer Gynt')
 MetadataValueText.create!(metadata_category: author_cat, text: 'Henrik Ibsen')
