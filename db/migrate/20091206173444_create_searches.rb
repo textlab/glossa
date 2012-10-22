@@ -1,5 +1,5 @@
 class CreateSearches < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :searches do |t|
       t.integer :owner_id
       t.text :queries, :null => false
@@ -8,9 +8,5 @@ class CreateSearches < ActiveRecord::Migration
 
       t.timestamps
     end
-  end
-
-  def self.down
-    drop_table :searches
   end
 end

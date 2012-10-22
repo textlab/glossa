@@ -1,5 +1,5 @@
 class CreateMetadataCategories < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :metadata_categories do |t|
       t.belongs_to :corpus
       t.string :name, null: false
@@ -8,9 +8,5 @@ class CreateMetadataCategories < ActiveRecord::Migration
 
       t.timestamps
     end
-  end
-
-  def self.down
-    drop_table :metadata_categories
   end
 end

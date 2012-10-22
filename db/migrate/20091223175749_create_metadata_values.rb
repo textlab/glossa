@@ -1,5 +1,5 @@
 class CreateMetadataValues < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :metadata_values do |t|
       t.belongs_to :metadata_category
       t.string :type
@@ -7,9 +7,5 @@ class CreateMetadataValues < ActiveRecord::Migration
       t.integer :integer_value
       t.boolean :boolean_value
     end
-  end
-
-  def self.down
-    drop_table :metadata_values
   end
 end
