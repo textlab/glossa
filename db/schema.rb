@@ -27,6 +27,17 @@ ActiveRecord::Schema.define(:version => 20121023142202) do
     t.datetime "updated_at",         :null => false
   end
 
+  create_table "corpus_translations", :force => true do |t|
+    t.integer  "corpus_id"
+    t.string   "locale"
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "corpus_translations", ["corpus_id"], :name => "index_corpus_translations_on_corpus_id"
+  add_index "corpus_translations", ["locale"], :name => "index_corpus_translations_on_locale"
+
   create_table "deleted_hits", :force => true do |t|
     t.integer  "search_id"
     t.datetime "created_at", :null => false
@@ -41,6 +52,17 @@ ActiveRecord::Schema.define(:version => 20121023142202) do
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
   end
+
+  create_table "metadata_category_translations", :force => true do |t|
+    t.integer  "metadata_category_id"
+    t.string   "locale"
+    t.string   "name"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+  end
+
+  add_index "metadata_category_translations", ["locale"], :name => "index_metadata_category_translations_on_locale"
+  add_index "metadata_category_translations", ["metadata_category_id"], :name => "index_40250a4bb167b9603d1cdfaab50036c15b217979"
 
   create_table "metadata_values", :force => true do |t|
     t.integer "metadata_category_id"

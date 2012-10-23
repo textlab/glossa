@@ -31,6 +31,7 @@ gem "active_model_serializers", :git => "git://github.com/josevalim/active_model
 
 # To use debugger
 # gem 'ruby-debug'
+gem 'debugger'
 
 gem 'devise'
 
@@ -38,6 +39,7 @@ gem 'devise'
 gem 'squeel'
 
 gem 'ember-rails'
+gem 'globalize3'
 
 # Kaminari gem for Rails pagination
 # gem 'kaminari'

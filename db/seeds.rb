@@ -8,7 +8,7 @@
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Mayor.create(:name => 'Daley', :city => cities.first)
 
-corpus = Corpus.create!(:name => 'Leksikografisk bokmålskorpus')
+corpus = Corpus.create!(name: 'Leksikografisk bokmålskorpus')
 
 title_cat = MetadataCategory.create!(
   corpus: corpus,
