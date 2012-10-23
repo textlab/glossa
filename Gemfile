@@ -36,7 +36,7 @@ gem 'debugger'
 gem 'devise'
 
 # Squeel Query DSL
-gem 'squeel'
+# gem 'squeel'
 
 gem 'ember-rails'
 gem 'globalize3'
