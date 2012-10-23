@@ -1,4 +1,5 @@
 class CorporaController < ApplicationController
+
   def index
     @corpora = Corpus.all
 
@@ -15,4 +16,5 @@ class CorporaController < ApplicationController
       format.json { render json: @corpus }
     end
   end
+
 end

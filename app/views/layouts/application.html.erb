@@ -3,11 +3,11 @@
 <head>
   <title>Glossa</title>
   <%= csrf_meta_tag %>
+  <base href="<%= ENV['RAILS_RELATIVE_URL_ROOT'] %>/" />
 
   <%= stylesheet_link_tag 'application' %>
 
   <script type="text/javascript">
-    var urlRoot = '<%= application_root %>';
     var authenticityToken = '<%= form_authenticity_token %>';
   </script>
 
