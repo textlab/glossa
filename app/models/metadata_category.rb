@@ -1,5 +1,6 @@
 class MetadataCategory < ActiveRecord::Base
   include LocalizationSupport
+  has_paper_trail
 
   belongs_to :corpus
   has_many   :metadata_values, dependent: :destroy, order: :text_value

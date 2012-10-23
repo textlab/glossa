@@ -39,6 +39,8 @@ gem 'squeel'
 
 gem 'ember-rails'
 
+gem 'paper_trail', '~> 2'
+
 # Kaminari gem for Rails pagination
 # gem 'kaminari'
 
