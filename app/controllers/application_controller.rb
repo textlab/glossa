@@ -9,4 +9,8 @@ class ApplicationController < ActionController::Base
   private
   ########
 
+  def received_id_for?(klass)
+    params["#{klass}_id"].to_i > 0
+  end
+
 end

@@ -1,0 +1,2 @@
+class MetadataValueTextSerializer < MetadataValueSerializer
+end

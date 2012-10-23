@@ -1,4 +1,4 @@
 App.MetadataValue = DS.Model.extend
-  cateory: DS.belongsTo('App.MetadataCategory')
+  text: DS.attr('string')
 
-  text_value: DS.attr('string')
+  metadataCategory: DS.belongsTo('App.MetadataCategory')

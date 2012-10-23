@@ -1,0 +1,2 @@
+class MetadataValueBooleanSerializer < MetadataValueSerializer
+end

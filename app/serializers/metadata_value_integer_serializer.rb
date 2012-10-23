@@ -1,0 +1,2 @@
+class MetadataValueIntegerSerializer < MetadataValueSerializer
+end
