@@ -5,7 +5,7 @@ class MetadataValuesController < ApplicationController
 
     render json: MetadataValue
       .joins(:metadata_category)
-      .where('metadata_categories.corpus_id = ?', params[:corpus_id])
+      .where(metadata_categories: {corpus_id: params[:corpus_id]})
   end
 
 end
