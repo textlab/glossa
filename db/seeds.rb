@@ -12,28 +12,28 @@ corpus = Corpus.create!(name: 'Leksikografisk bokmålskorpus')
 
 title_cat = MetadataCategory.create!(
   corpus: corpus,
-  name: ':title',
+  name: 'Title',
   category_type: 'list',
   value_type: 'text'
 )
 
 author_cat = MetadataCategory.create!(
   corpus: corpus,
-  name: ':author',
+  name: 'Author',
   category_type: 'list',
   value_type: 'text'
 )
 
 publ_year_cat = MetadataCategory.create!(
   corpus: corpus,
-  name: ':publishing_year',
+  name: 'Published',
   category_type: 'list',
   value_type: 'integer'
 )
 
 sex_cat = MetadataCategory.create!(
   corpus: corpus,
-  name: ':author_sex',
+  name: 'Sex',
   category_type: 'shortlist',
   value_type: 'text'
 )
