@@ -6,9 +6,10 @@ class MetadataCategory < ActiveRecord::Base
   validates_presence_of :category_type
   validates_presence_of :value_type
 
-  def localized_name
+  def name
     # Names that start with a colon should be localized; others should just be
     # returned as is
-    name.start_with?(':') ? I18n.t(name[1..-1]) : name
+    name_attr = read_attribute(:name)
+    name_attr.start_with?(':') ? I18n.t(name_attr[1..-1]) : name_attr
   end
 end
