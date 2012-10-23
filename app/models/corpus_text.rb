@@ -1,6 +1,4 @@
 class CorpusText < ActiveRecord::Base
-  has_paper_trail
-
   belongs_to :language_config
   validates_presence_of :language_config_id
 

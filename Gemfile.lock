@@ -161,7 +161,6 @@ DEPENDENCIES
   hirb
   jquery-rails
   oj
-  paper_trail (~> 2)
   pg
   pry
   pry-doc
