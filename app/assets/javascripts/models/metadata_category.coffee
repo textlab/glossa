@@ -1,10 +1,12 @@
 App.MetadataCategory = DS.Model.extend
+  corpus: DS.belongsTo('App.Corpus')
+
   localizedName: DS.attr('string')
 
-  values: DS.hasMany('App.MetadataValue', embedded: true)
+  metadataValues: DS.hasMany('App.MetadataValue')
 
   collapsibleId: (->
-    "collapse-#{@get 'name'}"
+    "collapse-#{@get 'localizedName'}"
   ).property()
 
   collapsibleHref: (->

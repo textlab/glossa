@@ -1,6 +1,6 @@
 class MetadataCategory < ActiveRecord::Base
   belongs_to :corpus
-  has_many   :values, class_name: 'MetadataValue', dependent: :destroy, order: :name
+  has_many   :metadata_values, dependent: :destroy, order: :text_value
 
   validates_presence_of :name
   validates_presence_of :category_type
