@@ -9,7 +9,7 @@
       <div {{bindAttr id="category.collapsibleId"}} class="accordion-body collapse">
         <div class="accordion-inner">
           <select multiple="multiple" style="width:180px">
-            {{#each value in category.values}}
+            {{#each value in category.metadataValues}}
               <option {{bindAttr value="value.id"}}>{{value.text}}</option>
             {{/each}}
           </select>

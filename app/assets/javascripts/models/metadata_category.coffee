@@ -6,7 +6,7 @@ App.MetadataCategory = DS.Model.extend
   metadataValues: DS.hasMany('App.MetadataValue')
 
   collapsibleId: (->
-    "collapse-#{@get 'localizedName'}"
+    "collapse-#{@get 'name'}"
   ).property()
 
   collapsibleHref: (->
