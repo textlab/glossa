@@ -21,10 +21,10 @@ ActiveRecord::Schema.define(:version => 20121110003219) do
   end
 
   create_table "corpus_texts", :force => true do |t|
-    t.integer  "language_config_id"
-    t.string   "uri"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+    t.integer  "startpos",   :limit => 8
+    t.integer  "endpos",     :limit => 8
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
   end
 
   create_table "corpus_texts_metadata_values", :force => true do |t|

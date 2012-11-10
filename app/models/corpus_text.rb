@@ -6,6 +6,7 @@ class CorpusText < ActiveRecord::Base
     # that have the given database ids
     def matching_metadata(metadata_value_ids)
         CorpusText
+        .select('corpus_texts.startpos, corpus_texts.endpos').uniq
         .joins('INNER JOIN corpus_texts_metadata_values ON ' +
           'corpus_texts_metadata_values.corpus_text_id = corpus_texts.id')
         .where(
