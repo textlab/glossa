@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100108140812) do
+ActiveRecord::Schema.define(:version => 20121110003219) do
 
   create_table "corpora", :force => true do |t|
     t.string   "name",             :null => false
@@ -25,6 +25,11 @@ ActiveRecord::Schema.define(:version => 20100108140812) do
     t.string   "uri"
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
+  end
+
+  create_table "corpus_texts_metadata_values", :force => true do |t|
+    t.integer "corpus_text_id"
+    t.integer "metadata_value_id"
   end
 
   create_table "corpus_translations", :force => true do |t|
