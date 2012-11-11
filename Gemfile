@@ -54,6 +54,7 @@ gem 'hirb'
 # and rake tasks are available in development mode:
 group :development, :test do
   # gem 'webrat'
+  gem 'rb-fsevent', '~> 0.9.1'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'capybara'
