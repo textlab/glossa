@@ -54,6 +54,10 @@ gem 'hirb'
 # and rake tasks are available in development mode:
 group :development, :test do
   # gem 'webrat'
+  gem 'rspec-rails'
+  gem 'factory_girl_rails'
+  gem 'capybara'
+  gem 'guard-rspec'
   gem 'poltergeist'
   gem 'konacha'  # for testing JavaScript with Mocha and chai
 end
