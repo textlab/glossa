@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121110003219) do
+ActiveRecord::Schema.define(:version => 20121111011719) do
 
   create_table "corpora", :force => true do |t|
     t.string   "name",             :null => false
@@ -68,6 +68,13 @@ ActiveRecord::Schema.define(:version => 20121110003219) do
 
   add_index "metadata_category_translations", ["locale"], :name => "index_metadata_category_translations_on_locale"
   add_index "metadata_category_translations", ["metadata_category_id"], :name => "index_40250a4bb167b9603d1cdfaab50036c15b217979"
+
+  create_table "metadata_constraints", :force => true do |t|
+    t.integer  "constrained_category_id"
+    t.integer  "constraining_category_id"
+    t.datetime "created_at",               :null => false
+    t.datetime "updated_at",               :null => false
+  end
 
   create_table "metadata_values", :force => true do |t|
     t.integer "metadata_category_id"

@@ -1,0 +1,2 @@
+class MetadataConstraintsController < ApplicationController
+end
