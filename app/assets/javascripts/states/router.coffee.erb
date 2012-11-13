@@ -5,6 +5,12 @@ App.Router = Ember.Router.extend
     index: Ember.Route.create
       route: '/'
 
+      enter: (router) ->
+        corpusId = 1  # TESTING!!!
+        corpus = App.Corpus.find(corpusId)
+        App.set('router.selectedCorpusController.content', corpus)
+
+
       connectOutlets: (router) ->
         appController = router.get('applicationController')
 
