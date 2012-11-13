@@ -1,2 +1,2 @@
 App.SimpleSearchView = Em.View.extend
-  templateName: 'simple_search'
+  templateName: 'search/simple_search'
