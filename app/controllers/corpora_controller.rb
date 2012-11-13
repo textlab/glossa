@@ -1,19 +1,21 @@
 class CorporaController < ApplicationController
 
   def index
-    @corpora = Corpus.all
+    corpora = Corpus.all
 
     respond_to do |format|
-      format.json { render json: @corpora }
+      format.json { render json: corpora }
+      format.xml  { render xml:  corpora }
     end
   end
 
 
   def show
-    @corpus = Corpus.find(params[:id])
+    corpus = Corpus.find(params[:id])
 
     respond_to do |format|
-      format.json { render json: @corpus }
+      format.json { render json: corpus }
+      format.xml  { render xml:  corpus }
     end
   end
 
