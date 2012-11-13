@@ -7,6 +7,8 @@ App.Router = Ember.Router.extend
 
       enter: (router) ->
         corpusId = 1  # TESTING!!!
+
+        # Loading the corpus also includes metadata categories and values
         corpus = App.Corpus.find(corpusId)
         App.set('router.selectedCorpusController.content', corpus)
 
@@ -15,7 +17,10 @@ App.Router = Ember.Router.extend
         appController = router.get('applicationController')
 
         appController.connectOutlet('leftSidebar', 'metadataAccordion')
+
         appController.connectOutlet
           outletName: 'corpusInfo'
           viewClass: App.CorpusInfoView
           controller: router.get('selectedCorpusController')
+
+        appController.connectOutlet('search', 'simpleSearch')
