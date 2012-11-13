@@ -23,4 +23,11 @@ App.Router = Ember.Router.extend
           viewClass: App.CorpusInfoView
           controller: router.get('selectedCorpusController')
 
-        appController.connectOutlet('search', 'simpleSearch')
+        appController.connectOutlet('search', 'regexSearch')
+
+      #############################
+      # Events for the index route
+      #############################
+
+      search: (router) ->
+        router.get('regexSearchController').search()
