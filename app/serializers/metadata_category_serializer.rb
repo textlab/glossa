@@ -1,5 +1,5 @@
 class MetadataCategorySerializer < ActiveModel::Serializer
-  embed :ids
+  embed :ids, include: true
 
   attributes :id, :corpus_id, :name
 
