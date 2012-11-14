@@ -1,8 +1,8 @@
-App.Router = Ember.Router.extend
+App.Router = Em.Router.extend
   enableLogging: <%= Rails.env == 'development' %>
 
-  root: Ember.Route.create
-    index: Ember.Route.create
+  root: Em.Route.create
+    index: Em.Route.create
       route: '/'
 
       enter: (router) ->
@@ -10,24 +10,68 @@ App.Router = Ember.Router.extend
 
         # Loading the corpus also includes metadata categories and values
         corpus = App.Corpus.find(corpusId)
-        App.set('router.selectedCorpusController.content', corpus)
+        router.get('selectedCorpusController').initCorpus(corpus)
+
+      #########################
+      # Child routes for index
+      #########################
+
+      start: Em.Route.create
+        route: '/start'
+
+        enter: (router) ->
+          # Choose which search interface to display based on the search type
+          # for this corpus
+          searchType = router.get('selectedCorpusController').get('searchType')
+          @newRoute = switch searchType
+            when 'cwb', 'corpuscle' then 'index.showingSearchInterface.word.regex'
+
+        connectOutlets: (router) ->
+          # Using transitionTo in the *enter* method doesn't work, so we have
+          # to do it here, although it has nothing to do with connecting
+          # outlets...
+          router.transitionTo(@newRoute)
 
 
-      connectOutlets: (router) ->
-        appController = router.get('applicationController')
+      showingSearchInterface: Em.Route.create
+        route: '/search'
 
-        appController.connectOutlet('leftSidebar', 'metadataAccordion')
+        connectOutlets: (router) ->
+          appController = router.get('applicationController')
 
-        appController.connectOutlet
-          outletName: 'corpusInfo'
-          viewClass: App.CorpusInfoView
-          controller: router.get('selectedCorpusController')
+          appController.connectOutlet('leftSidebar', 'metadataAccordion')
+          appController.connectOutlet
+            outletName: 'corpusInfo'
+            viewClass: App.CorpusInfoView
+            controller: router.get('selectedCorpusController')
 
-        appController.connectOutlet('search', 'regexSearch')
+        ####################################
+        # Events for showingSearchInterface
+        ####################################
 
-      #############################
-      # Events for the index route
-      #############################
+        search: (router) ->
+          query = router.get('regexSearchController').createQuery()
+          search = App.Search.createRecord(query: query)
 
-      search: (router) ->
-        router.get('regexSearchController').search()
+          router.get('searchesController').pushObject(search)
+          App.store.commit()
+
+        ##########################################
+        # Child routes for showingSearchInterface
+        ##########################################
+
+        word: Em.Route.create
+          route: '/word'
+
+          ###############################################
+          # Child routes for showingSearchInterface.word
+          ###############################################
+
+          simple: Em.Route.create()
+
+          regex: Em.Route.create
+            route: '/regex'
+
+            connectOutlets: (router) ->
+              appController = router.get('applicationController')
+              appController.connectOutlet('search', 'regexSearch')
