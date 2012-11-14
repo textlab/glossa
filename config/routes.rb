@@ -1,5 +1,4 @@
 Glossa::Application.routes.draw do
-  namespace :search_types do resources :cwb_searches end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -71,6 +70,13 @@ Glossa::Application.routes.draw do
       get 'corpora_list'
       get 'corpus_info'
     end
+  end
+
+  # Using *scope* with a *module* parameter lets us access the controllers in
+  # the module without using a 'search_types/' path prefix (since that creates
+  # problems with Ember.js)
+  scope module: 'search_types' do
+   resources :cwb_searches
   end
 
 end
