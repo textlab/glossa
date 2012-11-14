@@ -1,0 +1,2 @@
+module SearchTypes::CwbSearchesHelper
+end

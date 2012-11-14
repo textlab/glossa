@@ -1,4 +1,6 @@
 Glossa::Application.routes.draw do
+  namespace :search_types do resources :cwb_searches end
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
