@@ -85,7 +85,7 @@ ActiveRecord::Schema.define(:version => 20121111011719) do
   end
 
   create_table "searches", :force => true do |t|
-    t.integer  "owner_id"
+    t.integer  "user_id"
     t.text     "queries",            :null => false
     t.text     "search_options"
     t.text     "metadata_selection"
