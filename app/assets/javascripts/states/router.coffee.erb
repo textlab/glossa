@@ -24,7 +24,12 @@ App.Router = Em.Router.extend
           # for this corpus
           searchType = router.get('selectedCorpusController').get('searchType')
           @newRoute = switch searchType
-            when 'cwb', 'corpuscle' then 'index.showingSearchInterface.word.regex'
+            when 'cwb' then 'index.showingSearchInterface.cwb.regex'
+
+            # Add routes for other search interfaces/engines here as they are
+            # implemented, e.g.
+            # when 'corpuscle' then 'index.showingSearchInterface.corpuscle.simple'
+            # when 'annis2' then 'index.showingSearchInterface.annis2.simple'
 
         connectOutlets: (router) ->
           # Using transitionTo in the *enter* method doesn't work, so we have
@@ -60,12 +65,12 @@ App.Router = Em.Router.extend
         # Child routes for showingSearchInterface
         ##########################################
 
-        word: Em.Route.create
-          route: '/word'
+        cwb: Em.Route.create
+          route: '/cwb'
 
-          ###############################################
-          # Child routes for showingSearchInterface.word
-          ###############################################
+          ##############################################
+          # Child routes for showingSearchInterface.cwb
+          ##############################################
 
           simple: Em.Route.create()
 
