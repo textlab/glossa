@@ -1,4 +1,4 @@
-App.RegexSearchController = Em.Controller.extend
+App.CurrentCwbRegexSearchController = Em.Controller.extend
 
   # This will be bound to the search field by the template
   queryInputValue: ''
