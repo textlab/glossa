@@ -1,3 +1,2 @@
-#= require controllers/searches_controller
-
-App.CwbSearchesController = App.SearchesController.extend()
+App.CwbSearchesController = Em.ArrayController.extend
+  content: []

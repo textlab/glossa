@@ -1,7 +1,6 @@
 # Represent a single search result ("hit") in the Corpus Workbench.
-# Inherits from App.SearchResult.
 
-App.CwbSearchResult = App.SearchResult.extend
+App.CwbSearchResult = DS.model.extend
   leftContext:  DS.attr('string')
   match:        DS.attr('string')
   rightContext: DS.attr('string')
