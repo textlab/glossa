@@ -24,12 +24,12 @@ App.Router = Em.Router.extend
           # for this corpus
           searchType = router.get('selectedCorpusController').get('searchType')
           @newRoute = switch searchType
-            when 'cwb' then 'index.showingSearchInterface.cwb.regex'
+            when 'cwb' then 'index.home.cwb.regex'
 
             # Add routes for other search interfaces/engines here as they are
             # implemented, e.g.
-            # when 'corpuscle' then 'index.showingSearchInterface.corpuscle.simple'
-            # when 'annis2' then 'index.showingSearchInterface.annis2.simple'
+            # when 'corpuscle' then 'index.home.corpuscle.simple'
+            # when 'annis2' then 'index.home.annis2.simple'
 
         connectOutlets: (router) ->
           # Using transitionTo in the *enter* method doesn't work, so we have
@@ -38,8 +38,8 @@ App.Router = Em.Router.extend
           router.transitionTo(@newRoute)
 
 
-      showingSearchInterface: Em.Route.create
-        route: '/search'
+      home: Em.Route.create
+        route: '/home'
 
         connectOutlets: (router) ->
           appController = router.get('applicationController')
@@ -51,7 +51,7 @@ App.Router = Em.Router.extend
             controller: router.get('selectedCorpusController')
 
         ####################################
-        # Events for showingSearchInterface
+        # Events for home
         ####################################
 
         search: (router) ->
@@ -62,14 +62,14 @@ App.Router = Em.Router.extend
           App.store.commit()
 
         ##########################################
-        # Child routes for showingSearchInterface
+        # Child routes for home
         ##########################################
 
         cwb: Em.Route.create
           route: '/cwb'
 
           ##############################################
-          # Child routes for showingSearchInterface.cwb
+          # Child routes for home.cwb
           ##############################################
 
           simple: Em.Route.create()
