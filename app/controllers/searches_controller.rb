@@ -7,7 +7,8 @@ class SearchesController < ApplicationController
   end
 
   def create
-    # Derived controllers will create the @search object before calling this
+    @search = model.create(params[model.to_s.demodulize.underscore])
+
     respond_to do |format|
       format.any(:json, :xml) do
         render request.format.to_sym =>

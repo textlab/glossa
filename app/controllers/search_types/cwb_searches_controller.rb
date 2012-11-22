@@ -1,9 +1,8 @@
 class SearchTypes::CwbSearchesController < SearchesController
-  respond_to :json, :xml
 
-  def create
-    @search = SearchTypes::CwbSearch.create(params[:cwb_search])
-    super
+  # Used by the base controller to find the right kind of model to manipulate
+  def model
+    SearchTypes::CwbSearch
   end
 
 end
