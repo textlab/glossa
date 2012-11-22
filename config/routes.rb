@@ -60,23 +60,20 @@ Glossa::Application.routes.draw do
   root :to => 'home#index'
 
   resources :corpora, :metadata_categories, :metadata_values,
-    :metadata_constraints
+  :metadata_constraints
 
-  resources :searches do
-    collection do
-      post 'query'
+  namespace :search_types do
+    # Add more search types to the resource list as they are implemented, e.g.
+    # resources :cwb_searches, :corpuscle_searches, :annis2_searches do
+    resources :cwb_searches do
+      collection do
+        post 'query'
 
-      # FIXME: These don't belong here
-      get 'corpora_list'
-      get 'corpus_info'
+        # FIXME: These don't belong here
+        get 'corpora_list'
+        get 'corpus_info'
+      end
     end
-  end
-
-  # Using *scope* with a *module* parameter lets us access the controllers in
-  # the module without using a 'search_types/' path prefix (since that creates
-  # problems with Ember.js)
-  scope module: 'search_types' do
-   resources :cwb_searches
   end
 
 end
