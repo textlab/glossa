@@ -1,9 +1,18 @@
 class SearchesController < ApplicationController
+  respond_to :json, :xml
+
   def index
-    searches = current_user.searches
+    @searches = current_user.searches
+    respond_with(@searches)
+  end
+
+  def create
+    # Derived controllers will create the @search object before calling this
     respond_to do |format|
-      format.json { render json: searches }
-      format.xml  { render xml:  searches }
+      format.any(:json, :xml) do
+        render request.format.to_sym =>
+          @search.to_json(methods: :first_result_page)
+      end
     end
   end
 
@@ -85,5 +94,13 @@ class SearchesController < ApplicationController
     result.collect do |line|
       { :guid => line.first.match(/^\d+/)[0], :line => line }
     end
+  end
+
+  ########
+  private
+  ########
+
+  def page_size
+    20
   end
 end

@@ -1,2 +1,3 @@
-App.CwbSearch = DS.Model.extend
-  query: DS.attr('string')
+#= require models/search_types/search
+
+App.CwbSearch = App.Search.extend()
