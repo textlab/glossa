@@ -80,3 +80,14 @@ App.Router = Em.Router.extend
             connectOutlets: (router) ->
               appController = router.get('applicationController')
               appController.connectOutlet('search', 'cwbRegexSearch')
+
+
+          results: Em.Route.create
+            route: '/results/:cwb_search_id/:page'
+
+            connectOutlets: (router, params) ->
+              appController = router.get('applicationController')
+
+              search = App.CwbSearch.find(params['cwb_search_id'])
+              results = []
+              appController.connectOutlet('search', 'cwbResults', results)
