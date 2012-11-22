@@ -1,3 +1,3 @@
 App.store = DS.Store.create
-  revision: 6
+  revision: 8
   adapter: App.Adapter.create()
