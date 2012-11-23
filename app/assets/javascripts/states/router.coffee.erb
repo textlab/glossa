@@ -20,20 +20,20 @@ App.Router = Em.Router.extend
       # Child routes for index
       #########################
 
-      start: Em.Route.create
-        route: '/start'
+      home: Em.Route.create
+        route: '/home'
 
         enter: (router) ->
           # Choose which search interface to display based on the search type
           # for this corpus
           searchType = router.get('selectedCorpusController').get('searchType')
           @newRoute = switch searchType
-            when 'cwb' then 'index.home.cwb.regex'
+            when 'cwb' then 'index.search.cwb.regex'
 
             # Add routes for other search interfaces/engines here as they are
             # implemented, e.g.
-            # when 'corpuscle' then 'index.home.corpuscle.simple'
-            # when 'annis2' then 'index.home.annis2.simple'
+            # when 'corpuscle' then 'index.search.corpuscle.simple'
+            # when 'annis2' then 'index.search.annis2.simple'
 
         connectOutlets: (router) ->
           # Using transitionTo in the *enter* method doesn't work, so we have
@@ -42,38 +42,23 @@ App.Router = Em.Router.extend
           router.transitionTo(@newRoute)
 
 
-      home: Em.Route.create
-        route: '/home'
+      search: Em.Route.create
+        route: '/search'
 
         connectOutlets: (router) ->
           appController = router.get('applicationController')
 
           appController.connectOutlet('leftSidebar', 'metadataAccordion')
-          appController.connectOutlet
-            outletName: 'corpusInfo'
-            viewClass: App.CorpusInfoView
-            controller: router.get('selectedCorpusController')
-
-        ####################################
-        # Events for home
-        ####################################
-
-        search: (router) ->
-          query = router.get('regexSearchController').createQuery()
-          search = App.Search.createRecord(query: query)
-
-          router.get('searchesController').pushObject(search)
-          App.store.commit()
 
         ##########################################
-        # Child routes for home
+        # Child routes for index.search
         ##########################################
 
         cwb: Em.Route.create
           route: '/cwb'
 
           ##############################################
-          # Child routes for home.cwb
+          # Child routes for index.search.cwb
           ##############################################
 
           simple: Em.Route.create()
@@ -84,6 +69,22 @@ App.Router = Em.Router.extend
             connectOutlets: (router) ->
               appController = router.get('applicationController')
               appController.connectOutlet('search', 'cwbRegexSearch')
+
+              appController.connectOutlet
+                outletName: 'corpusInfo'
+                viewClass: App.CorpusInfoView
+                controller: router.get('selectedCorpusController')
+
+            ####################################
+            # Events for index.search.cwb.regex
+            ####################################
+
+            search: (router) ->
+              query = router.get('currentCwbRegexSearchController').createQuery()
+              search = App.CwbSearch.createRecord(query: query)
+
+              router.get('cwbSearchesController').pushObject(search)
+              App.store.commit()
 
 
           results: Em.Route.create
