@@ -68,12 +68,18 @@ App.Router = Em.Router.extend
 
             connectOutlets: (router) ->
               appController = router.get('applicationController')
-              appController.connectOutlet('search', 'cwbRegexSearch')
 
               appController.connectOutlet
                 outletName: 'corpusInfo'
                 viewClass: App.CorpusInfoView
                 controller: router.get('selectedCorpusController')
+
+              appController.connectOutlet('search', 'cwbRegexSearch')
+              appController.disconnectOutlet('results')
+
+            exit: (router) ->
+              appController = router.get('applicationController')
+              appController.disconnectOutlet('corpusInfo')
 
             ####################################
             # Events for index.search.cwb.regex
@@ -95,4 +101,4 @@ App.Router = Em.Router.extend
 
               search = App.CwbSearch.find(params['cwb_search_id'])
               results = []
-              appController.connectOutlet('search', 'cwbResults', results)
+              appController.connectOutlet('results', 'cwbResults', results)
