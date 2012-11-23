@@ -2,6 +2,10 @@ App.Router = Em.Router.extend
   enableLogging: <%= Rails.env == 'development' %>
 
   root: Em.Route.create
+
+    # The *index* state has the route '/', meaning that it will always be
+    # entered whenever the application is loaded by entering some URL in the
+    # browser (regardless of which substate that URL eventually routes to).
     index: Em.Route.create
       route: '/'
 
