@@ -2603,7 +2603,7 @@ DS.Store = Ember.Object.extend(DS._Mappable, {
     delete this.recordCache[clientId];
     delete this.clientIdToId[clientId];
     delete this.clientIdToType[clientId];
-    delete this.clientIdToHash[clientId];
+    delete this.clientIdToData[clientId];
     delete this.recordArraysByClientId[clientId];
 
     if (id) { delete typeMap.idToCid[id]; }
@@ -4372,7 +4372,7 @@ DS.OneToManyChange.prototype = {
         belongsToName = this.getBelongsToName(),
         hasManyName = this.getHasManyName(),
         store = this.store,
-        child, oldParent, newParent, transaction;
+        child, oldParent, newParent, lastParent, transaction;
 
     store.removeRelationshipChangeFor(childClientId, belongsToName);
 
@@ -4386,6 +4386,10 @@ DS.OneToManyChange.prototype = {
 
     if (newParent = this.getNewParent()) {
       newParent.removeDirtyFactor(hasManyName);
+    }
+
+    if (lastParent = this.getLastParent()) {
+      lastParent.removeDirtyFactor(hasManyName);
     }
 
     if (transaction = this.transaction) {
@@ -4498,13 +4502,17 @@ DS.OneToManyChange.prototype = {
       // materialized lastParent.
       var lastParent = this.getLastParent();
       if (lastParent) {
-        get(lastParent, hasManyName).removeObject(child);
+        lastParent.suspendAssociationObservers(function() {
+          get(lastParent, hasManyName).removeObject(child);
+        });
       }
 
       // Don't do anything if the belongsTo is going from null back to null
       if (oldParent) {
         get(oldParent, hasManyName).addObject(child);
       }
+
+      set(child, belongsToName, oldParent);
 
       this.destroy();
       return;
