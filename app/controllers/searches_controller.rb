@@ -7,7 +7,7 @@ class SearchesController < ApplicationController
   end
 
   def create
-    @search = model.create(params[model.to_s.demodulize.underscore])
+    @search = model_class.create(params[model_param])
 
     respond_to do |format|
       format.any(:json, :xml) do
@@ -15,6 +15,12 @@ class SearchesController < ApplicationController
           @search.to_json(methods: :first_result_page)
       end
     end
+  end
+
+  def page
+    search = current_user.searches.find(model_param_id)
+    @results = search ? search.get_result_page(page) : nil
+    respond_with(@results)
   end
 
   # Non restful endpoint for CQP/CWB queries
@@ -100,6 +106,18 @@ class SearchesController < ApplicationController
   ########
   private
   ########
+
+  # The name of the search model as it occurs in query parameters, e.g.
+  # "cwb_search"
+  def model_param
+    # model_class is defined by derived controllers for the individual search
+    # types we support
+    model_class.to_s.demodulize.underscore
+  end
+
+  def model_param_id
+    "#{model_param}_id"
+  end
 
   def page_size
     20

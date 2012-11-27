@@ -13,10 +13,6 @@ class Search < ActiveRecord::Base
     get_result_page(0)
   end
 
-  ########
-  private
-  ########
-
   def get_result_page(page_no)
     {some: 'test', data: 'here'}
   end

@@ -67,6 +67,7 @@ Glossa::Application.routes.draw do
     # resources :cwb_searches, :corpuscle_searches, :annis2_searches do
     resources :cwb_searches do
       collection do
+        get 'page'
         post 'query'
 
         # FIXME: These don't belong here
