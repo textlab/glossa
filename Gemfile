@@ -15,3 +15,11 @@ gem "jquery-rails"
 
 # To use debugger
 # gem 'debugger'
+
+group :development do
+  # Use thin instead of WEBrick in development
+  gem 'thin'
+
+  gem 'pry'
+  gem 'pry-doc'
+end
