@@ -15,4 +15,4 @@
 //= require ember_master/ember-data
 //
 // app.coffee will require the rest of the app-specific files
-//= require app
+//= require ./app

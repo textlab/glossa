@@ -1,3 +1,3 @@
-#= require models/search_types/search
+#= require rglossa/models/search_types/search
 
 App.CwbSearch = App.Search.extend()

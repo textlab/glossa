@@ -12,4 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//
+//= require rglossa/application
+//
 //= require_tree .
