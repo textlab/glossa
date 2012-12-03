@@ -1,2 +1,4 @@
-module SearchTypes::CwbSearchesHelper
+module Rglossa
+  module SearchTypes::CwbSearchesHelper
+  end
 end

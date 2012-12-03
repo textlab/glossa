@@ -1,2 +1,4 @@
-module SearchesHelper
+module Rglossa
+  module SearchesHelper
+  end
 end

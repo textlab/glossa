@@ -1,2 +1,4 @@
-module MetadataValuesHelper
+module Rglossa
+  module MetadataValuesHelper
+  end
 end

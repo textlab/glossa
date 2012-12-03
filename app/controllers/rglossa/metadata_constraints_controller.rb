@@ -1,2 +1,4 @@
-class Rglossa::MetadataConstraintsController < ApplicationController
+module Rglossa
+  class MetadataConstraintsController < ApplicationController
+  end
 end

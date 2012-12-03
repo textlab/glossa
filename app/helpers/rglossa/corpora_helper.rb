@@ -1,2 +1,4 @@
-module CorporaHelper
+module Rglossa
+  module CorporaHelper
+  end
 end

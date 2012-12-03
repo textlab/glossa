@@ -1,22 +1,24 @@
-class Rglossa::CorporaController < ApplicationController
+module Rglossa
+  class CorporaController < ApplicationController
 
-  def index
-    corpora = Corpus.all
+    def index
+      corpora = Corpus.all
 
-    respond_to do |format|
-      format.json { render json: corpora }
-      format.xml  { render xml:  corpora }
+      respond_to do |format|
+        format.json { render json: corpora }
+        format.xml  { render xml:  corpora }
+      end
     end
-  end
 
 
-  def show
-    corpus = Corpus.find(params[:id])
+    def show
+      corpus = Corpus.find(params[:id])
 
-    respond_to do |format|
-      format.json { render json: corpus }
-      format.xml  { render xml:  corpus }
+      respond_to do |format|
+        format.json { render json: corpus }
+        format.xml  { render xml:  corpus }
+      end
     end
-  end
 
+  end
 end

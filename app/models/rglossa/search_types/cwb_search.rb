@@ -1,3 +1,5 @@
-class Rglossa::SearchTypes::CwbSearch < Rglossa::Search
-  # attr_accessible :title, :body
+module Rglossa
+  class SearchTypes::CwbSearch < Search
+    # attr_accessible :title, :body
+  end
 end

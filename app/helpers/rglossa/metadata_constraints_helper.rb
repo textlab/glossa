@@ -1,2 +1,4 @@
-module MetadataConstraintsHelper
+module Rglossa
+  module MetadataConstraintsHelper
+  end
 end
