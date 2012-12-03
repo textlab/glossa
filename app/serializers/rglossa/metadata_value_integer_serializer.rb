@@ -1,2 +1,4 @@
-class MetadataValueIntegerSerializer < MetadataValueSerializer
+module Rglossa
+  class MetadataValueIntegerSerializer < MetadataValueSerializer
+  end
 end
