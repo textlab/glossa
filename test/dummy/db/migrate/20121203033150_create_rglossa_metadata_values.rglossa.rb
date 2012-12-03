@@ -1,6 +1,7 @@
-class CreateMetadataValues < ActiveRecord::Migration
+# This migration comes from rglossa (originally 20091223175749)
+class CreateRglossaMetadataValues < ActiveRecord::Migration
   def change
-    create_table :metadata_values do |t|
+    create_table :rglossa_metadata_values do |t|
       t.belongs_to :metadata_category
       t.string :type
       t.text :text_value

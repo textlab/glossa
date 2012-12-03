@@ -1,3 +1,4 @@
+# This migration comes from rglossa (originally 20121110003219)
 class AddJoinTableForCorpusTextAndMetadataValue < ActiveRecord::Migration
   def change
     create_table :rglossa_corpus_texts_metadata_values do |t|
