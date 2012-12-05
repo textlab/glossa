@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.summary     = "The Glossa corpus search system"
   s.description = "Ruby on Rails version of the Glossa system for corpus search and results management"
 
-  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
+  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md", "README.rails"]
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency 'rails', '~> 3.2.9'
