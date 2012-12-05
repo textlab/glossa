@@ -30,6 +30,8 @@ With Ruby and Rails installed, it is time to create a new Rails application usin
 
     rails new glossa -m http://raw.github.com/textlab/rglossa/blob/master/app_template.rb
 
+Alternatively, you may already have a Rails application and want to make RGlossa part of that. Since RGlossa is implemented as a Rails engine, this can easily be achieved by mounting RGlossa at some subpath within the application. See the [wiki](http://github.com/textlab/rglossa/wiki) for more information.
+
 ### Optionally install R
 
 RGlossa uses [R](http://www.r-project.org/) for various statistics. The R support is optional, but if you want to use it you need to install R on your server, along with an R package called rcqp.
