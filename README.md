@@ -2,7 +2,7 @@
 
 RGlossa is a reimplementation of the [Glossa search system](https://github.com/noklesta/glossa_svn) in Ruby on Rails.
 
-CURRENTLY WORK IN PROGRESS AND NOT YET FUNCTIONAL
+CURRENTLY WORK IN PROGRESS. NOT YET FUNCTIONAL!
 
 ## Prerequisites
 
@@ -65,3 +65,7 @@ RGlossa uses [R](http://www.r-project.org/) for various statistics. The R suppor
         R CMD INSTALL plyr rcqp
 
   Note: If you get an error message saying that the glib-2.0 library was not found by pkg-config, you need to install the header files for Glib 2. Depending on your distribution, these header files can be found in a package called libglib2.0-dev, glib2-devel, or something similar.
+
+## More information
+
+For more information, see the [RGlossa wiki](http://github.com/textlab/rglossa/wiki).
