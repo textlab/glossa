@@ -6,8 +6,7 @@ CURRENTLY WORK IN PROGRESS. NOT YET FUNCTIONAL!
 
 ## Prerequisites
 
- Ruby >= 1.9.2 (>= 1.9.3 is recommended)
-* PostgreSQL. RGlossa is being developed with version 9.1, but other versions may work as well.
+* Ruby >= 1.9.2 (>= 1.9.3 is recommended)
 * [The IMS Open Corpus Workbench (CWB)](http://cwb.sourceforge.net/). Check out the latest version from SVN to get support for UTF-8-encoded corpora.
 
 ## Installation instructions
