@@ -17,7 +17,7 @@ module Rglossa
     category_type: 'list',
     value_type: 'text'
     )
-  MetadataValueText.create([
+  MetadataValues::Text.create([
     { metadata_category: title, text: 'Peer Gynt' },
     { metadata_category: title, text: 'Vildanden' },
     { metadata_category: title, text: 'Brand' }
@@ -29,7 +29,7 @@ module Rglossa
     category_type: 'list',
     value_type: 'text'
     )
-  MetadataValueText.create([
+  MetadataValues::Text.create([
     { metadata_category: author, text: 'Henrik Ibsen' },
     { metadata_category: author, text: 'Ingvar Ambjørnsen' },
     { metadata_category: author, text: 'Erlend Loe' }
@@ -49,6 +49,6 @@ module Rglossa
     value_type: 'text'
     )
 
-  MetadataValueInteger.create!(metadata_category: publ_year, text: 1867)
-  MetadataValueText.create!(metadata_category: sex, text: 'male')
+  MetadataValues::Integer.create!(metadata_category: publ_year, text: 1867)
+  MetadataValues::Text.create!(metadata_category: sex, text: 'male')
 end
