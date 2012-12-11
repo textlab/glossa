@@ -12,7 +12,9 @@ module Rglossa
 
 
     def show
-      corpus = Corpus.find(params[:id])
+      corpus = Corpus
+        .includes(metadata_categories: [:translations, :metadata_values])
+        .find(params[:id])
 
       respond_to do |format|
         format.json { render json: corpus }
