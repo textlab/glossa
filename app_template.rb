@@ -1,4 +1,4 @@
-gem "rglossa", git: "git://github.com/textlab/rglossa.git"
+gem "rglossa", github: "textlab/rglossa"
 
 run "bundle install"
 
