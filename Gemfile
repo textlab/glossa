@@ -23,6 +23,5 @@ group :development do
   gem 'pry'
   gem 'pry-doc'
 
-  gem "better_errors"
-  gem "binding_of_caller"
+  gem 'bullet'
 end
