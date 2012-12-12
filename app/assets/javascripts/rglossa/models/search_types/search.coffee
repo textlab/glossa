@@ -1,5 +1,6 @@
 App.Search = DS.Model.extend
-  queries: DS.attr('string')
+  metadataValueIds: DS.attr('hash')
+  queries: DS.attr('array')
 
   # non-persisted attribute: cache of search result pages
   resultPages: {}

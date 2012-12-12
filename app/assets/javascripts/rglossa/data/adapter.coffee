@@ -39,3 +39,23 @@ App.Adapter = DS.RESTAdapter.extend
       App.router.transitionTo('results', {
         cwb_search_id: record.get('id')
         page: 1 })
+
+
+# Arrays and hashes should just be passed along to be (de)serialized by the
+# standard mechanisms. Ember Data does not include these attribute types (yet)
+# because of complications wrt knowing when an attribute becomes dirty, but we
+# define them ourselves and just make sure to dirty the object ourselves when
+# needed.
+App.Adapter.registerTransform 'array',
+  fromData: (serialized) ->
+    serialized
+
+  toData: (deserialized) ->
+    deserialized
+
+App.Adapter.registerTransform 'hash',
+  fromData: (serialized) ->
+    serialized
+
+  toData: (deserialized) ->
+    deserialized
