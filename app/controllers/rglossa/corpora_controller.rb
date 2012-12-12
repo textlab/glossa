@@ -1,25 +1,19 @@
 module Rglossa
   class CorporaController < ApplicationController
+    respond_to :json, :xml
 
     def index
-      corpora = Corpus.all
-
-      respond_to do |format|
-        format.json { render json: corpora }
-        format.xml  { render xml:  corpora }
-      end
+      @corpora = Corpus.all
+      respond_with @corpora
     end
 
 
     def show
-      corpus = Corpus
+      @corpus = Corpus
         .includes(metadata_categories: [:translations, :metadata_values])
         .find(params[:id])
 
-      respond_to do |format|
-        format.json { render json: corpus }
-        format.xml  { render xml:  corpus }
-      end
+      respond_with @corpus
     end
 
   end
