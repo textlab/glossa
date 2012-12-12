@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121203033153) do
+ActiveRecord::Schema.define(:version => 20121212002025) do
 
   create_table "rglossa_corpora", :force => true do |t|
     t.string   "name",             :null => false
@@ -89,7 +89,7 @@ ActiveRecord::Schema.define(:version => 20121203033153) do
     t.string   "type"
     t.text     "queries",            :null => false
     t.text     "search_options"
-    t.text     "metadata_selection"
+    t.text     "metadata_value_ids"
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
   end

@@ -5,7 +5,7 @@ class CreateRglossaSearches < ActiveRecord::Migration
       t.string :type
       t.text :queries, null: false
       t.text :search_options
-      t.text :metadata_selection
+      t.text :metadata_value_ids
 
       t.timestamps
     end

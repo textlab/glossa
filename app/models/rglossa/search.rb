@@ -5,7 +5,7 @@ module Rglossa
 
     serialize :queries, Array
     serialize :search_options, Hash
-    serialize :metadata_selection, Hash
+    serialize :metadata_value_ids, Array
 
     # This will be included in the response returned from the *create* action so
     # that we don't have to send an extra request in order to get the first
