@@ -9,7 +9,9 @@
 #   Mayor.create(:name => 'Daley', :city => cities.first)
 
 module Rglossa
-  corpus = Corpus.create!(name: 'The Corpus for Bokmål Lexicography')
+  corpus = Corpus.create!(
+    name: 'The Corpus for Bokmål Lexicography',
+    short_name: 'BOKMAL')
 
   title = MetadataCategory.create!(
     corpus: corpus,
