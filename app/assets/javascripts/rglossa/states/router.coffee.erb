@@ -92,10 +92,7 @@ App.Router = Em.Router.extend
             ####################################
 
             search: (router) ->
-              query = router.get('currentCwbRegexSearchController').createQuery()
-              search = App.CwbSearch.createRecord(query: query)
-
-              router.get('cwbSearchesController').pushObject(search)
+              router.get('cwbSearchesController').createCwbSearch()
               App.store.commit()
 
 
