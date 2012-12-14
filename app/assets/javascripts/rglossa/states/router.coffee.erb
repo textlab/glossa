@@ -66,6 +66,12 @@ App.Router = Em.Router.extend
           regex: Em.Route.create
             route: '/regex'
 
+            enter: (router) ->
+              # Now that we know we will use the regex interface, connect its
+              # controller to the controller handling searches
+              router.set('cwbSearchesController.currentSearchController',
+                router.get('cwbRegexSearchController'))
+
             connectOutlets: (router) ->
               appController = router.get('applicationController')
 

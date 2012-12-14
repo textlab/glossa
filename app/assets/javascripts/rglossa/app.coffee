@@ -13,3 +13,5 @@ App.reopen
 
   connectControllers: ->
     App.get('router.metadataAccordionController').connectControllers('selectedCorpus')
+    App.get('router.cwbSearchesController').connectControllers(
+      'selectedCorpus', 'currentCwbRegexSearch')
