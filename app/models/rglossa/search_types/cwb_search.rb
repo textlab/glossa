@@ -37,6 +37,7 @@ module Rglossa
       stop  = start + page_size - 1
       commands = [
         %Q{set DataDirectory "#{Dir.tmpdir}"},
+        "set Context s",
         "cat #{named_query} #{start} #{stop}"
       ]
       res = run_cqp_commands(commands).split("\n")
