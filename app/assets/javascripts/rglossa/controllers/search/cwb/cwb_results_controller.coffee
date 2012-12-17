@@ -3,8 +3,13 @@ App.CwbResultsController = Em.ArrayController.extend
 
   arrangedContent: (->
     @get('content').map (row) ->
-      m = row.match(/^\s*\d+:\s+(.+)<(.+?)>(.+)/)
-      preMatch:  m[1]
-      match:     m[2]
-      postMatch: m[3]
+      m = row.match(/<s_id (.+)>:\s+(.+)<(.+?)>(.+)/)
+      sId:       m[1]
+      preMatch:  m[2]
+      match:     m[3]
+      postMatch: m[4]
+  ).property('content')
+
+  hasMoreThanOnePage: (->
+    true
   ).property('content')

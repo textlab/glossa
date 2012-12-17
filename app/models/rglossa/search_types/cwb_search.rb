@@ -37,7 +37,9 @@ module Rglossa
       stop  = start + page_size - 1
       commands = [
         %Q{set DataDirectory "#{Dir.tmpdir}"},
+        corpus,  # necessary for "set PrintStructures to work"...
         "set Context s",
+        "set PrintStructures s_id",
         "cat #{named_query} #{start} #{stop}"
       ]
       res = run_cqp_commands(commands).split("\n")
