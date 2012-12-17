@@ -29,13 +29,15 @@ module Rglossa
     # Returns a single page of results from CQP
     def get_result_page(page_no)
       q = queries[0]
+      corpus = q['corpusEdition']
+      named_query = corpus + id.to_s
 
       # NOTE: page_no is 1-based while cqp uses 0-based numbering of hits
       start = (page_no - 1) * page_size
       stop  = start + page_size - 1
       commands = [
         %Q{set DataDirectory "#{Dir.tmpdir}"},
-        "cat #{start} #{stop}"
+        "cat #{named_query} #{start} #{stop}"
       ]
       res = run_cqp_commands(commands)
     end
