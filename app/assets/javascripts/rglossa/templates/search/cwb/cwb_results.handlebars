@@ -1,5 +1,11 @@
-{{#if hasMoreThanOnePage}}
 <div class="row-fluid">
+  <div class="pull-left">
+    <button class="btn btn-small"><i class="icon-download-alt"></i> Save</button>
+    <button class="btn btn-small"><i class="icon-pencil"></i> Annotate</button>
+    <button class="btn btn-small"><i class="icon-th-list"></i> Statistics</button>
+    <button class="btn btn-small">Metadata</button>
+  </div>
+  {{#if hasMoreThanOnePage}}
   <div class="pagination pagination-right">
     <ul>
       <li {{bindAttr class="isShowingFirstPage:disabled"}}>
@@ -19,8 +25,8 @@
       </li>
     </ul>
   </div>
+  {{/if}}
 </div>
-{{/if}}
 <div class="row-fluid search-result-table-container">
   <table class="table table-striped table-bordered">
     {{#each arrangedContent}}
