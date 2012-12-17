@@ -1,6 +1,6 @@
-App.CwbResultsController = Em.ArrayController.extend
-  content: []
+#= require rglossa/controllers/search/results_controller
 
+App.CwbResultsController = App.ResultsController.extend
   arrangedContent: (->
     @get('content').map (row) ->
       m = row.match(/<s_id (.+)>:\s+(.+)<(.+?)>(.+)/)
@@ -8,8 +8,4 @@ App.CwbResultsController = Em.ArrayController.extend
       preMatch:  m[2]
       match:     m[3]
       postMatch: m[4]
-  ).property('content')
-
-  hasMoreThanOnePage: (->
-    true
   ).property('content')

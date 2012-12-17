@@ -1,4 +1,6 @@
-App.CwbRegexSearchController = Em.Controller.extend
+#= require rglossa/controllers/search/search_controller
+
+App.CwbRegexSearchController = App.SearchController.extend
 
   # This will be bound to the search field by the template
   queryInputValue: ''
