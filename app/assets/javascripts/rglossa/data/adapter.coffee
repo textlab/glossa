@@ -26,7 +26,9 @@ App.Adapter = DS.RESTAdapter.extend
       # Note: We cannot use the didCreate model hook for this because that
       # method doesn't receive the JSON (only the model itself).
       root = @rootForType(type)
-      record.set('resultPages', {1: json[root]['first_result_page']})
+      record.resultPages = Em.Object.create({
+        1: json[root]['first_two_result_pages']['1']
+        2: json[root]['first_two_result_pages']['2']})
 
       # When the search has been created and we have got an ID from the
       # server, we transition to the *results* route with the record ID and
