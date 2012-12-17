@@ -1,9 +1,35 @@
-<table class="table table-striped table-bordered search-result-table">
-  {{#each arrangedContent}}
-  <tr>
-    <td>{{preMatch}}</td>
-    <td>{{match}}</td>
-    <td>{{postMatch}}</td>
-  </tr>
-  {{/each}}
-</table>
+{{#if hasMoreThanOnePage}}
+<div class="row-fluid">
+  <div class="pagination pagination-right">
+    <ul>
+      <li {{bindAttr class="isShowingFirstPage:disabled"}}>
+        <a {{action showFirstPage target="controller"}}>&laquo;&laquo;</a>
+      </li>
+      <li {{bindAttr class="isShowingFirstPage:disabled"}}>
+        <a {{action showPreviousPage target="controller"}}>&laquo;</a>
+      </li>
+      <li class="disabled"><span>Page</span></li>
+      <li><span class="paginator-counter">{{view App.CurrentPaginatorPageView}}</span></li>
+      <li class="disabled"><span>of {{numPages}} pages</a></li>
+      <li {{bindAttr class="isShowingLastPage:disabled"}}>
+        <a {{action showNextPage target="controller"}}>&raquo;</a>
+      </li>
+      <li {{bindAttr class="isShowingLastPage:disabled"}}>
+        <a {{action showLastPage target="controller"}}>&raquo;&raquo;</a>
+      </li>
+    </ul>
+  </div>
+</div>
+{{/if}}
+<div class="row-fluid">
+  <table class="table table-striped table-bordered search-result-table">
+    {{#each arrangedContent}}
+    <tr>
+      <td>{{sId}}</td>
+      <td>{{preMatch}}</td>
+      <td>{{match}}</td>
+      <td>{{postMatch}}</td>
+    </tr>
+    {{/each}}
+  </table>
+</div>

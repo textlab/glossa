@@ -7,12 +7,33 @@ body {
 }
 
 .search-result-table {
-  td:first-child {
+  td:nth-child(2) {
     width: 50%;
     text-align: right;
   }
 
   td:last-child {
     width: 50%;
+  }
+}
+
+ /* Override settings in bootstrap.css */
+.pagination {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.pagination ul > li > a, .pagination ul > li > span {
+  line-height: 25px;
+}
+
+.pagination ul > li > span.paginator-counter {
+  padding: 0;
+
+  input {
+    margin: 0;
+    height: 16px;
+    vertical-align: top;
+    text-align: right;
   }
 }
