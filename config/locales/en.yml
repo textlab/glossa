@@ -1,0 +1,13 @@
+en:
+  rglossa:
+    save: 'Save'
+    search: 'Search'
+
+    navbar:
+      my_results: 'My results'
+      log_out: 'Log out'
+
+    search_results:
+      annotate: 'Annotate'
+      statistics: 'Statistics'
+      metadata: 'Metadata'

@@ -1,0 +1,13 @@
+nb:
+  rglossa:
+    save: 'Lagre'
+    search: 'S&oslash;k'
+
+    navbar:
+      my_results: 'Mine resultater'
+      log_out: 'Logg ut'
+
+    search_results:
+      annotate: 'Annot&eacute;r'
+      statistics: 'Statistikk'
+      metadata: 'Metadata'
