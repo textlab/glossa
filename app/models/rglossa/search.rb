@@ -46,7 +46,7 @@ module Rglossa
 
     def page_size
       # TODO: Get this from the user's preferences or something
-      20
+      15
     end
 
   end

@@ -1,1 +1,9 @@
-RESULTS WILL BE SHOWN HERE
+<table class="table table-striped table-hover table-bordered search-result-table">
+  {{#each arrangedContent}}
+  <tr>
+    <td>{{preMatch}}</td>
+    <td>{{match}}</td>
+    <td>{{postMatch}}</td>
+  </tr>
+  {{/each}}
+</table>

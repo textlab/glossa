@@ -105,4 +105,6 @@ App.Router = Em.Router.extend
               search = App.CwbSearch.find(params['cwb_search_id'])
               results = []
               appController.connectOutlet('results', 'cwbResults', results)
-              search.getResultPage(params['page_no'])
+
+              router.set('cwbResultsController.content'
+                search.getResultPage(params['page_no']))

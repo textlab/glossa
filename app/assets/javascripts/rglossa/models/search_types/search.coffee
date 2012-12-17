@@ -12,7 +12,6 @@ App.Search = DS.Model.extend
       @resultPages[pageNo]
     else
       page = @_loadResultPage(pageNo)
-      @resultPages[pageNo] = page
 
   # private
   _loadResultPage: (pageNo) ->

@@ -1,0 +1,18 @@
+body {
+  padding-top: 80px;
+}
+
+.corpus-info {
+  margin-bottom: 50px;
+}
+
+.search-result-table {
+  td:first-child {
+    width: 50%;
+    text-align: right;
+  }
+
+  td:last-child {
+    width: 50%;
+  }
+}

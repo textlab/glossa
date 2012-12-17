@@ -39,7 +39,7 @@ module Rglossa
         %Q{set DataDirectory "#{Dir.tmpdir}"},
         "cat #{named_query} #{start} #{stop}"
       ]
-      res = run_cqp_commands(commands)
+      res = run_cqp_commands(commands).split("\n")
     end
 
     ########
