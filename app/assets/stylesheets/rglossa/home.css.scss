@@ -6,14 +6,19 @@ body {
   margin-bottom: 50px;
 }
 
-.search-result-table {
-  td:nth-child(2) {
-    width: 50%;
-    text-align: right;
-  }
+.search-result-table-container {
+  height: 500px;
+  overflow: auto;
 
-  td:last-child {
-    width: 50%;
+  table {
+    td:nth-child(2) {
+      width: 50%;
+      text-align: right;
+    }
+
+    td:last-child {
+      width: 50%;
+    }
   }
 }
 
