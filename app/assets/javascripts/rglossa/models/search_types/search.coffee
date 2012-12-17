@@ -6,11 +6,17 @@ App.Search = DS.Model.extend
   resultPages: {}
 
   getResultPage: (pageNo) ->
-    if pageNo of own resultPages
-      resultPages[pageNo]
+    if pageNo of @resultPages
+      @resultPages[pageNo]
     else
       page = @_loadResultPage(pageNo)
-      resultPages[pageNo] = page
+      @resultPages[pageNo] = page
 
   # private
   _loadResultPage: (pageNo) ->
+    adapter = App.store.adapter
+    type = @constructor
+    root = adapter.rootForType(type)
+    url = adapter.buildURL(root, @get('id')) + "/results?pages[]=#{pageNo}"
+
+    adapter.ajax(url, 'GET', {})

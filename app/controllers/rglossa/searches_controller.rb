@@ -7,101 +7,53 @@ module Rglossa
       respond_with(@searches)
     end
 
-    def create
-      @search = model_class.create(params[model_param])
+    def show
+      @search = model_class.find(params[:id])
 
       respond_to do |format|
         format.any(:json, :xml) do
           render request.format.to_sym =>
-          @search.to_json(methods: :first_result_page)
+            @search.to_json(
+              root: true,
+              only: [:id, :num_hits],
+              methods: :first_two_result_pages)
         end
       end
     end
 
-    def page
-      search = current_user.searches.find(model_param_id)
-      @results = search ? search.get_result_page(page) : nil
+    def create
+      # Run inside a transaction so that no search record is created if
+      # running queries throw an exception
+      ActiveRecord::Base.transaction do
+        @search = model_class.create(params[model_param])
+      end
+
+      respond_to do |format|
+        format.any(:json, :xml) do
+          render request.format.to_sym =>
+            @search.to_json(
+              root: true,
+              only: [:id, :num_hits],
+              methods: :first_two_result_pages)
+        end
+      end
+    end
+
+    def results
+      # FIXME: USE current_user!!
+      # search = current_user.searches.find(model_param_id)
+      search = model_class.find(params[:id])
+      if search
+        pages = search.get_result_pages(params[:pages])
+
+        @results = {
+          search_results: {
+            search_id: search.id,
+            pages: pages
+          }
+        }
+      end
       respond_with(@results)
-    end
-
-    # Non restful endpoint for CQP/CWB queries
-    def query
-      queries = params[:queries]
-      corpus = params[:queries].first[:corpus].upcase
-      query_id = params[:queryId]
-      case_insensitive = params[:caseInsensitive]
-      start = params[:start]  # may be undefined if paging is not used
-      limit = params[:limit]  # may be undefined if paging is not used
-
-      cwb_settings = read_cwb_settings
-
-      query_id = query_id.to_f
-
-      # a 0 id sent by the app means no id is given
-      if query_id == 0
-        query_id = nil
-      end
-
-      context = CQPQueryContext.new(:registry => cwb_settings['registry'],
-        :query_spec => queries,
-        :id => query_id,
-        :corpus => corpus,
-        :case_insensitive => (case_insensitive == "true"))
-
-      cqp = SimpleCQP.new(context, :cqp_path => cwb_settings['cwb_bin_path'])
-      @result = cqp.result(start.to_i, start.to_i + limit.to_i - 1)
-
-      render :json => {
-        :queryId => context.id,
-        :data => lines_to_json(@result),
-        :querySize => cqp.query_size,
-        :success => true
-      }
-    end
-
-    # non restful endpoint for CQP/CWB corpora list requests
-    def corpora_list
-      id = params[:id]
-
-      cwb_settings = read_cwb_settings
-
-      context = CQPQueryContext.new(:registry => cwb_settings['registry'])
-      cqp = SimpleCQP.new context, :cqp_path => cwb_settings['cwb_bin_path']
-      corpora = cqp.list_corpora
-
-      render :json => {
-        :data => corpora.collect { |c| { :corpus => c } },
-        :success => true
-      }
-    end
-
-    # non restful endpoint for CQP/CWB corpus info requests
-    def corpus_info
-      corpus = params[:corpus]
-
-      cwb_settings = read_cwb_settings
-
-      context = CQPQueryContext.new(:registry => cwb_settings['registry'])
-      cqp = SimpleCQP.new context, :cqp_path => cwb_settings['cwb_bin_path']
-
-      corpus_info = cqp.corpus_info corpus
-
-      render :json => corpus_info
-    end
-
-    def destroy
-    end
-
-    # helper that  reads CWB/CQP settings from a config file
-    def read_cwb_settings
-      return YAML.load_file("#{Rails.root}/config/cwb.yml")[Rails.env]
-    end
-
-    # helper that format CQP result lines to JSON
-    def lines_to_json(result)
-      result.collect do |line|
-        { :guid => line.first.match(/^\d+/)[0], :line => line }
-      end
     end
 
     ########
@@ -118,10 +70,6 @@ module Rglossa
 
     def model_param_id
       "#{model_param}_id"
-    end
-
-    def page_size
-      20
     end
   end
 end

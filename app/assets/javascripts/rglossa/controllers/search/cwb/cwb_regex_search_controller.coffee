@@ -6,5 +6,5 @@ App.CwbRegexSearchController = Em.Controller.extend
   queries: (->
     # For regex queries, the query is simply the contents of the search field.
     # TODO: support multiple search fields
-    [@get('queryInputValue')]
+    @get('queryInputValue')
   ).property('queryInputValue')

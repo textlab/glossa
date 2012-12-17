@@ -38,7 +38,7 @@ App.Adapter = DS.RESTAdapter.extend
       # here instead.
       App.router.transitionTo('results', {
         cwb_search_id: record.get('id')
-        page: 1 })
+        page_no: 1 })
 
 
 # Arrays and hashes should just be passed along to be (de)serialized by the
