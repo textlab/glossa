@@ -1,4 +1,4 @@
-App.ResultsController = Em.ArrayController.extend
+App.ResultToolbarController = Em.ArrayController.extend
   content: []
   searchBinding: 'currentSearchController.content'
 
@@ -18,6 +18,7 @@ App.ResultsController = Em.ArrayController.extend
 
   showNextPage: ->
     @set('currentPageNo', @get('currentPageNo') + 1)
+    App.router.send('goToPage')
 
   showFirstPage: ->
     @set('currentPageNo', 0)

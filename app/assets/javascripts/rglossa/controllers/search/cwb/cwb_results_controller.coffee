@@ -1,11 +1,11 @@
-#= require rglossa/controllers/search/results_controller
+App.CwbResultsController = Em.Controller.extend
+  resultsBinding: 'resultToolbarController.content'
 
-App.CwbResultsController = App.ResultsController.extend
   arrangedContent: (->
-    @get('content').map (row) ->
+    @get('results').map (row) ->
       m = row.match(/<s_id (.+)>:\s+(.+)<(.+?)>(.+)/)
       sId:       m[1]
       preMatch:  m[2]
       match:     m[3]
       postMatch: m[4]
-  ).property('content')
+  ).property('results')

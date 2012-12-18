@@ -85,6 +85,7 @@ App.Router = Em.Router.extend
                 controller: router.get('selectedCorpusController')
 
               appController.connectOutlet('search', 'cwbRegexSearch')
+              appController.disconnectOutlet('resultToolbar')
               appController.disconnectOutlet('results')
 
             exit: (router) ->
@@ -125,8 +126,27 @@ App.Router = Em.Router.extend
               search = App.CwbSearch.find(params['cwb_search_id'])
               router.set('currentSearchController.content', search)
 
-              results = []
-              appController.connectOutlet('results', 'cwbResults', results)
+              appController.connectOutlet('resultToolbar', 'resultToolbar')
+              appController.connectOutlet('results', 'cwbResults')
 
-              router.set('cwbResultsController.content'
+              router.set('resultToolbarController.content'
                 search.getResultPage(params['page_no']))
+
+            ##############################################
+            # Events for index.search.cwb.results
+            ##############################################
+
+            goToPage: (router) ->
+              router.transitionTo('changingResultPage')
+
+
+          changingResultPage: Em.Route.create
+
+            connectOutlets: (router) ->
+              # Using transitionTo in the *enter* method doesn't work, so we
+              # have to do it here, although it has nothing to do with
+              # connecting outlets...
+              params =
+                cwb_search_id: router.get('currentSearchController.id')
+                page_no: router.get('resultToolbarController.currentPageNo')
+              router.transitionTo('results', params)
