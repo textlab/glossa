@@ -18,9 +18,9 @@
       <li {{bindAttr class="isShowingFirstPage:disabled"}}>
         <a {{action showPreviousPage target="controller"}}>&laquo;</a>
       </li>
-      <li class="disabled"><span>Page</span></li>
+      <li><span>Page</span></li>
       <li><span class="paginator-counter">{{view App.CurrentPaginatorPageView}}</span></li>
-      <li class="disabled"><span>of {{numPages}} pages</a></li>
+      <li><span>of {{numPages}} pages</a></li>
       <li {{bindAttr class="isShowingLastPage:disabled"}}>
         <a {{action showNextPage target="controller"}}>&raquo;</a>
       </li>

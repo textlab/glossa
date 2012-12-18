@@ -26,9 +26,9 @@ App.ResultsController = Em.ArrayController.extend
     @set('currentPageNo', @get('numPages') - 1)
 
   numPages: (->
-    numHits = @get('content.length')
+    numHits = @get('search.numHits')
     if numHits is 0 then 0 else Math.floor((numHits - 1) / @pageSize) + 1
-  ).property('content.length')
+  ).property('search')
 
   hasMoreThanOnePage: (->
     @get('numPages') > 1

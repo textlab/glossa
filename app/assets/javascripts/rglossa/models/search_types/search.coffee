@@ -1,6 +1,7 @@
 App.Search = DS.Model.extend
   metadataValueIds: DS.attr('hash')
   queries: DS.attr('array')
+  numHits: DS.attr('number')
 
   # Non-persisted attribute: cache of search result pages. Will be initialized
   # by the adapter to an Em.Object containing the first two result pages after
