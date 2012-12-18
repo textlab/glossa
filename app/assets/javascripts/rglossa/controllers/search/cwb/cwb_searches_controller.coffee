@@ -2,9 +2,9 @@ App.CwbSearchesController = Em.ArrayController.extend
   content: []
 
   # This will be set to the controller for the currently active search
-  # interface (regex, multiword or simple)
-  currentSearchController: null
-  queryBinding: 'currentSearchController.queries'
+  # type (regex, multiword or simple)
+  searchTypeController: null
+  queryBinding: 'searchTypeController.queries'
 
   corpusBinding: 'selectedCorpusController.content'
 

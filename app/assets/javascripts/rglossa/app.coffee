@@ -12,6 +12,20 @@ App.reopen
     @connectControllers()
 
   connectControllers: ->
-    App.get('router.metadataAccordionController').connectControllers('selectedCorpus')
+    App.get('router.metadataAccordionController').connectControllers(
+      'selectedCorpus')
+
+    # Connect controllers for different kind of searches as well as result
+    # handling controllers to the controller proxying the currently active
+    # search. Also give the controller for the array of searches access to
+    # the controller for the current corpus.
+    # For CWB:
+    App.get('router.cwbSimpleSearchController').connectControllers(
+      'currentSearch')
+    App.get('router.cwbRegexSearchController').connectControllers(
+      'currentSearch')
+    App.get('router.cwbResultsController').connectControllers(
+      'currentSearch')
+
     App.get('router.cwbSearchesController').connectControllers(
-      'selectedCorpus', 'currentCwbRegexSearch')
+      'selectedCorpus')

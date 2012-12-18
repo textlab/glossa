@@ -1,9 +1,6 @@
 App.ResultsController = Em.ArrayController.extend
   content: []
-
-  hasMoreThanOnePage: (->
-    true
-  ).property('content')
+  searchBinding: 'currentSearchController.content'
 
   pageSize: 15
 

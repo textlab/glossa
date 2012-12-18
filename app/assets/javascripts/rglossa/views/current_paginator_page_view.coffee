@@ -7,5 +7,5 @@ App.CurrentPaginatorPageView = Em.TextField.extend
   displayedValue: ((key, value) ->
     if value?
       @set('controller.currentPageNo', value - 1)
-      @get('controller.currentPageNo') + 1
-      ).property('controller.currentPageNo')
+    @get('controller.currentPageNo') + 1
+  ).property('controller.currentPageNo')

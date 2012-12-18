@@ -68,9 +68,13 @@ App.Router = Em.Router.extend
 
             enter: (router) ->
               # Now that we know we will use the regex interface, connect its
-              # controller to the controller handling searches
-              router.set('cwbSearchesController.currentSearchController',
-                router.get('cwbRegexSearchController'))
+              # controller to the controllers handling searches and results
+              searchController = router.get('cwbRegexSearchController')
+              router.set('cwbSearchesController.searchTypeController',
+                searchController)
+
+              router.set('cwbResultsController.searchTypeController',
+                searchController)
 
             connectOutlets: (router) ->
               appController = router.get('applicationController')
@@ -119,6 +123,8 @@ App.Router = Em.Router.extend
               appController = router.get('applicationController')
 
               search = App.CwbSearch.find(params['cwb_search_id'])
+              router.set('currentSearchController.content', search)
+
               results = []
               appController.connectOutlet('results', 'cwbResults', results)
 
