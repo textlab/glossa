@@ -15,6 +15,7 @@ App.ResultToolbarController = Em.ArrayController.extend
 
   showPreviousPage: ->
     @set('currentPageNo', @get('currentPageNo') - 1)
+    App.router.send('goToPage')
 
   showNextPage: ->
     @set('currentPageNo', @get('currentPageNo') + 1)
@@ -22,9 +23,11 @@ App.ResultToolbarController = Em.ArrayController.extend
 
   showFirstPage: ->
     @set('currentPageNo', 0)
+    App.router.send('goToPage')
 
   showLastPage: ->
     @set('currentPageNo', @get('numPages') - 1)
+    App.router.send('goToPage')
 
   numPages: (->
     numHits = @get('search.numHits')
