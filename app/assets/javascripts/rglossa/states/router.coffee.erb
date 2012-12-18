@@ -148,5 +148,5 @@ App.Router = Em.Router.extend
               # connecting outlets...
               params =
                 cwb_search_id: router.get('currentSearchController.id')
-                page_no: router.get('resultToolbarController.currentPageNo')
+                page_no: router.get('resultToolbarController.currentPageNo') + 1
               router.transitionTo('results', params)
