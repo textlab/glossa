@@ -38,7 +38,7 @@ App.Adapter = DS.RESTAdapter.extend
       # due to a bug in Ember Data, that hook is called before the ID received
       # from the server is set on the record. So until that is fixed, we do it
       # here instead.
-      App.router.transitionTo('results', {
+      App.router.send('showResults', {
         cwb_search_id: record.get('id')
         page_no: 1 })
 

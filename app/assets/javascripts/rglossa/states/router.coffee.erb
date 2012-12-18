@@ -91,9 +91,25 @@ App.Router = Em.Router.extend
             # Events for index.search.cwb.regex
             ####################################
 
-            search: (router) ->
-              router.get('cwbSearchesController').createCwbSearch()
-              App.store.commit()
+            search: Em.State.transitionTo('searching')
+
+            ##########################################
+            # Child routes for index.search.cwb.regex
+            ##########################################
+
+            # Non-routable
+            searching: Em.State.create
+
+              enter: (router) ->
+                # TODO: Show spinner while we are searching
+                router.get('cwbSearchesController').createCwbSearch()
+                App.store.commit()
+
+              ##############################################
+              # Events for index.search.cwb.regex.searching
+              ##############################################
+
+              showResults: Em.Route.transitionTo('results')
 
 
           results: Em.Route.create
