@@ -9,10 +9,12 @@ App.Search = DS.Model.extend
   resultPages: null
 
   getResultPage: (pageNo) ->
+    pageNo = pageNo + ''
     if pageNo of @resultPages
-      @resultPages[pageNo]
+      @resultPages.get(pageNo)
     else
-      page = @_loadResultPage(pageNo)
+      @_loadResultPage(pageNo)
+      @get('resultPages').set(pageNo, [])
 
   # private
   _loadResultPage: (pageNo) ->
@@ -23,4 +25,4 @@ App.Search = DS.Model.extend
 
     adapter.ajax url, 'GET',
       success: (data) =>
-        @get('resultPages').set(pageNo, data.search_results.pages[pageNo])
+        @get('resultPages').set(pageNo + '', data.search_results.pages[pageNo])
