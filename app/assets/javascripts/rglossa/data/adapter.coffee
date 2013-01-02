@@ -1,13 +1,10 @@
+DS.RESTAdapter.configure 'plurals',
+  corpus:     'corpora'
+  search:     'searches'
+  cwb_search: 'cwb_searches'
+
+
 App.Adapter = DS.RESTAdapter.extend
-  plurals:
-    corpus:     'corpora'
-    search:     'searches'
-    cwb_search: 'cwb_searches'
-
-  mappings:
-    metadata_categories: 'App.MetadataCategory'
-    metadata_values: 'App.MetadataValue'
-
 
   buildURL: (record, suffix) ->
     url = @_super(record, suffix)
@@ -49,15 +46,15 @@ App.Adapter = DS.RESTAdapter.extend
 # define them ourselves and just make sure to dirty the object ourselves when
 # needed.
 App.Adapter.registerTransform 'array',
-  fromData: (serialized) ->
+  deserialize: (serialized) ->
     serialized
 
-  toData: (deserialized) ->
+  serialize: (deserialized) ->
     deserialized
 
 App.Adapter.registerTransform 'hash',
-  fromData: (serialized) ->
+  deserialize: (serialized) ->
     serialized
 
-  toData: (deserialized) ->
+  serialize: (deserialized) ->
     deserialized

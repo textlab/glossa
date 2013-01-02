@@ -2,11 +2,11 @@ App.CwbSearchesController = Em.ArrayController.extend
   content: []
 
   # This will be set to the controller for the currently active search
-  # type (regex, multiword or simple)
+  # type (regex, multiword, simple etc.)
   searchTypeController: null
   queryBinding: 'searchTypeController.queries'
 
-  corpusBinding: 'selectedCorpusController.content'
+  corpusBinding: 'corpusController.content'
 
   createCwbSearch: ->
     # TODO: Add support for searching in multiple corpora simultaneously

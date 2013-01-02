@@ -1,152 +1,24 @@
 App.Router = Em.Router.extend
   enableLogging: <%= Rails.env == 'development' %>
 
-  root: Em.Route.create
+App.Router.map (match) ->
+  # This route fetches the corpus with the given short name and dispatches
+  # to the appropriate search interface based on the searchType that is set
+  # on the corpus (or to a CWB interface if none is specified)
+  match('home/:corpus_short_name').to 'home'
 
-    # The *index* state has the route '/', meaning that it will always be
-    # entered whenever the application is loaded by entering some URL in the
-    # browser (regardless of which substate that URL eventually routes to).
-    index: Em.Route.create
-      route: '/'
+  match('search').to 'search', (match) ->
+    match('cwb').to 'cwb', (match) ->
+      match('simple').to 'cwbSimple'
+      match('regex').to 'cwbRegex'
 
-      enter: (router) ->
-        corpusId = 1  # TESTING!!!
+    # Add routes for other search engines and interfaces as they are
+    # implemented, e.g.:
+    # match('corpuscle').to 'corpuscle', (match) ->
+      # match('simple').to 'corpuscleSimple'
+      # match('regex').to 'corpuscleRegex'
 
-        # Loading the corpus also includes metadata categories and values
-        corpus = App.Corpus.find(corpusId)
-        router.get('selectedCorpusController').initCorpus(corpus)
-
-      #########################
-      # Child routes for index
-      #########################
-
-      home: Em.Route.create
-        route: '/home'
-
-        enter: (router) ->
-          # Choose which search interface to display based on the search type
-          # for this corpus
-          searchType = router.get('selectedCorpusController').get('searchType')
-          @newRoute = switch searchType
-            when 'cwb' then 'index.search.cwb.regex'
-
-            # Add routes for other search interfaces/engines here as they are
-            # implemented, e.g.
-            # when 'corpuscle' then 'index.search.corpuscle.simple'
-            # when 'annis2' then 'index.search.annis2.simple'
-
-        connectOutlets: (router) ->
-          # Using transitionTo in the *enter* method doesn't work, so we have
-          # to do it here, although it has nothing to do with connecting
-          # outlets...
-          router.transitionTo(@newRoute)
-
-
-      search: Em.Route.create
-        route: '/search'
-
-        connectOutlets: (router) ->
-          appController = router.get('applicationController')
-
-          appController.connectOutlet('leftSidebar', 'metadataAccordion')
-
-        ##########################################
-        # Child routes for index.search
-        ##########################################
-
-        cwb: Em.Route.create
-          route: '/cwb'
-
-          ##############################################
-          # Child routes for index.search.cwb
-          ##############################################
-
-          simple: Em.Route.create()
-
-          regex: Em.Route.create
-            route: '/regex'
-
-            enter: (router) ->
-              # Now that we know we will use the regex interface, connect its
-              # controller to the controllers handling searches and results
-              searchController = router.get('cwbRegexSearchController')
-              router.set('cwbSearchesController.searchTypeController',
-                searchController)
-
-              router.set('cwbResultsController.searchTypeController',
-                searchController)
-
-            connectOutlets: (router) ->
-              appController = router.get('applicationController')
-
-              appController.connectOutlet
-                outletName: 'corpusInfo'
-                viewClass: App.CorpusInfoView
-                controller: router.get('selectedCorpusController')
-
-              appController.connectOutlet('search', 'cwbRegexSearch')
-              appController.disconnectOutlet('resultToolbar')
-              appController.disconnectOutlet('results')
-
-            exit: (router) ->
-              appController = router.get('applicationController')
-              appController.disconnectOutlet('corpusInfo')
-
-            ####################################
-            # Events for index.search.cwb.regex
-            ####################################
-
-            search: Em.State.transitionTo('searching')
-
-            ##########################################
-            # Child routes for index.search.cwb.regex
-            ##########################################
-
-            # Non-routable
-            searching: Em.State.create
-
-              enter: (router) ->
-                # TODO: Show spinner while we are searching
-                router.get('cwbSearchesController').createCwbSearch()
-                App.store.commit()
-
-              ##############################################
-              # Events for index.search.cwb.regex.searching
-              ##############################################
-
-              showResults: Em.Route.transitionTo('results')
-
-
-          results: Em.Route.create
-            route: '/results/:cwb_search_id/:page_no'
-
-            connectOutlets: (router, params) ->
-              appController = router.get('applicationController')
-
-              search = App.CwbSearch.find(params['cwb_search_id'])
-              router.set('currentSearchController.content', search)
-
-              appController.connectOutlet('resultToolbar', 'resultToolbar')
-              appController.connectOutlet('results', 'cwbResults')
-
-              router.set('resultToolbarController.content'
-                search.getResultPage(params['page_no']))
-
-            ##############################################
-            # Events for index.search.cwb.results
-            ##############################################
-
-            goToPage: (router) ->
-              router.transitionTo('changingResultPage')
-
-
-          changingResultPage: Em.Route.create
-
-            connectOutlets: (router) ->
-              # Using transitionTo in the *enter* method doesn't work, so we
-              # have to do it here, although it has nothing to do with
-              # connecting outlets...
-              params =
-                cwb_search_id: router.get('currentSearchController.id')
-                page_no: router.get('resultToolbarController.currentPageNo') + 1
-              router.transitionTo('results', params)
+    # Make this route a substate of the *search* route since we want to keep
+    # the different parts of the search interface (query, metadata etc.) when
+    # viewing results so that the search can be refined
+    match('/results/:search_id/:page_no').to 'searchResults'

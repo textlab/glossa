@@ -1,6 +1,6 @@
 App.ResultToolbarController = Em.ArrayController.extend
   content: []
-  searchBinding: 'currentSearchController.content'
+  searchBinding: 'searchController.content'
 
   pageSize: 15
 
@@ -15,19 +15,19 @@ App.ResultToolbarController = Em.ArrayController.extend
 
   showPreviousPage: ->
     @set('currentPageNo', @get('currentPageNo') - 1)
-    App.router.send('goToPage')
+    App.router.send('changeResultPage')
 
   showNextPage: ->
     @set('currentPageNo', @get('currentPageNo') + 1)
-    App.router.send('goToPage')
+    App.router.send('changeResultPage')
 
   showFirstPage: ->
     @set('currentPageNo', 0)
-    App.router.send('goToPage')
+    App.router.send('changeResultPage')
 
   showLastPage: ->
     @set('currentPageNo', @get('numPages') - 1)
-    App.router.send('goToPage')
+    App.router.send('changeResultPage')
 
   numPages: (->
     numHits = @get('search.numHits')
