@@ -12,8 +12,5 @@ App.SearchResultsRoute = Em.Route.extend
     @render 'resultToolbar', outlet: 'resultToolbar'
     @render 'cwbResults',    outlet: 'results'
 
-  #########
-  # Events
-  #########
-
-  changeResultPage: -> @transitionTo('changingResultPage')
+  events:
+    changeResultPage: -> @transitionTo('changingResultPage')

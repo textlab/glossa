@@ -17,11 +17,8 @@ App.CwbRegexRoute = Em.Route.extend
     @render null,
       outlet: 'corpusInfo'
 
-  #########
-  # Events
-  #########
-
-  search: -> @transitionTo('searching')
+  events:
+    search: -> @transitionTo('searching')
 
   #########################
   # Non-routable substates
