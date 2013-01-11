@@ -1,11 +1,11 @@
 App.CwbRegexRoute = Em.Route.extend
 
-  setupControllers: (controller, model) ->
+  setupController: (controller, model) ->
     # Now that we know we will use the regex interface, connect its
     # controller to the controller handling CWB searches
-    Em.controllerFor('cwbSearches').set('searchTypeController', controller)
+    @controllerFor('cwbSearches').set('searchTypeController', controller)
 
-  renderTemplates: ->
+  renderTemplate: ->
     @render 'corpusInfo',
       outlet: 'corpusInfo'
       controller: 'corpusController'
@@ -28,11 +28,11 @@ App.CwbRegexRoute = Em.Route.extend
 
     enter: ->
       # TODO: Show spinner while we are searching
-      Em.controllerFor('cwbSearches').createCwbSearch()
+      @controllerFor('cwbSearches').createCwbSearch()
       App.store.commit()
 
     #########
     # Events
     #########
 
-    showResults: -> @transitionTo('searchResults')
+    showResults: -> @transitionTo('search.results')
