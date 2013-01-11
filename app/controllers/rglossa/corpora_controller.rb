@@ -13,7 +13,14 @@ module Rglossa
     def show
       @corpus = Corpus
         .includes(metadata_categories: [:translations, :metadata_values])
-        .find(params[:id])
+
+      # params[:id] can be either the short_name of the corpus or its database
+      # id as usual
+      if params[:id].is_a?(Integer)
+        @corpus = @corpus.find(params[:id])
+      else
+        @corpus = @corpus.where(short_name: params[:id]).first
+      end
 
       respond_with @corpus
     end
