@@ -1,5 +1,5 @@
-// Version: v1.0.0-pre.2-366-g4772b18
-// Last commit: 4772b18 (2013-01-09 18:56:47 -0800)
+// Version: v1.0.0-pre.2-370-g6a165ad
+// Last commit: 6a165ad (2013-01-10 15:58:36 -0800)
 
 
 (function() {
@@ -142,8 +142,8 @@ if ('undefined' !== typeof window) {
 
 })();
 
-// Version: v1.0.0-pre.2-366-g4772b18
-// Last commit: 4772b18 (2013-01-09 18:56:47 -0800)
+// Version: v1.0.0-pre.2-370-g6a165ad
+// Last commit: 6a165ad (2013-01-10 15:58:36 -0800)
 
 
 (function() {
@@ -22007,14 +22007,23 @@ Ember.Router = Ember.Object.extend({
   },
 
   _lookupActiveView: function(templateName) {
-    return this._activeViews[templateName];
+    var active = this._activeViews[templateName];
+    return active && active[0];
   },
 
   _connectActiveView: function(templateName, view) {
-    this._activeViews[templateName] = view;
-    view.one('willDestroyElement', this, function() {
+    var existing = this._activeViews[templateName];
+
+    if (existing) {
+      existing[0].off('willDestroyElement', this, existing[1]);
+    }
+
+    var disconnect = function() {
       delete this._activeViews[templateName];
-    });
+    };
+
+    this._activeViews[templateName] = [view, disconnect];
+    view.one('willDestroyElement', this, disconnect);
   }
 });
 
@@ -22029,7 +22038,7 @@ Ember.Router.reopenClass({
   }
 });
 
-function getHandlerFunction(router, activeViews) {
+function getHandlerFunction(router) {
   var seen = {}, container = router.container;
 
   return function(name) {
@@ -22084,7 +22093,7 @@ function setupRouter(emberRouter, router, location) {
     location.setURL(lastURL);
   }
 
-  router.getHandler = getHandlerFunction(emberRouter, emberRouter._activeViews);
+  router.getHandler = getHandlerFunction(emberRouter);
   router.updateURL = function(path) {
     lastURL = path;
     Ember.run.once(updateURL);
@@ -22102,16 +22111,16 @@ function setupRouterDelegate(router, namespace) {
 
       if (context === 'application' || context === undefined) {
         return handler;
-      } else {
+      } else if (handler.indexOf('.') === -1) {
         context = context.split('.').slice(-1)[0];
         return context + '.' + handler;
+      } else {
+        return handler;
       }
     },
 
     contextEntered: function(target, match) {
       match('/').to('index');
-
-      namespace[classify(target)] = Ember.Namespace.create();
     }
   };
 }
@@ -25602,8 +25611,8 @@ Ember States
 
 
 })();
-// Version: v1.0.0-pre.2-366-g4772b18
-// Last commit: 4772b18 (2013-01-09 18:56:47 -0800)
+// Version: v1.0.0-pre.2-370-g6a165ad
+// Last commit: 6a165ad (2013-01-10 15:58:36 -0800)
 
 
 (function() {

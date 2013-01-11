@@ -1081,7 +1081,7 @@ DS.Store = Ember.Object.extend(DS._Mappable, {
 
     @property {DS.Adapter|String}
   */
-  adapter: 'DS.Adapter',
+  adapter: 'DS.RESTAdapter',
 
   /**
     @private
