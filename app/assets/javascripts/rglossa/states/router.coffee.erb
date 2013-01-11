@@ -1,16 +1,13 @@
-App.Router = Em.Router.extend
-  enableLogging: <%= Rails.env == 'development' %>
-
 App.Router.map (match) ->
   # This route fetches the corpus with the given short name and dispatches
   # to the appropriate search interface based on the searchType that is set
   # on the corpus (or to a CWB interface if none is specified)
-  match('home/:corpus_short_name').to 'home'
+  match('corp/:corpus_short_name/home').to 'home'
 
-  match('search').to 'search', (match) ->
+  match('corp/:corpus_short_name/search').to 'search', (match) ->
     match('cwb').to 'cwb', (match) ->
-      match('simple').to 'cwbSimple'
-      match('regex').to 'cwbRegex'
+      match('simple').to 'simple'
+      match('regex').to  'regex'
 
     # Add routes for other search engines and interfaces as they are
     # implemented, e.g.:
@@ -21,4 +18,4 @@ App.Router.map (match) ->
     # Make this route a substate of the *search* route since we want to keep
     # the different parts of the search interface (query, metadata etc.) when
     # viewing results so that the search can be refined
-    match('/results/:search_id/:page_no').to 'searchResults'
+    match('corp/:corpus_short_name/res/:search_id/:page_no').to 'results'

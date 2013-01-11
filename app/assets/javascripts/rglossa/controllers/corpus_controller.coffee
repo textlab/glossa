@@ -7,6 +7,6 @@ App.CorpusController = Em.ObjectController.extend
 
 
   setCorpus: (shortName) ->
-    corpus = App.Corpus.find({ shortName: shortName })
+    corpus = App.Corpus.find(shortName)
     @set('content', corpus)
     corpus
