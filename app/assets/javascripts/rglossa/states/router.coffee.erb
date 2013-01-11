@@ -1,21 +1,24 @@
 App.Router.map (match) ->
-  # This route fetches the corpus with the given short name and dispatches
-  # to the appropriate search interface based on the searchType that is set
-  # on the corpus (or to a CWB interface if none is specified)
-  match('corp/:corpus_short_name/home').to 'home'
 
-  match('corp/:corpus_short_name/search').to 'search', (match) ->
-    match('cwb').to 'cwb', (match) ->
-      match('simple').to 'simple'
-      match('regex').to  'regex'
+  # fetches the corpus
+  match('corp/:corpus_short_name').to 'corpus', (match) ->
 
-    # Add routes for other search engines and interfaces as they are
-    # implemented, e.g.:
-    # match('corpuscle').to 'corpuscle', (match) ->
-      # match('simple').to 'corpuscleSimple'
-      # match('regex').to 'corpuscleRegex'
+    # redirects to the appropriate search interface for the corpus
+    match('home').to 'home'
 
-    # Make this route a substate of the *search* route since we want to keep
-    # the different parts of the search interface (query, metadata etc.) when
-    # viewing results so that the search can be refined
-    match('corp/:corpus_short_name/res/:search_id/:page_no').to 'results'
+    # search interfaces
+    match('search').to 'search', (match) ->
+
+      # various CWB interfaces
+      match('cwb').to 'cwb', (match) ->
+        match('simple').to 'simple'
+        match('regex').to  'regex'
+
+      # Add routes for other search engines and interfaces as they are
+      # implemented, e.g.:
+      # match('corpuscle').to 'corpuscle', (match) ->
+        # match('simple').to 'simple'
+        # match('regex').to 'regex'
+
+    # search results
+    match('res/:search_id/:page_no').to 'results'

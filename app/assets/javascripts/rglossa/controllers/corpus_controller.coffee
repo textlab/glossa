@@ -2,11 +2,5 @@ App.CorpusController = Em.ObjectController.extend
 
   # Search type, depending on chosen corpus. Defaults to the Corpus Workbench.
   searchType: (->
-    @get('content.searchType') or 'cwb'
-  ).property('content.searchType')
-
-
-  setCorpus: (shortName) ->
-    corpus = App.Corpus.find(shortName)
-    @set('content', corpus)
-    corpus
+    @get('model.searchType') or 'cwb'
+  ).property('model.searchType')
