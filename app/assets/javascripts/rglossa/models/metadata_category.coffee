@@ -12,7 +12,3 @@ App.MetadataCategory = DS.Model.extend
   collapsibleHref: (->
     "##{@get 'collapsibleId'}"
   ).property()
-
-
-App.store.adapter.serializer.configure App.MetadataCategory,
-  sideloadAs: 'metadata_categories'

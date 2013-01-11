@@ -3,6 +3,12 @@ DS.RESTAdapter.configure 'plurals',
   search:     'searches'
   cwb_search: 'cwb_searches'
 
+DS.RESTAdapter.configure 'App.MetadataCategory',
+  sideloadAs: 'metadata_categories'
+
+DS.RESTAdapter.configure 'App.MetadataValue',
+  sideloadAs: 'metadata_values'
+
 
 App.Adapter = DS.RESTAdapter.extend
 
