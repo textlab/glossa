@@ -1,8 +1,5 @@
 App.SearchRoute = Em.Route.extend
 
-  model: (params) ->
-    corpus = @controllerFor('corpus').setCorpus(params['corpus_short_name'])
-
   renderTemplate: ->
     # Metadata selection is independent of the type of search interface, so
     # render the metadata accordion in the sidebar for all search interfaces.
