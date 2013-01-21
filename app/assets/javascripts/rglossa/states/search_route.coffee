@@ -1,13 +1,9 @@
+# This route sets up everything that is common to the search front page and
+# result pages, e.g. the metadata accordion in the sidebar etc.
 App.SearchRoute = Em.Route.extend
 
   renderTemplate: ->
-    # Metadata selection is independent of the type of search interface, so
-    # render the metadata accordion in the sidebar for all search interfaces.
-    # The rest of the search interface will be rendered by a substate that is
-    # determined by the desired search type (CWB, Corpuscle etc.)
-    @render 'metadataAccordion',
-      outlet: 'leftSidebar',
-      controller: 'metadataAccordion'
+    @render 'metadataAccordion', outlet: 'leftSidebar'
 
   #########################
   # Non-routable substates
