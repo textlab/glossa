@@ -1,24 +1,20 @@
+# NOTE: The class name of routes need to be prefixed with the name of their
+# parent, while resources should not (cf.
+# https://github.com/emberjs/ember.js/commit/
+# e4af09edd357cdccfddfa684247bc43a6eaae0fe#commitcomment-2432875). So, it
+# should be App.CorpusHomeRoute, but App.SearchRoute.
 App.Router.map (match) ->
 
   # fetches the corpus
-  match('corp/:corpus_short_name').to 'corpus', (match) ->
+  @resource 'corpus', path: 'corp/:corpus_short_name', ->
 
-    # redirects to the appropriate search interface for the corpus
-    match('home').to 'home'
+    # sets up everything that is common to the search front page and result
+    # pages, e.g. the metadata accordion in the sidebar etc.
+    @resource 'search', ->
 
-    # search interfaces
-    match('search').to 'search', (match) ->
+      # the "front page" for search that shows corpus info and search
+      # interface
+      @route 'front'
 
-      # various CWB interfaces
-      match('cwb').to 'cwb', (match) ->
-        match('simple').to 'simple'
-        match('regex').to  'regex'
-
-      # Add routes for other search engines and interfaces as they are
-      # implemented, e.g.:
-      # match('corpuscle').to 'corpuscle', (match) ->
-        # match('simple').to 'simple'
-        # match('regex').to 'regex'
-
-    # search results
-    match('res/:search_id/:page_no').to 'results'
+      # the search results page, which also allows further searches
+      @route 'results', path: 'res/:search_id/:page_no'
