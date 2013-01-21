@@ -1,9 +1,6 @@
 # This route sets up everything that is common to the search front page and
 # result pages, e.g. the metadata accordion in the sidebar etc.
-App.SearchRoute = Em.Route.extend
-
-  renderTemplate: ->
-    @render 'metadataAccordion', outlet: 'leftSidebar'
+App.CorpusSearchRoute = Em.Route.extend
 
   #########################
   # Non-routable substates

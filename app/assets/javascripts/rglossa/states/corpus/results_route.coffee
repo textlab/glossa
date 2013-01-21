@@ -1,4 +1,4 @@
-App.SearchResultsRoute = Em.Route.extend
+App.CorpusResultsRoute = Em.Route.extend
 
   setupController: (controller, params) ->
     search = App.CwbSearch.find(params['cwb_search_id'])
