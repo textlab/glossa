@@ -1,5 +1,5 @@
-module Rglossa::SearchTypes
+module Rglossa::SearchEngines
   def self.table_name_prefix
-    'search_types_'
+    'search_engines_'
   end
 end

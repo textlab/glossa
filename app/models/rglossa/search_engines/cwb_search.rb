@@ -1,7 +1,7 @@
 require 'rglossa/query_error'
 
 module Rglossa
-  class SearchTypes::CwbSearch < Search
+  class SearchEngines::CwbSearch < Search
 
     def run_queries
       # TODO: Handle several queries at once

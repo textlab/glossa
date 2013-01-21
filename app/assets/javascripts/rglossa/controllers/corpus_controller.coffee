@@ -1,6 +1,6 @@
 App.CorpusController = Em.ObjectController.extend
 
-  # Search type, depending on chosen corpus. Defaults to the Corpus Workbench.
-  searchType: (->
-    @get('model.searchType') or 'cwb'
-  ).property('model.searchType')
+  # Search engine, depending on chosen corpus. Defaults to the Corpus Workbench.
+  searchEngine: (->
+    @get('model.searchEngine') or 'cwb'
+  ).property('model.searchEngine')

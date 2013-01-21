@@ -1,5 +1,5 @@
 # This route dispatches to the appropriate search interface based on the
-# searchType that is set on the corpus (or to a CWB interface if none is
+# searchEngine that is set on the corpus (or to a CWB interface if none is
 # specified)
 App.CorpusHomeRoute = Em.Route.extend
 
@@ -10,8 +10,8 @@ App.CorpusHomeRoute = Em.Route.extend
     # of the parent route (CorpusRoute). In fact, we don't get here until
     # Ember has finished loading the parent route model from the server, so we
     # don't need to set up an observer to wait for it or anything :-)
-    searchType = @controllerFor('corpus').get('searchType')
-    newRoute = switch searchType
+    searchEngine = @controllerFor('corpus').get('searchEngine')
+    newRoute = switch searchEngine
       when 'cwb' then 'cwb.regex'
 
       # Add routes for other search interfaces/engines here as they are
