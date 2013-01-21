@@ -10,7 +10,7 @@
 //= require bootstrap-2.1.0/bootstrap
 //
 // Use ember.js and ember-data.js from the master branches at least until 1.0 comes out
-//= require ember_master/handlebars-1.0.rc.1
+//= require ember_master/handlebars
 //= require ember_master/ember
 //= require ember_master/ember-data
 //
