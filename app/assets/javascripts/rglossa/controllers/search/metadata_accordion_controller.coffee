@@ -1,2 +1,3 @@
 App.MetadataAccordionController = Em.ArrayController.extend
-  contentBinding: 'corpusController.metadataCategories'
+  needs: 'corpus'
+  contentBinding: 'controllers.corpus.metadataCategories'
