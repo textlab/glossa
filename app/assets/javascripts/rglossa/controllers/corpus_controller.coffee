@@ -12,7 +12,7 @@ App.CorpusController = Em.ObjectController.extend
 
   # Reopen the class and add to this object if you implement other search
   # engines
-  defaultSearchInterface:
+  defaultSearchInterfaceVariant:
     cwb: 'regex'
 
   userPreferencesBinding: 'controllers.currentUser.preferences'
@@ -24,17 +24,19 @@ App.CorpusController = Em.ObjectController.extend
   ).property('model.searchEngine')
 
 
-  # The interface that matches the user's preferences for the search engine
-  # for the current corpus (e.g. simple, multiword or regex for CWB corpora).
-  # The search engine is determined by the corpus itself or set to a default,
-  # while the interface type is taken from the user's preferences or a default
-  # for the search engine.
-  searchInterface: (->
+  # The Handlebars template for the interface of the current search engine
+  searchInterfaceTemplate: (->
     engine = @get('searchEngine')
-    interf = @get('userPreferences.interfaces')?[engine] or
-      @defaultSearchInterface[engine]
+    "search/#{engine}"
+  ).property('searchEngine')
 
-    "#{engine}#{interf.classify()}"
+
+  # Returns e.g. "simple", "multiword" or "regex" for the CWB search engine,
+  # depending on the user's preferences or the default variant
+  preferredSearchInterfaceVariant: (->
+    engine  = @get('searchEngine')
+    variant = @get('userPreferences.interfaces')?[engine] or
+      @defaultSearchInterfaceVariant[engine]
   ).property('searchEngine', 'userPreferences.interfaces')
 
 
