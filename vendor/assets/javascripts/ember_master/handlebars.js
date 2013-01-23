@@ -1,27 +1,3 @@
-/*
-
-Copyright (C) 2011 by Yehuda Katz
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
-*/
-
 // lib/handlebars/base.js
 
 /*jshint eqnull:true*/
@@ -1051,7 +1027,7 @@ Handlebars.JavaScriptCompiler = function() {};
       this.opcode('invokeAmbiguous', name);
     },
 
-    simpleMustache: function(mustache) {
+    simpleMustache: function(mustache, program, inverse) {
       var id = mustache.id;
 
       if (id.type === 'DATA') {
@@ -1213,7 +1189,7 @@ Handlebars.JavaScriptCompiler = function() {};
   JavaScriptCompiler.prototype = {
     // PUBLIC API: You can override these methods in a subclass to provide
     // alternative compiled forms for name lookup and buffering semantics
-    nameLookup: function(parent, name /* , type*/) {
+    nameLookup: function(parent, name, type) {
       if (/^[0-9]+$/.test(name)) {
         return parent + "[" + name + "]";
       } else if (JavaScriptCompiler.isValidJavaScriptVariableName(name)) {
@@ -1279,7 +1255,7 @@ Handlebars.JavaScriptCompiler = function() {};
     },
 
     nextOpcode: function() {
-      var opcodes = this.environment.opcodes;
+      var opcodes = this.environment.opcodes, opcode = opcodes[this.i + 1];
       return opcodes[this.i + 1];
     },
 
@@ -1321,6 +1297,7 @@ Handlebars.JavaScriptCompiler = function() {};
 
       // Generate minimizer alias mappings
       if (!this.isChild) {
+        var aliases = [];
         for (var alias in this.context.aliases) {
           this.source[1] = this.source[1] + ', ' + alias + '=' + this.context.aliases[alias];
         }
