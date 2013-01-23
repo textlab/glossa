@@ -1,5 +1,5 @@
-// Version: v1.0.0-pre.4-10-g389a912
-// Last commit: 389a912 (2013-01-20 16:30:20 -0800)
+// Version: v1.0.0-pre.4-12-ge3fb7f6
+// Last commit: e3fb7f6 (2013-01-22 10:37:17 -0800)
 
 
 (function() {
@@ -142,8 +142,8 @@ if ('undefined' !== typeof window) {
 
 })();
 
-// Version: v1.0.0-pre.4-10-g389a912
-// Last commit: 389a912 (2013-01-20 16:30:20 -0800)
+// Version: v1.0.0-pre.4-12-ge3fb7f6
+// Last commit: e3fb7f6 (2013-01-22 10:37:17 -0800)
 
 
 (function() {
@@ -23896,12 +23896,18 @@ Ember.HistoryLocation = Ember.Object.extend({
   /**
     @private
 
-    Returns the current `location.pathname`.
+    Returns the current `location.pathname` without rootURL
 
     @method getURL
   */
   getURL: function() {
-    return get(this, 'location').pathname;
+    var rootURL = get(this, 'rootURL'),
+        url = get(this, 'location').pathname;
+
+    rootURL = rootURL.replace(/\/$/, '');
+    url = url.replace(rootURL, '');
+
+    return url;
   },
 
   /**
@@ -23984,13 +23990,14 @@ Ember.HistoryLocation = Ember.Object.extend({
     @param callback {Function}
   */
   onUpdateURL: function(callback) {
-    var guid = Ember.guidFor(this);
+    var guid = Ember.guidFor(this),
+        self = this;
 
     Ember.$(window).bind('popstate.ember-location-'+guid, function(e) {
       if(!popstateReady) {
         return;
       }
-      callback(location.pathname);
+      callback(self.getURL());
     });
   },
 
@@ -26078,8 +26085,8 @@ Ember States
 
 
 })();
-// Version: v1.0.0-pre.4-10-g389a912
-// Last commit: 389a912 (2013-01-20 16:30:20 -0800)
+// Version: v1.0.0-pre.4-12-ge3fb7f6
+// Last commit: e3fb7f6 (2013-01-22 10:37:17 -0800)
 
 
 (function() {
