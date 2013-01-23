@@ -3,14 +3,20 @@
 App.CorpusSearchRoute = Em.Route.extend
 
   renderTemplate: ->
-    # render the search template into the main outlet of the corpus template
+    # Render the search template into the main outlet of the corpus template
     @_super()
 
-    # Also select which search interface to show inside the search template
-    # itself. App.CorpusController determines the appropriate interface
-    # depending on the current corpus (or picks the default)
-    searchInterface = @controllerFor('corpus').get('searchInterfaceTemplate')
-    @render searchInterface, into: 'corpus/search', outlet: 'searchInterface'
+    # Select which search interface to show inside the search template itself.
+    # App.CorpusController determines the appropriate interface depending on
+    # the current corpus (or picks the default)
+    corpusController         = @controllerFor('corpus')
+    searchesControllerPrefix = corpusController.get('searchesControllerPrefix')
+    searchInterface          = corpusController.get('searchInterfaceTemplate')
+
+    @render searchInterface,
+      into: 'corpus/search'
+      outlet: 'searchInterface'
+      controller: searchesControllerPrefix
 
   #########################
   # Non-routable substates

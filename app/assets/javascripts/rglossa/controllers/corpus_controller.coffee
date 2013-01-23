@@ -1,8 +1,4 @@
 App.CorpusController = Em.ObjectController.extend
-  # Need to initialize `content` to an empty object to allow bindings to be
-  # set up before `content` is set to an actual corpus model (otherwise, the
-  # bindings initialization code will throw an exception)
-  content: {}
 
   needs: 'currentUser'
 
@@ -15,6 +11,7 @@ App.CorpusController = Em.ObjectController.extend
   defaultSearchInterfaceVariant:
     cwb: 'regex'
 
+  userPreferences: null
   userPreferencesBinding: 'controllers.currentUser.preferences'
 
 
@@ -22,6 +19,22 @@ App.CorpusController = Em.ObjectController.extend
   searchEngine: (->
     @get('model.searchEngine') or @defaultSearchEngine
   ).property('model.searchEngine')
+
+
+  # The search model subclass for the current search engine without the
+  # application namespace (e.g. "CwbSearch")
+  searchModelClass: (->
+    engine = @get('searchEngine')
+    "#{engine.classify()}Search"
+  ).property('searchEngine')
+
+
+  # The prefix (i.e., without "Controller") of the name of the controller for
+  # searches with the current search engine (e.g. "cwbSearches")
+  searchesControllerPrefix: (->
+    engine = @get('searchEngine')
+    "#{engine}Searches"
+  ).property('searchEngine')
 
 
   # The Handlebars template for the interface of the current search engine

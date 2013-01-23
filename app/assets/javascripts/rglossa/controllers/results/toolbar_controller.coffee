@@ -1,4 +1,4 @@
-App.ResultToolbarController = Em.ArrayController.extend
+App.ResultsToolbarController = Em.ArrayController.extend
   content: []
   searchBinding: 'searchController.content'
 

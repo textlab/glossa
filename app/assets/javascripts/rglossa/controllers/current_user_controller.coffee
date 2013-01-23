@@ -1,2 +1,1 @@
-App.CurrentUserController = Em.ObjectController.extend
-  content: {}
+App.CurrentUserController = Em.ObjectController.extend()

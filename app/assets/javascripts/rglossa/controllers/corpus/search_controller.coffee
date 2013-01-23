@@ -1,4 +1,7 @@
-App.CorpusSearchController = Em.Controller.extend
+App.CorpusSearchController = Em.ObjectController.extend
+
   needs: 'corpus'
+
+  corpusController: null
   corpusControllerBinding: 'controllers.corpus'
 

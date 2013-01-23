@@ -1,21 +1,17 @@
 <div class="row-fluid">
 
-  <%# Begin action buttons %>
+  <!-- Begin action buttons -->
 
   <div class="pull-left">
-    <button class="btn btn-small"><i class="icon-download-alt"></i>
-      <%= I18n.t('rglossa.save') %></button>
-    <button class="btn btn-small"><i class="icon-pencil"></i>
-      <%= I18n.t('rglossa.search_results.annotate') %></button>
-    <button class="btn btn-small"><i class="icon-th-list"></i>
-      <%= I18n.t('rglossa.search_results.statistics') %></button>
-    <button class="btn btn-small">
-      <%= I18n.t('rglossa.search_results.metadata') %></button>
+    <button class="btn btn-small"><i class="icon-download-alt"></i>Save</button>
+    <button class="btn btn-small"><i class="icon-pencil"></i>Annotate</button>
+    <button class="btn btn-small"><i class="icon-th-list"></i>Statistics</button>
+    <button class="btn btn-small">Metadata</button>
   </div>
 
-  <%# End action buttons %>
+  <!-- End action buttons -->
 
-  <%# Begin result paginator %>
+  <!-- Begin result paginator -->
 
   {{#if hasMoreThanOnePage}}
   <div class="pagination pagination-right">
@@ -39,6 +35,6 @@
   </div>
   {{/if}}
 
-  <%# End result paginator %>
+  <!-- End result paginator -->
 
 </div>

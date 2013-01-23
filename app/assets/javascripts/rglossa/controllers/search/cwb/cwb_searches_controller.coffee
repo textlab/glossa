@@ -1,15 +1,15 @@
 App.CwbSearchesController = Em.ArrayController.extend
-  content: []
 
-  # This will be set to the controller for the currently active search
-  # type (regex, multiword, simple etc.)
-  searchTypeController: null
-  queryBinding: 'searchTypeController.queries'
+  needs: 'corpus'
 
-  corpusBinding: 'corpusController.content'
+  # This will be bound to properties on views for for simple search, multiword
+  # search and regex search.
+  query: ''
+
+  corpus: null
+  corpusBinding: 'controllers.corpus.content'
 
   createCwbSearch: ->
-    # TODO: Add support for searching in multiple corpora simultaneously
     metadataValueIds = {}
     metadataValueIds[@get('corpus.id')] = [1,2,3]
 
