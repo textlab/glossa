@@ -5,7 +5,7 @@ Rglossa::Engine.routes.draw do
   resources :corpora, :metadata_categories, :metadata_values,
   :metadata_constraints
 
-  namespace :search_types do
+  namespace :search_engines do
     # Add more search types to the resource list as they are implemented, e.g.
     # resources :cwb_searches, :corpuscle_searches, :annis2_searches do
     resources :cwb_searches do

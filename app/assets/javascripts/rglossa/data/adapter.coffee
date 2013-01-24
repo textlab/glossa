@@ -14,7 +14,7 @@ App.Adapter = DS.RESTAdapter.extend
 
   buildURL: (record, suffix) ->
     url = @_super(record, suffix)
-    url = "/search_types#{url}" unless record.search(/_search$/) is -1
+    url = "/search_engines#{url}" unless record.search(/_search$/) is -1
     url
 
 
