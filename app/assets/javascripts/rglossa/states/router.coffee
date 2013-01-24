@@ -10,7 +10,7 @@ App.Router.map (match) ->
   # page and the result pages, e.g. the metadata accordion in the sidebar etc.
   @resource 'corpus', path: 'corp/:corpus_short_name', ->
 
-    @route 'search'
+    @route 'home'
 
     # the search results page, which also allows further searches
     @route 'results', path: 'res/:search_id/:page_no'

@@ -1,5 +1,5 @@
 App.CwbRegexView = Em.View.extend
-  templateName: 'search/cwb_regex'
+  templateName: 'home/cwb_regex'
 
   # This is defined on each of the different view classes for the simple,
   # multiword and regex CWB search and bound to the CwbSearchesController,

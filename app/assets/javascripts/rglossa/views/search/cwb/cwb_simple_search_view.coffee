@@ -1,5 +1,5 @@
 App.CwbSimpleSearchView = Em.View.extend
-  templateName: 'search/cwb/cwb_simple_search'
+  templateName: 'home/cwb/cwb_simple_search'
 
   didInsertElement: ->
     @$('.searchfield').focus()

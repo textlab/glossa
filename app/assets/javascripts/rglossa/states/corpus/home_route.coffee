@@ -1,12 +1,10 @@
-# This route sets up everything that is common to the search front page and
-# result pages, e.g. the metadata accordion in the sidebar etc.
-App.CorpusSearchRoute = Em.Route.extend
+App.CorpusHomeRoute = Em.Route.extend
 
   renderTemplate: ->
-    # Render the search template into the main outlet of the corpus template
+    # Render the home template into the main outlet of the corpus template
     @_super()
 
-    # Select which search interface to show inside the search template itself.
+    # Select which search interface to show inside the home template itself.
     # App.CorpusController determines the appropriate interface depending on
     # the current corpus (or picks the default)
     corpusController         = @controllerFor('corpus')
@@ -14,7 +12,7 @@ App.CorpusSearchRoute = Em.Route.extend
     searchInterface          = corpusController.get('searchInterfaceTemplate')
 
     @render searchInterface,
-      into: 'corpus/search'
+      into: 'corpus/home'
       outlet: 'searchInterface'
       controller: searchesControllerPrefix
 

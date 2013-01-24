@@ -1,4 +1,4 @@
-App.CorpusSearchController = Em.ObjectController.extend
+App.CorpusHomeController = Em.ObjectController.extend
 
   needs: 'corpus'
 
