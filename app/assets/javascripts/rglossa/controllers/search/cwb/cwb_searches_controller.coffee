@@ -1,4 +1,5 @@
 App.CwbSearchesController = Em.ArrayController.extend
+  content: []
 
   needs: 'corpus'
 
@@ -8,6 +9,9 @@ App.CwbSearchesController = Em.ArrayController.extend
 
   corpus: null
   corpusBinding: 'controllers.corpus.content'
+
+  # Action handler
+  search: -> @createCwbSearch()
 
   createCwbSearch: ->
     metadataValueIds = {}
@@ -24,5 +28,7 @@ App.CwbSearchesController = Em.ArrayController.extend
     search = App.CwbSearch.createRecord(
       metadataValueIds: metadataValueIds
       queries: queries)
+
+    @get('store').commit()
 
     @pushObject(search)
