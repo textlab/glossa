@@ -1,4 +1,4 @@
-App.CorpusResultsRoute = Em.Route.extend
+App.CorpusResultsRoute = Em.Route.extend App.SearchInterfaceRenderer,
 
   # These probably belong more in setupController(), but that method doesn't
   # get the params argument
@@ -17,12 +17,7 @@ App.CorpusResultsRoute = Em.Route.extend
     @_super()
 
     template = 'corpus/results'
-
-    # Select which search interface to show inside the results template
-    # itself. App.CorpusController determines the appropriate interface
-    # depending on the current corpus (or picks the default)
-    searchInterface = @controllerFor('corpus').get('searchInterfaceTemplate')
-    @render searchInterface, into: template, outlet: 'searchInterface'
+    @renderSearchInterfaceInto(template)
 
     @render 'results/toolbar', into: template, outlet: 'resultsToolbar'
 

@@ -1,20 +1,11 @@
-App.CorpusHomeRoute = Em.Route.extend
+#= require rglossa/states/router
+
+App.CorpusHomeRoute = Em.Route.extend App.SearchInterfaceRenderer,
 
   renderTemplate: ->
     # Render the home template into the main outlet of the corpus template
     @_super()
-
-    # Select which search interface to show inside the home template itself.
-    # App.CorpusController determines the appropriate interface depending on
-    # the current corpus (or picks the default)
-    corpusController         = @controllerFor('corpus')
-    searchesControllerPrefix = corpusController.get('searchesControllerPrefix')
-    searchInterface          = corpusController.get('searchInterfaceTemplate')
-
-    @render searchInterface,
-      into: 'corpus/home'
-      outlet: 'searchInterface'
-      controller: searchesControllerPrefix
+    @renderSearchInterfaceInto('corpus/home')
 
   #########################
   # Non-routable substates
