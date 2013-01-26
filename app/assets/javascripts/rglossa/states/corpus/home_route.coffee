@@ -1,5 +1,3 @@
-#= require rglossa/states/router
-
 App.CorpusHomeRoute = Em.Route.extend App.SearchInterfaceRenderer,
 
   renderTemplate: ->
