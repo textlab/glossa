@@ -11,6 +11,11 @@
     var authenticityToken = '<%= form_authenticity_token %>';
   </script>
 
+  <script type="text/javascript">
+    I18n.defaultLocale = "<%= I18n.default_locale %>";
+    I18n.locale = "<%= I18n.locale %>";
+  </script>
+
   <%= javascript_include_tag 'application' %>
 </head>
 <body>
