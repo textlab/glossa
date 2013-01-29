@@ -33,18 +33,6 @@ App.Adapter = DS.RESTAdapter.extend
         1: json[root]['first_two_result_pages']['1']
         2: json[root]['first_two_result_pages']['2']})
 
-      # When the search has been created and we have got an ID from the
-      # server, we transition to the *results* route with the record ID and
-      # the first result page as parameters.
-      #
-      # This would also be more natural to do in the didCreate model hook, but
-      # due to a bug in Ember Data, that hook is called before the ID received
-      # from the server is set on the record. So until that is fixed, we do it
-      # here instead.
-      App.router.send('showResults', {
-        cwb_search_id: record.get('id')
-        page_no: 1 })
-
 
 # Arrays and hashes should just be passed along to be (de)serialized by the
 # standard mechanisms. Ember Data does not include these attribute types (yet)

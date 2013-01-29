@@ -1,5 +1,6 @@
 App.SearchesController = Em.ArrayController.extend
   content: []
+  currentSearch: null
 
   needs: 'corpus'
 
@@ -31,6 +32,7 @@ App.SearchesController = Em.ArrayController.extend
       metadataValueIds: metadataValueIds
       queries: queries)
 
-    @get('store').commit()
-
     @pushObject(search)
+    @set('currentSearch', search)
+
+    @get('store').commit()

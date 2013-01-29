@@ -14,4 +14,3 @@ App.Router.map (match) ->
 
     # the search results page, which also allows further searches
     @route 'results', path: 'res/:search_id/:page_no'
-

@@ -12,6 +12,11 @@ App.CorpusResultsRoute = Em.Route.extend App.SearchInterfaceRenderer,
     @controllerFor('resultToolbar').set('content', resultPage)
 
 
+  serialize: (params) ->
+    [searchId, pageNo] = params
+    {search_id: searchId, page_no: pageNo}
+
+
   renderTemplate: ->
     # Render the results template into the main outlet of the corpus template
     @_super()
