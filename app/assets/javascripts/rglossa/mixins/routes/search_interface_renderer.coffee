@@ -6,10 +6,9 @@ App.SearchInterfaceRenderer = Em.Mixin.create
     # App.CorpusController determines the appropriate interface depending on
     # the current corpus (or picks the default)
     corpusController         = @controllerFor('corpus')
-    searchesControllerPrefix = corpusController.get('searchesControllerPrefix')
     searchInterface          = corpusController.get('searchInterfaceTemplate')
 
     @render searchInterface,
       into: template
       outlet: 'searchInterface'
-      controller: searchesControllerPrefix
+      controller: 'searches'

@@ -5,7 +5,7 @@ App.CorpusResultsRoute = Em.Route.extend App.SearchInterfaceRenderer,
   model: (params) ->
     # Get the search model subclass for the search engine used by the current
     # corpus and find the record with the given search_id
-    searchModelClass = App.get(@controllerFor('corpus').get('searchModelClass'))
+    searchModelClass = @controllerFor('corpus').get('searchModelClass')
     search = searchModelClass.find(params['search_id'])
 
     resultPage = search.getResultPage(params['page_no'])

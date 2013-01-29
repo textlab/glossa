@@ -21,19 +21,10 @@ App.CorpusController = Em.ObjectController.extend
   ).property('model.searchEngine')
 
 
-  # The search model subclass for the current search engine without the
-  # application namespace (e.g. "CwbSearch")
+  # The search model subclass for the current search engine
   searchModelClass: (->
     engine = @get('searchEngine')
-    "#{engine.classify()}Search"
-  ).property('searchEngine')
-
-
-  # The prefix (i.e., without "Controller") of the name of the controller for
-  # searches with the current search engine (e.g. "cwbSearches")
-  searchesControllerPrefix: (->
-    engine = @get('searchEngine')
-    "#{engine}Searches"
+    App.get("#{engine.classify()}Search")
   ).property('searchEngine')
 
 

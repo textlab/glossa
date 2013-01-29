@@ -1,4 +1,4 @@
-App.CwbSearchesController = Em.ArrayController.extend
+App.SearchesController = Em.ArrayController.extend
   content: []
 
   needs: 'corpus'
@@ -10,10 +10,12 @@ App.CwbSearchesController = Em.ArrayController.extend
   corpus: null
   corpusBinding: 'controllers.corpus.content'
 
-  # Action handler
-  search: -> @createCwbSearch()
+  searchModelClassBinding: 'controllers.corpus.searchModelClass'
 
-  createCwbSearch: ->
+  # Action handler
+  search: -> @createSearch()
+
+  createSearch: ->
     metadataValueIds = {}
     metadataValueIds[@get('corpus.id')] = [1,2,3]
 
@@ -25,7 +27,7 @@ App.CwbSearchesController = Em.ArrayController.extend
       query:         @get('query')
     ]
 
-    search = App.CwbSearch.createRecord(
+    search = @get('searchModelClass').createRecord(
       metadataValueIds: metadataValueIds
       queries: queries)
 
