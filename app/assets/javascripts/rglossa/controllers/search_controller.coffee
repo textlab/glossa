@@ -4,8 +4,8 @@ App.SearchController = Em.ObjectController.extend
   model: null
   modelBinding: 'controllers.searches.currentSearch'
 
-  corpusId: null
-  corpusIdBinding: 'controllers.corpus.model.id'
+  corpus: null
+  corpusBinding: 'controllers.corpus.model'
 
   modelIdDidChange: (->
     # When the search has been created and we have got an ID from the server,
@@ -18,7 +18,7 @@ App.SearchController = Em.ObjectController.extend
     # until that is fixed, we observe the model ID.
     if @get('model.id')
       @get('target').send 'showResults',
-        corpusId: @get('corpusId')
+        corpusId: @get('corpus.id')
         searchId: @get('model.id')
         pageNo: 1
   ).observes('model.id')
