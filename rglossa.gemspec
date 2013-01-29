@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'devise'
   s.add_dependency 'ember-rails'
   s.add_dependency 'globalize3'
+  s.add_dependency 'i18n-js'
   s.add_dependency 'hirb'
 
   s.add_development_dependency 'sqlite3'

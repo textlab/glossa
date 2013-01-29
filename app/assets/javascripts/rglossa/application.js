@@ -14,5 +14,8 @@
 //= require ember_master/ember
 //= require ember_master/ember-data
 //
+//= require i18n
+//= require i18n/translations
+//
 // app.coffee will require the rest of the app-specific files
 //= require ./app
