@@ -31,7 +31,14 @@ App.CorpusController = Em.ObjectController.extend
   # The Handlebars template for the interface of the current search engine
   searchInterfaceTemplate: (->
     engine = @get('searchEngine')
-    "home/#{engine}"
+    "home/#{engine}/#{engine}"
+  ).property('searchEngine')
+
+
+  # The Handlebars template for the result view of the current search engine
+  searchResultTemplate: (->
+    engine = @get('searchEngine')
+    "result/#{engine}/#{engine}"
   ).property('searchEngine')
 
 

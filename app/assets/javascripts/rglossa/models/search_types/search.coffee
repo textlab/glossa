@@ -18,10 +18,10 @@ App.Search = DS.Model.extend
 
   # private
   _loadResultPage: (pageNo) ->
-    adapter = App.store.adapter
-    type = @constructor
-    root = adapter.rootForType(type)
-    url = adapter.buildURL(root, @get('id')) + "/results?pages[]=#{pageNo}"
+    adapter   = App.store.adapter
+    type      = @constructor
+    root      = adapter.rootForType(type)
+    url       = adapter.buildURL(root, @get('id')) + "/results?pages[]=#{pageNo}"
 
     adapter.ajax url, 'GET',
       success: (data) =>

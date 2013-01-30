@@ -1,7 +1,6 @@
-App.CorpusHomeController = Em.ObjectController.extend
+App.CorpusHomeController = Em.Controller.extend
 
-  needs: 'corpus'
+  needs: ['corpus', 'searches']
 
-  corpusController: null
-  corpusControllerBinding: 'controllers.corpus'
-
+  corpusBinding: 'controllers.corpus.model'
+  searchesControllerBinding: 'controllers.searches'

@@ -2,7 +2,7 @@ App.SearchesController = Em.ArrayController.extend
   content: []
   currentSearch: null
 
-  needs: 'corpus'
+  needs: ['corpus', 'resultPage']
 
   # This will be bound to properties on views for for simple search, multiword
   # search and regex search.
@@ -35,4 +35,25 @@ App.SearchesController = Em.ArrayController.extend
     @pushObject(search)
     @set('currentSearch', search)
 
+    # Setup a one-time observer for the `id` property of the search object,
+    # which will send an event to the router to make it transition to the
+    # search results view when the search data has returned from the server.
+    # (A more natural thing to observe would be the `isNew` property, but due
+    # to a bug in Ember Data, the id has not yet been set when `isNew` becomes
+    # false.)
+    search.addObserver('id', @, @_sendShowResultEvent)
     @get('store').commit()
+
+
+  _sendShowResultEvent: ->
+    search = @get('currentSearch')
+
+    if search.get('id')
+      @set('controllers.resultPage.content', search.getResultPage(1))
+
+      @get('target').send 'showResult',
+        corpus: @get('corpus')
+        search: search
+        pageNo: 1
+
+      search.removeObserver('id', @, @_sendShowResultEvent)

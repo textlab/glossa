@@ -19,15 +19,7 @@ App.CorpusResultRoute = Em.Route.extend App.SearchInterfaceRenderer,
 
 
   renderTemplate: ->
-    # Render the result template into the main outlet of the corpus template
-    @_super()
-
-    template = 'corpus/result'
-    @renderSearchInterfaceInto(template)
-
-    @render 'result/toolbar', into: template, outlet: 'resultToolbar'
-
-    @render 'result/page', into: template, outlet: 'resultPage'
+    @renderSearchInterface('result')
 
 
   events:
