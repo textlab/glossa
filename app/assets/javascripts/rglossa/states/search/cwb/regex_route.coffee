@@ -35,4 +35,4 @@ App.CwbRegexRoute = Em.Route.extend
     # Events
     #########
 
-    showResults: -> @transitionTo('search.results')
+    showResult: -> @transitionTo('search.result')

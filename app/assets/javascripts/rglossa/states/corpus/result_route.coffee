@@ -1,4 +1,4 @@
-App.CorpusResultsRoute = Em.Route.extend App.SearchInterfaceRenderer,
+App.CorpusResultRoute = Em.Route.extend App.SearchInterfaceRenderer,
 
   # These probably belong more in setupController(), but that method doesn't
   # get the params argument
@@ -10,7 +10,7 @@ App.CorpusResultsRoute = Em.Route.extend App.SearchInterfaceRenderer,
     @controllerFor('search').set('model', search)
 
     resultPage = search.getResultPage(params['page_no'])
-    @controllerFor('resultToolbar').set('content', resultPage)
+    @controllerFor('resultPage').set('content', resultPage)
 
 
   serialize: (params) ->
@@ -19,16 +19,16 @@ App.CorpusResultsRoute = Em.Route.extend App.SearchInterfaceRenderer,
 
 
   renderTemplate: ->
-    # Render the results template into the main outlet of the corpus template
+    # Render the result template into the main outlet of the corpus template
     @_super()
 
-    template = 'corpus/results'
+    template = 'corpus/result'
     @renderSearchInterfaceInto(template)
 
-    @render 'results/toolbar', into: template, outlet: 'resultsToolbar'
+    @render 'result/toolbar', into: template, outlet: 'resultToolbar'
 
-    @render 'results/page', into: template, outlet: 'resultsPage'
+    @render 'result/page', into: template, outlet: 'resultPage'
 
 
   events:
-    changeResultPage: (pageNo) -> @transitionTo('corpus.results')
+    changeResultPage: (pageNo) -> @transitionTo('corpus.result')

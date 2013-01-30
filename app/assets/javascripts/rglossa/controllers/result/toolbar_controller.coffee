@@ -1,4 +1,4 @@
-App.ResultsToolbarController = Em.ArrayController.extend
+App.ResultToolbarController = Em.ArrayController.extend
   needs: ['search', 'corpus']
 
   search: null
@@ -53,7 +53,7 @@ App.ResultsToolbarController = Em.ArrayController.extend
 
 
   changeResultPage: ->
-    @get('target').send 'showResults',
+    @get('target').send 'showResult',
         corpus: @get('corpus')
         search: @get('search')
         pageNo: @get('currentPageNo')

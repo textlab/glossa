@@ -12,5 +12,5 @@ App.Router.map (match) ->
 
     @route 'home'
 
-    # the search results page, which also allows further searches
-    @route 'results', path: 'res/:search_id/:page_no'
+    # the search result view, which also allows further searches
+    @route 'result', path: 'res/:search_id/:page_no'
