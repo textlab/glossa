@@ -18,7 +18,7 @@ App.SearchController = Em.ObjectController.extend
     # until that is fixed, we observe the model ID.
     if @get('model.id')
       @get('target').send 'showResults',
-        corpusId: @get('corpus.id')
-        searchId: @get('model.id')
+        corpus: @get('corpus')
+        search: @get('model')
         pageNo: 1
   ).observes('model.id')

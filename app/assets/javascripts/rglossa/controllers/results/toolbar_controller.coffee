@@ -1,6 +1,11 @@
 App.ResultsToolbarController = Em.ArrayController.extend
-  content: []
-  searchBinding: 'searchController.content'
+  needs: ['search', 'corpus']
+
+  search: null
+  searchBinding: 'controllers.search.model'
+
+  corpus: null
+  corpusBinding: 'controllers.corpus.model'
 
   pageSize: 15
 
@@ -15,19 +20,19 @@ App.ResultsToolbarController = Em.ArrayController.extend
 
   showPreviousPage: ->
     @set('currentPageNo', @get('currentPageNo') - 1)
-    App.router.send('changeResultPage')
+    @changeResultPage()
 
   showNextPage: ->
     @set('currentPageNo', @get('currentPageNo') + 1)
-    App.router.send('changeResultPage')
+    @changeResultPage()
 
   showFirstPage: ->
     @set('currentPageNo', 0)
-    App.router.send('changeResultPage')
+    @changeResultPage()
 
   showLastPage: ->
     @set('currentPageNo', @get('numPages') - 1)
-    App.router.send('changeResultPage')
+    @changeResultPage()
 
   numPages: (->
     numHits = @get('search.numHits')
@@ -45,3 +50,10 @@ App.ResultsToolbarController = Em.ArrayController.extend
   isShowingLastPage: (->
     @get('currentPageNo') is @get('numPages') - 1
   ).property('currentPageNo', 'numPages')
+
+
+  changeResultPage: ->
+    @get('target').send 'showResults',
+        corpus: @get('corpus')
+        search: @get('search')
+        pageNo: @get('currentPageNo')

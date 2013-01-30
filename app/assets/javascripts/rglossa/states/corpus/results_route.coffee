@@ -7,14 +7,15 @@ App.CorpusResultsRoute = Em.Route.extend App.SearchInterfaceRenderer,
     # corpus and find the record with the given search_id
     searchModelClass = @controllerFor('corpus').get('searchModelClass')
     search = searchModelClass.find(params['search_id'])
+    @controllerFor('search').set('model', search)
 
     resultPage = search.getResultPage(params['page_no'])
     @controllerFor('resultToolbar').set('content', resultPage)
 
 
   serialize: (params) ->
-    [searchId, pageNo] = params
-    {search_id: searchId, page_no: pageNo}
+    [search, pageNo] = params
+    {search_id: search.get('id'), page_no: pageNo}
 
 
   renderTemplate: ->
@@ -26,7 +27,8 @@ App.CorpusResultsRoute = Em.Route.extend App.SearchInterfaceRenderer,
 
     @render 'results/toolbar', into: template, outlet: 'resultsToolbar'
 
-    # @render 'cwbResults',    outlet: 'results'
+    @render 'results/page', into: template, outlet: 'resultsPage'
+
 
   events:
-    changeResultPage: -> @transitionTo('changingResultPage')
+    changeResultPage: (pageNo) -> @transitionTo('corpus.results')
