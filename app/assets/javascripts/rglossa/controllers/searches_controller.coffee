@@ -2,7 +2,7 @@ App.SearchesController = Em.ArrayController.extend
   content: []
   currentSearch: null
 
-  needs: ['corpus', 'resultPage']
+  needs: ['corpus', 'resultTable']
 
   # This will be bound to properties on views for for simple search, multiword
   # search and regex search.
@@ -49,7 +49,7 @@ App.SearchesController = Em.ArrayController.extend
     search = @get('currentSearch')
 
     if search.get('id')
-      @set('controllers.resultPage.content', search.getResultPage(1))
+      @set('controllers.resultTable.content', search.getResultPage(1))
 
       @get('target').send 'showResult',
         corpus: @get('corpus')

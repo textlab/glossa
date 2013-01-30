@@ -1,11 +1,11 @@
-App.CwbResultPageController = Em.Controller.extend
+App.CwbResultTableController = Em.Controller.extend
 
-  needs: ['resultPage']
+  needs: ['resultTable']
 
-  # We get the actual page of results from the resultPageController; this
+  # We get the actual page of results from the resultTableController; this
   # controller is only responsible for doing CWB-specific formatting of
   # those results
-  resultPageBinding: 'controllers.resultPage.content'
+  resultPageBinding: 'controllers.resultTable.content'
 
   arrangedContent: (->
     resultPage = @get('resultPage')
