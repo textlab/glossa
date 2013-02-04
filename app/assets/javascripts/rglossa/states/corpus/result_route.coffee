@@ -20,7 +20,3 @@ App.CorpusResultRoute = Em.Route.extend App.SearchInterfaceRenderer,
 
   renderTemplate: ->
     @renderSearchInterface('result')
-
-
-  events:
-    changeResultPage: (pageNo) -> @transitionTo('corpus.result')
