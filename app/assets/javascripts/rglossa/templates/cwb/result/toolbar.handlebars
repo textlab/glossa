@@ -17,19 +17,19 @@
   <div class="pagination pagination-right">
     <ul>
       <li {{bindAttr class="isShowingFirstPage:disabled"}}>
-        <a {{action showFirstPage}}>&laquo;&laquo;</a>
+        <a href="#" {{action showFirstPage}}>&laquo;&laquo;</a>
       </li>
       <li {{bindAttr class="isShowingFirstPage:disabled"}}>
-        <a {{action showPreviousPage}}>&laquo;</a>
+        <a href="#" {{action showPreviousPage}}>&laquo;</a>
       </li>
       <li><span>Page</span></li>
       <li><span class="paginator-counter">{{view App.CurrentPaginatorPageView}}</span></li>
       <li><span>of {{numPages}} pages</a></li>
       <li {{bindAttr class="isShowingLastPage:disabled"}}>
-        <a {{action showNextPage}}>&raquo;</a>
+        <a href="#" {{action showNextPage}}>&raquo;</a>
       </li>
       <li {{bindAttr class="isShowingLastPage:disabled"}}>
-        <a {{action showLastPage}}>&raquo;&raquo;</a>
+        <a href="#" {{action showLastPage}}>&raquo;&raquo;</a>
       </li>
     </ul>
   </div>
