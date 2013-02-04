@@ -42,7 +42,7 @@ App.SearchesController = Em.ArrayController.extend
     # to a bug in Ember Data, the id has not yet been set when `isNew` becomes
     # false.)
     search.addObserver('id', @, @_sendShowResultEvent)
-    @get('store').commit()
+    search.get('transaction').commit()
 
 
   _sendShowResultEvent: ->
