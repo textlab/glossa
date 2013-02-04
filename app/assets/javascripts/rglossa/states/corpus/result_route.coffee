@@ -9,13 +9,13 @@ App.CorpusResultRoute = Em.Route.extend App.SearchInterfaceRenderer,
     search = searchModelClass.find(params['search_id'])
     @controllerFor('search').set('model', search)
 
-    resultPage = search.getResultPage(params['page_no'])
+    resultPage = search.getResultPage(params['page_no'] - 1)
     @controllerFor('resultPage').set('content', resultPage)
 
 
   serialize: (params) ->
     [search, pageNo] = params
-    {search_id: search.get('id'), page_no: pageNo}
+    {search_id: search.get('id'), page_no: pageNo + 1}
 
 
   renderTemplate: ->
