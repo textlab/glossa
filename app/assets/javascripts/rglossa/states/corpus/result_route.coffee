@@ -14,9 +14,12 @@ App.CorpusResultRoute = Em.Route.extend App.SearchInterfaceRenderer,
 
 
   serialize: (params) ->
-    [search, pageNo] = params
-    {search_id: search.get('id'), page_no: pageNo + 1}
+    [@search, @pageNo] = params
+    {search_id: @search.get('id'), page_no: @pageNo}
 
+
+  setupController: ->
+    @controllerFor('resultTable').set('content', @search.getResultPage(@pageNo))
 
   renderTemplate: ->
     @renderSearchInterface('result')

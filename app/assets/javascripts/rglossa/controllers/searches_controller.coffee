@@ -40,7 +40,8 @@ App.SearchesController = Em.ArrayController.extend
     # search results view when the search data has returned from the server.
     # (A more natural thing to observe would be the `isNew` property, but due
     # to a bug in Ember Data, the id has not yet been set when `isNew` becomes
-    # false.)
+    # false, and we need to set the id in the URL when we transition to the
+    # result route.)
     search.addObserver('id', @, @_sendShowResultEvent)
     search.get('transaction').commit()
 
@@ -49,11 +50,9 @@ App.SearchesController = Em.ArrayController.extend
     search = @get('currentSearch')
 
     if search.get('id')
-      @set('controllers.resultTable.content', search.getResultPage(1))
-
       @get('target').send 'showResult',
         corpus: @get('corpus')
         search: search
-        pageNo: 0
+        pageNo: 1
 
       search.removeObserver('id', @, @_sendShowResultEvent)

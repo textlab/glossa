@@ -9,11 +9,11 @@ App.ResultToolbarController = Em.ArrayController.extend
 
   pageSize: 15
 
-  _currentPageNo: 0
+  _currentPageNo: 1
   currentPageNo: ((key, value) ->
     if value?
       numPages = @get('numPages')
-      @_currentPageNo = if value < 0 then 0 else (if value >= numPages then numPages - 1 else value)
+      @_currentPageNo = if value < 1 then 1 else (if value > numPages then numPages else value)
 
     @_currentPageNo
   ).property()
@@ -27,11 +27,11 @@ App.ResultToolbarController = Em.ArrayController.extend
     @changeResultPage()
 
   showFirstPage: ->
-    @set('currentPageNo', 0)
+    @set('currentPageNo', 1)
     @changeResultPage()
 
   showLastPage: ->
-    @set('currentPageNo', @get('numPages') - 1)
+    @set('currentPageNo', @get('numPages'))
     @changeResultPage()
 
   numPages: (->
@@ -44,11 +44,11 @@ App.ResultToolbarController = Em.ArrayController.extend
   ).property('numPages')
 
   isShowingFirstPage: (->
-    @get('currentPageNo') is 0
+    @get('currentPageNo') is 1
   ).property('currentPageNo')
 
   isShowingLastPage: (->
-    @get('currentPageNo') is @get('numPages') - 1
+    @get('currentPageNo') is @get('numPages')
   ).property('currentPageNo', 'numPages')
 
 
