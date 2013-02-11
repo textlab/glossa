@@ -19,4 +19,4 @@ App.CwbResultTableController = Em.Controller.extend
         postMatch: m[4]
     else
       []
-  ).property('resultPage')
+  ).property('resultPage.@each')
