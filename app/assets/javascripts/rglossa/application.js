@@ -7,6 +7,7 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //= require jquery
+//= require jquery-ui-1.10.0.custom
 //= require bootstrap-2.1.0/bootstrap
 //
 // Use ember.js and ember-data.js from the master branches at least until 1.0 comes out
