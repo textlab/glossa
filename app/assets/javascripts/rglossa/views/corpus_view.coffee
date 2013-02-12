@@ -1,12 +1,22 @@
 App.CorpusView = Em.View.extend
 
   didInsertElement: ->
-    @$().on('click', '[data-search-button]', @collapseSidebar)
+    @$().on('click', '#hide-criteria-button, button[data-search]', @hideSidebar)
+
 
   willRemoveElement: ->
-    @$().off('click', '[data-search-button]', @collapseSidebar)
+    @$().off('click', '#hide-criteria-button, button[data-search]', @hideSidebar)
 
-  collapseSidebar: ->
-    $('#left-sidebar')
-      .animate {width: 'toggle'}, 100, ->
-        $('#main-content').toggleClass('span12 span9 no-sidebar')
+
+  hideSidebar: ->
+    $('#hide-criteria-button').hide()
+
+    $('#left-sidebar').animate {width: 'hide'}, 100, ->
+        $('#main-content').removeClass('span9').addClass('span12 no-sidebar')
+
+
+  showSidebar: ->
+    $('#main-content').removeClass('span12 no-sidebar').addClass('span9')
+    $('#left-sidebar').animate {width: 'show'}, 100
+
+    $('#hide-criteria-button').show()
