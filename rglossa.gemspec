@@ -3,20 +3,20 @@
 $:.push File.expand_path("../lib", __FILE__)
 
 # Maintain your gem's version:
-require "rglossa/version"
+require 'rglossa/version'
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "rglossa"
+  s.name        = 'rglossa'
   s.version     = Rglossa::VERSION
-  s.authors     = ["Anders Nøklestad, André Lynum"]
-  s.email       = ["tekstlab-post@iln.uio.no"]
-  s.homepage    = "http://www.hf.uio.no/iln/english/about/organization/text-laboratory/"
-  s.summary     = "The Glossa corpus search system"
-  s.description = "Ruby on Rails version of the Glossa system for corpus search and results management"
+  s.authors     = ['Anders Nøklestad, André Lynum']
+  s.email       = ['tekstlab-post@iln.uio.no']
+  s.homepage    = 'http://www.hf.uio.no/iln/english/about/organization/text-laboratory/'
+  s.summary     = 'The Glossa corpus search system'
+  s.description = 'Ruby on Rails version of the Glossa system for corpus search and results management'
 
-  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md", "README.rails"]
-  s.test_files = Dir["test/**/*"]
+  s.files = Dir['{app,config,db,lib}/**/*'] + ['MIT-LICENSE', 'Rakefile', 'README.md', 'README.rails']
+  s.test_files = Dir['test/**/*']
 
   s.add_dependency 'rails', '~> 3.2.11'
   s.add_dependency "jquery-rails"
