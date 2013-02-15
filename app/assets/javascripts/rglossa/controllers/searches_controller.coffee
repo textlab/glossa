@@ -51,8 +51,8 @@ App.SearchesController = Em.ArrayController.extend
 
     if search.get('id')
       @get('target').send 'showResult',
-        corpus: @get('corpus')
-        search: search
-        pageNo: 1
+                          corpus: @get('corpus')
+                          search: search
+                          pageNo: 1
 
       search.removeObserver('id', @, @_sendShowResultEvent)

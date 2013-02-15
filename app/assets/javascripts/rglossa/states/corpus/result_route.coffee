@@ -1,25 +1,29 @@
 App.CorpusResultRoute = Em.Route.extend App.SearchInterfaceRenderer,
 
-  # These probably belong more in setupController(), but that method doesn't
-  # get the params argument
   model: (params) ->
+    {search_id: searchId, page_no: @pageNo} = params
+
     # Get the search model subclass for the search engine used by the current
     # corpus and find the record with the given search_id
     searchModelClass = @controllerFor('corpus').get('searchModelClass')
-    search = searchModelClass.find(params['search_id'])
+    search = searchModelClass.find(searchId)
     @controllerFor('search').set('model', search)
 
-    resultPage = search.getResultPage(params['page_no'] - 1)
-    @controllerFor('resultPage').set('content', resultPage)
+    search
 
 
   serialize: (params) ->
-    [@search, @pageNo] = params
-    {search_id: @search.get('id'), page_no: @pageNo}
+    [search, @pageNo] = params
+    {search_id: search.get('id'), page_no: @pageNo}
 
 
-  setupController: ->
-    @controllerFor('resultTable').set('content', @search.getResultPage(@pageNo))
+  setupController: (controller, model) ->
+    # When the route is loaded via a URL, `model` is the actual search model, but when we
+    # transition here from a different route, the "model" is actually an array containing the model
+    # and the page number...
+    model = model[0] if Em.isArray(model)
+    @controllerFor('resultTable').set('content', model.getResultPage(@pageNo))
+
 
   renderTemplate: ->
     @renderSearchInterface('result')

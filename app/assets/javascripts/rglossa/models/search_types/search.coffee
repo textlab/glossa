@@ -8,6 +8,18 @@ App.Search = DS.Model.extend
   # the search object is created
   resultPages: null
 
+  setupResultPages: (json) ->
+    # When we create any kind of search model, the server will include the
+    # first two result pages as part of its JSON response so that we don't
+    # have to send a separate request in order to get them.
+    #
+    # Note: We cannot use the didCreate model hook for this because that
+    # method doesn't receive the JSON (only the model itself).
+    @resultPages = Em.Object.create(
+      1: json['first_two_result_pages']['1']
+      2: json['first_two_result_pages']['2']
+    )
+
   getResultPage: (pageNo) ->
     pageNo = pageNo + ''
 
