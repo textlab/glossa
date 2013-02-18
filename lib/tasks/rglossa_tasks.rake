@@ -3,7 +3,7 @@ namespace "rglossa" do
 
     desc "Install thor scripts"
     task :thor do
-      puts "Installing thor scripts..."
+      print "Installing thor scripts... "
 
       filenames = "rglossa_*.thor"
       source = Dir["#{Rglossa::Engine.root}/lib/tasks/#{filenames}"]
@@ -12,6 +12,8 @@ namespace "rglossa" do
 
       FileUtils.rm(old_files)
       FileUtils.cp(source, dest)
+
+      puts "done."
     end
 
   end
