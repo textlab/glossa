@@ -16,14 +16,26 @@ module Rglossa
         corpus   = options[:corpus].upcase
         user     = options[:user]
 
-        table = "#{database}.#{corpus}text"
-        outfile = "#{Rails.root}/tmp/#{table}.tsv"
+        table = "#{corpus}text"
 
+        outfile = "#{Rails.root}/tmp/#{table}_columns.txt"
+        sql = "SELECT column_name FROM information_schema.columns WHERE table_name = '#{table}' INTO OUTFILE '#{outfile}'"
+        puts "Dumping column names from #{table}:"
+        run_sql_command(database, user, outfile, sql)
+
+        outfile = "#{Rails.root}/tmp/#{table}_data.tsv"
+        sql = "SELECT * FROM #{corpus}text INTO OUTFILE '#{outfile}'"
+        puts "Dumping data from #{table}:"
+        run_sql_command(database, user, outfile, sql)
+      end
+
+      ########
+      private
+      ########
+
+      def run_sql_command(database, user, outfile, sql)
         remove_file(outfile)
-        command = %Q{mysql -u #{user} -p #{database} } +
-            %Q{-e "SELECT * FROM #{corpus}text INTO OUTFILE '#{outfile}'"}
-
-        puts "Dumping metadata from #{table}:"
+        command = %Q{mysql -u #{user} -p #{database} -e "#{sql}"}
         puts command
         system(command)
       end
