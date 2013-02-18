@@ -1,5 +1,4 @@
 App.SearchesController = Em.ArrayController.extend
-  content: []
   currentSearch: null
 
   needs: ['corpus', 'resultTable']
