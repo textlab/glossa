@@ -5,8 +5,13 @@ module Rglossa
       include Thor::Actions
 
       desc "dump", "Dump data from metadata tables in old Glossa"
-      method_options database: "glossa", user: "root"
-      method_option :corpus, required: true
+      method_option :database, default: "glossa",
+                    desc: "The database used by old Glossa"
+      method_option :user, default: "root",
+                    desc: "A database user with permissions to read the old Glossa database"
+      method_option :corpus, required: true,
+                    desc: "The CWB ID of the corpus (i.e., the name of its registry file)"
+
 
       def dump
         # Pull in the Rails app
