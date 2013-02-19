@@ -12,10 +12,8 @@ module Rglossa
       method_option :corpus, required: true,
                     desc: "The CWB ID of the corpus (i.e., the name of its registry file)"
 
-
       def dump
-        # Pull in the Rails app
-        require File.expand_path('../../../config/environment', __FILE__)
+        setup
 
         @database = options[:database]
         @corpus   = options[:corpus].upcase
@@ -32,15 +30,39 @@ module Rglossa
       end
 
 
-      desc "convert", "Convert metadata from a dump of the old Glossa format to RGlossa format"
-      method_option :corpus, required: true
+      desc "convert", "Convert metadata from a dump of the old Glossa format to the RGlossa format"
+      method_option :corpus, required: true,
+                    desc: "The CWB ID of the corpus (i.e., the name of its registry file)"
+      method_option :charset, default: 'utf-8',
+                    desc: "The character set of the old Glossa data. If different from UTF-8, " +
+                        "it will be converted."
 
       def convert
+        setup
+
+        @corpus  = options[:corpus].upcase
+        @charset = options[:charset].downcase
+
+        unless @charset.in?('utf-8', 'utf8')
+          [column_file, data_file].each do |file|
+            tmpfile = "#{file}.tmp"
+            system("iconv -f #@charset -t utf-8 #{file} > #{tmpfile}")
+            FileUtils.mv(tmpfile, file)
+          end
+        end
+
+        # More conversions needed?
       end
+
 
       ########
       private
       ########
+
+      def setup
+        # Pull in the Rails app
+        require File.expand_path('../../../config/environment', __FILE__)
+      end
 
       def table
         @table ||= "#{@corpus}text"
