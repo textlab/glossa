@@ -1,8 +1,11 @@
+require "rglossa/thor_utils"
+
 module Rglossa
   module Metadata
     class OldGlossa < Thor
 
       include Thor::Actions
+      include ::Rglossa::ThorUtils
 
       desc "dump", "Dump data from metadata tables in old Glossa"
       method_option :database, default: "glossa",
@@ -54,33 +57,13 @@ module Rglossa
         # More conversions needed?
       end
 
-
-      ########
+      #######
       private
-      ########
+      #######
 
       def setup
         # Pull in the Rails app
         require File.expand_path('../../../config/environment', __FILE__)
-      end
-
-      def table
-        @table ||= "#{@corpus}text"
-      end
-
-      def column_file
-        @column_file ||= "#{Rails.root}/tmp/#{table}_columns.txt"
-      end
-
-      def data_file
-        @data_file ||= "#{Rails.root}/tmp/#{table}_data.tsv"
-      end
-
-      def run_sql_command(outfile, sql)
-        remove_file(outfile)
-        command = %Q{mysql -u #@user -p #@database -e "#{sql}"}
-        puts command
-        system(command)
       end
 
     end
