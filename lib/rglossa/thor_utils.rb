@@ -6,7 +6,7 @@ module Rglossa
     ########
 
     def table
-      @table ||= "#{@corpus}text"
+      @table ||= "#{@uppercase_corpusname}text"
     end
 
     def category_file

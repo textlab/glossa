@@ -19,7 +19,7 @@ module Rglossa
         setup
 
         @database = options[:database]
-        @corpus   = options[:corpus].upcase
+        @uppercase_corpusname = options[:corpus].upcase
         @user     = options[:user]
 
         sql = "SELECT column_name FROM information_schema.columns " +
@@ -27,7 +27,7 @@ module Rglossa
         puts "Dumping column names from #{table}:"
         run_sql_command(category_file, sql)
 
-        sql = "SELECT * FROM #{@corpus}text INTO OUTFILE '#{data_file}'"
+        sql = "SELECT * FROM #{@uppercase_corpusname}text INTO OUTFILE '#{data_file}'"
         puts "Dumping data from #{table}:"
         run_sql_command(data_file, sql)
       end
@@ -43,7 +43,7 @@ module Rglossa
       def convert
         setup
 
-        @corpus  = options[:corpus].upcase
+        @uppercase_corpusname = options[:corpus].upcase
         @charset = options[:charset].downcase
 
         unless @charset.in?('utf-8', 'utf8')
