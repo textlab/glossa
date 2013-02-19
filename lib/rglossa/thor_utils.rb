@@ -9,8 +9,8 @@ module Rglossa
       @table ||= "#{@corpus}text"
     end
 
-    def column_file
-      @column_file ||= "#{Rails.root}/tmp/#{table}_columns.txt"
+    def category_file
+      @column_file ||= "#{Rails.root}/tmp/#{table}_categories.txt"
     end
 
     def data_file

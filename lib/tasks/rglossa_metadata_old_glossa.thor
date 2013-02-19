@@ -23,9 +23,9 @@ module Rglossa
         @user     = options[:user]
 
         sql = "SELECT column_name FROM information_schema.columns " +
-            "WHERE table_name = '#{table}' INTO OUTFILE '#{column_file}'"
+            "WHERE table_name = '#{table}' INTO OUTFILE '#{category_file}'"
         puts "Dumping column names from #{table}:"
-        run_sql_command(column_file, sql)
+        run_sql_command(category_file, sql)
 
         sql = "SELECT * FROM #{@corpus}text INTO OUTFILE '#{data_file}'"
         puts "Dumping data from #{table}:"
@@ -47,7 +47,7 @@ module Rglossa
         @charset = options[:charset].downcase
 
         unless @charset.in?('utf-8', 'utf8')
-          [column_file, data_file].each do |file|
+          [category_file, data_file].each do |file|
             tmpfile = "#{file}.tmp"
             system("iconv -f #@charset -t utf-8 #{file} > #{tmpfile}")
             FileUtils.mv(tmpfile, file)
