@@ -9,10 +9,5 @@ module Rglossa
     belongs_to :corpus
 
     has_many :metadata_values, dependent: :destroy, order: :text_value
-
-    # See comments in models/metadata_constraints.rb
-    has_many :metadata_constraints, foreign_key: :constrained_category_id
-    has_many :constraining_categories, through: :metadata_constraints
-
   end
 end
