@@ -11,8 +11,7 @@ module Rglossa
 
 
     def show
-      @corpus = Corpus
-        .includes(metadata_categories: [:translations, :metadata_values])
+      @corpus = Corpus.includes(metadata_categories: [:translations, :metadata_values])
 
       # params[:id] can be either the short_name of the corpus or its database
       # id as usual
