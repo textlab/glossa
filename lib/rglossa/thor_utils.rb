@@ -6,22 +6,19 @@ module Rglossa
     ########
 
     def table
-      @table ||= "#{@uppercase_corpusname}text"
+      @table ||= "#{uppercase_corpusname}text"
+    end
+
+    def uppercase_corpusname
+      @uppercase_corpusname ||= options[:corpus].upcase
     end
 
     def category_file
-      @column_file ||= "#{Rails.root}/tmp/#{table}_categories.txt"
+      @category_file ||= "#{Rails.root}/tmp/#{table}_categories.txt"
     end
 
     def data_file
       @data_file ||= "#{Rails.root}/tmp/#{table}_data.tsv"
-    end
-
-    def run_sql_command(outfile, sql)
-      remove_file(outfile)
-      command = %Q{mysql -u #@user -p #@database -e "#{sql}"}
-      puts command
-      system(command)
     end
 
   end

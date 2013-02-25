@@ -18,18 +18,16 @@ module Rglossa
       def dump
         setup
 
-        @database = options[:database]
-        @uppercase_corpusname = options[:corpus].upcase
-        @user     = options[:user]
-
         sql = "SELECT column_name FROM information_schema.columns " +
             "WHERE table_name = '#{table}' INTO OUTFILE '#{category_file}'"
-        puts "Dumping column names from #{table}:"
+        say "Dumping column names from #{table}:"
         run_sql_command(category_file, sql)
 
-        sql = "SELECT * FROM #{@uppercase_corpusname}text INTO OUTFILE '#{data_file}'"
-        puts "Dumping data from #{table}:"
+        sql = "SELECT * FROM #{uppercase_corpusname}text INTO OUTFILE '#{data_file}'"
+        say "Dumping data from #{table}:"
         run_sql_command(data_file, sql)
+
+        say "Now specify the type of each (non-text) category in #{category_file}", :yellow
       end
 
 
@@ -43,13 +41,12 @@ module Rglossa
       def convert
         setup
 
-        @uppercase_corpusname = options[:corpus].upcase
-        @charset = options[:charset].downcase
+        charset = options[:charset].downcase
 
-        unless @charset.in?('utf-8', 'utf8')
+        unless charset.in?('utf-8', 'utf8')
           [category_file, data_file].each do |file|
             tmpfile = "#{file}.tmp"
-            system("iconv -f #@charset -t utf-8 #{file} > #{tmpfile}")
+            system("iconv -f #{charset} -t utf-8 #{file} > #{tmpfile}")
             FileUtils.mv(tmpfile, file)
           end
         end
@@ -64,6 +61,13 @@ module Rglossa
       def setup
         # Pull in the Rails app
         require File.expand_path('../../../config/environment', __FILE__)
+      end
+
+      def run_sql_command(outfile, sql)
+        remove_file(outfile)
+        command = %Q{mysql -u #{options[:user]} -p #{options[:database]} -e "#{sql}"}
+        puts command
+        system(command)
       end
 
     end
