@@ -11,10 +11,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121212002025) do
+ActiveRecord::Schema.define(:version => 20130222171020) do
 
   create_table "rglossa_corpora", :force => true do |t|
     t.string   "name",             :null => false
+    t.string   "short_name"
     t.integer  "default_max_hits"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
@@ -41,7 +42,7 @@ ActiveRecord::Schema.define(:version => 20121212002025) do
   end
 
   add_index "rglossa_corpus_translations", ["locale"], :name => "index_rglossa_corpus_translations_on_locale"
-  add_index "rglossa_corpus_translations", ["rglossa_corpus_id"], :name => "index_eb2c41fbf33df329fa0e2ec06b744d958981ed42"
+  add_index "rglossa_corpus_translations", ["rglossa_corpus_id"], :name => "index_rglossa_corpus_translations_on_rglossa_corpus_id"
 
   create_table "rglossa_deleted_hits", :force => true do |t|
     t.integer  "search_id"
@@ -69,13 +70,6 @@ ActiveRecord::Schema.define(:version => 20121212002025) do
   add_index "rglossa_metadata_category_translations", ["locale"], :name => "index_rglossa_metadata_category_translations_on_locale"
   add_index "rglossa_metadata_category_translations", ["rglossa_metadata_category_id"], :name => "index_e158ce1e8d13553f5fb5f8b2393ea60d7b09f133"
 
-  create_table "rglossa_metadata_constraints", :force => true do |t|
-    t.integer  "constrained_category_id"
-    t.integer  "constraining_category_id"
-    t.datetime "created_at",               :null => false
-    t.datetime "updated_at",               :null => false
-  end
-
   create_table "rglossa_metadata_values", :force => true do |t|
     t.integer "metadata_category_id"
     t.string  "type"
@@ -90,6 +84,7 @@ ActiveRecord::Schema.define(:version => 20121212002025) do
     t.text     "queries",            :null => false
     t.text     "search_options"
     t.text     "metadata_value_ids"
+    t.integer  "num_hits"
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
   end

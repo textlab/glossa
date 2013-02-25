@@ -3,7 +3,10 @@ class CreateRglossaCorpora < ActiveRecord::Migration
   def up
     create_table :rglossa_corpora do |t|
       t.string :name, null: false
-      t.integer :default_max_hits  # it might be a good idea to set this if the corpus is very big
+      t.string :short_name         # optional "code" used by e.g. CWB
+
+      # it might be a good idea to set this if the corpus is very big:
+      t.integer :default_max_hits
 
       t.timestamps
     end
