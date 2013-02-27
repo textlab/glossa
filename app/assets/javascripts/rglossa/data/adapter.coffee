@@ -2,6 +2,7 @@ DS.RESTAdapter.configure 'plurals',
   corpus:     'corpora'
   search:     'searches'
   cwb_search: 'cwb_searches'
+  metadata_category: 'metadata_categories'
 
 DS.RESTAdapter.configure 'App.MetadataCategory',
   sideloadAs: 'metadata_categories'
