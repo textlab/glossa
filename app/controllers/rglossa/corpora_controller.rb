@@ -11,17 +11,37 @@ module Rglossa
 
 
     def show
-      @corpus = Corpus.includes(metadata_categories: [:translations, :metadata_values])
+      @corpus = Corpus.scoped
 
       # params[:id] can be either the short_name of the corpus or its database
       # id as usual
-      if params[:id].is_a?(Integer)
+      if params[:id].to_i > 0
         @corpus = @corpus.find(params[:id])
       else
         @corpus = @corpus.where(short_name: params[:id]).first
       end
 
-      respond_with @corpus
+      @metadata_categories = @corpus.metadata_categories.includes(:translations)
+      @metadata_values = MetadataValue.where(metadata_category_id: @corpus.metadata_category_ids)
+
+      respond_to do |format|
+        format.json do
+          render json: {
+              corpus: @corpus.as_json(
+                  only: [:id, :name, :short_name],
+                  methods: :metadata_category_ids
+              ),
+              metadata_categories: @metadata_categories.as_json(
+                  only: [:id, :name],
+                  methods: :metadata_value_ids
+              ),
+              metadata_values: @metadata_values.as_json(
+                  only: :id,
+                  methods: :text
+              )
+          }
+        end
+      end
     end
 
     ########
