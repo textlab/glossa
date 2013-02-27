@@ -21,11 +21,11 @@ module Rglossa
         @corpus = @corpus.where(short_name: params[:id]).first
       end
 
-      @metadata_categories = @corpus.metadata_categories.includes(:translations)
-      @metadata_values = MetadataValue.where(metadata_category_id: @corpus.metadata_category_ids)
-
       respond_to do |format|
         format.json do
+          @metadata_categories = @corpus.metadata_categories.includes(:translations)
+          @metadata_values = MetadataValue.where(metadata_category_id: @corpus.metadata_category_ids)
+
           render json: {
               corpus: @corpus.as_json(
                   only: [:id, :name, :short_name],
@@ -41,6 +41,8 @@ module Rglossa
               )
           }
         end
+
+        format.xml { render @corpus }  # don't include metadata in XML
       end
     end
 
