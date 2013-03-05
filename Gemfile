@@ -24,4 +24,6 @@ group :development do
   gem 'pry-doc'
 
   gem 'bullet'
+
+  gem "coffee-script-redux-debugger", git: "git://github.com/JetBrains/coffee-script-redux-debugger.git"
 end
