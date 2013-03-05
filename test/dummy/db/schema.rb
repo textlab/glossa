@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130222171020) do
+ActiveRecord::Schema.define(:version => 20130305143147) do
 
   create_table "rglossa_corpora", :force => true do |t|
     t.string   "name",             :null => false
@@ -22,15 +22,15 @@ ActiveRecord::Schema.define(:version => 20130222171020) do
   end
 
   create_table "rglossa_corpus_texts", :force => true do |t|
-    t.integer  "startpos",   :limit => 8
-    t.integer  "endpos",     :limit => 8
+    t.integer  "startpos",   :limit => 8, :null => false
+    t.integer  "endpos",     :limit => 8, :null => false
     t.datetime "created_at",              :null => false
     t.datetime "updated_at",              :null => false
   end
 
   create_table "rglossa_corpus_texts_metadata_values", :force => true do |t|
-    t.integer "rglossa_corpus_text_id"
-    t.integer "rglossa_metadata_value_id"
+    t.integer "rglossa_corpus_text_id",    :null => false
+    t.integer "rglossa_metadata_value_id", :null => false
   end
 
   create_table "rglossa_corpus_translations", :force => true do |t|
@@ -45,14 +45,14 @@ ActiveRecord::Schema.define(:version => 20130222171020) do
   add_index "rglossa_corpus_translations", ["rglossa_corpus_id"], :name => "index_rglossa_corpus_translations_on_rglossa_corpus_id"
 
   create_table "rglossa_deleted_hits", :force => true do |t|
-    t.integer  "search_id"
+    t.integer  "search_id",  :null => false
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
 
   create_table "rglossa_metadata_categories", :force => true do |t|
-    t.integer  "corpus_id"
-    t.string   "name",          :null => false
+    t.integer  "corpus_id",     :null => false
+    t.string   "short_name",    :null => false
     t.string   "category_type", :null => false
     t.string   "value_type",    :null => false
     t.datetime "created_at",    :null => false
@@ -71,15 +71,15 @@ ActiveRecord::Schema.define(:version => 20130222171020) do
   add_index "rglossa_metadata_category_translations", ["rglossa_metadata_category_id"], :name => "index_e158ce1e8d13553f5fb5f8b2393ea60d7b09f133"
 
   create_table "rglossa_metadata_values", :force => true do |t|
-    t.integer "metadata_category_id"
-    t.string  "type"
+    t.integer "metadata_category_id", :null => false
+    t.string  "type",                 :null => false
     t.text    "text_value"
     t.integer "integer_value"
     t.boolean "boolean_value"
   end
 
   create_table "rglossa_searches", :force => true do |t|
-    t.integer  "user_id"
+    t.integer  "user_id",            :null => false
     t.string   "type"
     t.text     "queries",            :null => false
     t.text     "search_options"

@@ -2,10 +2,10 @@
 class CreateRglossaMetadataCategories < ActiveRecord::Migration
   def up
     create_table :rglossa_metadata_categories do |t|
-      t.belongs_to :corpus
-      t.string :name, null: false
+      t.belongs_to :corpus,    null: false
+      t.string :short_name,    null: false
       t.string :category_type, null: false
-      t.string :value_type, null: false
+      t.string :value_type,    null: false
 
       t.timestamps
 
