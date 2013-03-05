@@ -1,4 +1,4 @@
-// Last commit: 73ad70c (2013-02-23 22:52:20 -0800)
+// Last commit: 36d3f1b (2013-02-27 21:28:39 -0800)
 
 
 (function() {
@@ -5624,7 +5624,7 @@ DS.Serializer = Ember.Object.extend({
       primaryKey: function(type) {
         // If the type is `BlogPost`, this will return
         // `blog_post_id`.
-        var typeString = type.toString.split(".")[1].underscore();
+        var typeString = type.toString().split(".")[1].underscore();
         return typeString + "_id";
       }
     });
