@@ -1,12 +1,3 @@
-GIT
-  remote: git://github.com/JetBrains/coffee-script-redux-debugger.git
-  revision: 45ab4936bc35d5150dd0995833f2ab730ac8bd37
-  specs:
-    coffee-script-redux-debugger (0.0.1)
-      coffee-script
-      execjs
-      sprockets
-
 PATH
   remote: .
   specs:
@@ -261,7 +252,6 @@ PLATFORMS
 DEPENDENCIES
   bullet
   capybara
-  coffee-script-redux-debugger!
   factory_girl_rails
   guard-rspec
   jquery-rails
