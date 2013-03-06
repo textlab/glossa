@@ -16,6 +16,8 @@ gem "jquery-rails"
 # To use debugger
 # gem 'debugger'
 
+gem "coffee-script-redux-debugger", git: "git://github.com/JetBrains/coffee-script-redux-debugger.git"
+
 group :development do
   # Use thin instead of WEBrick in development
   gem 'thin'
@@ -24,6 +26,4 @@ group :development do
   gem 'pry-doc'
 
   gem 'bullet'
-
-  gem "coffee-script-redux-debugger", git: "git://github.com/JetBrains/coffee-script-redux-debugger.git"
 end
