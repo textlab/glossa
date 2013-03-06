@@ -13,6 +13,10 @@ module Rglossa
       @uppercase_corpusname ||= options[:corpus].upcase
     end
 
+    def lowercase_corpusname
+      @lowercase_corpusname ||= options[:corpus].downcase
+    end
+
     def category_file
       @category_file ||= "#{Rails.root}/tmp/#{table}_categories.txt"
     end
