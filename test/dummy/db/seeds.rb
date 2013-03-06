@@ -16,6 +16,7 @@ module Rglossa
   title = MetadataCategory.create!(
       corpus: corpus,
       short_name: 'title',
+      name: 'Title',
       category_type: 'list',
       value_type: 'text'
   )
@@ -30,6 +31,7 @@ module Rglossa
   author = MetadataCategory.create!(
       corpus: corpus,
       short_name: 'author',
+      name: 'Author',
       category_type: 'list',
       value_type: 'text'
   )
@@ -44,6 +46,7 @@ module Rglossa
   publ_year = MetadataCategory.create!(
       corpus: corpus,
       short_name: 'published',
+      name: 'Published?',
       category_type: 'list',
       value_type: 'integer'
   )
@@ -51,6 +54,7 @@ module Rglossa
   sex = MetadataCategory.create!(
       corpus: corpus,
       short_name: 'sex',
+      name: 'Sex',
       category_type: 'shortlist',
       value_type: 'text'
   )
