@@ -54,6 +54,6 @@ App.ResultToolbarController = Em.ArrayController.extend
 
   changeResultPage: ->
     @get('target').send 'showResult',
-        corpus: @get('corpus')
-        search: @get('search')
-        pageNo: @get('currentPageNo')
+      corpus: @get('corpus')
+      search: @get('search')
+      pageNo: @get('currentPageNo')
