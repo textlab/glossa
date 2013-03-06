@@ -46,6 +46,6 @@ App.CorpusController = Em.ObjectController.extend
   # depending on the user's preferences or the default variant
   preferredSearchInterfaceVariant: (->
     engine  = @get('searchEngine')
-    variant = @get('userPreferences.interfaces')?[engine] or
-      @defaultSearchInterfaceVariant[engine]
+    @get('userPreferences.interfaces')?[engine] or @defaultSearchInterfaceVariant[engine]
   ).property('searchEngine', 'userPreferences.interfaces')
+
