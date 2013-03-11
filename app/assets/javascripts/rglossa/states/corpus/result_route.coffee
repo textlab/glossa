@@ -1,4 +1,4 @@
-App.CorpusResultRoute = Em.Route.extend App.SearchInterfaceRenderer,
+App.CorpusResultRoute = Em.Route.extend
 
   model: (params) ->
     {search_id: searchId, page_no: @pageNo} = params
@@ -26,4 +26,6 @@ App.CorpusResultRoute = Em.Route.extend App.SearchInterfaceRenderer,
 
 
   renderTemplate: ->
-    @renderSearchInterface('result')
+    searchEngine = @controllerFor('corpus').get('searchEngine')
+    @render("#{searchEngine}/result")
+

@@ -1,4 +1,5 @@
-App.CorpusHomeRoute = Em.Route.extend App.SearchInterfaceRenderer,
+App.CorpusHomeRoute = Em.Route.extend
 
   renderTemplate: ->
-    @renderSearchInterface('home')
+    searchEngine = @controllerFor('corpus').get('searchEngine')
+    @render("#{searchEngine}/home")

@@ -1,5 +1,4 @@
 #= require ./core
-#= require_tree ./mixins
 #= require_tree ./data
 #= require_tree ./models
 #= require_tree ./controllers

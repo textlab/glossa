@@ -1,33 +1,17 @@
 App.SearchesController = Em.ArrayController.extend
+
   currentSearch: null
 
-  needs: ['corpus', 'resultTable']
-
-  # This will be bound to properties on views for for simple search, multiword
-  # search and regex search.
-  query: ''
+  needs: ['corpus']
 
   corpus: null
-  corpusBinding: 'controllers.corpus.content'
+  corpusBinding: 'controllers.corpus.model'
 
-  searchModelClassBinding: 'controllers.corpus.searchModelClass'
-
-  # Action handler
-  search: -> @createSearch()
-
-  createSearch: ->
+  createSearch: (searchModel, queries) ->
     metadataValueIds = {}
     metadataValueIds[@get('corpus.id')] = [1,2,3]
 
-    # TODO: Add support for simultaneous search in different "editions" within
-    # the same corpus (e.g. different languages in a parallel corpus). Each
-    # edition will have a distinct shortName.
-    queries = [
-      corpusEdition: @get('corpus.shortName')
-      query:         @get('query')
-    ]
-
-    search = @get('searchModelClass').createRecord(
+    search = App.get(searchModel).createRecord(
       metadataValueIds: metadataValueIds
       queries: queries)
 
