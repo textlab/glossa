@@ -1,4 +1,4 @@
-// Last commit: 902e87f (2013-03-05 19:29:13 -0800)
+// Last commit: 830420a (2013-03-17 11:18:45 -0700)
 
 
 (function() {
@@ -749,7 +749,7 @@ var classify = Ember.String.classify, get = Ember.get;
   For example, the DS.Adapter class can behave like a map, with
   more semantic API, via the `map` API:
 
-    DS.Adapter.map('App.Person', { firstName: { keyName: 'FIRST' } });
+    DS.Adapter.map('App.Person', { firstName: { key: 'FIRST' } });
 
   Class configuration via a map-like API has a few common requirements
   that differentiate it from the standard Ember.Map implementation.
@@ -972,6 +972,8 @@ DS.Store = Ember.Object.extend(DS._Mappable, {
     // total number of loading records drops to zero, it becomes
     // `isLoaded` and fires a `didLoad` event.
     this.loadingRecordArrays = {};
+
+    this._recordsToSave = Ember.OrderedSet.create();
 
     set(this, 'defaultTransaction', this.transaction());
   },
@@ -1545,7 +1547,7 @@ DS.Store = Ember.Object.extend(DS._Mappable, {
     if (!Ember.isArray(ids)) {
       var adapter = this.adapterForType(type);
       if (adapter && adapter.findHasMany) { adapter.findHasMany(this, record, relationship, ids); }
-      else { throw fmt("Adapter is either null or does not implement `findHasMany` method", this); }
+      else if (ids !== undefined) { throw fmt("Adapter is either null or does not implement `findHasMany` method", this); }
 
       return this.createManyArray(type, Ember.A());
     }
@@ -1781,6 +1783,39 @@ DS.Store = Ember.Object.extend(DS._Mappable, {
     if (typeof data === "object") {
       this.updateRecordArrays(type, clientId);
     }
+  },
+
+  // .................
+  // . BASIC ADAPTER .
+  // .................
+
+  scheduleSave: function(record) {
+    this._recordsToSave.add(record);
+    Ember.run.once(this, 'flushSavedRecords');
+  },
+
+  flushSavedRecords: function() {
+    var created = Ember.OrderedSet.create();
+    var updated = Ember.OrderedSet.create();
+    var deleted = Ember.OrderedSet.create();
+
+    this._recordsToSave.forEach(function(record) {
+      if (get(record, 'isNew')) {
+        created.add(record);
+      } else if (get(record, 'isDeleted')) {
+        deleted.add(record);
+      } else {
+        updated.add(record);
+      }
+    });
+
+    this._recordsToSave.clear();
+
+    get(this, '_adapter').commit(this, {
+      created: created,
+      updated: updated,
+      deleted: deleted
+    });
   },
 
   // ..............
@@ -2271,7 +2306,6 @@ DS.Store = Ember.Object.extend(DS._Mappable, {
     }
 
     var content = get(array, 'content');
-    var alreadyInArray = content.indexOf(clientId) !== -1;
 
     var recordArrays = this.recordArraysForClientId(clientId);
     var reference = this.referenceForClientId(clientId);
@@ -2472,7 +2506,10 @@ DS.Store = Ember.Object.extend(DS._Mappable, {
 
     // TODO (tomdale) this assumes that loadHasMany *always* means
     // that the records for the provided IDs are loaded.
-    if (relationship) { set(relationship, 'isLoaded', true); }
+    if (relationship) {
+      set(relationship, 'isLoaded', true);
+      relationship.trigger('didLoad');
+    }
   },
 
   /** @private
@@ -3507,7 +3544,10 @@ var LoadPromise = DS.LoadPromise; // system/mixins/load_promise
 
 var get = Ember.get, set = Ember.set, none = Ember.isNone, map = Ember.EnumerableUtils.map;
 
-var retrieveFromCurrentState = Ember.computed(function(key) {
+var retrieveFromCurrentState = Ember.computed(function(key, value) {
+  if (arguments.length > 1) {
+    throw new Error('Cannot Set: ' + key + ' on: ' + this.toString() );
+  }
   return get(get(this, 'stateManager.currentState'), key);
 }).property('stateManager.currentState');
 
@@ -3542,6 +3582,11 @@ DS.Model = Ember.Object.extend(Ember.Evented, LoadPromise, {
   serialize: function(options) {
     var store = get(this, 'store');
     return store.serialize(this, options);
+  },
+
+  toJSON: function() {
+    var serializer = DS.JSONSerializer.create();
+    return serializer.serialize(this);
   },
 
   didLoad: Ember.K,
@@ -3784,6 +3829,12 @@ DS.Model = Ember.Object.extend(Ember.Evented, LoadPromise, {
   becameInFlight: function() {
   },
 
+  // FOR USE BY THE BASIC ADAPTER
+
+  save: function() {
+    this.get('store').scheduleSave(this);
+  },
+
   // FOR USE DURING COMMIT PROCESS
 
   adapterDidUpdateAttribute: function(attributeName, value) {
@@ -3846,6 +3897,7 @@ DS.Model.reopenClass({
   isLoaded: storeAlias('recordIsLoaded'),
   find: storeAlias('find'),
   all: storeAlias('all'),
+  query: storeAlias('findQuery'),
   filter: storeAlias('filter'),
 
   _create: DS.Model.create,
@@ -3944,8 +3996,6 @@ DS.attr = function(type, options) {
   };
 
   return Ember.computed(function(key, value, oldValue) {
-    var data;
-
     if (arguments.length > 1) {
       Ember.assert("You may not set `id` as an attribute on your model. Please remove any lines that look like: `id: DS.attr('<type>')` from " + this.constructor.toString(), key !== 'id');
     } else {
@@ -4066,7 +4116,7 @@ var hasRelationship = function(type, options) {
     }
 
     ids = data[key];
-    relationship = store.findMany(type, ids || [], this, meta);
+    relationship = store.findMany(type, ids, this, meta);
     set(relationship, 'owner', this);
     set(relationship, 'name', key);
 
@@ -5214,17 +5264,26 @@ function mustImplement(name) {
   by implementing `keyForAttributeName`:
 
   ```javascript
-    keyForAttributeName: function(type, name) {
-      return name.underscore.toUpperCase();
-    }
+  keyForAttributeName: function(type, name) {
+    return name.underscore.toUpperCase();
+  }
   ```
 
   If your attribute names are not predictable, you can re-map them
-  one-by-one using the `map` API:
+  one-by-one using the adapter's `map` API:
 
   ```javascript
-  App.Person.map('App.Person', {
+  App.Adapter.map('App.Person', {
     firstName: { key: '*API_USER_FIRST_NAME*' }
+  });
+  ```
+
+  This API will also work for relationships and primary keys. For
+  example:
+
+  ```javascript
+  App.Adapter.map('App.Person', {
+    primaryKey: '_id'
   });
   ```
 
@@ -7513,7 +7572,8 @@ DS.FixtureSerializer = DS.Serializer.extend({
 
 
 (function() {
-var get = Ember.get;
+var get = Ember.get, fmt = Ember.String.fmt,
+    dump = Ember.get(window, 'JSON.stringify') || function(object) { return object.toString(); };
 
 /**
   `DS.FixtureAdapter` is an adapter that loads records from memory.
@@ -7541,7 +7601,7 @@ DS.FixtureAdapter = DS.Adapter.extend({
       var fixtures = Ember.A(type.FIXTURES);
       return fixtures.map(function(fixture){
         if(!fixture.id){
-          throw new Error('the id property must be defined for fixture %@'.fmt(fixture));
+          throw new Error(fmt('the id property must be defined for fixture %@', [dump(fixture)]));
         }
         fixture.id = fixture.id + '';
         return fixture;
@@ -8118,6 +8178,240 @@ DS.RESTAdapter = DS.Adapter.extend({
   }
 });
 
+
+})();
+
+
+
+(function() {
+var camelize = Ember.String.camelize,
+    capitalize = Ember.String.capitalize,
+    get = Ember.get,
+    map = Ember.ArrayPolyfills.map,
+    registeredTransforms;
+
+var passthruTransform = {
+  serialize: function(value) { return value; },
+  deserialize: function(value) { return value; }
+};
+
+var defaultTransforms = {
+  string: passthruTransform,
+  boolean: passthruTransform,
+  number: passthruTransform
+};
+
+function camelizeKeys(json) {
+  var value;
+
+  for (var prop in json) {
+    value = json[prop];
+    delete json[prop];
+    json[camelize(prop)] = value;
+  }
+}
+
+function munge(json, callback) {
+  callback(json);
+}
+
+function applyTransforms(json, type, transformType) {
+  var transforms = registeredTransforms[transformType];
+
+  Ember.assert("You are trying to apply the '" + transformType + "' transforms, but you didn't register any transforms with that name", transforms);
+
+  get(type, 'attributes').forEach(function(name, attribute) {
+    var attributeType = attribute.type,
+        value = json[name];
+
+    var transform = transforms[attributeType] || defaultTransforms[attributeType];
+
+    Ember.assert("Your model specified the '" + attributeType + "' type for the '" + name + "' attribute, but no transform for that type was registered", transform);
+
+    json[name] = transform.deserialize(value);
+  });
+}
+
+function ObjectProcessor(json, type, store) {
+  this.json = json;
+  this.type = type;
+  this.store = store;
+}
+
+ObjectProcessor.prototype = {
+  camelizeKeys: function() {
+    camelizeKeys(this.json);
+    return this;
+  },
+
+  munge: function(callback) {
+    munge(this.json, callback);
+    return this;
+  },
+
+  applyTransforms: function(transformType) {
+    applyTransforms(this.json, this.type, transformType);
+    return this;
+  }
+};
+
+function LoadObjectProcessor() {
+  ObjectProcessor.apply(this, arguments);
+}
+
+LoadObjectProcessor.prototype = Ember.create(ObjectProcessor.prototype);
+
+LoadObjectProcessor.prototype.load = function() {
+  this.store.load(this.type, {}, this.json);
+};
+
+function loadObjectProcessorFactory(store, type) {
+  return function(json) {
+    return new LoadObjectProcessor(json, type, store);
+  };
+}
+
+function ArrayProcessor(json, type, array, store) {
+  this.json = json;
+  this.type = type;
+  this.array = array;
+  this.store = store;
+}
+
+ArrayProcessor.prototype = {
+  load: function() {
+    var store = this.store,
+        type = this.type;
+
+    var references = this.json.map(function(object) {
+      return store.load(type, {}, object);
+    });
+
+    this.array.load(references);
+  },
+
+  camelizeKeys: function() {
+    this.json.forEach(camelizeKeys);
+    return this;
+  },
+
+  munge: function(callback) {
+    this.json.forEach(function(object) {
+      munge(object, callback);
+    });
+    return this;
+  },
+
+  applyTransforms: function(transformType) {
+    var type = this.type;
+
+    this.json.forEach(function(object) {
+      applyTransforms(object, type, transformType);
+    });
+
+    return this;
+  }
+};
+
+function arrayProcessorFactory(store, type, array) {
+  return function(json) {
+    return new ArrayProcessor(json, type, array, store);
+  };
+}
+
+var HasManyProcessor = function(json, store, record, relationship) {
+  this.json = json;
+  this.store = store;
+  this.record = record;
+  this.type = record.constructor;
+  this.relationship = relationship;
+};
+
+HasManyProcessor.prototype = Ember.create(ArrayProcessor.prototype);
+
+HasManyProcessor.prototype.load = function() {
+  var store = this.store;
+  var ids = map.call(this.json, function(obj) { return obj.id; });
+
+  store.loadMany(this.relationship.type, this.json);
+  store.loadHasMany(this.record, this.relationship.key, ids);
+};
+
+function hasManyProcessorFactory(store, record, relationship) {
+  return function(json) {
+    return new HasManyProcessor(json, store, record, relationship);
+  };
+}
+
+function CreateProcessor(record, store, type) {
+  this.record = record;
+  ObjectProcessor.call(this, record.toJSON(), type, store);
+}
+
+CreateProcessor.prototype = Ember.create(ObjectProcessor.prototype);
+
+CreateProcessor.prototype.save = function() {};
+
+function createProcessorFactory(store, type) {
+  return function(record) {
+    return new CreateProcessor(record, store, type);
+  };
+}
+
+DS.BasicAdapter = DS.Adapter.extend({
+  find: function(store, type, id) {
+    var sync = type.sync;
+
+    Ember.assert("You are trying to use the BasicAdapter to find id '" + id + "' of " + type + " but " + type + ".sync was not found", sync);
+    Ember.assert("The sync code on " + type + " does not implement find(), but you are trying to find id '" + id + "'.", sync.find);
+
+    sync.find(id, loadObjectProcessorFactory(store, type));
+  },
+
+  findQuery: function(store, type, query, recordArray) {
+    var sync = type.sync;
+
+    Ember.assert("You are trying to use the BasicAdapter to query " + type + " but " + type + ".sync was not found", sync);
+    Ember.assert("The sync code on " + type + " does not implement query(), but you are trying to query " + type + ".", sync.query);
+
+    sync.query(query, arrayProcessorFactory(store, type, recordArray));
+  },
+
+  findHasMany: function(store, record, relationship, data) {
+    var name = capitalize(relationship.key),
+        sync = record.constructor.sync,
+        processor = hasManyProcessorFactory(store, record, relationship);
+
+    var options = {
+      relationship: relationship.key,
+      data: data
+    };
+
+    if (sync['find'+name]) {
+      sync['find' + name](record, options, processor);
+    } else if (sync.findHasMany) {
+      sync.findHasMany(record, options, processor);
+    } else {
+      Ember.assert("You are trying to use the BasicAdapter to find the " + relationship.key + " has-many relationship, but " + record.constructor + ".sync did not implement findHasMany or find" + name + ".", false);
+    }
+  },
+
+  createRecord: function(store, type, record) {
+    var sync = type.sync;
+
+    sync.createRecord(record, createProcessorFactory(store, type));
+  }
+});
+
+DS.registerTransforms = function(kind, object) {
+  registeredTransforms[kind] = object;
+};
+
+DS.clearTransforms = function() {
+  registeredTransforms = {};
+};
+
+DS.clearTransforms();
 
 })();
 
