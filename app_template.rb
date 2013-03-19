@@ -5,10 +5,9 @@ def install_devise
                           "(in the case of a lost password etc.). Can be changed later in " +
                           "config/initializers/devise.rb:")
 
-  init_file = 'config/initializers/devise.rb'
-  text = File.read(init_file)
-  text.sub!(/(config.mailer_sender = ").+?"/, %Q(\\1#{devise_sender}"))
-  File.write(init_file, text)
+  gsub_file('config/initializers/devise.rb',
+            /(config.mailer_sender = ").+?"/,
+            %Q(\\1#{devise_sender}"))
 end
 
 
