@@ -1,4 +1,5 @@
 Rglossa::Engine.routes.draw do
+  devise_for :users, :class_name => "Rglossa::User", module: :devise
 
   root :to => 'home#index'
 

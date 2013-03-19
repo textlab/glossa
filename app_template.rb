@@ -1,6 +1,5 @@
 def install_devise
   generate("devise:install")
-  generate("devise", "User")
 
   devise_sender = ask("Please provide a sender e-mail address to use when sending info to users " +
                           "(in the case of a lost password etc.). Can be changed later in " +
