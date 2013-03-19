@@ -5,7 +5,7 @@ def install_devise
                           "(in the case of a lost password etc.). Can be changed later in " +
                           "config/initializers/devise.rb:")
 
-  gsub_file('config/initializers/devise.rb',
+  gsub_file("config/initializers/devise.rb",
             /(config.mailer_sender = ").+?"/,
             %Q(\\1#{devise_sender}"))
 end
@@ -29,3 +29,7 @@ rake("railties:install:migrations")
 install_devise
 
 rake("db:migrate")
+
+insert_into_file("app/assets/stylesheets/application.css",
+                 " *= require rglossa/application\n",
+                 after: "*= require_self\n")
