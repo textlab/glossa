@@ -23,9 +23,11 @@ module Rglossa
 
     def create
       # Run inside a transaction so that no search record is created if
-      # running queries throw an exception
+      # running queries throws an exception
       ActiveRecord::Base.transaction do
-        @search = model_class.create(params[model_param])
+        @search = model_class.new(params[model_param])
+        @search.user_id = (Rails.env == 'development' && !current_user) ? 1 : current_user.id
+        @search.save
       end
 
       respond_to do |format|
