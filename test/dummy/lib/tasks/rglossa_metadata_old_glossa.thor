@@ -27,6 +27,11 @@ module Rglossa
         say "Dumping data from #{table}:"
         run_sql_command(data_file, sql)
 
+        # Find line breaks inside fields (escaped by backslashes) and replace them by spaces, since
+        # they confuse the import mechanism we will run later on by splitting a single record
+        # across several lines.
+        gsub_file(data_file, /\\\n/, ' ')
+
         say "Now specify the type of each (non-text) category in #{category_file}", :yellow
       end
 
