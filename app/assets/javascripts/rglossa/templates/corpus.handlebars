@@ -1,27 +1,31 @@
 <div class="container-fluid">
 
-  <div class="row-fluid">
-    <div class="span12">
-      <button id="hide-criteria-button" class="btn btn-mini"><i class="icon-double-angle-left"></i> Hide search criteria</button>
-    </div>
-  </div>
-
-  <div class="row-fluid">
-    <div id="left-sidebar" class="span3">
-
-      {{render "corpus/metadata_accordion" metadataCategories}}
-
-    </div>
-    <div id="main-content" class="span9">
-
-      <div class="row-fluid">
+    <div class="row-fluid">
         <div class="span12">
-          <button id="show-criteria-button" class="btn btn-mini"><i class="icon-double-angle-left"></i> Show search criteria</button>
+            <button id="hide-criteria-button" class="btn btn-mini" title="Hide search criteria">
+                <i class="icon-double-angle-left"></i>
+            </button>
         </div>
-      </div>
-
-      {{outlet}}
-
     </div>
-  </div>
+
+    <div class="row-fluid">
+        <div id="left-sidebar" class="span3">
+
+          {{render "corpus/metadata_accordion" metadataCategories}}
+
+        </div>
+        <div id="main-content" class="span9">
+
+            <div class="row-fluid">
+                <div class="span12">
+                    <button id="show-criteria-button" class="btn btn-mini" title="Show search criteria">
+                        <i class="icon-double-angle-right"></i> Criteria
+                    </button>
+                </div>
+            </div>
+
+          {{outlet}}
+
+        </div>
+    </div>
 </div>
