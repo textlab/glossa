@@ -61,7 +61,9 @@ module Rglossa
           # The value type ('text', 'integer' etc.) can be set in column 4. Defaults to 'text'.
           value_type = columns.size > 3 ? columns[3] : 'text'
 
-          unless corpus.metadata_categories.find_by_short_name(short_name)
+          if corpus.metadata_categories.find_by_short_name(short_name)
+            say_status :skip, "#{short_name} (already exists)"
+          else
             say "Creating category #{short_name}"
             corpus.metadata_categories.create!(short_name: short_name,
                                                name: name,
