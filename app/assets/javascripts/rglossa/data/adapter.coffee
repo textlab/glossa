@@ -4,13 +4,6 @@ DS.RESTAdapter.configure 'plurals',
   cwb_search: 'cwb_searches'
   metadata_category: 'metadata_categories'
 
-DS.RESTAdapter.configure 'App.MetadataCategory',
-  sideloadAs: 'metadata_categories'
-
-DS.RESTAdapter.configure 'App.MetadataValue',
-  sideloadAs: 'metadata_values'
-
-
 App.Adapter = DS.RESTAdapter.extend
 
   buildURL: (record, suffix) ->
