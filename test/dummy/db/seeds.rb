@@ -9,6 +9,10 @@
 #   Mayor.create(:name => 'Daley', :city => cities.first)
 
 module Rglossa
+  if Rails.env == 'development'
+    User.create!(email: 'admin@test.com', password: 'admin123', password_confirmation: 'admin123')
+  end
+
   corpus = Corpus.create!(
       short_name: 'RUN_EN',
       name: 'The Corpus for Bokmål Lexicography')
