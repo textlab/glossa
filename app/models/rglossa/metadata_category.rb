@@ -13,7 +13,7 @@ module Rglossa
     has_many :metadata_values,
              dependent: :destroy,
              order: :text_value,
-             before_add: ->(value) { value.type = value_type }
+             before_add: ->(category, value) { value.type = category.value_type }
 
     def metadata_value_ids
       metadata_values.pluck(:id)

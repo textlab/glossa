@@ -18,11 +18,11 @@ module Rglossa
     end
 
     # This lets us specify a value_type of 'text', 'integer' etc. when we add a metadata category
-    # and have it be automatically converted to 'Rglossa::MetadataValue.Text' etc. before the
+    # and have it be automatically converted to 'Rglossa::MetadataValues::Text' etc. before the
     # category is saved.
     def set_metadata_value_type(category)
       unless category.value_type.start_with?("Rglossa")
-        category.value_type = "Rglossa::MetadataValue::#{category.value_type.classify}"
+        category.value_type = "Rglossa::MetadataValues::#{category.value_type.classify}"
       end
     end
   end

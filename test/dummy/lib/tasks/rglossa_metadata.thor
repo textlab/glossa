@@ -6,7 +6,7 @@ module Rglossa
 
       include ::Rglossa::ThorUtils
 
-      desc "categories", "Import metadata categories from _categories and _data files "
+      desc "categories", "Import metadata categories from _categories file "
       method_option :corpus, required: true,
                     desc: "The CWB ID of the corpus (i.e., the name of its registry file)"
 
@@ -15,6 +15,19 @@ module Rglossa
         return unless corpus
         create_categories
       end
+
+
+      desc "values", "Import metadata values from _data file "
+      method_option :corpus, required: true,
+                    desc: "The CWB ID of the corpus (i.e., the name of its registry file)"
+      method_option :remove_existing, default: false
+
+      def values
+        setup
+        return unless corpus
+        import_metadata_values
+      end
+
 
       #######
       private
@@ -61,7 +74,9 @@ module Rglossa
           # The value type ('text', 'integer' etc.) can be set in column 4. Defaults to 'text'.
           value_type = columns.size > 3 ? columns[3] : 'text'
 
-          unless corpus.metadata_categories.find_by_short_name(short_name)
+          if corpus.metadata_categories.find_by_short_name(short_name)
+            say_status :skip, "#{short_name} (already exists)"
+          else
             say "Creating category #{short_name}"
             corpus.metadata_categories.create!(short_name: short_name,
                                                name: name,
@@ -69,6 +84,68 @@ module Rglossa
                                                value_type: value_type)
           end
         end
+      end
+
+      def import_metadata_values
+        # Read category short names from file (typically dumped from old Glossa)
+        categories = File.readlines(category_file).map { |line| line.split("\t").first.strip }
+
+        # Find which column contains the text id. This is required.
+        tid_col = categories.index('tid')
+
+        unless tid_col
+          raise Thor::Error, "No 'tid' (text id) category found! A 'tid' category is necessary " +
+              "to link metadata lines to their corresponding corpus texts."
+        end
+
+        # Find which columns contain start and end positions for corpus texts (if any)
+        startpos_col = categories.index('startpos')
+        endpos_col = categories.index('endpos')
+
+        # Map the category names to category objects. Names that have not been imported as
+        # categories in RGlossa (such as startpos and endpos) will leave nils in the array,
+        # which we can use to skip the corresponding columns in the metadata value lines.
+        categories.map! { |cat| corpus.metadata_categories.find_by_short_name(cat) }
+
+        if options[:remove_existing]
+          print "Removing existing metadata for this corpus..."
+          ::Rglossa::MetadataValue.destroy_all
+          ::Rglossa::CorpusText.destroy_all
+          puts " done"
+        end
+
+        total_lines = %x(wc -l #{data_file}).split(' ').first
+
+        # Go through the metadata value lines and create a corpus text for each one. For each
+        # column that has a corresponding metadata category, see if a MetadataValue object with
+        # this value already exists for the category. If so, fetch it; otherwise create a new one.
+        # Finally, associate the value with the corpus text.
+        puts "Importing metadata..."
+        File.readlines(data_file).each_with_index do |line, lineno|
+
+          if lineno > 0 && lineno % 1000 == 0
+            puts "Finished processing #{lineno} of #{total_lines} lines"
+          end
+
+          text = ::Rglossa::CorpusText.create!
+
+          # Note: '\N' represents a NULL in MySQL database exports
+          columns = line.split("\t").map { |col| col.strip!; col == '\N' ? nil : col }
+
+          text.startpos = columns[startpos_col].to_i if startpos_col
+          text.endpos   = columns[endpos_col].to_i   if endpos_col
+
+          columns.zip(categories) do |column, category|
+            # Skip columns for which no category has been created (e.g. startpos and endpos)
+            next unless category
+
+            value = category.metadata_values.find_or_create_by_text_value(column)
+            text.metadata_values << value
+          end
+
+          text.save!
+        end
+        puts "Done"
       end
 
     end
