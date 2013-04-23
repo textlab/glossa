@@ -15,8 +15,22 @@ module Rglossa
              order: :text_value,
              before_add: ->(category, value) { value.type = category.value_type }
 
+    def vtype
+      value_type.demodulize.underscore
+    end
+
     def metadata_value_ids
       metadata_values.pluck(:id)
+    end
+
+    def get_metadata_value(value)
+      metadata_values.with_type_and_value(value_type, value) ||
+          metadata_values.create do |o|
+            # For some reason, the before_add hook is not called here, so we cannot use the
+            # text=() method of MetadataValue but need to figure out the correct column ourselves
+            column = "#{value_type.demodulize.underscore}_value"
+            o.update_attribute(column, value)
+          end
     end
   end
 end

@@ -1,21 +1,8 @@
-<div class="accordion">
-  {{#each category in content}}
-    <div class="accordion-group">
-      <div class="accordion-heading">
-        <a {{bindAttr href="category.collapsibleHref"}} class="accordion-toggle" data-toggle="collapse" data-parent="metadata-accordion">
-          {{category.name}}
-        </a>
+<div>
+  {{#each content itemController="corpusMetadataCategory"}}
+      <h5>{{name}}</h5>
+      <div>
+        {{view App.Select2View contentBinding="this"}}
       </div>
-      <div {{bindAttr id="category.collapsibleId"}} class="accordion-body collapse">
-        <div class="accordion-inner">
-          {{view Em.Select
-            contentBinding="category.metadataValues"
-            optionValuePath="content.id"
-            optionLabelPath="content.text"
-            multiple="true"
-          }}
-        </div>
-      </div>
-    </div>
   {{/each}}
 </div>

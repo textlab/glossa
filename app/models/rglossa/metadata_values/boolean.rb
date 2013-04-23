@@ -11,6 +11,11 @@ module Rglossa
         # it to false
         self.boolean_value = val && !val.in?('no', 'false')
       end
+
+      # Converts a text value to a value of the type handled by this class
+      def self.convert_text_value(value)
+        val.in?('no', 'false') ? false : true
+      end
     end
   end
 end

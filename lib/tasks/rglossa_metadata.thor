@@ -109,8 +109,8 @@ module Rglossa
 
         if options[:remove_existing]
           print "Removing existing metadata for this corpus..."
-          ::Rglossa::MetadataValue.destroy_all
-          ::Rglossa::CorpusText.destroy_all
+          corpus.corpus_texts.delete_all
+          categories.each { |cat| cat.metadata_values.delete_all if cat }
           puts " done"
         end
 
@@ -127,19 +127,23 @@ module Rglossa
             puts "Finished processing #{lineno} of #{total_lines} lines"
           end
 
-          text = ::Rglossa::CorpusText.create!
+          text = corpus.corpus_texts.create!
 
           # Note: '\N' represents a NULL in MySQL database exports
-          columns = line.split("\t").map { |col| col.strip!; col == '\N' ? nil : col }
+          columns = line.split("\t").map do |col|
+            col.strip!
+            col.empty? || col == '\N' ? nil : col
+          end
 
           text.startpos = columns[startpos_col].to_i if startpos_col
           text.endpos   = columns[endpos_col].to_i   if endpos_col
 
           columns.zip(categories) do |column, category|
             # Skip columns for which no category has been created (e.g. startpos and endpos)
-            next unless category
+            # as well as empty columns
+            next unless category && column
 
-            value = category.metadata_values.find_or_create_by_text_value(column)
+            value = category.get_metadata_value(column)
             text.metadata_values << value
           end
 

@@ -3,7 +3,11 @@ Rglossa::Engine.routes.draw do
 
   root :to => 'home#index'
 
-  resources :corpora, :metadata_categories, :metadata_values
+  resources :corpora, :metadata_values
+
+  resources :metadata_categories do
+    resources :metadata_values
+  end
 
   namespace :search_engines do
     # Add more search types to the resource list as they are implemented, e.g.
