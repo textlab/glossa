@@ -8,6 +8,7 @@ module Rglossa
 
     validates_presence_of :name
 
+    has_many :corpus_texts
     has_many :metadata_categories,
              dependent: :destroy,
              order: :short_name,

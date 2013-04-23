@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130416154328) do
+ActiveRecord::Schema.define(:version => 20130423174716) do
 
   create_table "rglossa_corpora", :force => true do |t|
     t.string   "name",             :null => false
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(:version => 20130416154328) do
     t.integer  "endpos",     :limit => 8
     t.datetime "created_at",              :null => false
     t.datetime "updated_at",              :null => false
+    t.integer  "corpus_id"
   end
 
   create_table "rglossa_corpus_texts_metadata_values", :force => true do |t|
