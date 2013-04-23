@@ -4,7 +4,7 @@ App.Select2View = Em.View.extend
 
   didInsertElement: ->
     @$().select2
-      width: 280
+      width: '100%'
       multiple: true
       placeholder: 'Click to select'
       ajax:
@@ -14,6 +14,5 @@ App.Select2View = Em.View.extend
         data: (term, page) -> {query: term, page: page}
 
         results: (data, page) =>
-#          results = ({id: r.id, text: r.text} for r in data.metadata_values)
           {results: data.metadata_values}
 
