@@ -9,17 +9,17 @@ require 'rglossa/version'
 Gem::Specification.new do |s|
   s.name        = 'rglossa'
   s.version     = Rglossa::VERSION
-  s.authors     = ['Anders Nøklestad, André Lynum']
-  s.email       = ['tekstlab-post@iln.uio.no']
+  s.authors     = ['Anders Nøklestad', 'André Lynum']
+  s.email       = %w(tekstlab-post@iln.uio.no)
   s.homepage    = 'http://www.hf.uio.no/iln/english/about/organization/text-laboratory/'
   s.summary     = 'The Glossa corpus search system'
   s.description = 'Ruby on Rails version of the Glossa system for corpus search and results management'
 
-  s.files = Dir['{app,config,db,lib}/**/*'] + ['MIT-LICENSE', 'Rakefile', 'README.md', 'README.rails']
+  s.files = Dir['{app,config,db,lib}/**/*'] + %w(MIT-LICENSE Rakefile README.md README.rails)
   s.test_files = Dir['test/**/*']
 
   s.add_dependency 'rails', '~> 3.2.11'
-  s.add_dependency "jquery-rails"
+  s.add_dependency 'jquery-rails'
   s.add_dependency 'sass-rails',   '~> 3.2.5'
   s.add_dependency 'coffee-rails', '~> 3.2.2'
   s.add_dependency 'uglifier',     '>= 1.2.7'

@@ -24,7 +24,6 @@ module Rglossa
       respond_to do |format|
         format.json do
           @metadata_categories = @corpus.metadata_categories.includes(:translations)
-          @metadata_values = MetadataValue.where(metadata_category_id: @corpus.metadata_category_ids)
 
           render json: {
               corpus: @corpus.as_json(
@@ -32,12 +31,7 @@ module Rglossa
                   methods: :metadata_category_ids
               ),
               metadata_categories: @metadata_categories.as_json(
-                  only: [:id, :name],
-                  methods: :metadata_value_ids
-              ),
-              metadata_values: @metadata_values.as_json(
-                  only: :id,
-                  methods: :text
+                  only: [:id, :name]
               )
           }
         end
