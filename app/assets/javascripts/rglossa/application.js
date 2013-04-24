@@ -9,7 +9,7 @@
 //= require jquery
 //= require jquery-ui-1.10.0.custom
 //= require bootstrap-2.3.1/bootstrap
-//= require select2.min
+//= require select2
 //
 // Use ember.js and ember-data.js from the master branches at least until 1.0 comes out
 //= require ember_master/handlebars
