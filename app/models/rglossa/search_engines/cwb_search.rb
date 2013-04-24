@@ -55,7 +55,9 @@ module Rglossa
         command_file.puts commands
         command_file.rewind
 
-        output_file = open("| cqp -c -f#{command_file.path}")
+        corpus = Corpus.find_by_short_name(queries[0]['corpusEdition'].downcase)
+        encoding = corpus.encoding
+        output_file = open("| cqp -c -f#{command_file.path}", external_encoding: encoding)
         output_file.readline  # throw away the first line with the CQP version
 
         result = output_file.read

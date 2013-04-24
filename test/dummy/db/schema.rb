@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130423174716) do
+ActiveRecord::Schema.define(:version => 20130424025517) do
 
   create_table "rglossa_corpora", :force => true do |t|
     t.string   "name",             :null => false
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(:version => 20130423174716) do
     t.integer  "default_max_hits"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
+    t.string   "encoding"
   end
 
   create_table "rglossa_corpus_texts", :force => true do |t|
