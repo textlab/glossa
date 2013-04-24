@@ -16,6 +16,10 @@ module Rglossa
       def self.convert_text_value(value)
         val.in?('no', 'false') ? false : true
       end
+
+      def self.search(query, scope = scoped)
+        scope.where('boolean_value = ?', query.in?('true', 'yes'))
+      end
     end
   end
 end

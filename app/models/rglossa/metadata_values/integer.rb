@@ -13,6 +13,10 @@ module Rglossa
       def self.convert_text_value(value)
         value.to_i
       end
+
+      def self.search(query, scope = scoped)
+        scope.where('integer_value = ?', query.to_i)
+      end
     end
   end
 end
