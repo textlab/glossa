@@ -12,7 +12,7 @@ App.CwbResultTableController = Em.Controller.extend
 
     if resultPage
       resultPage.map (row) ->
-        m = row.match(/<s_id (.+)>:\s+(.+)<(.+?)>(.+)/)
+        m = row.match(/<s_id (.+)>:\s+(.*)<(.+?)>(.*)/)
         sId:       m[1]
         preMatch:  m[2]
         match:     m[3]
