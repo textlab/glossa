@@ -14,7 +14,7 @@ App.CwbSearchInputsController = Em.Controller.extend
     # the same corpus (e.g. different languages in a parallel corpus). Each
     # edition will have a distinct shortName.
     queries = [
-      corpusEdition: @get('corpusShortName')
+      corpusEdition: @get('corpusShortName').toUpperCase()
       query:         @get('query')
     ]
     @get('controllers.searches').createSearch('CwbSearch', queries)

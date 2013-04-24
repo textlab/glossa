@@ -18,7 +18,7 @@ module Rglossa
       if params[:id].to_i > 0
         @corpus = @corpus.find(params[:id])
       else
-        @corpus = @corpus.where(short_name: params[:id]).first
+        @corpus = @corpus.where(short_name: params[:id].downcase).first
       end
 
       respond_to do |format|
