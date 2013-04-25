@@ -17,6 +17,7 @@ gem "jquery-rails"
 # gem 'debugger'
 
 #gem "coffee-script-redux-debugger", git: "git://github.com/JetBrains/coffee-script-redux-debugger.git"
+gem "mysql2"
 gem "devise", "~> 2.2.3"
 
 group :development do
