@@ -12,4 +12,8 @@ App.CorpusRoute = Em.Route.extend
       {corpus, search, pageNo} = params
       @transitionTo('corpus.result', corpus, [search, pageNo])
 
-    showCorpusHome: -> @transitionTo("corpus.home")
+    showCorpusHome: ->
+      # FIXME: Should we just do this for all input controllers or find another solution?
+      @controllerFor('cwbSearchInputs').set('query', '')
+
+      @transitionTo("corpus.home")

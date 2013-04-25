@@ -2,7 +2,7 @@ App.CwbSearchInputsController = Em.Controller.extend
 
   needs: ['corpus', 'searches']
 
-  # This will be bound to properties on views for for simple search, multiword
+  # This will be bound to properties on views for simple search, multiword
   # search and regex search.
   query: ''
 
