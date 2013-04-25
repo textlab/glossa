@@ -14,12 +14,12 @@
 ActiveRecord::Schema.define(:version => 20130424025517) do
 
   create_table "rglossa_corpora", :force => true do |t|
-    t.string   "name",             :null => false
+    t.string   "name",                                  :null => false
     t.string   "short_name"
     t.integer  "default_max_hits"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
-    t.string   "encoding"
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
+    t.string   "encoding",         :default => "utf-8"
   end
 
   create_table "rglossa_corpus_texts", :force => true do |t|

@@ -45,7 +45,11 @@ module Rglossa
           unless corpus
             if yes?("No corpus with short name #{lowercase_corpusname} was found. Create one?")
               full_name = ask("Full name of the corpus:")
-              corpus = ::Rglossa::Corpus.create(short_name: lowercase_corpusname, name: full_name)
+              encoding = ask("Corpus encoding (default = utf-8):")
+              encoding = 'utf-8' if encoding.blank?
+              corpus = ::Rglossa::Corpus.create(short_name: lowercase_corpusname,
+                                                name: full_name,
+                                                encoding: encoding)
               unless corpus
                 say "Unable to create corpus #{lowercase_corpusname}!", :red
                 say $!
