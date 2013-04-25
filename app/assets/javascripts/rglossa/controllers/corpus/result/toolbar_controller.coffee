@@ -12,27 +12,27 @@ App.ResultToolbarController = Em.ArrayController.extend
   _currentPageNo: 1
   currentPageNo: ((key, value) ->
     if value?
+      value = parseInt(value)
       numPages = @get('numPages')
       @_currentPageNo = if value < 1 then 1 else (if value > numPages then numPages else value)
 
     @_currentPageNo
   ).property()
 
+  setCurrentPageNo: (pageNo) ->
+    @set('currentPageNo', pageNo)
+
   showPreviousPage: ->
     @set('currentPageNo', @get('currentPageNo') - 1)
-    @changeResultPage()
 
   showNextPage: ->
     @set('currentPageNo', @get('currentPageNo') + 1)
-    @changeResultPage()
 
   showFirstPage: ->
     @set('currentPageNo', 1)
-    @changeResultPage()
 
   showLastPage: ->
     @set('currentPageNo', @get('numPages'))
-    @changeResultPage()
 
   numPages: (->
     numHits = @get('search.numHits')
@@ -51,9 +51,9 @@ App.ResultToolbarController = Em.ArrayController.extend
     @get('currentPageNo') is @get('numPages')
   ).property('currentPageNo', 'numPages')
 
-
-  changeResultPage: ->
+  changeResultPage: (->
     @get('target').send 'showResult',
       corpus: @get('corpus')
       search: @get('search')
       pageNo: @get('currentPageNo')
+  ).observes('currentPageNo')
