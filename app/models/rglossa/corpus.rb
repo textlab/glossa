@@ -2,13 +2,13 @@ require 'globalize3'
 
 module Rglossa
   class Corpus < ActiveRecord::Base
-    attr_accessible :locale, :name, :short_name
+    attr_accessible :locale, :name, :short_name, :encoding
 
     translates :name, fallbacks_for_empty_translations: true
 
     validates_presence_of :name
 
-    has_many :corpus_texts
+    has_many :corpus_texts, dependent: :destroy
     has_many :metadata_categories,
              dependent: :destroy,
              order: :short_name,
