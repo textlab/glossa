@@ -28,4 +28,5 @@ App.CorpusResultRoute = Em.Route.extend
   renderTemplate: ->
     searchEngine = @controllerFor('corpus').get('searchEngine')
     @render("#{searchEngine}/result")
+    $('#new-search-button').show()
 

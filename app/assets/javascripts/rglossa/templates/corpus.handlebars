@@ -1,12 +1,16 @@
 <div class="container-fluid">
 
     <div class="row-fluid">
-        <div class="span3">
+        <div class="span3 top-toolbar">
             <button id="hide-criteria-button" class="btn btn-mini" title="Hide search criteria">
                 <i class="icon-double-angle-left"> Hide</i>
             </button>
             <button id="show-criteria-button" class="btn btn-mini" style="display:none" title="Show search criteria">
                 <i class="icon-double-angle-right"></i> Criteria
+            </button>
+            <button {{action showCorpusHome}} id="new-search-button" class="btn btn-mini"
+                                              style="display:none" title="New search">
+                New search
             </button>
         </div>
     </div>

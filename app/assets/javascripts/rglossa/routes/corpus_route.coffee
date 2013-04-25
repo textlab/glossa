@@ -11,3 +11,5 @@ App.CorpusRoute = Em.Route.extend
     showResult: (params) ->
       {corpus, search, pageNo} = params
       @transitionTo('corpus.result', corpus, [search, pageNo])
+
+    showCorpusHome: -> @transitionTo("corpus.home")

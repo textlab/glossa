@@ -2,10 +2,6 @@ body {
   padding-top: 70px;
 }
 
-#hide-criteria-button, #show-criteria-button {
-  margin-bottom: 20px;
-}
-
 .corpus-info {
   margin-bottom: 50px;
 }
@@ -31,6 +27,12 @@ body {
       width: 50%;
     }
   }
+}
+
+.top-toolbar > button {
+  margin-bottom: 20px;
+  margin-right: 5px;
+  width: 75px;
 }
 
  /* Override settings in bootstrap.css */
