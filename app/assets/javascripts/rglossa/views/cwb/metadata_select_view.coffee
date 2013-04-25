@@ -1,4 +1,4 @@
-App.Select2View = Em.View.extend
+App.MetadataSelectView = Em.View.extend
 
   tagName: 'input type="hidden"'
 
