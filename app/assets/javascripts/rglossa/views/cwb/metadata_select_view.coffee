@@ -1,6 +1,9 @@
 App.MetadataSelectView = Em.View.extend
 
   tagName: 'input type="hidden"'
+  attributeBindings: ['name']
+
+  nameBinding: 'content.shortName'
 
   didInsertElement: ->
     @$().select2

@@ -1,8 +1,10 @@
 <div>
-  {{#each content itemController="corpusMetadataCategory"}}
-      <h5>{{name}}</h5>
-      <div>
-        {{view App.Select2View contentBinding="this"}}
-      </div>
-  {{/each}}
+    <form data-metadata-selections>
+      {{#each content itemController="corpusMetadataCategory"}}
+          <h5>{{name}}</h5>
+          <div>
+            {{view App.MetadataSelectView contentBinding="this"}}
+          </div>
+      {{/each}}
+    </form>
 </div>

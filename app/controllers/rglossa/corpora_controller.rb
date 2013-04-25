@@ -31,7 +31,7 @@ module Rglossa
                   methods: :metadata_category_ids
               ),
               metadata_categories: @metadata_categories.as_json(
-                  only: [:id, :name]
+                  only: [:id, :name, :short_name]
               )
           }
         end

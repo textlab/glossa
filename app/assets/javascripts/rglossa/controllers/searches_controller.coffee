@@ -9,7 +9,13 @@ App.SearchesController = Em.ArrayController.extend
 
   createSearch: (searchModel, queries) ->
     metadataValueIds = {}
-    metadataValueIds[@get('corpus.id')] = [1,2,3]
+    $('[data-metadata-selections] input[type="hidden"]').each (index, input) ->
+      $input = $(input)
+      val = $input.val()
+
+      if val isnt ''
+        name = $input.attr('name')
+        metadataValueIds[name] = val.split(',')
 
     search = App.get(searchModel).createRecord(
       metadataValueIds: metadataValueIds
