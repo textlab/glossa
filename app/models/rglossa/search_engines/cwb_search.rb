@@ -13,13 +13,15 @@ module Rglossa
       # corpus edition followed by the database ID of the search object
       named_query = corpus + id.to_s
 
-      if metadata_value_ids.empty?
+      all_metadata_value_ids = metadata_value_ids.values.flatten
+
+      if all_metadata_value_ids.empty?
         query_commands = "#{named_query} = #{query}"
       else
         # Print corpus positions of texts matching the metadata selection to a file marked with
         # the database ID of the search object
         positions_filename = "#{Dir.tmpdir}/positions_#{id}"
-        CorpusText.print_positions_matching_metadata(metadata_value_ids, positions_filename)
+        CorpusText.print_positions_matching_metadata(all_metadata_value_ids, positions_filename)
         query_commands = ["undump #{named_query} < '#{positions_filename}';",
                             "#{named_query};",
                             "#{named_query} = #{query};"].join("\n")
