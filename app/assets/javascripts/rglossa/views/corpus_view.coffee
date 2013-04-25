@@ -2,12 +2,12 @@ App.CorpusView = Em.View.extend
 
   didInsertElement: ->
     @$().on('click', '#hide-criteria-button, button[data-search]', @hideSidebar)
-    @$().on('click', '#show-criteria-button', @showSidebar)
+    @$().on('click', '#show-criteria-button, #new-search-button', @showSidebar)
 
 
   willRemoveElement: ->
     @$().off('click', '#hide-criteria-button, button[data-search]', @hideSidebar)
-    @$().off('click', '#show-criteria-button', @showSidebar)
+    @$().off('click', '#show-criteria-button, #new-search-button', @showSidebar)
 
 
   hideSidebar: ->
