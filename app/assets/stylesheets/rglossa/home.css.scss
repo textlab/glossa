@@ -2,6 +2,15 @@ body {
   padding-top: 70px;
 }
 
+h5.category-header {
+  color: #1010C2;
+  font-weight: normal;
+
+  &.active-category {
+    font-weight: bold;
+  }
+}
+
 .corpus-info {
   margin-bottom: 50px;
 }
@@ -54,4 +63,10 @@ body {
     vertical-align: top;
     text-align: right;
   }
+}
+
+// Override select2.css
+
+.select2-container-multi .select2-choices .select2-search-choice {
+  margin-top: 6px;
 }

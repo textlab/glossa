@@ -1,7 +1,7 @@
 <div>
     <form data-metadata-selections>
       {{#each content itemController="corpusMetadataCategory"}}
-          <h5>{{name}}</h5>
+          <h5 class="category-header">{{name}}</h5>
           <div>
             {{view App.MetadataSelectView contentBinding="this"}}
           </div>
