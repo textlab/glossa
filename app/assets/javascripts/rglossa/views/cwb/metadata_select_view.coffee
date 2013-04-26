@@ -3,7 +3,7 @@ App.MetadataSelectView = Em.View.extend
   tagName: 'input type="hidden"'
   attributeBindings: ['name']
 
-  nameBinding: 'content.shortName'
+  nameBinding: 'content.id'
 
   didInsertElement: ->
     @header = @$().parent().prev()
