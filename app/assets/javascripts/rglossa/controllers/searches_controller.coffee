@@ -8,6 +8,10 @@ App.SearchesController = Em.ArrayController.extend
   corpusBinding: 'controllers.corpus.model'
 
   createSearch: (searchModel, queries) ->
+    # Empty queries are not allowed
+    return unless queries.some (query) ->
+      query.query isnt ''
+
     metadataValueIds = {}
     $('[data-metadata-selections] input[type="hidden"]').each (index, input) ->
       $input = $(input)
