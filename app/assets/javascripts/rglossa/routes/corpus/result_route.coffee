@@ -30,3 +30,8 @@ App.CorpusResultRoute = Em.Route.extend
     @render("#{searchEngine}/result")
     $('#new-search-button').show()
 
+  events:
+    metadataSelectionsChanged: ->
+      # FIXME: Select the appropriate controller based on the type of search we're doing
+      @controllerFor('cwbSearchInputs').search()
+

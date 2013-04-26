@@ -17,3 +17,7 @@ App.CorpusRoute = Em.Route.extend
       @controllerFor('cwbSearchInputs').set('query', '')
 
       @transitionTo("corpus.home")
+
+    metadataSelectionsChanged: ->
+      # If we get here, it means that we are currently in a route that should not
+      # react to a change in metadata selection (e.g. the home route), so just ignore it.

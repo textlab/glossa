@@ -38,6 +38,8 @@ App.MetadataSelectView = Em.View.extend
         results: (data, page) =>
           {results: data.metadata_values}
 
+    @$().on 'change', =>
+      @get('controller').send('metadataSelectionsChanged')
 
   destroySelect: ->
     @$().select2('destroy')
