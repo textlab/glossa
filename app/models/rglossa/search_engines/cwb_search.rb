@@ -57,6 +57,7 @@ module Rglossa
         corpus,  # necessary for "set PrintStructures to work"...
         "set Context s",
         "set PrintStructures s_id",
+        "show +lemma",
         "cat #{named_query} #{start} #{stop}"
       ]
       run_cqp_commands(commands).split("\n")
