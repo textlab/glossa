@@ -33,7 +33,9 @@ App.MetadataSelectView = Em.View.extend
         url: "metadata_categories/#{@get('content.id')}/metadata_values"
         dataType: 'json'
 
-        data: (term, page) -> {query: term, page: page}
+        data: (term, page) =>
+          selectedMetadata = @get('controller').collectMetadataValues()
+          {query: term, page: page, metadata_value_ids: selectedMetadata}
 
         results: (data, page) =>
           {results: data.metadata_values}

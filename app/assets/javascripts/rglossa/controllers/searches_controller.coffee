@@ -2,7 +2,7 @@ App.SearchesController = Em.ArrayController.extend
 
   currentSearch: null
 
-  needs: ['corpus']
+  needs: ['corpus', 'corpusMetadataCategory']
 
   corpus: null
   corpusBinding: 'controllers.corpus.model'
@@ -12,14 +12,7 @@ App.SearchesController = Em.ArrayController.extend
     return unless queries.some (query) ->
       query.query isnt ''
 
-    metadataValueIds = {}
-    $('[data-metadata-selections] input[type="hidden"]').each (index, input) ->
-      $input = $(input)
-      val = $input.val()
-
-      if val isnt ''
-        name = $input.attr('name')
-        metadataValueIds[name] = val.split(',')
+    metadataValueIds = @get('controllers.corpusMetadataCategory').collectMetadataValues()
 
     search = App.get(searchModel).createRecord(
       metadataValueIds: metadataValueIds
