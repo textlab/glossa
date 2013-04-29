@@ -5,6 +5,7 @@ body {
 h5.category-header {
   color: #1010C2;
   font-weight: normal;
+  cursor: pointer;
 
   &.active-category {
     font-weight: bold;
