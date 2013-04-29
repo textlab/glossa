@@ -21,7 +21,13 @@ App.CwbResultTableController = Em.Controller.extend
         fields = fields.map (field) ->
           tokens = field.split(/\s+/).map (token) ->
             parts = token.split('/')
-            "<span data-ot=\"lemma: #{parts[1]}\">#{parts[0]}</span>"
+
+            labels = ['lemma', 'pos', 'type']
+            ot = []
+            for i in [1..3]
+              if parts[i] != '__UNDEF__'
+                ot.push "#{labels[i-1]}: #{parts[i]}"
+            "<span data-ot=\"#{ot.join('<br>')}\">#{parts[0]}</span>"
           tokens.join(' ')
 
         sId:       sId
