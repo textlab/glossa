@@ -1,6 +1,6 @@
 App.MetadataSelectView = Em.View.extend
 
-  tagName: 'input type="hidden"'
+  tagName: 'input type="hidden" data-metadata-selection'
   attributeBindings: ['name']
 
   nameBinding: 'content.id'
@@ -10,18 +10,26 @@ App.MetadataSelectView = Em.View.extend
 
     @header.on 'click', =>
       if @isOpen
-        @destroySelect()
-        @header.removeClass('active-category')
-        @isOpen = false
+        @closeSelect()
       else
-        @createSelect()
-        @$().select2('open')
-        @isOpen = true
-        @header.addClass('active-category')
+        @openSelect()
 
 
   willDestroyElement: ->
     @header.off 'click'
+
+
+  openSelect: ->
+    @createSelect()
+    @$().select2('open')
+    @isOpen = true
+    @header.addClass('active-category')
+
+
+  closeSelect: ->
+    @destroySelect()
+    @header.removeClass('active-category')
+    @isOpen = false
 
 
   createSelect: ->

@@ -2,7 +2,7 @@ App.CorpusMetadataCategoryController = Em.ObjectController.extend
 
   collectMetadataValues: ->
     metadataValueIds = {}
-    $('[data-metadata-selections] input[type="hidden"]').each (index, input) ->
+    $('input[type="hidden"][data-metadata-selection]').each (index, input) ->
       $input = $(input)
       val = $input.val()
 
