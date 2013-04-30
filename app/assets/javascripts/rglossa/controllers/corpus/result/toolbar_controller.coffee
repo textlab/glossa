@@ -37,7 +37,7 @@ App.ResultToolbarController = Em.ArrayController.extend
   numPages: (->
     numHits = @get('search.numHits')
     if numHits is 0 then 0 else Math.floor((numHits - 1) / @pageSize) + 1
-  ).property('search')
+  ).property('search.numHits')
 
   hasMoreThanOnePage: (->
     @get('numPages') > 1
