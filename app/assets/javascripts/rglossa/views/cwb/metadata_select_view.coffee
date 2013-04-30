@@ -20,7 +20,7 @@ App.MetadataSelectView = Em.View.extend
         @header.addClass('active-category')
 
 
-  willRemoveElement: ->
+  willDestroyElement: ->
     @header.off 'click'
 
 
