@@ -29,7 +29,6 @@ App.CorpusResultRoute = Em.Route.extend
     searchEngine = @controllerFor('corpus').get('searchEngine')
     @render("#{searchEngine}/result")
     @render('corpus/result/num_hits', outlet: 'numHits', controller: 'search')
-    $('#new-search-button').show()
 
   events:
     metadataSelectionsChanged: ->
