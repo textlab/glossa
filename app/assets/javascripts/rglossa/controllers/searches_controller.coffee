@@ -31,6 +31,10 @@ App.SearchesController = Em.ArrayController.extend
     search.addObserver('id', @, @_sendShowResultEvent)
     search.get('transaction').commit()
 
+    # Hide any previous results and show spinners while we are waiting for results
+    $('.search-result-toolbar, .search-result-table-container').hide()
+    $('.result-spinner').show()
+
 
   _sendShowResultEvent: ->
     search = @get('currentSearch')
