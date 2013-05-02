@@ -1,13 +1,32 @@
 App.CorpusView = Em.View.extend
 
+  # If the width of the browser window is <= this, we automatically hide the sidebar
+  # to make more room for search results.
+  maxAutoHideSidebarWidth: 1100
+  hideSidebarSelector: null
+
   didInsertElement: ->
-    @$().on('click', '#hide-criteria-button, button[data-search]', @hideSidebar)
+    @determineHideSidebarSelector()
+    @$().on('click', @hideSidebarSelector, @hideSidebar)
     @$().on('click', '#show-criteria-button, #new-search-button', @showSidebar)
+
+    $(window).resize =>
+      @$().off('click', @hideSidebarSelector, @hideSidebar)
+      @determineHideSidebarSelector()
+      @$().on('click', @hideSidebarSelector, @hideSidebar)
 
 
   willRemoveElement: ->
-    @$().off('click', '#hide-criteria-button, button[data-search]', @hideSidebar)
+    @$().off('click', @hideSidebarSelector, @hideSidebar)
     @$().off('click', '#show-criteria-button, #new-search-button', @showSidebar)
+
+
+  determineHideSidebarSelector: ->
+    if $('body').width() <= @maxAutoHideSidebarWidth
+      # automatically hide sidebar when searching if the browser window is narrow
+      @hideSidebarSelector = '#hide-criteria-button, button[data-search]'
+    else
+      @hideSidebarSelector = '#hide-criteria-button'
 
 
   hideSidebar: ->
