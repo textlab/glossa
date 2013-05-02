@@ -12,11 +12,13 @@ App.CorpusRoute = Em.Route.extend
       {corpus, search, pageNo} = params
       @transitionTo('corpus.result', corpus, [search, pageNo])
 
+
     showCorpusHome: ->
       # FIXME: Should we just do this for all input controllers or find another solution?
       @controllerFor('cwbSearchInputs').set('query', '')
 
       @transitionTo("corpus.home")
+
 
     metadataSelectionsChanged: ->
       # If we get here, it means that we are currently in a route that should not

@@ -6,6 +6,8 @@ App.CorpusView = Em.View.extend
   hideSidebarSelector: null
 
   didInsertElement: ->
+    @$().on 'click', 'button[data-search]', => @$('.result-spinner').show()
+
     @determineHideSidebarSelector()
     @$().on('click', @hideSidebarSelector, @hideSidebar)
     @$().on('click', '#show-criteria-button, #new-search-button', @showSidebar)
@@ -17,6 +19,7 @@ App.CorpusView = Em.View.extend
 
 
   willRemoveElement: ->
+    @$().off('click', 'button[data-search]')
     @$().off('click', @hideSidebarSelector, @hideSidebar)
     @$().off('click', '#show-criteria-button, #new-search-button', @showSidebar)
 
