@@ -9,7 +9,7 @@ App.CorpusController = Em.ObjectController.extend
   # Reopen the class and add to this object if you implement other search
   # engines
   defaultSearchInterfaceVariant:
-    cwb: 'regex'
+    cwb: 'simple'
 
   userPreferences: null
   userPreferencesBinding: 'controllers.currentUser.preferences'

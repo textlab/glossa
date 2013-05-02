@@ -2,7 +2,7 @@ App.CwbRegexView = Em.View.extend
   templateName: 'cwb/regex'
 
   # "query" is defined on each of the different view classes for the simple,
-  # multiword and regex CWB search and bound to the SearchesController, which
+  # multiword and regex CWB search and bound to the CwbSearchInputsController, which
   # will create the search records.
   queryBinding: 'controller.query'
 
