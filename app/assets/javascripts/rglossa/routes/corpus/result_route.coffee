@@ -24,6 +24,9 @@ App.CorpusResultRoute = Em.Route.extend
     model = model[0] if Em.isArray(model)
     @controllerFor('resultTable').set('content', model.getResultPage(@pageNo))
 
+    # FIXME: Select the appropriate controller based on the type of search we're doing
+    @controllerFor('cwbResultToolbar').setCurrentPageNo(@pageNo)
+
 
   renderTemplate: ->
     searchEngine = @controllerFor('corpus').get('searchEngine')
