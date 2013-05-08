@@ -1,22 +1,22 @@
 {{#if isShowingSimple}}
   <div class="row-fluid search-input-links">
     <b>Simple</b> |
-    <a href="" {{action showMultiword}}>Extended</a> |
-    <a href="" {{action showRegex}}>Advanced</a>
+    <a href="" title="Search for grammatical categories etc." {{action showMultiword}}>Extended</a> |
+    <a href="" title="Regular expressions" {{action showRegex}}>Advanced</a>
   </div>
   {{view App.CwbSimpleView}}
 {{else}}
   {{#if isShowingMultiword}}
       <div class="row-fluid search-input-links">
-          <a href="" {{action showSimple}}>Simple</a> |
+          <a href="" title="Simple search box" {{action showSimple}}>Simple</a> |
           <b>Extended</b> |
-          <a href="" {{action showRegex}}>Advanced</a>
+          <a href="" title="Regular expressions" {{action showRegex}}>Advanced</a>
       </div>
     {{view App.CwbMultiwordView}}
   {{else}}
       <div class="row-fluid search-input-links">
-          <a href="" {{action showSimple}}>Simple</a> |
-          <a href="" {{action showMultiword}}>Extended</a> |
+          <a href="" title="Simple search box" {{action showSimple}}>Simple</a> |
+          <a href="" title="Search for grammatical categories etc." {{action showMultiword}}>Extended</a> |
           <b>Advanced</b>
       </div>
     {{view App.CwbRegexView}}

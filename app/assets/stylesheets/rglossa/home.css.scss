@@ -54,6 +54,11 @@ h5.category-header {
 }
 
  /* Override settings in bootstrap.css */
+.form-inline input.multiword-field {
+  width: 108px;
+  margin-bottom: 5px;
+}
+
 .pagination {
   margin-top: 0;
   margin-bottom: 10px;

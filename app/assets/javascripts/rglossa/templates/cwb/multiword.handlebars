@@ -1,0 +1,25 @@
+<div class="row-fluid">
+
+    <form class="form-inline">
+        <div class="input-prepend input-append">
+            <span class="add-on" title="Search options"><i class="icon-cog"></i></span>
+          {{view Em.TextField class="multiword-field" valueBinding="view.displayedQuery"}}
+            <span class="add-on" title="Remove word"><i class="icon-minus"></i></span>
+        </div>
+        <div>
+            <div class="control-group">
+                <label class="checkbox">
+                    <input type="checkbox" title="Lemma (base form)"> Lemma
+                </label>
+                &nbsp;
+                <label class="checkbox">
+                    <input type="checkbox" title="Start of word"> Start
+                </label>
+                &nbsp;
+                <label class="checkbox">
+                    <input type="checkbox" title="End of word"> End
+                </label>
+            </div>
+        </div>
+    </form>
+</div>
