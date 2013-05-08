@@ -18,6 +18,16 @@ h5.category-header {
   margin-bottom: 50px;
 }
 
+.multiword-search-form {
+  &> .control-group {
+    margin-bottom: 5px;
+  }
+
+  .btn.add-search-word {
+    margin-left: 10px;
+  }
+}
+
 .result-spinner {
   margin-top: 40px;
 }
@@ -55,10 +65,10 @@ h5.category-header {
   width: 75px;
 }
 
- /* Override bootstrap.css */
+ // Override bootstrap.css
+
 .form-inline input.multiword-field {
   width: 108px;
-  margin-bottom: 5px;
 }
 
 .pagination {
@@ -82,11 +92,16 @@ h5.category-header {
 }
 
 // Override font-awesome.css
+
 .icon-cog:before {
   color: $mellow-icon-color;
 }
 
 .icon-minus:before {
+  color: $mellow-icon-color;
+}
+
+.icon-plus:before {
   color: $mellow-icon-color;
 }
 
