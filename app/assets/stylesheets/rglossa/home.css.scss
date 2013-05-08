@@ -1,3 +1,5 @@
+$mellow-icon-color: #666;
+
 body {
   padding-top: 70px;
 }
@@ -53,7 +55,7 @@ h5.category-header {
   width: 75px;
 }
 
- /* Override settings in bootstrap.css */
+ /* Override bootstrap.css */
 .form-inline input.multiword-field {
   width: 108px;
   margin-bottom: 5px;
@@ -77,6 +79,15 @@ h5.category-header {
     vertical-align: top;
     text-align: right;
   }
+}
+
+// Override font-awesome.css
+.icon-cog:before {
+  color: $mellow-icon-color;
+}
+
+.icon-minus:before {
+  color: $mellow-icon-color;
 }
 
 // Override select2.css
