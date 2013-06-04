@@ -18,13 +18,54 @@ h5.category-header {
   margin-bottom: 50px;
 }
 
+.minmax-field {
+  width: 20px;
+}
+
 .multiword-search-form {
-  &> .control-group {
-    margin-bottom: 5px;
+  /*.btn.interval {*/
+    /*margin-left: 10px;*/
+    /*margin-right: 10px;*/
+  /*}*/
+  .multiword-table {
+    display: table;
   }
 
-  .btn.add-search-word {
-    margin-left: 10px;
+  .multiword-word {
+    display: table-cell;
+
+    &> .control-group {
+      display: table;
+      margin-bottom: 7px;
+
+      div.interval {
+        display: table-cell;
+        vertical-align: bottom;
+        padding-right: 10px;
+
+        input.interval {
+          height: 10px;
+          width: 12px;
+          font-size: 12px;
+        }
+
+        h6 {
+          margin-bottom: 2px;
+        }
+      }
+
+      div.word {
+        display: table-cell;
+        vertical-align: bottom;
+      }
+
+      div.add-search-word {
+        display: table-cell;
+        vertical-align: bottom;
+        padding-left: 10px;
+        padding-bottom: 2px;
+      }
+    }
   }
 }
 
