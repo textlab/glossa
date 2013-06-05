@@ -23,10 +23,6 @@ h5.category-header {
 }
 
 .multiword-search-form {
-  /*.btn.interval {*/
-    /*margin-left: 10px;*/
-    /*margin-right: 10px;*/
-  /*}*/
   .multiword-table {
     display: table;
   }
@@ -40,7 +36,8 @@ h5.category-header {
       div.interval {
         display: table-cell;
         vertical-align: bottom;
-        padding-right: 10px;
+        padding-left: 15px;
+        padding-right: 15px;
 
         input.interval {
           height: 10px;

@@ -17,4 +17,7 @@ App.CwbMultiwordView = Em.View.extend
 
 
   didInsertElement: ->
-    @$('.searchfield').focus()
+    @$('.searchfield').first().focus()
+    @$('div.interval').first().hide()
+    @$('div.interval-filler').first().hide()
+    @$('div.add-search-word').last().show()
