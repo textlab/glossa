@@ -1,6 +1,8 @@
 <div class="row-fluid">
 
     <form class="form-inline multiword-search-form">
-        {{partial "cwb/multiword_word"}}
+        {{#each term in view.displayedQuery}}
+          {{partial "cwb/multiword_term"}}
+        {{/each}}
     </form>
 </div>
