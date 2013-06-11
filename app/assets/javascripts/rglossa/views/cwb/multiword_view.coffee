@@ -14,28 +14,18 @@ App.CwbMultiwordView = Em.View.extend
     query = @_splitQueryTerms()
 
     dq = []
-    interval = {}
+    @interval = {}
 
-    query.forEach (term) ->
+    query.forEach (term) =>
       m = term.match(/\[\]\{(.+)\}/)
       if m
-        # The term is an interval specification
-        intervalText = m[1]
-        min = max = null
-
-        m2 = intervalText.match(/(\d+),/)
-        min = m2[1] if m2
-
-        m2 = intervalText.match(/,(\d+)/)
-        max = m2[1] if m2
-
-        interval = {min: min, max: max}
+        @_handleIntervalSpecification(m)
       else
         dq.push
           word: term
-          interval: interval
+          interval: @interval
 
-        interval = {}
+        @interval = {}
     dq
   ).property('query')
 
@@ -51,4 +41,17 @@ App.CwbMultiwordView = Em.View.extend
     query = @get('query')
     query = query.replace(/"(.+?)"/g, '$1')
     query.split(/\s+/)
+
+
+  _handleIntervalSpecification: (m) ->
+    intervalText = m[1]
+    min = max = null
+
+    m2 = intervalText.match(/(\d+),/)
+    min = m2[1] if m2
+
+    m2 = intervalText.match(/,(\d+)/)
+    max = m2[1] if m2
+
+    @interval = {min: min, max: max}
 
