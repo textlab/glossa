@@ -11,9 +11,7 @@ App.CwbMultiwordView = Em.View.extend
       query = value.replace(/\S+/g, '"$&"')
       @set 'query', query
 
-    query = @get('query')
-    query = query.replace(/"(.+?)"/g, '$1')
-    query = query.split(/\s+/)
+    query = @_splitQueryTerms()
 
     dq = []
     interval = {}
@@ -47,3 +45,10 @@ App.CwbMultiwordView = Em.View.extend
     @$('div.interval').first().hide()
     @$('div.interval-filler').first().hide()
     @$('div.add-search-word').last().show()
+
+
+  _splitQueryTerms: ->
+    query = @get('query')
+    query = query.replace(/"(.+?)"/g, '$1')
+    query.split(/\s+/)
+

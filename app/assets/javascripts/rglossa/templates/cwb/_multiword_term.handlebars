@@ -1,15 +1,15 @@
 <div class="multiword-table">
-  <div class="multiword-word">
+  <div class="multiword-term">
     <div class="control-group">
       <div style="display:table-row">
         <div class="interval">
           <h6>Interval</h6>
-          {{view Em.TextField class="interval"}} min<br>
-          {{view Em.TextField class="interval"}} max
+          {{view Em.TextField class="interval" valueBinding="term.interval.min"}} min<br>
+          {{view Em.TextField class="interval" valueBinding="term.interval.max"}} max
         </div>
         <div class="input-prepend input-append word">
           <span class="add-on" title="Search options"><i class="icon-cog"></i></span>
-          {{view Em.TextField class="searchfield multiword-field" valueBinding="word"}}
+          {{view Em.TextField class="searchfield multiword-field" valueBinding="term.word"}}
           <span class="add-on" title="Remove word"><i class="icon-minus"></i></span>
         </div>
         <div class="add-search-word" style="display:none">
