@@ -23,10 +23,6 @@ h5.category-header {
 }
 
 .multiword-search-form {
-  .multiword-table {
-    display: table;
-  }
-
   .multiword-term {
     display: table-cell;
 
@@ -67,6 +63,11 @@ h5.category-header {
     div.word-checkboxes {
       margin-top: 7px;
     }
+  }
+
+  button[data-search] {
+    margin-left: 20px;
+    margin-bottom: 22px;
   }
 }
 

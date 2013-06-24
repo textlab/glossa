@@ -1,8 +1,15 @@
 <div class="row-fluid">
 
-    <form class="form-inline multiword-search-form">
+  <form class="form-inline multiword-search-form">
+    <div style="display:table">
+      <div style="display:table-row">
         {{#each term in view.displayedQuery}}
-          {{partial "cwb/multiword_term"}}
+        {{partial "cwb/multiword_term"}}
         {{/each}}
-    </form>
+        <div style="display:table-cell">
+          <button type="submit" class="btn" data-search {{action search}}>Search</button>
+        </div>
+      </div>
+    </div>
+  </form>
 </div>
