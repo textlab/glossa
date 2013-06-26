@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.files = Dir['{app,config,db,lib}/**/*'] + %w(MIT-LICENSE Rakefile README.md README.rails)
   s.test_files = Dir['test/**/*']
 
-  s.add_dependency 'rails', '~> 3.2.11'
+  s.add_dependency 'rails', '~> 3.2.13'
   s.add_dependency 'jquery-rails'
   s.add_dependency 'sass-rails',   '~> 3.2.5'
   s.add_dependency 'coffee-rails', '~> 3.2.2'
@@ -26,7 +26,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'oj'  # more efficient parsing and generation of JSON
   s.add_dependency 'turbo-sprockets-rails3'  # faster precompilation of assets
   s.add_dependency 'devise', '~> 2.2.3'
-  s.add_dependency 'ember-rails'
+  s.add_dependency 'handlebars-source', "~> 1.0.12"
+  s.add_dependency 'ember-rails', '~> 0.13.0'
   s.add_dependency 'globalize3'
   s.add_dependency 'i18n-js'
   s.add_dependency 'hirb'

@@ -16,9 +16,10 @@ gem "jquery-rails"
 # To use debugger
 # gem 'debugger'
 
-#gem "coffee-script-redux-debugger", git: "git://github.com/JetBrains/coffee-script-redux-debugger.git"
 gem "mysql2"
 gem "devise", "~> 2.2.3"
+
+gem "ember-source", github: "emberjs/ember.js"
 
 group :development do
   # Use thin instead of WEBrick in development
