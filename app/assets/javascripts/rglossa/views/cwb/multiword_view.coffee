@@ -25,8 +25,13 @@ App.CwbMultiwordView = Em.View.extend
 
         min = null
         max = null
+
+    # Ugly hack that is needed because the #each Handlebars helper
+    # does not provide array indices to the templates in the loop :-/
+    dq[0].isFirst = true
+    dq[dq.length-1].isLast = true
     dq
-  ).property()
+  ).property('query')
 
 
   displayedQueryDidChange: (->
@@ -48,9 +53,6 @@ App.CwbMultiwordView = Em.View.extend
 
   didInsertElement: ->
     @$('.searchfield').first().focus()
-    @$('div.interval').first().hide()
-    @$('div.interval-filler').first().hide()
-    @$('div.add-search-word').last().show()
 
 
   _splitQueryTerms: ->

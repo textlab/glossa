@@ -22,16 +22,24 @@ App.CwbSearchInputsController = Em.Controller.extend
     @get('currentInterface') is 'regex'
   ).property('currentInterface')
 
-  # Actions
-  showSimple:    -> @set('currentInterface', 'simple')
-  showMultiword: -> @set('currentInterface', 'multiword')
-  showRegex:     -> @set('currentInterface', 'regex')
-
   init: ->
     # Show the preferred interface (simple, multiword or regex) for this user or corpus
     @set('currentInterface', @get('controllers.corpus.preferredSearchInterfaceVariant'))
 
-  # Action handler
+
+  # Action handlers
+  showSimple:    -> @set('currentInterface', 'simple')
+  showMultiword: -> @set('currentInterface', 'multiword')
+  showRegex:     -> @set('currentInterface', 'regex')
+
+  addWord: ->
+    query = @get('query')
+    return unless query
+
+    query += ' ""'
+    @set('query', query)
+
+
   search: ->
     # TODO: Add support for simultaneous search in different "editions" within
     # the same corpus (e.g. different languages in a parallel corpus). Each
