@@ -6,28 +6,44 @@ App.CwbMultiwordView = Em.View.extend
   # will create the search records.
   queryBinding: 'controller.query'
 
-  displayedQuery: ((key, value) ->
-    if value
-      query = value.replace(/\S+/g, '"$&"')
-      @set 'query', query
-
+  displayedQuery: (->
     query = @_splitQueryTerms()
 
     dq = []
-    @interval = {}
+    min = null
+    max = null
 
     query.forEach (term) =>
       m = term.match(/\[\]\{(.+)\}/)
       if m
-        @_handleIntervalSpecification(m)
+        [min, max] = @_handleIntervalSpecification(m)
       else
         dq.push
           word: term
-          interval: @interval
+          min: min
+          max: max
 
-        @interval = {}
+        min = null
+        max = null
     dq
-  ).property('query')
+  ).property()
+
+
+  displayedQueryDidChange: (->
+    displayedQuery = @get('displayedQuery')
+
+    terms = for term in displayedQuery
+      res = []
+      if term.min or term.max
+        res.push("[]{#{term.min ? ''},#{term.max ? ''}}")  # interval
+      res.push term.word.replace(/\S+/g, '"$&"')           # word
+      res.join(' ')
+
+    @set 'query', terms.join(' ')
+
+  ).observes('displayedQuery.@each.word',
+      'displayedQuery.@each.min',
+      'displayedQuery.@each.max')
 
 
   didInsertElement: ->
@@ -53,5 +69,5 @@ App.CwbMultiwordView = Em.View.extend
     m2 = intervalText.match(/,(\d+)/)
     max = m2[1] if m2
 
-    @interval = {min: min, max: max}
+    [min, max]
 
