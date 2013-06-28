@@ -12,7 +12,7 @@ App.CwbSimpleView = Em.View.extend
       @set 'query', query
 
     query = @get('query')
-    query.replace(/"(.+?)"/g, '$1')
+    query?.replace(/"(.+?)"/g, '$1') or ''
   ).property('query')
 
   didInsertElement: ->

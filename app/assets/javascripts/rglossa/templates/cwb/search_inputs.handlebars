@@ -4,7 +4,7 @@
     <a href="" title="Search for grammatical categories etc." {{action showMultiword}}>Extended</a> |
     <a href="" title="Regular expressions" {{action showRegex}}>Advanced</a>
   </div>
-  {{view App.CwbSimpleView}}
+  {{render "cwb/simple"}}
 {{else}}
   {{#if isShowingMultiword}}
       <div class="row-fluid search-input-links">
@@ -12,13 +12,13 @@
           <b>Extended</b> |
           <a href="" title="Regular expressions" {{action showRegex}}>Advanced</a>
       </div>
-    {{view App.CwbMultiwordView}}
+    {{render "cwb/multiword"}}
   {{else}}
       <div class="row-fluid search-input-links">
           <a href="" title="Simple search box" {{action showSimple}}>Simple</a> |
           <a href="" title="Search for grammatical categories etc." {{action showMultiword}}>Extended</a> |
           <b>Advanced</b>
       </div>
-    {{view App.CwbRegexView}}
+    {{render "cwb/regex"}}
   {{/if}}
 {{/if}}
