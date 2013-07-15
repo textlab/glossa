@@ -86,7 +86,7 @@ App.CwbMultiwordController = Em.Controller.extend
 
   _splitQueryTerms: ->
     query = @get('query')
-    query = query.replace(/"(.+?)"/g, '$1')
+    query = query.replace(/"(.*?)"/g, '$1')
     query.split(/\s+/)
 
 
