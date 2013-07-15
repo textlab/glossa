@@ -62,7 +62,7 @@ App.CwbMultiwordController = Em.Controller.extend
 
       if min or max
         res.push("[]{#{min ? ''},#{max ? ''}}")  # interval
-      res.push word.replace(/\S+/g, '"$&"')           # word
+      res.push word.replace(/\S+/g, '"$&"')      # word
       res.join(' ')
 
     @set 'query', terms.join(' ')
