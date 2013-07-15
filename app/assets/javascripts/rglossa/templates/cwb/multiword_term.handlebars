@@ -13,7 +13,7 @@
           <div class="input-prepend input-append word dropdown">
             <span data-toggle="dropdown" class="add-on dropdown-toggle" style="cursor:pointer"><i class="icon-cog"></i></span>
             {{view Em.TextField class="searchfield multiword-field" valueBinding="word"}}
-            <span class="add-on" title="Remove word"><i class="icon-minus"></i></span>
+            <span class="add-on" title="Remove word" style="cursor:pointer" {{action removeTerm this}}><i class="icon-minus"></i></span>
             <ul class="dropdown-menu">
               <li>
                 <a {{action heidu}}>Adverb</a>
@@ -21,7 +21,7 @@
               <li class="dropdown-submenu">
                 <a>Adjective</a>
                 <ul class="dropdown-menu">
-                  <li><a {{action heidu bubble="false"}}>definite</a></li>
+                  <li><a {{action heidu}}>definite</a></li>
                 </ul>
               </li>
             </ul>

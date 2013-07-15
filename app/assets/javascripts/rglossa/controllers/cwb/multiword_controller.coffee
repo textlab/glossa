@@ -1,3 +1,19 @@
+# Helper object
+App.CwbMultiwordTerm = Em.Object.extend
+  word:     null
+  min:      null
+  max:      null
+
+  isFirst:  false
+  isLast:   false
+
+  isFirstDidChange: ->
+    # The first term cannot be preceded by an interval
+    if @get('isFirst')
+      @set('min', null)
+      @set('max', null)
+
+
 App.CwbMultiwordController = Em.Controller.extend
 
   # "query" is defined on each of the different controllers for the simple,
@@ -14,13 +30,13 @@ App.CwbMultiwordController = Em.Controller.extend
     min = null
     max = null
 
-    query.forEach (term) =>
-      m = term.match(/\[\]\{(.+)\}/)
+    query.forEach (item) =>
+      m = item.match(/\[\]\{(.+)\}/)
       if m
         [min, max] = @_handleIntervalSpecification(m)
       else
-        dq.push
-          word: term
+        dq.push App.CwbMultiwordTerm.create
+          word: item
           min: min
           max: max
 
@@ -39,10 +55,14 @@ App.CwbMultiwordController = Em.Controller.extend
     displayedQuery = @get('displayedQuery')
 
     terms = for term in displayedQuery
-      res = []
-      if term.min or term.max
-        res.push("[]{#{term.min ? ''},#{term.max ? ''}}")  # interval
-      res.push term.word.replace(/\S+/g, '"$&"')           # word
+      min  = term.get('min')
+      max  = term.get('max')
+      word = term.get('word')
+      res  = []
+
+      if min or max
+        res.push("[]{#{min ? ''},#{max ? ''}}")  # interval
+      res.push word.replace(/\S+/g, '"$&"')           # word
       res.join(' ')
 
     @set 'query', terms.join(' ')
@@ -70,5 +90,11 @@ App.CwbMultiwordController = Em.Controller.extend
 
     [min, max]
 
-  removeWord: (word) ->
-    console.log @
+  removeTerm: (term) ->
+    newDQ = (t for t in @get('displayedQuery') when t isnt term)
+
+    # If we removed the first term, we need to mark the new first term as being
+    # first.
+    newDQ[0].set('isFirst', true) if term.isFirst
+
+    @set('displayedQuery', newDQ)
