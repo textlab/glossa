@@ -3,3 +3,6 @@ App.CwbMultiwordView = Em.View.extend
 
   didInsertElement: ->
     @$('.searchfield').first().focus()
+
+  focusOut: ->
+    @get('controller').updateQuery()

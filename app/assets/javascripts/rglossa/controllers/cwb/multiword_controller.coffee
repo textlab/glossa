@@ -16,14 +16,19 @@ App.CwbMultiwordTerm = Em.Object.extend
 
 App.CwbMultiwordController = Em.Controller.extend
 
-  # "query" is defined on each of the different controllers for the simple,
-  # multiword and regex CWB search and bound to the CwbSearchInputsController, which
-  # will create the search records.
+  # Private variable that holds the currently displayed query, which is
+  # transferred to the public query property on reception of a focusOut event
+  _query: null
+
   needs: ['cwbSearchInputs']
 
+  # "query" is defined on each of the different controllers for the simple,
+  # multiword and regex CWB search and bound to the CwbSearchInputsController,
+  # which will create the search records.
   queryBinding: 'controllers.cwbSearchInputs.query'
 
   displayedQuery: (->
+    @_query = @get('query')
     query = @_splitQueryTerms()
 
     dq = []
@@ -65,11 +70,18 @@ App.CwbMultiwordController = Em.Controller.extend
       res.push word.replace(/\S+/g, '"$&"')      # word
       res.join(' ')
 
-    @set 'query', terms.join(' ')
-
+    # Assign the query value to a private variable, which will not be
+    # transferred to the query property until we recieve a focusOut event.
+    # Otherwise, displayedQuery will be updated in turn when query is set,
+    # which leads to the input field that we are editing losing focus.
+    @_query = terms.join(' ')
   ).observes('displayedQuery.@each.word',
       'displayedQuery.@each.min',
       'displayedQuery.@each.max')
+
+
+  # Called by the view on reception of a focusOut event
+  updateQuery: -> @set('query', @_query)
 
 
   _splitQueryTerms: ->
