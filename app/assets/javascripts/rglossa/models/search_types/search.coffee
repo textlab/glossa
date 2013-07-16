@@ -37,6 +37,5 @@ App.Search = DS.Model.extend
     root      = adapter.rootForType(type)
     url       = adapter.buildURL(root, @get('id')) + "/results?pages[]=#{pageNo}"
 
-    adapter.ajax url, 'GET',
-      success: (data) =>
-        @get('resultPages').get(pageNo).setObjects(data.search_results.pages[pageNo])
+    adapter.ajax(url, 'GET').then (data) =>
+      @get('resultPages').get(pageNo).setObjects(data.search_results.pages[pageNo])
