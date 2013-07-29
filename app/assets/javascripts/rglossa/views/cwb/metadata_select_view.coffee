@@ -1,7 +1,9 @@
 App.MetadataSelectView = Em.View.extend
 
-  tagName: 'input type="hidden" data-metadata-selection'
-  attributeBindings: ['name']
+  tagName: 'input'
+  attributeBindings: ['type', 'data-metadata-selection', 'name']
+  type: 'hidden'
+  'data-metadata-selection': 'data-metadata-selection'
 
   nameBinding: 'content.id'
 
