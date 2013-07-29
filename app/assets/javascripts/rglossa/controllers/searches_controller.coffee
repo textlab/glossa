@@ -46,3 +46,8 @@ App.SearchesController = Em.ArrayController.extend
                           pageNo: 1
 
       search.removeObserver('id', @, @_sendShowResultEvent)
+
+      # Hide spinners and show new search results
+      $('.result-spinner').hide()
+      $('.search-result-toolbar, .search-result-table-container').show()
+
