@@ -7,16 +7,18 @@ App.SearchesController = Em.ArrayController.extend
   corpus: null
   corpusBinding: 'controllers.corpus.model'
 
-  createSearch: (searchModel, queries) ->
+  createSearch: (searchModel, {queries, maxHits}) ->
     # Empty queries are not allowed
     return unless queries.some (query) ->
       query.query isnt ''
 
     metadataValueIds = @get('controllers.corpusMetadataCategory').collectMetadataValues()
 
-    search = App.get(searchModel).createRecord(
+    params =
       metadataValueIds: metadataValueIds
-      queries: queries)
+      queries: queries
+    params.maxHits = maxHits if maxHits
+    search = App.get(searchModel).createRecord(params)
 
     @pushObject(search)
     @set('currentSearch', search)

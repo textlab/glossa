@@ -15,7 +15,7 @@ module Rglossa
           render request.format.to_sym =>
             @search.to_json(
               root: true,
-              only: [:id, :num_hits],
+              only: [:id, :num_hits, :max_hits],
               methods: :first_two_result_pages)
         end
       end
@@ -35,7 +35,7 @@ module Rglossa
           render request.format.to_sym =>
             @search.to_json(
               root: true,
-              only: [:id, :num_hits],
+              only: [:id, :num_hits, :max_hits],
               methods: :first_two_result_pages)
         end
       end

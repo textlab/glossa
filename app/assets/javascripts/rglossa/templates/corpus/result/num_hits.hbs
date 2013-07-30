@@ -1,3 +1,7 @@
-{{#if numHits}}
-  Found {{numHits}} matches
+{{#if hitsAreCutOff}}
+  Showing the first {{view App.CorpusResultMaxHitsView class="max-hits span1"}} matches
+{{else}}
+  {{#if numHits}}
+    Found {{numHits}} matches
+  {{/if}}
 {{/if}}

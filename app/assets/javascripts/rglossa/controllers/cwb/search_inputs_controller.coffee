@@ -40,12 +40,12 @@ App.CwbSearchInputsController = Em.Controller.extend
     @set('query', query)
 
 
-  search: ->
+  search: (options = {}) ->
     # TODO: Add support for simultaneous search in different "editions" within
     # the same corpus (e.g. different languages in a parallel corpus). Each
     # edition will have a distinct shortName.
-    queries = [
+    options.queries = [
       corpusEdition: @get('corpusShortName').toUpperCase()
       query:         @get('query')
     ]
-    @get('controllers.searches').createSearch('CwbSearch', queries)
+    @get('controllers.searches').createSearch('CwbSearch', options)

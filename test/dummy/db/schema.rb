@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130424025517) do
+ActiveRecord::Schema.define(:version => 20130730095637) do
 
   create_table "rglossa_corpora", :force => true do |t|
     t.string   "name",                                  :null => false
@@ -89,6 +89,7 @@ ActiveRecord::Schema.define(:version => 20130424025517) do
     t.integer  "num_hits"
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
+    t.integer  "max_hits"
   end
 
   create_table "rglossa_users", :force => true do |t|

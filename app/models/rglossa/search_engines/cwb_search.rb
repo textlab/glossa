@@ -29,6 +29,7 @@ module Rglossa
                             "#{named_query};",
                             "#{named_query} = #{query};"].join("\n")
       end
+      query_commands += " cut #{max_hits}" if max_hits.present?
 
       commands = [
         %Q{set DataDirectory "#{Dir.tmpdir}"},
