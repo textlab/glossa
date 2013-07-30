@@ -1,5 +1,6 @@
 {{#if hitsAreCutOff}}
-  Showing the first {{view App.CorpusResultMaxHitsView class="max-hits span1"}} matches
+  Showing the first {{view App.CorpusResultMaxHitsView class="max-hits span1"}} matches&nbsp;&nbsp;
+  <button class="btn btn-small" {{action showAllHits}}>Show all</button>
 {{else}}
   {{#if numHits}}
     Found {{numHits}} matches

@@ -17,7 +17,11 @@ App.SearchesController = Em.ArrayController.extend
     params =
       metadataValueIds: metadataValueIds
       queries: queries
-    params.maxHits = maxHits if maxHits
+    if maxHits
+      # -1 means no limit, which means we must set null explicitly in the call
+      # to createRecord in order to prevent the default limit to be set
+      params.maxHits = if maxHits is -1 then null else maxHits
+
     search = App.get(searchModel).createRecord(params)
 
     @pushObject(search)

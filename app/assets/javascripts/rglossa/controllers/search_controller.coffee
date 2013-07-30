@@ -6,11 +6,26 @@ App.SearchController = Em.ObjectController.extend
   content: null
   contentBinding: 'controllers.searches.currentSearch'
 
+
+  # Predicates used by conditionals in the handlebars template
+
   hitsAreCutOff: (->
     @get('content.numHits') is @get('content.maxHits')
   ).property('content.numHits', 'content.maxHits')
 
-  setMaxHits: (value) ->
+
+  # Actions
+
+  setMaxHits: (maxHits) ->
+    @_searchWithMaxHits(maxHits)
+
+  showAllHits: ->
+    @_searchWithMaxHits(-1)
+
+
+  # Helper methods
+
+  _searchWithMaxHits: (maxHits) ->
     searchType = @get('content').constructor.toString().split('.')[1] # e.g. "CwbSearch"
     controller = searchType.camelize() + 'Inputs' # e.g. "cwbSearchInputs"
-    @get("controllers.#{controller}").search({maxHits: value})
+    @get("controllers.#{controller}").search({maxHits: maxHits})
