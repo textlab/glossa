@@ -14,6 +14,8 @@ module Rglossa
              order: :short_name,
              before_add: :set_metadata_value_type
 
+    store :config, accessors: [:languages], coder: JSON
+
     def metadata_category_ids
       metadata_categories.pluck(:id)
     end

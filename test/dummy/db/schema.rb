@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130802121402) do
+ActiveRecord::Schema.define(:version => 20130803193149) do
 
   create_table "rglossa_corpora", :force => true do |t|
     t.string   "name",                            :null => false
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(:version => 20130802121402) do
     t.datetime "created_at",                      :null => false
     t.datetime "updated_at",                      :null => false
     t.string   "encoding",   :default => "utf-8"
+    t.text     "config"
   end
 
   create_table "rglossa_corpus_texts", :force => true do |t|
