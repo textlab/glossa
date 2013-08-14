@@ -14,7 +14,7 @@ App.ResultToolbarController = Em.ArrayController.extend
     if value?
       value = parseInt(value)
       numPages = @get('numPages')
-      @_currentPageNo = if value < 1 then 1 else (if value > numPages then numPages else value)
+      @_currentPageNo = if value < 1 then 1 else (if numPages > 0 and value > numPages then numPages else value)
 
     @_currentPageNo
   ).property()

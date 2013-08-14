@@ -20,6 +20,10 @@ module Rglossa
       metadata_categories.pluck(:id)
     end
 
+    def langs
+      languages.map { |l| {lang: l[:lang], tags: Rglossa.taggers[l[:tagger].to_s]['tags']} }
+    end
+
     # This lets us specify a value_type of 'text', 'integer' etc. when we add a metadata category
     # and have it be automatically converted to 'Rglossa::MetadataValues::Text' etc. before the
     # category is saved.

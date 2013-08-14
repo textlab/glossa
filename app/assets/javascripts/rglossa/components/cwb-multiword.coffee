@@ -14,18 +14,12 @@ App.CwbMultiwordTerm = Em.Object.extend
       @set('max', null)
 
 
-App.CwbMultiwordController = Em.Controller.extend
+App.CwbMultiwordComponent = Em.Component.extend
 
   # Private variable that holds the currently displayed query, which is
   # transferred to the public query property on reception of a focusOut event
+  # or a search action
   _query: null
-
-  needs: ['cwbSearchInputs']
-
-  # "query" is defined on each of the different controllers for the simple,
-  # multiword and regex CWB search and bound to the CwbSearchInputsController,
-  # which will create the search records.
-  queryBinding: 'controllers.cwbSearchInputs.query'
 
   displayedQuery: (->
     @_query = @get('query')
@@ -80,10 +74,6 @@ App.CwbMultiwordController = Em.Controller.extend
       'displayedQuery.@each.max')
 
 
-  # Called by the view on reception of a focusOut event
-  updateQuery: -> @set('query', @_query)
-
-
   _splitQueryTerms: ->
     query = @get('query')
     query = query.replace(/"(.*?)"/g, '$1')
@@ -110,3 +100,11 @@ App.CwbMultiwordController = Em.Controller.extend
     newDQ[0].set('isFirst', true) if term.isFirst
 
     @set('displayedQuery', newDQ)
+
+
+  focusOut: -> @set('query', @_query)
+
+  action: 'search'
+  search: ->
+    @set('query', @_query)
+    @sendAction()

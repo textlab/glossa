@@ -15,6 +15,10 @@ App.CorpusController = Em.ObjectController.extend
   userPreferencesBinding: 'controllers.currentUser.preferences'
 
 
+  isMultilingual: (->
+    @get('model.langs.length') > 1
+  ).property()
+  
   # The search engine for the current corpus
   searchEngine: (->
     @get('model.searchEngine') or @defaultSearchEngine

@@ -4,7 +4,9 @@
     <a href="" title="Search for grammatical categories etc." {{action showMultiword}}>Extended</a> |
     <a href="" title="Regular expressions" {{action showRegex}}>Advanced</a>
   </div>
-  {{render "cwb/simple"}}
+  {{#each row in controller}}
+    {{cwb-simple query=row.query corpusShortName=row.corpusShortName}}
+  {{/each}}
 {{else}}
   {{#if isShowingMultiword}}
       <div class="row-fluid search-input-links">
@@ -12,13 +14,17 @@
           <b>Extended</b> |
           <a href="" title="Regular expressions" {{action showRegex}}>Advanced</a>
       </div>
-    {{render "cwb/multiword"}}
+    {{#each row in controller}}
+      {{cwb-multiword query=row.query corpusShortName=row.corpusShortName inputsController=this}}
+    {{/each}}
   {{else}}
       <div class="row-fluid search-input-links">
           <a href="" title="Simple search box" {{action showSimple}}>Simple</a> |
           <a href="" title="Search for grammatical categories etc." {{action showMultiword}}>Extended</a> |
           <b>Advanced</b>
       </div>
-    {{render "cwb/regex"}}
+      {{#each row in controller}}
+        {{cwb-regex query=row.query corpusShortName=row.corpusShortName inputsController=this}}
+      {{/each}}
   {{/if}}
 {{/if}}

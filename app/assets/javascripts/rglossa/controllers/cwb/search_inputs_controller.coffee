@@ -1,14 +1,12 @@
-App.CwbSearchInputsController = Em.Controller.extend
-
+App.CwbSearchInputsController = Em.ArrayController.extend
   needs: ['corpus', 'searches']
 
-  # This will be bound to properties on controllers for simple search, multiword
-  # search and regex search.
-  query: ''
-
-  corpusShortNameBinding: 'controllers.corpus.model.shortName'
-
   currentInterface: null
+
+  init: ->
+    # Show the preferred interface (simple, multiword or regex) for this user or corpus
+    @set('currentInterface', @get('controllers.corpus.preferredSearchInterfaceVariant'))
+    @set('content', [Em.Object.create({query: '', corpusShortName: 'BOKMAL'})])
 
   isShowingSimple: (->
     @get('currentInterface') is 'simple'
@@ -22,30 +20,21 @@ App.CwbSearchInputsController = Em.Controller.extend
     @get('currentInterface') is 'regex'
   ).property('currentInterface')
 
-  init: ->
-    # Show the preferred interface (simple, multiword or regex) for this user or corpus
-    @set('currentInterface', @get('controllers.corpus.preferredSearchInterfaceVariant'))
-
 
   # Action handlers
   showSimple:    -> @set('currentInterface', 'simple')
   showMultiword: -> @set('currentInterface', 'multiword')
   showRegex:     -> @set('currentInterface', 'regex')
 
+
   addWord: ->
-    query = @get('query')
+    query = @get('content')
     return unless query
 
     query += ' ""'
-    @set('query', query)
+    @set('content', query)
 
 
-  search: (options = {}) ->
-    # TODO: Add support for simultaneous search in different "editions" within
-    # the same corpus (e.g. different languages in a parallel corpus). Each
-    # edition will have a distinct shortName.
-    options.queries = [
-      corpusEdition: @get('corpusShortName').toUpperCase()
-      query:         @get('query')
-    ]
+  search: (component, options = {}) ->
+    options.queries = @get('content')
     @get('controllers.searches').createSearch('CwbSearch', options)

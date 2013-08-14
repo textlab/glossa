@@ -14,12 +14,6 @@ h5.category-header {
   }
 }
 
-.row-fluid input.max-hits[class*="span"] {
-  margin-top: 7px;
-  margin-left: 2px;
-  vertical-align: baseline;
-}
-
 .corpus-info {
   margin-bottom: 50px;
 }
@@ -86,6 +80,12 @@ h5.category-header {
   .no-sidebar {
     margin-left: 0;
   }
+
+  input.max-hits[class*="span"] {
+    margin-top: 7px;
+    margin-left: 2px;
+    vertical-align: baseline;
+  }
 }
 
 .search-input-links {
@@ -106,6 +106,10 @@ h5.category-header {
       width: 50%;
     }
   }
+}
+
+.table-cell {
+  display: table-cell;
 }
 
 .top-toolbar > button {

@@ -8,6 +8,7 @@ App.SearchesController = Em.ArrayController.extend
   corpusBinding: 'controllers.corpus.model'
 
   createSearch: (searchModel, {queries, maxHits}) ->
+    debugger
     # Empty queries are not allowed
     return unless queries.some (query) ->
       query.query isnt ''

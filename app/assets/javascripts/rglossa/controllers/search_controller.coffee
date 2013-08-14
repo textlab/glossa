@@ -28,4 +28,4 @@ App.SearchController = Em.ObjectController.extend
   _searchWithMaxHits: (maxHits) ->
     searchType = @get('content').constructor.toString().split('.')[1] # e.g. "CwbSearch"
     controller = searchType.camelize() + 'Inputs' # e.g. "cwbSearchInputs"
-    @get("controllers.#{controller}").search({maxHits: maxHits})
+    @get("controllers.#{controller}").search(null, {maxHits: maxHits})

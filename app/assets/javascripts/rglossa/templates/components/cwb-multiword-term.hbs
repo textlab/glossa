@@ -1,0 +1,63 @@
+{{#with term}}
+  <div style="display:table-cell">
+    <div style="display:table">
+      <div class="multiword-term">
+        <div class="control-group">
+          <div style="display:table-row">
+            {{#unless isFirst}}
+            <div class="interval">
+              <h6>Interval</h6>
+              {{view Em.TextField class="interval" valueBinding="min"}} min<br>
+              {{view Em.TextField class="interval" valueBinding="max"}} max
+            </div>
+            {{/unless}}
+            <div class="input-prepend input-append word dropdown">
+              <span data-toggle="dropdown" class="add-on dropdown-toggle" style="cursor:pointer"><i class="icon-cog"></i></span>
+              {{view Em.TextField class="searchfield multiword-field" valueBinding="word"}}
+              <span class="add-on" title="Remove word" style="cursor:pointer" {{action removeTerm this}}><i class="icon-minus"></i></span>
+              <ul class="dropdown-menu">
+                <li>
+                  <a {{action heidu}}>Adverb</a>
+                </li>
+                <li class="dropdown-submenu">
+                  <a>Adjective</a>
+                  <ul class="dropdown-menu">
+                    <li><a {{action heidu}}>definite</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            {{#if isLast}}
+            <div class="add-search-word">
+              <button class="btn btn-small" title="Add search word" {{action addWord}}>
+                <i class="icon-plus"></i>
+              </button>
+            </div>
+            {{/if}}
+          </div>
+          <div style="display:table-row">
+            {{#unless isFirst}}
+            <div class="interval-filler" style="display:table-cell">
+            </div>
+            {{/unless}}
+            <div class="word-checkboxes">
+              <label class="checkbox">
+                <input type="checkbox" title="Lemma (base form)"> Lemma
+              </label>
+              &nbsp;
+              <label class="checkbox">
+                <input type="checkbox" title="Start of word"> Start
+              </label>
+              &nbsp;
+              <label class="checkbox">
+                <input type="checkbox" title="End of word"> End
+              </label>
+              <div style="display:table-cell">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{{/with}}
