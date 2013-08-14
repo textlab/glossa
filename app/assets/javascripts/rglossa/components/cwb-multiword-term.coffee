@@ -1,5 +1,8 @@
 App.CwbMultiwordTermComponent = Em.Component.extend
   classNames: ['table-cell']
 
+  addTerm: ->
+    @get('parentView').addTerm()
+
   removeTerm: ->
-    @get('multiwordController').removeTerm(@get('term'))
+    @get('parentView').removeTerm(@get('term'))

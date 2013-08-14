@@ -92,6 +92,15 @@ App.CwbMultiwordComponent = Em.Component.extend
 
     [min, max]
 
+
+  addTerm: ->
+    query = @get('query')
+    return unless query
+
+    query += ' ""'
+    @set('query', query)
+
+
   removeTerm: (term) ->
     newDQ = (t for t in @get('displayedQuery') when t isnt term)
 

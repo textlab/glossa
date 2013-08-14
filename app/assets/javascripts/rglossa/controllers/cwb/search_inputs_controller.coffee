@@ -27,14 +27,6 @@ App.CwbSearchInputsController = Em.ArrayController.extend
   showRegex:     -> @set('currentInterface', 'regex')
 
 
-  addWord: ->
-    query = @get('content')
-    return unless query
-
-    query += ' ""'
-    @set('content', query)
-
-
   search: (component, options = {}) ->
     options.queries = @get('content')
     @get('controllers.searches').createSearch('CwbSearch', options)
