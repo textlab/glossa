@@ -102,13 +102,12 @@ App.CwbMultiwordComponent = Em.Component.extend
 
 
   removeTerm: (term) ->
-    newDQ = (t for t in @get('displayedQuery') when t isnt term)
+    dq = @get('displayedQuery')
+    dq.removeObject(term)
 
     # If we removed the first term, we need to mark the new first term as being
     # first.
-    newDQ[0].set('isFirst', true) if term.isFirst
-
-    @set('displayedQuery', newDQ)
+    dq.objectAt(0).set('isFirst', true) if term.isFirst
 
 
   focusOut: -> @set('query', @_query)
@@ -116,4 +115,6 @@ App.CwbMultiwordComponent = Em.Component.extend
   action: 'search'
   search: ->
     @set('query', @_query)
-    @sendAction()
+    # Run on the next runloop to enable the change to propagate to the
+    # CwbSearchInputsController
+    Em.run.next => @sendAction()
