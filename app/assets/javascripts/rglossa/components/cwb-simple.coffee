@@ -25,8 +25,3 @@ App.CwbSimpleComponent = Em.Component.extend
   search: -> 
     @set('query', @_query)
     @sendAction()
-  
-  queryDidChange: (->
-    debugger
-    console.log @get('query')
-  ).observes('query')
