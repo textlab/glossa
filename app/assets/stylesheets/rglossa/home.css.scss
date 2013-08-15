@@ -71,6 +71,20 @@ h5.category-header {
   }
 }
 
+.pos-feature-heading {
+  padding: 2px 20px 7px 20px;
+  margin-top: 5px;
+  font-variant: small-caps;
+  font-size: 130%;
+  font-weight: bold;
+  color: #555;
+  background-color: #eee;
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+}
+
 .result-spinner {
   margin-top: 40px;
 }

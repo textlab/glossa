@@ -4,7 +4,7 @@
     <div style="display:table">
       <div style="display:table-row">
         {{#each term in displayedQuery}}
-          {{cwb-multiword-term multiwordController=this term=term}}
+          {{cwb-multiword-term multiwordController=this term=term tags=tags}}
         {{/each}}
         <div style="display:table-cell">
           <button type="submit" class="btn btn-success" data-search {{action search}}>Search</button>

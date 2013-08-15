@@ -1,0 +1,37 @@
+{
+  "description": "The Oslo Bergen Tagger for Norwegian bokmål",
+  "tags": [{
+    "name": "adjective",
+    "value": "adj",
+    "features": [{
+      "attr": "grad_dia",
+      "name": "degree",
+      "options": [{
+          "name": "positive",
+          "value": "pos"
+        }, {
+          "name": "comparative",
+          "value": "komp"
+        }, {
+          "name": "superlative",
+          "value": "sup"
+        }]
+    }, {
+      "attr": "kjonn",
+      "name": "gender",
+      "options": [{
+        "name": "feminine",
+        "value": "f"
+      }, {
+        "name": "feminine or masculine",
+        "value": "m/f"
+      }, {
+        "name": "masculine",
+        "value": "m"
+      }, {
+        "name": "neuter",
+        "value": "n"
+      }]
+    }]
+  }]
+}

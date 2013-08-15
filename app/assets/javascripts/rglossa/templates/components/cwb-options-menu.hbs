@@ -1,0 +1,30 @@
+{{#each tags}}
+  {{#if features}}
+    <li class="dropdown-submenu">
+      <a>{{name}}</a>
+      <ul class="dropdown-menu">
+        {{#each features}}
+          <li class="pos-feature-heading">{{name}}</li>
+          {{#each options}}
+            <li>
+              <a>{{name}}</a>
+            </li>
+          {{/each}}
+        {{/each}}
+      </ul>
+    </li>
+  {{else}}
+    <li>
+      <a>{{value}}</a>
+    </li>
+  {{/if}}
+{{/each}}
+<!--<li>-->
+  <!--<a {{action heidu}}>Adverb</a>-->
+<!--</li>-->
+<!--<li class="dropdown-submenu">-->
+  <!--<a>Adjective</a>-->
+  <!--<ul class="dropdown-menu">-->
+    <!--<li><a {{action heidu}}>definite</a></li>-->
+  <!--</ul>-->
+<!--</li>-->

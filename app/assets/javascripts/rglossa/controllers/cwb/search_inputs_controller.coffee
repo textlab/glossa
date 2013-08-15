@@ -1,12 +1,14 @@
 App.CwbSearchInputsController = Em.ArrayController.extend
   needs: ['corpus', 'searches']
 
+  corpusBinding: 'controllers.corpus.content'
+
   currentInterface: null
 
   init: ->
     # Show the preferred interface (simple, multiword or regex) for this user or corpus
     @set('currentInterface', @get('controllers.corpus.preferredSearchInterfaceVariant'))
-    @set('content', [Em.Object.create({query: '', corpusShortName: 'BOKMAL'})])
+    @set('content', [{query: '', corpusShortName: 'BOKMAL', tags: @get('corpus.langs.firstObject.tags')}])
 
   isShowingSimple: (->
     @get('currentInterface') is 'simple'
