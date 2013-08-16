@@ -21,6 +21,9 @@ gem "devise", "~> 2.2.3"
 
 gem "ember-source", github: "emberjs/ember.js"
 
+gem 'hirb'
+gem 'table_print'
+
 group :development do
   # Use thin instead of WEBrick in development
   gem 'thin'
