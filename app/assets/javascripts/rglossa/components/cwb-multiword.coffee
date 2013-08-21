@@ -21,8 +21,11 @@ App.CwbMultiwordComponent = Em.Component.extend
   # or a search action
   _query: null
 
-  didInsertElement: -> 
+  didInsertElement: ->
     @$().on 'focusout', '.ember-text-field', => @set('query', @_query)
+
+  willDestroyElement: ->
+    @$().off 'focusout'
 
   displayedQuery: (->
     @_query = @get('query')
