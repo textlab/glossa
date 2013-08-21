@@ -47,7 +47,7 @@ App.CwbMultiwordComponent = Em.Component.extend
     dq[0].isFirst = true
     dq[dq.length-1].isLast = true
     dq
-  ).property('query')
+  ).property()
 
 
   displayedQueryDidChange: (->
