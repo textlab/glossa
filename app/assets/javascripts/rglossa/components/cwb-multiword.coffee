@@ -118,6 +118,7 @@ App.CwbMultiwordComponent = Em.Component.extend
     # If we removed the first term, we need to mark the new first term as being
     # first.
     dq.objectAt(0).set('isFirst', true) if term.isFirst
+    dq.get('lastObject').set('isLast', true) if term.isLast
 
 
   action: 'search'
