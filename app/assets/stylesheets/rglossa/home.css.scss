@@ -136,6 +136,23 @@ h5.category-header {
   width: 75px;
 }
 
+// Override bootstrap-tags.css
+
+.multiword-term .tag-list {
+  left: 0;
+  top: 5px;
+  width: 170px;
+}
+
+.tag a {
+  color: white;
+  opacity: 0.8;
+}
+
+.tag.label {
+  line-height: 17px;
+}
+
  // Override bootstrap.css
 
 .form-inline input.multiword-field {

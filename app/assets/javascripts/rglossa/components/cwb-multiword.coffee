@@ -1,6 +1,8 @@
 # Helper object
 App.CwbMultiwordTerm = Em.Object.extend
   word:     null
+  pos:      null
+  features: []
   min:      null
   max:      null
 
@@ -76,6 +78,8 @@ App.CwbMultiwordComponent = Em.Component.extend
     # which leads to the input field that we are editing losing focus.
     @_query = terms.join(' ')
   ).observes('displayedQuery.@each.word',
+      'displayedQuery.@each.pos',
+      'displayedQuery.@each.features',
       'displayedQuery.@each.min',
       'displayedQuery.@each.max')
 

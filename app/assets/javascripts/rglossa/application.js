@@ -10,6 +10,7 @@
 //= require jquery-ui-1.10.0.custom
 //= require bootstrap-2.3.1/bootstrap
 //= require select2
+//= require bootstrap-tags
 //= require opentip-jquery-excanvas.min
 //= require spin.min
 //= require spin_helper

@@ -45,6 +45,13 @@
             </div>
           </div>
         </div>
+        <div style="display:table-row">
+          {{#unless term.isFirst}}
+          <div class="interval-filler" style="display:table-cell">
+          </div>
+          {{/unless}}
+          <div class="tag-list" data-term-tags><div class="tags"></div></div>
+        </div>
       </div>
     </div>
   </div>

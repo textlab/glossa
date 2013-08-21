@@ -1,13 +1,13 @@
-{{#each tags}}
-  {{#if features}}
+{{#each pos in tags}}
+  {{#if pos.features}}
     <li class="dropdown-submenu">
-      <a>{{name}}</a>
+    <a {{action addPos pos}}>{{pos.name}}</a>
       <ul class="dropdown-menu">
-        {{#each features}}
-          <li class="pos-feature-heading">{{name}}</li>
-          {{#each options}}
+        {{#each feature in pos.features}}
+          <li class="pos-feature-heading">{{feature.name}}</li>
+          {{#each option in feature.options}}
             <li>
-              <a>{{name}}</a>
+            <a {{action addFeature option pos}}>{{option.name}}</a>
             </li>
           {{/each}}
         {{/each}}
@@ -15,7 +15,7 @@
     </li>
   {{else}}
     <li>
-      <a>{{value}}</a>
+    <a {{action addPos pos}}>{{pos.name}}</a>
     </li>
   {{/if}}
 {{/each}}

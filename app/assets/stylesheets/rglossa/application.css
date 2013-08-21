@@ -6,6 +6,7 @@
  *= require bootstrap-2.3.1/bootstrap
  *= require font-awesome.min
  *= require select2
+ *= require bootstrap-tags
  *= require opentip
  *= require ./home
 */
