@@ -7,7 +7,7 @@ module Rglossa
     def run_queries
       # TODO: Handle several queries at once
       q = queries[0]
-      corpus = q['corpusShortName']
+      corpus = q['corpusShortName'].upcase
       query = q['query']
 
       # The query will be saved under a name composed of the name of the
@@ -47,7 +47,7 @@ module Rglossa
     # Returns a single page of results from CQP
     def get_result_page(page_no)
       q = queries[0]
-      corpus = q['corpusShortName']
+      corpus = q['corpusShortName'].upcase
       named_query = corpus + id.to_s
 
       # NOTE: page_no is 1-based while cqp uses 0-based numbering of hits
