@@ -94,11 +94,15 @@ App.CwbMultiwordComponent = Em.Component.extend
 
 
   addTerm: ->
-    query = @get('query')
-    return unless query
+    newTerm = App.CwbMultiwordTerm.create
+      word: ''
+      min: null
+      max: null
+      isLast: true
 
-    query += ' ""'
-    @set('query', query)
+    dq = @get('displayedQuery')
+    dq[dq.length-1].set('isLast', false)
+    dq.pushObject(newTerm)
 
 
   removeTerm: (term) ->
