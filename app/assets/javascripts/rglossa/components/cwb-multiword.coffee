@@ -62,15 +62,30 @@ App.CwbMultiwordComponent = Em.Component.extend
     displayedQuery = @get('displayedQuery')
 
     terms = for term in displayedQuery
-      min  = term.get('min')
-      max  = term.get('max')
-      word = term.get('word')
-      res  = []
+      min      = term.get('min')
+      max      = term.get('max')
+      word     = term.get('word')
+      pos      = term.get('pos')
+      features = term.get('features')
+      attrs    = []
+
+      if pos or features.length
+        if word
+          word = "(word=\"#{word}\" %c)"
+          attrs.push(word)
+
+        if pos
+          pos = "ordkl=\"#{pos.value}\""
+          attrs.push(pos)
+
+        str = '[' + attrs.join(' & ') + ']'
+      else
+        str = if word then "\"#{word}\"" else ''
 
       if min or max
-        res.push("[]{#{min ? ''},#{max ? ''}}")  # interval
-      res.push word.replace(/\S+/g, '"$&"')      # word
-      res.join(' ')
+        str = "[]{#{min ? ''},#{max ? ''}} " + str
+
+      str
 
     # Assign the query value to a private variable, which will not be
     # transferred to the query property until we recieve a focusOut event.
