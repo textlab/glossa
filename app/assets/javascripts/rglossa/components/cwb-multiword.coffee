@@ -21,6 +21,9 @@ App.CwbMultiwordComponent = Em.Component.extend
   # or a search action
   _query: null
 
+  didInsertElement: -> 
+    @$().on 'focusout', '.ember-text-field', => @set('query', @_query)
+
   displayedQuery: (->
     @_query = @get('query')
     query = @_splitQueryTerms()
@@ -113,8 +116,6 @@ App.CwbMultiwordComponent = Em.Component.extend
     # first.
     dq.objectAt(0).set('isFirst', true) if term.isFirst
 
-
-  focusOut: -> @set('query', @_query)
 
   action: 'search'
   search: ->
