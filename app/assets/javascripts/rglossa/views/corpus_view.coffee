@@ -16,7 +16,7 @@ App.CorpusView = Em.View.extend
       @$().on('click', @hideSidebarSelector, @hideSidebar)
 
 
-  willRemoveElement: ->
+  willDestroyElement: ->
     @$().off('click', @hideSidebarSelector, @hideSidebar)
     @$().off('click', '#show-criteria-button, #new-search-button', @showSidebar)
 
