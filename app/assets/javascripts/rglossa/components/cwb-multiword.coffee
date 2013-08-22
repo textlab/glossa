@@ -41,15 +41,9 @@ App.CwbMultiwordComponent = Em.Component.extend
       if m = item.match(/\[\]\{(.+)\}/)
         [min, max] = @_handleIntervalSpecification(m)
       else if m = item.match(/\[(.+)\]/) 
-        attributes = m[1].split(/\s*&\s*/)
-        term = App.CwbMultiwordTerm.create()
-        for attr in attributes
-          m2 = attr.match(/(\S+)\s*=\s*"(\S+)"/) 
-          switch m2[1]
-            when 'word' then term.set('word',  m2[2])
-            when 'pos'  then term.set('ordkl', m2[2])
-            else term.set(m2[1], m2[2])
-        dq.push term
+        dq.push @_handleAttributes(m, min, max)
+        min = null
+        max = null
       else
         dq.push App.CwbMultiwordTerm.create
           word: item.substring(1, item.length-1)
@@ -128,6 +122,20 @@ App.CwbMultiwordComponent = Em.Component.extend
 
     [min, max]
 
+
+  _handleAttributes: (m, min, max) ->
+    attributes = m[1].split(/\s*&\s*/)
+    term = App.CwbMultiwordTerm.create
+      min: min
+      max: max
+
+    for attr in attributes
+      m2 = attr.match(/(\S+)\s*=\s*"(\S+)"/) 
+      switch m2[1]
+        when 'word' then term.set('word',  m2[2])
+        when 'pos'  then term.set('ordkl', m2[2])
+        else term.set(m2[1], m2[2])
+    term
 
   addTerm: ->
     newTerm = App.CwbMultiwordTerm.create
