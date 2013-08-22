@@ -1,6 +1,9 @@
 App.CwbMultiwordTermComponent = Em.Component.extend
   classNames: ['table-cell']
 
+  didInsertElement: ->
+    @get('tagsInput').addTag(term.name) for term in @get('term.features')
+
   tagsInput: (->
     unless @_tagsInput
       @_tagsInput = @$('[data-term-tags]').tags(
@@ -23,7 +26,11 @@ App.CwbMultiwordTermComponent = Em.Component.extend
     @get('tagsInput').addTag(pos.name)
 
   addFeature: (option, feature, pos) ->
-    @get('term.features').pushObject(attr: feature.attr, value: option.value)
+    @get('term.features').pushObject
+      attr: feature.attr
+      name: option.name
+      value: option.value
+
     @get('tagsInput').addTag(option.name)
 
     # TODO: Figure out why observing the features array doesn't work so that we

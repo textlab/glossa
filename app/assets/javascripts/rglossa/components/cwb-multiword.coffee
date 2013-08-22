@@ -38,12 +38,21 @@ App.CwbMultiwordComponent = Em.Component.extend
     max = null
 
     query.forEach (item) =>
-      m = item.match(/\[\]\{(.+)\}/)
-      if m
+      if m = item.match(/\[\]\{(.+)\}/)
         [min, max] = @_handleIntervalSpecification(m)
+      else if m = item.match(/\[(.+)\]/) 
+        attributes = m[1].split(/\s*&\s*/)
+        term = App.CwbMultiwordTerm.create()
+        for attr in attributes
+          m2 = attr.match(/(\S+)\s*=\s*"(\S+)"/) 
+          switch m2[1]
+            when 'word' then term.set('word',  m2[2])
+            when 'pos'  then term.set('ordkl', m2[2])
+            else term.set(m2[1], m2[2])
+        dq.push term
       else
         dq.push App.CwbMultiwordTerm.create
-          word: item
+          word: item.substring(1, item.length-1)
           min: min
           max: max
 
@@ -98,15 +107,13 @@ App.CwbMultiwordComponent = Em.Component.extend
     @_query = terms.join(' ')
   ).observes('displayedQuery.@each.word',
       'displayedQuery.@each.pos',
-      'displayedQuery.@each.features',
       'displayedQuery.@each.min',
       'displayedQuery.@each.max')
 
 
   _splitQueryTerms: ->
     query = @get('query')
-    query = query.replace(/"(.*?)"/g, '$1')
-    query.split(/\s+/)
+    query.match(/"[^"\s]+"|\[[^\]]+\]/g) or ['']
 
 
   _handleIntervalSpecification: (m) ->
