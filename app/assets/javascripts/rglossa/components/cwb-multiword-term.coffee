@@ -22,6 +22,10 @@ App.CwbMultiwordTermComponent = Em.Component.extend
     @set('term.pos', pos)
     @get('tagsInput').addTag(pos.name)
 
-  addFeature: (feature, pos) ->
-    @get('term.features').pushObject(feature.value)
-    @get('tagsInput').addTag(feature.name)
+  addFeature: (option, feature, pos) ->
+    @get('term.features').pushObject(attr: feature.attr, value: option.value)
+    @get('tagsInput').addTag(option.name)
+
+    # TODO: Figure out why observing the features array doesn't work so that we
+    # have to do this manually
+    @get('parentView').displayedQueryDidChange()

@@ -4,5 +4,5 @@ App.CwbOptionsMenuComponent = Em.Component.extend
 
   addPos: (pos) -> @get('parentView').addPos(pos)
 
-  addFeature: (feature, pos) ->
-    @get('parentView').addFeature(feature, pos)
+  addFeature: (option, feature, pos) ->
+    @get('parentView').addFeature(option, feature, pos)

@@ -78,6 +78,10 @@ App.CwbMultiwordComponent = Em.Component.extend
           pos = "ordkl=\"#{pos.value}\""
           attrs.push(pos)
 
+        for feature in features
+          f = "#{feature.attr}=\"#{feature.value}\""
+          attrs.push(f)
+
         str = '[' + attrs.join(' & ') + ']'
       else
         str = if word then "\"#{word}\"" else ''
