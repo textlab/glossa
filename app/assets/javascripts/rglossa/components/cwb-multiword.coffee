@@ -24,7 +24,7 @@ App.CwbMultiwordComponent = Em.Component.extend
   _query: null
 
   didInsertElement: ->
-    @$().on 'focusout', '.ember-text-field', => @set('query', @_query)
+    @$().on 'focusout', '.ember-text-field', $.proxy(@updateQuery, @)
 
   willDestroyElement: ->
     @$().off 'focusout'
@@ -137,6 +137,8 @@ App.CwbMultiwordComponent = Em.Component.extend
         else term.get('features').pushObject(attr: m2[1], value: m2[2])
     term
 
+  updateQuery: -> @set('query', @_query)
+
   addTerm: ->
     newTerm = App.CwbMultiwordTerm.create
       features: []
@@ -159,7 +161,7 @@ App.CwbMultiwordComponent = Em.Component.extend
 
   action: 'search'
   search: ->
-    @set('query', @_query)
+    @updateQuery()
     # Run on the next runloop to enable the change to propagate to the
     # CwbSearchInputsController
     Em.run.next => @sendAction()

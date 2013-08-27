@@ -8,6 +8,7 @@ App.CwbMultiwordTermComponent = Em.Component.extend
     unless @_tagsInput
       @_tagsInput = @$('[data-term-tags]').tags(
         promptText: ' '
+        afterDeletingTag: $.proxy(@_onTagRemoved, @)
       )
       pos = @get('term.pos.name')
       @_tagsInput.addTag(pos) if pos
@@ -34,4 +35,26 @@ App.CwbMultiwordTermComponent = Em.Component.extend
 
     # TODO: Figure out why observing the features array doesn't work so that we
     # have to do this manually
-    @get('parentView').displayedQueryDidChange()
+    parentView = @get('parentView')
+    parentView.displayedQueryDidChange()
+    parentView.updateQuery()
+
+
+  # Called after a tag has been removed from the tag list. We need to remove
+  # the tag from the term object as well.
+  _onTagRemoved: (tag) ->
+    if tag is @get('term.pos.name')
+      @set('term.pos', null)
+    else
+      features = @get('term.features')
+      for feature in features
+        if feature.value is tag
+          features.removeObject(feature)
+          #
+          # TODO: Figure out why observing the features array doesn't work so that we
+          # have to do this manually
+          parentView = @get('parentView')
+          parentView.displayedQueryDidChange()
+          parentView.updateQuery()
+
+          break
