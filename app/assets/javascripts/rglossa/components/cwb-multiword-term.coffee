@@ -10,9 +10,6 @@ App.CwbMultiwordTermComponent = Em.Component.extend
         promptText: ' '
         afterDeletingTag: $.proxy(@_onTagRemoved, @)
       )
-      pos = @get('term.pos.name')
-      @_tagsInput.addTag(pos) if pos
-
     @_tagsInput
   ).property()
 
@@ -24,7 +21,7 @@ App.CwbMultiwordTermComponent = Em.Component.extend
 
   addPos: (pos) ->
     @set('term.pos', pos)
-    @get('tagsInput').addTag(pos.name)
+    @get('tagsInput').addTag(pos.value)
 
   addFeature: (option, feature, pos) ->
     @get('term.features').pushObject
