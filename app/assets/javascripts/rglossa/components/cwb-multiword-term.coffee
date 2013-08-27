@@ -24,6 +24,7 @@ App.CwbMultiwordTermComponent = Em.Component.extend
   addPos: (pos) ->
     @set('term.pos', pos)
     @get('tagsInput').addTag(pos.value)
+    @get('parentView').updateQuery()
 
   addFeature: (option, feature, pos) ->
     @get('term.features').pushObject
@@ -54,6 +55,6 @@ App.CwbMultiwordTermComponent = Em.Component.extend
           # have to do this manually
           parentView = @get('parentView')
           parentView.displayedQueryDidChange()
-          parentView.updateQuery()
 
           break
+    parentView.updateQuery()
