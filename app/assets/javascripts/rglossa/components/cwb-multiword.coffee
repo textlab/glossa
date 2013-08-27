@@ -1,8 +1,8 @@
 # Helper object
 App.CwbMultiwordTerm = Em.Object.extend
-  word:     null
+  word:     ''
   pos:      null
-  features: []
+  features: null
   min:      null
   max:      null
 
@@ -47,8 +47,7 @@ App.CwbMultiwordComponent = Em.Component.extend
       else
         dq.push App.CwbMultiwordTerm.create
           word: item.substring(1, item.length-1)
-          min: min
-          max: max
+          features: []
 
         min = null
         max = null
@@ -139,9 +138,7 @@ App.CwbMultiwordComponent = Em.Component.extend
 
   addTerm: ->
     newTerm = App.CwbMultiwordTerm.create
-      word: ''
-      min: null
-      max: null
+      features: []
       isLast: true
 
     dq = @get('displayedQuery')
