@@ -127,13 +127,14 @@ App.CwbMultiwordComponent = Em.Component.extend
     term = App.CwbMultiwordTerm.create
       min: min
       max: max
+      features: []
 
     for attr in attributes
-      m2 = attr.match(/(\S+)\s*=\s*"(\S+)"/) 
+      m2 = attr.match(/\(?(\S+)\s*=\s*"(\S+)"/) 
       switch m2[1]
         when 'word' then term.set('word',  m2[2])
         when 'pos'  then term.set('ordkl', m2[2])
-        else term.set(m2[1], m2[2])
+        else term.get('features').pushObject(attr: m2[1], value: m2[2])
     term
 
   addTerm: ->
