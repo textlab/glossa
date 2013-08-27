@@ -42,7 +42,7 @@ App.CwbMultiwordTermComponent = Em.Component.extend
   # Called after a tag has been removed from the tag list. We need to remove
   # the tag from the term object as well.
   _onTagRemoved: (tag) ->
-    if tag is @get('term.pos.name')
+    if tag is @get('term.pos.value')
       @set('term.pos', null)
     else
       features = @get('term.features')
