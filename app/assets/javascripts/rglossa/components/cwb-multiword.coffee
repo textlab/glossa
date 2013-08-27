@@ -147,6 +147,7 @@ App.CwbMultiwordComponent = Em.Component.extend
     dq = @get('displayedQuery')
     dq[dq.length-1].set('isLast', false)
     dq.pushObject(newTerm)
+    @updateQuery()
 
 
   removeTerm: (term) ->
@@ -159,6 +160,7 @@ App.CwbMultiwordComponent = Em.Component.extend
     # first.
     dq.objectAt(0).set('isFirst', true) if term.isFirst
     dq.get('lastObject').set('isLast', true) if term.isLast
+    @updateQuery()
 
 
   action: 'search'
