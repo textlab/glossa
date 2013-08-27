@@ -1,6 +1,8 @@
 App.CwbMultiwordTermComponent = Em.Component.extend
   classNames: ['table-cell']
 
+  queryHasSingleTerm: Em.computed.equal('parentView.displayedQuery.length', 1)
+
   didInsertElement: ->
     @get('tagsInput').addTag(term.value) for term in @get('term.features')
 

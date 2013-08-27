@@ -156,7 +156,11 @@ h5.category-header {
  // Override bootstrap.css
 
 .form-inline input.multiword-field {
-  width: 108px;
+  width: 131px;
+
+  &.removable {
+    width: 108px;
+  }
 }
 
 .pagination {

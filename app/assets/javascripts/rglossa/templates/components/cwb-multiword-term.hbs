@@ -12,8 +12,10 @@
           {{/unless}}
           <div class="input-prepend input-append word dropdown">
             <span data-toggle="dropdown" class="add-on dropdown-toggle" style="cursor:pointer"><i class="icon-cog"></i></span>
-            {{view Em.TextField class="searchfield multiword-field" valueBinding="term.word"}}
-            <span class="add-on" title="Remove word" style="cursor:pointer" {{action removeTerm this}}><i class="icon-minus"></i></span>
+            {{view Em.TextField class="searchfield multiword-field" classBinding="queryHasSingleTerm::removable" valueBinding="term.word"}}
+            {{#unless queryHasSingleTerm}}
+              <span class="add-on" title="Remove word" style="cursor:pointer" {{action removeTerm this}}><i class="icon-minus"></i></span>
+            {{/unless}}
             {{cwb-options-menu tags=tags}}
           </div>
           {{#if term.isLast}}

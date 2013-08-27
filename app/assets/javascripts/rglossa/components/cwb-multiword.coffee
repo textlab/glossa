@@ -151,6 +151,8 @@ App.CwbMultiwordComponent = Em.Component.extend
 
   removeTerm: (term) ->
     dq = @get('displayedQuery')
+    return unless dq.get('length') > 1 # must contain at least one term
+
     dq.removeObject(term)
 
     # If we removed the first term, we need to mark the new first term as being
