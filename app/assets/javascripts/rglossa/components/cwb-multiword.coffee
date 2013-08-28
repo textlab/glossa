@@ -6,6 +6,8 @@ App.CwbMultiwordTerm = Em.Object.extend
   min:      null
   max:      null
 
+  isLemma: false
+
   isFirst:  false
   isLast:   false
 
@@ -67,13 +69,15 @@ App.CwbMultiwordComponent = Em.Component.extend
       min      = term.get('min')
       max      = term.get('max')
       word     = term.get('word')
+      isLemma  = term.get('isLemma')
       pos      = term.get('pos')
       features = term.get('features')
       attrs    = []
 
-      if pos or features.length
+      if isLemma or pos or features.length
         if word
-          word = "(word=\"#{word}\" %c)"
+          attr = if isLemma then 'lemma' else 'word'
+          word = "(#{attr}=\"#{word}\" %c)"
           attrs.push(word)
 
         if pos
@@ -86,6 +90,7 @@ App.CwbMultiwordComponent = Em.Component.extend
 
         str = '[' + attrs.join(' & ') + ']'
       else
+        # Only the word attribute is specified, so use a simple string
         str = if word then "\"#{word}\"" else ''
 
       if min or max
@@ -101,7 +106,8 @@ App.CwbMultiwordComponent = Em.Component.extend
   ).observes('displayedQuery.@each.word',
       'displayedQuery.@each.pos',
       'displayedQuery.@each.min',
-      'displayedQuery.@each.max')
+      'displayedQuery.@each.max',
+      'displayedQuery.@each.isLemma')
 
 
   _splitQueryTerms: ->
@@ -132,8 +138,11 @@ App.CwbMultiwordComponent = Em.Component.extend
     for attr in attributes
       m2 = attr.match(/\(?(\S+)\s*=\s*"(\S+)"/) 
       switch m2[1]
-        when 'word' then term.set('word',  m2[2])
-        when 'pos'  then term.set('ordkl', m2[2])
+        when 'word'  then term.set('word',  m2[2])
+        when 'lemma'
+          term.set('word',  m2[2])
+          term.set('isLemma', true)
+        when 'pos'   then term.set('ordkl', m2[2])
         else term.get('features').pushObject(attr: m2[1], value: m2[2])
     term
 

@@ -15,6 +15,15 @@ App.CwbMultiwordTermComponent = Em.Component.extend
     @_tagsInput
   ).property()
 
+  isLemma: ((key, value) ->
+    if value?
+      @set('term.isLemma', value) 
+      parentView = @get('parentView')
+      parentView.displayedQueryDidChange()
+      parentView.updateQuery()
+    @get('term.isLemma')
+  ).property('term.isLemma')
+
   addTerm: ->
     @get('parentView').addTerm()
 
