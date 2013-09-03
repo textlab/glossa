@@ -6,7 +6,7 @@ module Rglossa
 
     protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
-    before_filter :authenticate_user!
+    # before_filter :authenticate_user!
 
     ########
     private
