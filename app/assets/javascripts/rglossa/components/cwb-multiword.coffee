@@ -7,6 +7,8 @@ App.CwbMultiwordTerm = Em.Object.extend
   max:      null
 
   isLemma: false
+  isStart: false
+  isEnd:   false
 
   isFirst:  false
   isLast:   false
@@ -42,14 +44,21 @@ App.CwbMultiwordComponent = Em.Component.extend
     query.forEach (item) =>
       if m = item.match(/\[\]\{(.+)\}/)
         [min, max] = @_handleIntervalSpecification(m)
-      else if m = item.match(/\[(.+)\]/) 
+      else if m = item.match(/\[(.+)\]/)
         dq.push @_handleAttributes(m, min, max)
         min = null
         max = null
       else
+        word    = item.substring(1, item.length-1)
+        isStart = /\.\+$/.test(word)
+        isEnd   = /^\.\+/.test(word)
+        word = word.replace(/^(?:\.\+)?(.+?)/, "$1").replace(/(.+?)(?:\.\+)?$/, "$1")
+
         dq.push App.CwbMultiwordTerm.create
-          word: item.substring(1, item.length-1)
+          word:     word
           features: []
+          isStart:  isStart
+          isEnd:    isEnd
 
         min = null
         max = null
@@ -70,6 +79,8 @@ App.CwbMultiwordComponent = Em.Component.extend
       max      = term.get('max')
       word     = term.get('word')
       isLemma  = term.get('isLemma')
+      isStart  = term.get('isStart')
+      isEnd    = term.get('isEnd')
       pos      = term.get('pos')
       features = term.get('features')
       attrs    = []
@@ -77,6 +88,8 @@ App.CwbMultiwordComponent = Em.Component.extend
       if isLemma or pos or features.length
         if word
           attr = if isLemma then 'lemma' else 'word'
+          word = "#{word}.+" if isStart
+          word = ".+#{word}" if isEnd
           word = "(#{attr}=\"#{word}\" %c)"
           attrs.push(word)
 
@@ -91,8 +104,11 @@ App.CwbMultiwordComponent = Em.Component.extend
         str = '[' + attrs.join(' & ') + ']'
       else
         # Only the word attribute is specified, so use a simple string
-        str = if word then "\"#{word}\"" else ''
-
+        str = if word
+          word = "#{word}.+" if isStart
+          word = ".+#{word}" if isEnd
+          "\"#{word}\""
+        else ''
       if min or max
         str = "[]{#{min ? ''},#{max ? ''}} " + str
 
@@ -136,14 +152,18 @@ App.CwbMultiwordComponent = Em.Component.extend
       features: []
 
     for attr in attributes
-      m2 = attr.match(/\(?(\S+)\s*=\s*"(\S+)"/) 
+      m2 = attr.match(/\(?(\S+)\s*=\s*"(\S+)"/)
       switch m2[1]
-        when 'word'  then term.set('word',  m2[2])
-        when 'lemma'
-          term.set('word',  m2[2])
-          term.set('isLemma', true)
-        when 'pos'   then term.set('ordkl', m2[2])
+        when 'word', 'lemma'
+          term.set('word',    m2[2])
+          term.set('isLemma', m2[1] is 'lemma')
+          term.set('isStart', /\.\+$/.test(m2[2]))
+          term.set('isEnd',   /^\.\+/.test(m2[2]))
+        when 'pos' then term.set('ordkl', m2[2])
         else term.get('features').pushObject(attr: m2[1], value: m2[2])
+
+      # Remove any .+ at the beginning and/or end of the displayed form
+      term.set('word', term.get('word').replace(/^(?:\.\+)?(.+?)/, "$1").replace(/(.+?)(?:\.\+)?$/, "$1"))
     term
 
   updateQuery: -> @set('query', @_query)

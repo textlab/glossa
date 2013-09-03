@@ -17,12 +17,30 @@ App.CwbMultiwordTermComponent = Em.Component.extend
 
   isLemma: ((key, value) ->
     if value?
-      @set('term.isLemma', value) 
+      @set('term.isLemma', value)
       parentView = @get('parentView')
       parentView.displayedQueryDidChange()
       parentView.updateQuery()
     @get('term.isLemma')
   ).property('term.isLemma')
+
+  isStart: ((key, value) ->
+    if value?
+      @set('term.isStart', value)
+      parentView = @get('parentView')
+      parentView.displayedQueryDidChange()
+      parentView.updateQuery()
+    @get('term.isStart')
+  ).property('term.isStart')
+
+  isEnd: ((key, value) ->
+    if value?
+      @set('term.isEnd', value)
+      parentView = @get('parentView')
+      parentView.displayedQueryDidChange()
+      parentView.updateQuery()
+    @get('term.isEnd')
+  ).property('term.isEnd')
 
   addTerm: ->
     @get('parentView').addTerm()
