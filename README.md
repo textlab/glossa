@@ -28,7 +28,7 @@ Set this version to be your default Ruby version:
 
 With Ruby and Rails installed, it is time to create a new Rails application using the application template that we provide for RGlossa. You can name the application anything you want, but *glossa* is probably a good name:
 
-    rails new glossa -m http://raw.github.com/textlab/rglossa/blob/master/app_template.rb
+    rails new glossa -m https://raw.github.com/textlab/rglossa/master/app_template.rb
 
 Alternatively, you may already have a Rails application and want to make RGlossa part of that. Since RGlossa is implemented as a Rails engine, this can easily be achieved by mounting RGlossa at some subpath within the application. See the [wiki](http://github.com/textlab/rglossa/wiki) for more information.
 
