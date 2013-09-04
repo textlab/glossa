@@ -26,6 +26,8 @@ route "mount Rglossa::Engine => '/'"
 
 rake("railties:install:migrations")
 
+rake("rglossa:install:thor")
+
 install_devise
 
 rake("db:migrate")
