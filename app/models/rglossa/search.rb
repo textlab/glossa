@@ -1,5 +1,7 @@
 module Rglossa
   class Search < ActiveRecord::Base
+    attr_accessible :queries, :metadata_value_ids, :num_hits, :max_hits
+
     belongs_to :user
     has_many :deleted_hits, dependent: :destroy
 
