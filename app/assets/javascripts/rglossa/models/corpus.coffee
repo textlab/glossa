@@ -3,5 +3,6 @@ App.Corpus = DS.Model.extend
   logo: DS.attr('string')
   shortName: DS.attr('string')
   langs: DS.attr('array')
+  searchEngine: DS.attr('string')
 
   metadataCategories: DS.hasMany('App.MetadataCategory')
