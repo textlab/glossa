@@ -4,5 +4,3 @@ App.CwbSearchResult = DS.Model.extend
   leftContext:  DS.attr('string')
   match:        DS.attr('string')
   rightContext: DS.attr('string')
-
-  page: DS.belongsTo('App.CwbSearchResultPage')
