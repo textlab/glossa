@@ -155,6 +155,10 @@ h5.category-header {
 
  // Override bootstrap.css
 
+.row-fluid script:first-child + [class*="span"] {
+  margin-left: 0;
+}
+
 .form-inline input.multiword-field {
   width: 131px;
 

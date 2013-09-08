@@ -8,17 +8,20 @@ App.CorpusView = Em.View.extend
   didInsertElement: ->
     @determineHideSidebarSelector()
     @$().on('click', @hideSidebarSelector, @hideSidebar)
-    @$().on('click', '#show-criteria-button, #new-search-button', @showSidebar)
+
+    if @get('controller.metadataCategories.length')
+      @$().on('click', '#show-criteria-button, #new-search-button', @showSidebar)
 
     $(window).resize =>
       @$().off('click', @hideSidebarSelector, @hideSidebar)
       @determineHideSidebarSelector()
       @$().on('click', @hideSidebarSelector, @hideSidebar)
 
-
   willDestroyElement: ->
     @$().off('click', @hideSidebarSelector, @hideSidebar)
-    @$().off('click', '#show-criteria-button, #new-search-button', @showSidebar)
+
+    if @get('controller.metadataCategories.length')
+      @$().off('click', '#show-criteria-button, #new-search-button', @showSidebar)
 
 
   determineHideSidebarSelector: ->
