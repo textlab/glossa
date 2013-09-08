@@ -71,13 +71,14 @@ module Rglossa
       ########
 
       def run_cqp_commands(commands)
-        Tempfile.open('cqp') do |command_file|
+        corpus = Corpus.find_by_short_name(queries[0]['corpusShortName'].downcase)
+        encoding = corpus.encoding
+
+        Tempfile.open('cqp', encoding: encoding) do |command_file|
           commands.map! { |cmd| cmd.end_with?(';') ? cmd : cmd + ';' }
           command_file.puts commands
           command_file.rewind
 
-          corpus = Corpus.find_by_short_name(queries[0]['corpusShortName'].downcase)
-          encoding = corpus.encoding
           output_file = open("| cqp -c -f#{command_file.path}", external_encoding: encoding)
           output_file.readline  # throw away the first line with the CQP version
 
