@@ -27,11 +27,11 @@ module Rglossa
 
           render json: {
               corpus: @corpus.as_json(
-                  only: [:id, :name, :short_name],
+                  only: [:id, :name, :logo, :short_name],
                   methods: [:metadata_category_ids, :langs]
               ),
               metadata_categories: @metadata_categories.as_json(
-                  only: [:id, :name, :short_name]
+                  only: [:id, :name, :logo, :short_name]
               )
           }
         end
