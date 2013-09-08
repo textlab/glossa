@@ -45,7 +45,7 @@ module Rglossa
 
 
     # Returns a single page of results from CQP
-    def get_result_page(page_no)
+    def get_result_page(page_no, extra_attributes=['lemma', 'ordkl', 'type'])
       q = queries[0]
       corpus = q['corpusShortName'].upcase
       named_query = corpus + id.to_s
@@ -57,10 +57,11 @@ module Rglossa
         %Q{set DataDirectory "#{Dir.tmpdir}"},
         corpus,  # necessary for "set PrintStructures to work"...
         "set Context s",
-        "set PrintStructures s_id",
-        "show +lemma +ordkl +type",
-        "cat #{named_query} #{start} #{stop}"
-      ]
+        "set PrintStructures s_id"]
+      if extra_attributes.present?
+        commands << "show " + extra_attributes.map { |a| "+#{a}" }.join(' ')
+      end
+      commands << "cat #{named_query} #{start} #{stop}"
       run_cqp_commands(commands).split("\n")
     end
 
