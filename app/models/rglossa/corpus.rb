@@ -21,7 +21,11 @@ module Rglossa
     end
 
     def langs
-      languages.map { |l| {lang: l[:lang], tags: Rglossa.taggers[l[:tagger].to_s]['tags']} }
+      if languages
+        languages.map { |l| {lang: l[:lang], tags: Rglossa.taggers[l[:tagger].to_s]['tags']} }
+      else
+        []
+      end
     end
 
     # This lets us specify a value_type of 'text', 'integer' etc. when we add a metadata category
