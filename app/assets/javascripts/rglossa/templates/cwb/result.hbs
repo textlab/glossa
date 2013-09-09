@@ -4,3 +4,23 @@
 
 {{render "cwb/result/toolbar"}}
 {{render "cwb/result/table"}}
+
+<div id="frequencies-modal" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Frequencies</h3>
+  </div>
+  <div class="modal-body">
+    <table class="table table-striped">
+    {{#each controller}}
+      <tr>
+      <td>{{form}}</td>
+      <td>{{freq}}</td>
+      </tr>
+    {{/each}}
+    </table>
+  </div>
+  <div class="modal-footer">
+    <a class="btn" data-dismiss="modal">Close</a>
+  </div>
+</div>
