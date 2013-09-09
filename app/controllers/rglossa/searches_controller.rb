@@ -28,11 +28,20 @@ module Rglossa
 
       respond_to do |format|
         format.any(:json, :xml) do
-          render request.format.to_sym =>
-            @search.to_json(
-              root: true,
-              only: [:id, :num_hits, :max_hits],
-              methods: :first_two_result_pages)
+          # With certain search engines, the number of hits is not determined
+          # until we actually fetch a result page, so we do that explicitly
+          # before creating the response
+          pages = @search.first_two_result_pages
+          root = @search.class.to_s.demodulize.underscore
+          s = {}
+          s[root] = {
+              id: @search.id,
+              num_hits: @search.num_hits,
+              max_hits: @search.max_hits,
+              first_two_result_pages: pages
+            }
+
+          render request.format.to_sym => s.to_json
         end
       end
     end
