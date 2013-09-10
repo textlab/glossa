@@ -4,7 +4,9 @@
     <a {{action addPos pos}}>{{pos.name}}</a>
       <ul class="dropdown-menu">
         {{#each feature in pos.features}}
+          {{#if feature.name}}
           <li class="pos-feature-heading">{{feature.name}}</li>
+          {{/if}}
           {{#each option in feature.options}}
             <li>
             <a {{action addFeature option feature pos}}>{{option.name}}</a>
