@@ -30,7 +30,26 @@ With Ruby and Rails installed, it is time to create a new Rails application usin
 
     rails new glossa -m https://raw.github.com/textlab/rglossa/master/app_template.rb
 
-Alternatively, you may already have a Rails application and want to make RGlossa part of that. Since RGlossa is implemented as a Rails engine, this can easily be achieved by mounting RGlossa at some subpath within the application. See the [wiki](http://github.com/textlab/rglossa/wiki) for more information.
+If you are getting the following message:
+
+    You passed :github as an option for gem 'rglossa', but it is invalid.
+
+you need to update the *bundler* gem:
+
+    gem install bundler
+
+Also, if you are using an old version of Rails, you may get the following message:
+
+    Bundler could not find compatible versions for gem "rails"
+      In Gemfile:
+        rglossa (>= 0) ruby depends on
+          rails (~> 3.2.14) ruby
+
+In that case, please install the version of the *rails* gem that is mentioned in the error message, e.g.:
+
+    gem install rails -v3.2.14
+
+As an alternative to creating a new application, you may already have a Rails application and want to make RGlossa part of that. Since RGlossa is implemented as a Rails engine, this can easily be achieved by mounting RGlossa at some subpath within the application. See the [wiki](http://github.com/textlab/rglossa/wiki) for more information.
 
 ### Optionally install R
 
