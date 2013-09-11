@@ -8,7 +8,10 @@ App.Adapter = DS.RESTAdapter.extend
 
   buildURL: (record, suffix) ->
     url = @_super(record, suffix)
-    url = "/search_engines#{url}" unless record.search(/_search$/) is -1
+    unless record.search(/_search$/) is -1
+      parts = url.split('/')
+      lastElm = parts.length - 1
+      url = parts[0...lastElm].join('/') + '/search_engines/' + parts[lastElm]
     url
 
 
