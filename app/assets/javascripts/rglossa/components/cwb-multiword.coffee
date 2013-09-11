@@ -57,6 +57,8 @@ App.CwbMultiwordComponent = Em.Component.extend
         dq.push App.CwbMultiwordTerm.create
           word:     word
           features: []
+          min:      min
+          max:      max
           isStart:  isStart
           isEnd:    isEnd
 
@@ -128,7 +130,7 @@ App.CwbMultiwordComponent = Em.Component.extend
 
   _splitQueryTerms: ->
     query = @get('query')
-    query.match(/"[^"\s]+"|\[[^\]]+\]/g) or ['']
+    query.match(/\[\]\{(.+)\}|"[^"\s]+"|\[[^\]]+\]/g) or ['']
 
 
   _handleIntervalSpecification: (m) ->
