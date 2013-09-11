@@ -7,7 +7,8 @@ App.CwbResultToolbarController = App.ResultToolbarController.extend
 
   showStatistics: ->
     query = @get('controllers.cwbSearchInputs.firstObject')
-    req = $.getJSON 'r/search_engines/cwb/query_freq',
+    namespace = DS.RESTAdapter.prototype.namespace
+    req = $.getJSON (if namespace then namespace + '/' else '') + 'r/search_engines/cwb/query_freq',
       { query: query.query, corpus: query.corpusShortName }
 
     req.done (data) =>
