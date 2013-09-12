@@ -9,6 +9,23 @@
         "value": "adj",
         "features": [
           {
+            "attr": "type",
+            "options": [
+              {
+                "name": "ordinal",
+                "value": "ordenstall"
+              },
+              {
+                "name": "perfect participle",
+                "value": "perf-part"
+              },
+              {
+                "name": "present participle",
+                "value": "pres-part"
+              }
+            ]
+          },
+          {
             "attr": "grad_dia",
             "name": "degree",
             "options": [
@@ -45,6 +62,378 @@
               {
                 "name": "neuter",
                 "value": "n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "adverb",
+        "value": "adv"
+      },
+      {
+        "name": "determiner",
+        "value": "det",
+        "features": [
+          {
+            "attr": "type",
+            "options": [
+              {
+                "name": "demonstrative",
+                "value": "dem"
+              },
+              {
+                "name": "forsterkende",
+                "value": "forst"
+              },
+              {
+                "name": "present participle",
+                "value": "pres-part"
+              },
+              {
+                "name": "polite",
+                "value": "hfl"
+              },
+              {
+                "name": "quantifier",
+                "value": "kvant"
+              },
+              {
+                "name": "possessive",
+                "value": "poss"
+              },
+              {
+                "name": "roman number",
+                "value": "romertall"
+              },
+              {
+                "name": "interrogative",
+                "value": "spm"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "infinitive marker",
+        "value": "infmerke"
+      },
+      {
+        "name": "interjection",
+        "value": "interj"
+      },
+      {
+        "name": "conjunction",
+        "value": "konj"
+      },
+      {
+        "name": "preposition",
+        "value": "prep"
+      },
+      {
+        "name": "pronoun",
+        "value": "pron",
+        "features": [
+          {
+            "attr": "type",
+            "options": [
+              {
+                "name": "human",
+                "value": "hum"
+              },
+              {
+                "name": "polite",
+                "value": "hfl"
+              },
+              {
+                "name": "personal",
+                "value": "pers"
+              },
+              {
+                "name": "reflexive",
+                "value": "refl"
+              },
+              {
+                "name": "reciprocal",
+                "value": "resip"
+              },
+              {
+                "name": "interrogative",
+                "value": "spm"
+              }
+            ]
+          },
+          {
+            "attr": "modus_kasus",
+            "name": "case",
+            "options": [
+              {
+                "name": "accusative",
+                "value": "akk"
+              },
+              {
+                "name": "genitive",
+                "value": "gen"
+              },
+              {
+                "name": "nominative",
+                "value": "nom"
+              }
+            ]
+          },
+          {
+            "attr": "person_type2",
+            "name": "person",
+            "options": [
+              {
+                "name": "1st person",
+                "value": "1"
+              },
+              {
+                "name": "2nd person",
+                "value": "2"
+              },
+              {
+                "name": "3rd person",
+                "value": "3"
+              }
+            ]
+          },
+          {
+            "attr": "kjonn",
+            "name": "gender",
+            "options": [
+              {
+                "name": "feminine",
+                "value": "f"
+              },
+              {
+                "name": "masculine",
+                "value": "m"
+              },
+              {
+                "name": "feminine or masculine",
+                "value": "m/f"
+              },
+              {
+                "name": "neuter",
+                "value": "n"
+              }
+            ]
+          },
+          {
+            "attr": "tall",
+            "name": "number",
+            "options": [
+              {
+                "name": "singular",
+                "value": "ent"
+              },
+              {
+                "name": "singular or plural",
+                "value": "ent/fl"
+              },
+              {
+                "name": "plural",
+                "value": "fl"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "subjunction",
+        "value": "sbu"
+      },
+      {
+        "name": "noun",
+        "value": "s",
+        "features": [
+          {
+            "attr": "type",
+            "options": [
+              {
+                "name": "common name",
+                "value": "a"
+              },
+              {
+                "name": "proper name",
+                "value": "p"
+              },
+              {
+                "name": "uninflectable",
+                "value": "ubøy"
+              }
+            ]
+          },
+          {
+            "attr": "kjonn",
+            "name": "gender",
+            "options": [
+              {
+                "name": "feminine",
+                "value": "f"
+              },
+              {
+                "name": "masculine",
+                "value": "m"
+              },
+              {
+                "name": "feminine or masculine",
+                "value": "m/f"
+              },
+              {
+                "name": "neuter",
+                "value": "n"
+              }
+            ]
+          },
+          {
+            "attr": "tid_bestemthet",
+            "name": "definiteness",
+            "options": [
+              {
+                "name": "definite",
+                "value": "be"
+              },
+              {
+                "name": "definite or indefinite",
+                "value": "be/ub"
+              },
+              {
+                "name": "indefinite",
+                "value": "ub"
+              }
+            ]
+          },
+          {
+            "attr": "tall",
+            "name": "number",
+            "options": [
+              {
+                "name": "singular",
+                "value": "ent"
+              },
+              {
+                "name": "singular or plural",
+                "value": "ent/fl"
+              },
+              {
+                "name": "plural",
+                "value": "fl"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "punctuation",
+        "value": "punkt",
+        "features": [
+          {
+            "attr": "type",
+            "options": [
+              {
+                "name": "quotation mark",
+                "value": "anf"
+              },
+              {
+                "name": "ellipse",
+                "value": "ellipse"
+              },
+              {
+                "name": "colon",
+                "value": "kolon"
+              },
+              {
+                "name": "comma",
+                "value": "comma"
+              },
+              {
+                "name": "right parenthesis",
+                "value": "par-s"
+              },
+              {
+                "name": "full stop",
+                "value": "punktum"
+              },
+              {
+                "name": "semicolon",
+                "value": "semikolon"
+              },
+              {
+                "name": "question mark",
+                "value": "spm"
+              },
+              {
+                "name": "dash",
+                "value": "dash"
+              },
+              {
+                "name": "exclamation mark",
+                "value": "utrop"
+              },
+              {
+                "name": "left parenthesis",
+                "value": "par-b"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "unknown",
+        "value": "ukjent"
+      },
+      {
+        "name": "verb",
+        "value": "v",
+        "features": [
+          {
+            "attr": "grad_dia",
+            "options": [
+              {
+                "name": "passive",
+                "value": "pass"
+              }
+            ]
+          },
+          {
+            "attr": "modus_kasus",
+            "options": [
+              {
+                "name": "imperative",
+                "value": "imp"
+              }
+            ]
+          },
+          {
+            "attr": "tid_bestemthet",
+            "options": [
+              {
+                "name": "infinitive",
+                "value": "inf"
+              },
+              {
+                "name": "present tense",
+                "value": "pres"
+              },
+              {
+                "name": "past tense",
+                "value": "past"
+              }
+            ]
+          },
+          {
+            "attr": "type",
+            "options": [
+              {
+                "name": "perfect participle",
+                "value": "perf-part"
+              },
+              {
+                "name": "uninflectable",
+                "value": "ubøy"
               }
             ]
           }
