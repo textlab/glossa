@@ -24,15 +24,7 @@ module Rglossa
       if metadata.empty?
         values = MetadataValue.where(metadata_category_id: params[:metadata_category_id])
       else
-        values =  MetadataValue.uniq.joins('INNER JOIN rglossa_corpus_texts_metadata_values j ' +
-                                               'ON j.rglossa_metadata_value_id = rglossa_metadata_values.id ' +
-                                               'INNER JOIN rglossa_corpus_texts t ' +
-                                               'ON j.rglossa_corpus_text_id = t.id ' +
-                                               'INNER JOIN rglossa_corpus_texts_metadata_values j2 ' +
-                                               'ON j2.rglossa_corpus_text_id = t.id').where(
-            metadata_category_id: params[:metadata_category_id],
-            j2: {rglossa_metadata_value_id: metadata}
-        )
+        values = MetadataValue.get_constrained_list(params[:metadata_category_id], metadata)
       end
 
       unless values.empty? || params[:query].blank?
