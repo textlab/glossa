@@ -16,8 +16,6 @@ module Rglossa
         metadata = metadata_value_ids.map do |cat, vals|
           # Don't restrict the possible values based on previous choices within the *same* category,
           # because then we could only select a single value from each category...
-          puts cat
-          puts params[:metadata_category_id]
           cat != params[:metadata_category_id] ? vals.map(&:to_i) : nil
         end
         metadata = metadata.compact.flatten
