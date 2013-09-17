@@ -22,7 +22,7 @@ module Rglossa
       end
 
       if metadata.empty?
-        values =  MetadataValue.where(metadata_category_id: params[:metadata_category_id])
+        values = MetadataValue.where(metadata_category_id: params[:metadata_category_id])
       else
         values =  MetadataValue.uniq.joins('INNER JOIN rglossa_corpus_texts_metadata_values j ' +
                                                'ON j.rglossa_metadata_value_id = rglossa_metadata_values.id ' +
