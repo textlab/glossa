@@ -2,7 +2,7 @@
 
 RGlossa is a reimplementation of the [Glossa search system](https://github.com/noklesta/glossa_svn) in Ruby on Rails.
 
-CURRENTLY WORK IN PROGRESS. NOT YET FUNCTIONAL!
+Rglossa is currently under active development. It is functional but still has some way to go before it reaches feature parity with the old Glossa version.
 
 ## Prerequisites
 
