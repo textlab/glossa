@@ -10,7 +10,7 @@ PATH
       i18n-js
       jquery-rails
       oj
-      rails (~> 3.2.13)
+      rails (~> 3.2.14)
       sass-rails (~> 3.2.5)
       turbo-sprockets-rails3
       uglifier (>= 1.2.7)
@@ -20,8 +20,15 @@ PATH
   specs:
     rglossa-fcs (0.0.1)
       nokogiri
-      rails (~> 3.2.13)
+      rails (~> 3.2.14)
       rest-client
+
+PATH
+  remote: /Users/noklesta/rails/tekstlab/plugins/rglossa-r
+  specs:
+    rglossa-r (0.0.1)
+      rails (~> 3.2.14)
+      rserve-client (~> 0.3.1)
 
 GEM
   remote: https://rubygems.org/
@@ -75,7 +82,7 @@ GEM
       orm_adapter (~> 0.1)
       railties (~> 3.1)
       warden (~> 1.2.1)
-    ember-data-source (0.13)
+    ember-data-source (0.14)
       ember-source
     ember-rails (0.13.0)
       active_model_serializers
@@ -150,6 +157,7 @@ GEM
       json (~> 1.4)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    rserve-client (0.3.1)
     sass (3.2.10)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -189,6 +197,7 @@ DEPENDENCIES
   rails (= 3.2.14)
   rglossa!
   rglossa-fcs!
+  rglossa-r!
   sass-rails (~> 3.2.3)
   sqlite3
   uglifier (>= 1.0.3)

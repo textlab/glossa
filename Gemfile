@@ -40,5 +40,11 @@ gem 'jquery-rails'
 
 gem "rglossa", :path => "/Users/noklesta/rails/tekstlab/plugins/rglossa"
 gem "rglossa-fcs", :path => "/Users/noklesta/rails/tekstlab/plugins/rglossa-fcs"
+gem "rglossa-r", :path => "/Users/noklesta/rails/tekstlab/plugins/rglossa-r"
 gem "devise", "~> 2.2.3"
-gem 'pry'
+
+group :development do
+  #gem 'thin'
+  gem 'pry'
+end
+
