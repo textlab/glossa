@@ -70,6 +70,7 @@ App.CwbMultiwordTermComponent = Em.Component.extend
   # Called after a tag has been removed from the tag list. We need to remove
   # the tag from the term object as well.
   _onTagRemoved: (tag) ->
+    parentView = @get('parentView')
     if tag is @get('term.pos.value')
       @set('term.pos', null)
     else
@@ -80,7 +81,6 @@ App.CwbMultiwordTermComponent = Em.Component.extend
           #
           # TODO: Figure out why observing the features array doesn't work so that we
           # have to do this manually
-          parentView = @get('parentView')
           parentView.displayedQueryDidChange()
 
           break
