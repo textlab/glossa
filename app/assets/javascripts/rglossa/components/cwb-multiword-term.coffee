@@ -4,7 +4,12 @@ App.CwbMultiwordTermComponent = Em.Component.extend
   queryHasSingleTerm: Em.computed.equal('parentView.displayedQuery.length', 1)
 
   didInsertElement: ->
-    @get('tagsInput').addTag(term.value) for term in @get('term.features')
+    tagsInput = @get('tagsInput')
+    pos = @get('term.pos')
+
+    tagsInput.addTag(pos) if pos
+    tagsInput.addTag(term.value) for term in @get('term.features')
+
 
   tagsInput: (->
     unless @_tagsInput
@@ -14,6 +19,7 @@ App.CwbMultiwordTermComponent = Em.Component.extend
       )
     @_tagsInput
   ).property()
+
 
   isLemma: ((key, value) ->
     if value?
