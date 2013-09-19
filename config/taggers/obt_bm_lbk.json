@@ -1,7 +1,7 @@
 {
-  "description": "The Oslo Bergen Tagger for Norwegian bokmål",
+  "description": "The Oslo Bergen Tagger for Norwegian bokmål with LBK tags",
   "tags": {
-    "attr": "pos",
+    "attr": "ordkl",
     "name": "part-of-speech",
     "options": [
       {
@@ -13,7 +13,7 @@
             "options": [
               {
                 "name": "ordinal",
-                "value": "ord"
+                "value": "ordenstall"
               },
               {
                 "name": "perfect participle",
@@ -26,7 +26,7 @@
             ]
           },
           {
-            "attr": "degr_dia",
+            "attr": "grad_dia",
             "name": "degree",
             "options": [
               {
@@ -35,7 +35,7 @@
               },
               {
                 "name": "comparative",
-                "value": "comp"
+                "value": "komp"
               },
               {
                 "name": "superlative",
@@ -44,7 +44,7 @@
             ]
           },
           {
-            "attr": "gender",
+            "attr": "kjonn",
             "name": "gender",
             "options": [
               {
@@ -84,7 +84,7 @@
               },
               {
                 "name": "amplifying",
-                "value": "emph"
+                "value": "forst"
               },
               {
                 "name": "present participle",
@@ -92,11 +92,11 @@
               },
               {
                 "name": "polite",
-                "value": "polite"
+                "value": "hfl"
               },
               {
                 "name": "quantifier",
-                "value": "quant"
+                "value": "kvant"
               },
               {
                 "name": "possessive",
@@ -104,11 +104,11 @@
               },
               {
                 "name": "roman number",
-                "value": "roman_num"
+                "value": "romertall"
               },
               {
                 "name": "interrogative",
-                "value": "question"
+                "value": "spm"
               }
             ]
           }
@@ -116,7 +116,7 @@
       },
       {
         "name": "infinitive marker",
-        "value": "infmark"
+        "value": "infmerke"
       },
       {
         "name": "interjection",
@@ -124,7 +124,7 @@
       },
       {
         "name": "conjunction",
-        "value": "conj"
+        "value": "konj"
       },
       {
         "name": "preposition",
@@ -143,7 +143,7 @@
               },
               {
                 "name": "polite",
-                "value": "polite"
+                "value": "hfl"
               },
               {
                 "name": "personal",
@@ -159,17 +159,17 @@
               },
               {
                 "name": "interrogative",
-                "value": "question"
+                "value": "spm"
               }
             ]
           },
           {
-            "attr": "mood_case",
+            "attr": "modus_kasus",
             "name": "case",
             "options": [
               {
                 "name": "accusative",
-                "value": "acc"
+                "value": "akk"
               },
               {
                 "name": "genitive",
@@ -200,7 +200,7 @@
             ]
           },
           {
-            "attr": "gender",
+            "attr": "kjonn",
             "name": "gender",
             "options": [
               {
@@ -222,20 +222,20 @@
             ]
           },
           {
-            "attr": "number",
+            "attr": "tall",
             "name": "number",
             "options": [
               {
                 "name": "singular",
-                "value": "sg"
+                "value": "ent"
               },
               {
                 "name": "singular or plural",
-                "value": "sg/pl"
+                "value": "ent/fl"
               },
               {
                 "name": "plural",
-                "value": "pl"
+                "value": "fl"
               }
             ]
           }
@@ -243,31 +243,31 @@
       },
       {
         "name": "subjunction",
-        "value": "subj"
+        "value": "sbu"
       },
       {
         "name": "noun",
-        "value": "n",
+        "value": "s",
         "features": [
           {
             "attr": "type",
             "options": [
               {
                 "name": "common name",
-                "value": "c"
+                "value": "a"
               },
               {
                 "name": "proper name",
                 "value": "p"
               },
               {
-                "name": "no inflection",
-                "value": "noconj"
+                "name": "uninflectable",
+                "value": "ubøy"
               }
             ]
           },
           {
-            "attr": "gender",
+            "attr": "kjonn",
             "name": "gender",
             "options": [
               {
@@ -289,38 +289,38 @@
             ]
           },
           {
-            "attr": "tense_defin",
+            "attr": "tid_bestemthet",
             "name": "definiteness",
             "options": [
               {
                 "name": "definite",
-                "value": "def"
+                "value": "be"
               },
               {
                 "name": "definite or indefinite",
-                "value": "def/indef"
+                "value": "be/ub"
               },
               {
                 "name": "indefinite",
-                "value": "indef"
+                "value": "ub"
               }
             ]
           },
           {
-            "attr": "number",
+            "attr": "tall",
             "name": "number",
             "options": [
               {
                 "name": "singular",
-                "value": "sg"
+                "value": "ent"
               },
               {
                 "name": "singular or plural",
-                "value": "sg/pl"
+                "value": "ent/fl"
               },
               {
                 "name": "plural",
-                "value": "pl"
+                "value": "fl"
               }
             ]
           }
@@ -328,22 +328,22 @@
       },
       {
         "name": "punctuation",
-        "value": "punct",
+        "value": "punkt",
         "features": [
           {
             "attr": "type",
             "options": [
               {
                 "name": "quotation mark",
-                "value": "quote"
+                "value": "anf"
               },
               {
                 "name": "ellipse",
-                "value": "ellipsis"
+                "value": "ellipse"
               },
               {
                 "name": "colon",
-                "value": "colon"
+                "value": "kolon"
               },
               {
                 "name": "comma",
@@ -351,19 +351,19 @@
               },
               {
                 "name": "right parenthesis",
-                "value": "rpar"
+                "value": "par-s"
               },
               {
                 "name": "full stop",
-                "value": "period"
+                "value": "punktum"
               },
               {
                 "name": "semicolon",
-                "value": "semicolon"
+                "value": "semikolon"
               },
               {
                 "name": "question mark",
-                "value": "question"
+                "value": "spm"
               },
               {
                 "name": "dash",
@@ -371,11 +371,11 @@
               },
               {
                 "name": "exclamation mark",
-                "value": "excl"
+                "value": "utrop"
               },
               {
                 "name": "left parenthesis",
-                "value": "lpar"
+                "value": "par-b"
               }
             ]
           }
@@ -383,14 +383,14 @@
       },
       {
         "name": "unknown",
-        "value": "unknown"
+        "value": "ukjent"
       },
       {
         "name": "verb",
         "value": "v",
         "features": [
           {
-            "attr": "degr_dia",
+            "attr": "grad_dia",
             "options": [
               {
                 "name": "passive",
@@ -399,7 +399,7 @@
             ]
           },
           {
-            "attr": "mood_case",
+            "attr": "modus_kasus",
             "options": [
               {
                 "name": "imperative",
@@ -408,7 +408,7 @@
             ]
           },
           {
-            "attr": "tense_defin",
+            "attr": "tid_bestemthet",
             "options": [
               {
                 "name": "infinitive",
@@ -425,20 +425,15 @@
             ]
           },
           {
-            "attr": "person_type2",
-            "options": [
-              {
-                "name": "perfect participle",
-                "value": "pcp2"
-              }
-            ]
-          },
-          {
             "attr": "type",
             "options": [
               {
-                "name": "no inflection",
-                "value": "noconj"
+                "name": "perfect participle",
+                "value": "perf-part"
+              },
+              {
+                "name": "uninflectable",
+                "value": "ubøy"
               }
             ]
           }
