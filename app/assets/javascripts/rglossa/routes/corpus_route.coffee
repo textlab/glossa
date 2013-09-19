@@ -15,11 +15,12 @@ App.CorpusRoute = Em.Route.extend
 
     showCorpusHome: ->
       # FIXME: Should we just do this for all input controllers or find another solution?
-      #@controllerFor('cwbSearchInputs').set('query', [''])
+      tags = @currentModel.get('langs.firstObject.tags')
       @controllerFor('cwbSearchInputs').set('content', [{
         query: '',
-        corpusShortName: @currentModel.get('shortName')
-        tags: @currentModel.get('langs.firstObject.tags.options')
+        corpusShortName: @currentModel.get('shortName'),
+        posAttr: tags.attr,
+        tags: tags.options
       }])
 
       @transitionTo("corpus.home")

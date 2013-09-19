@@ -46,23 +46,29 @@ module Rglossa
 
 
       # Returns a single page of results from CQP
-      def get_result_page(page_no, extra_attributes=['lemma', 'ordkl', 'type'])
+      def get_result_page(page_no, extra_attributes=['lemma', 'pos', 'type'])
         q = queries[0]
-        corpus = q['corpusShortName'].upcase
-        named_query = corpus + id.to_s
+        cwbCorpusName = q['corpusShortName'].upcase
+        named_query = cwbCorpusName + id.to_s
 
         # NOTE: page_no is 1-based while cqp uses 0-based numbering of hits
         start = (page_no - 1) * page_size
         stop  = start + page_size - 1
         commands = [
           %Q{set DataDirectory "#{Dir.tmpdir}"},
-          corpus,  # necessary for "set PrintStructures to work"...
+          cwbCorpusName,  # necessary for "set PrintStructures to work"...
           "set Context s",
           "set PrintStructures s_id"]
+
         if extra_attributes.present?
-          commands << "show " + extra_attributes.map { |a| "+#{a}" }.join(' ')
+          corpus = Corpus.find_by_short_name(q['corpusShortName'])
+          # TODO: Handle multilingual corpora - here we just take the first language
+          pos_attr = corpus.langs.first[:tags]['attr']
+          commands << "show " + extra_attributes.map { |a| "+#{a == 'pos' ? pos_attr : a}" }.join(' ')
         end
+
         commands << "cat #{named_query} #{start} #{stop}"
+
         run_cqp_commands(commands).split("\n")
       end
 

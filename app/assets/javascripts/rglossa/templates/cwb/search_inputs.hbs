@@ -15,7 +15,7 @@
           <a href="" title="Regular expressions" {{action showRegex}}>Advanced</a>
       </div>
     {{#each row in controller}}
-      {{cwb-multiword query=row.query corpusShortName=row.corpusShortName tags=row.tags}}
+      {{cwb-multiword query=row.query corpusShortName=row.corpusShortName posAttr=row.posAttr tags=row.tags}}
     {{/each}}
   {{else}}
       <div class="row-fluid search-input-links">

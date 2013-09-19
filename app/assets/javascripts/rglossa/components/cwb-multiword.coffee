@@ -96,7 +96,8 @@ App.CwbMultiwordComponent = Em.Component.extend
           attrs.push(word)
 
         if pos
-          pos = "ordkl=\"#{pos.value}\""
+          posAttr = @get('posAttr')
+          pos = "#{posAttr}=\"#{pos.value}\""
           attrs.push(pos)
 
         for feature in features
@@ -161,7 +162,7 @@ App.CwbMultiwordComponent = Em.Component.extend
           term.set('isLemma', m2[1] is 'lemma')
           term.set('isStart', /\.\+$/.test(m2[2]))
           term.set('isEnd',   /^\.\+/.test(m2[2]))
-        when 'pos' then term.set('ordkl', m2[2])
+        when 'pos' then term.set(@get('posAttr'), m2[2])
         else term.get('features').pushObject(attr: m2[1], value: m2[2])
 
       # Remove any .+ at the beginning and/or end of the displayed form
