@@ -35,12 +35,13 @@ App.MetadataSelectView = Em.View.extend
 
 
   createSelect: ->
+    prefix = DS.RESTAdapter.prototype.namespace || ''
     @$().select2
       width: '100%'
       multiple: true
       placeholder: 'Click to select'
       ajax:
-        url: "metadata_categories/#{@get('content.id')}/metadata_values"
+        url: "#{prefix}/metadata_categories/#{@get('content.id')}/metadata_values"
         dataType: 'json'
 
         data: (term, page) =>
