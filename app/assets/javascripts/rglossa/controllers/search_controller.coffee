@@ -9,6 +9,13 @@ App.SearchController = Em.ObjectController.extend
 
   # Predicates used by conditionals in the handlebars template
 
+  noResultsFound: (->
+    # We have to check explicitly for 0, because an otherwise false
+    # (undefined) value just means that we haven't received a response from
+    # the server yet
+    @get('content.numHits') is 0
+  ).property('content.numHits')
+
   hitsAreCutOff: (->
     @get('content.numHits') is @get('content.maxHits')
   ).property('content.numHits', 'content.maxHits')

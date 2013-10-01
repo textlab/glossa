@@ -2,7 +2,11 @@
   Showing the first {{view App.CorpusResultMaxHitsView class="max-hits span1"}} matches&nbsp;&nbsp;
   <button class="btn btn-small" {{action showAllHits}}>Show all</button>
 {{else}}
-  {{#if numHits}}
-    Found {{numHits}} matches
+  {{#if noResultsFound}}
+    No matches found
+  {{else}}
+    {{#if numHits}}
+      Found {{numHits}} matches
+    {{/if}}
   {{/if}}
 {{/if}}
