@@ -51,3 +51,12 @@ App.Adapter.registerTransform 'hash',
 
   serialize: (deserialized) ->
     deserialized
+
+App.Adapter.registerTransform 'queries',
+  deserialize: (serialized) ->
+    serialized
+
+  serialize: (deserialized) ->
+    deserialized.map (querySpec) ->
+      query: querySpec.query
+      corpusShortName: querySpec.corpusShortName

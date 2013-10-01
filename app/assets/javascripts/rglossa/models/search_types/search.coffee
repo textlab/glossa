@@ -2,7 +2,7 @@ defaultMaxHits = 2000
 
 App.Search = DS.Model.extend
   metadataValueIds: DS.attr('hash')
-  queries: DS.attr('array')
+  queries: DS.attr('queries')
   numHits: DS.attr('number')
   maxHits: DS.attr('number', defaultValue: defaultMaxHits)
 
