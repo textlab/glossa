@@ -10,6 +10,12 @@ App.CwbMultiwordTermComponent = Em.Component.extend
     tagsInput.addTag(pos) if pos
     tagsInput.addTag(term.value) for term in @get('term.features')
 
+    @$('[data-add-term-button]').on('click', $.proxy(@addTerm, @))
+
+
+  willDestroyElement: ->
+    @$('[data-add-term-button]').off 'click'
+
 
   tagsInput: (->
     unless @_tagsInput
@@ -48,8 +54,9 @@ App.CwbMultiwordTermComponent = Em.Component.extend
     @get('term.isEnd')
   ).property('term.isEnd')
 
-  addTerm: ->
-    @get('parentView').addTerm()
+  addTerm: (e) ->
+    if e.screenX > 0 and e.screenY > 0
+      @get('parentView').addTerm()
 
   removeTerm: ->
     @get('parentView').removeTerm(@get('term'))
@@ -91,3 +98,7 @@ App.CwbMultiwordTermComponent = Em.Component.extend
 
           break
     parentView.updateQuery()
+
+  search: ->
+    # Just forward to the controller of the parent view
+    @get('parentView.controller').search()

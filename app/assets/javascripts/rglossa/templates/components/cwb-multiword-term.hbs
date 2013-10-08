@@ -6,13 +6,13 @@
           {{#unless term.isFirst}}
           <div class="interval">
             <h6>Interval</h6>
-            {{view Em.TextField class="interval" valueBinding="term.min"}} min<br>
-            {{view Em.TextField class="interval" valueBinding="term.max"}} max
+            {{view App.SearchInputField class="interval" valueBinding="term.min"}} min<br>
+            {{view App.SearchInputField class="interval" valueBinding="term.max"}} max
           </div>
           {{/unless}}
           <div class="input-prepend input-append word dropdown">
             <span data-toggle="dropdown" class="add-on dropdown-toggle" style="cursor:pointer"><i class="icon-cog"></i></span>
-            {{view Em.TextField class="searchfield multiword-field" classBinding="queryHasSingleTerm::removable" valueBinding="term.word"}}
+            {{view App.SearchInputField class="searchfield multiword-field" classBinding="queryHasSingleTerm::removable" valueBinding="term.word"}}
             {{#unless queryHasSingleTerm}}
               <span class="add-on" title="Remove word" style="cursor:pointer" {{action removeTerm this}}><i class="icon-minus"></i></span>
             {{/unless}}
@@ -20,7 +20,7 @@
           </div>
           {{#if term.isLast}}
           <div class="add-search-word">
-            <button class="btn btn-small" title="Add search word" {{action addTerm}}>
+            <button class="btn btn-small" data-add-term-button title="Add search word">
               <i class="icon-plus"></i>
             </button>
           </div>
