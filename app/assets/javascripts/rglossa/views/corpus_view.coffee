@@ -8,6 +8,8 @@ App.CorpusView = Em.View.extend
   didInsertElement: ->
     @determineHideSidebarSelector()
     @$().on('click', @hideSidebarSelector, @hideSidebar)
+    @$().on 'keyup', (e) =>
+      @hideSidebar() if e.keyCode is 13 and $('body').width() <= @maxAutoHideSidebarWidth
 
     if @get('controller.metadataCategories.length')
       @$().on('click', '#show-criteria-button, #new-search-button', @showSidebar)
