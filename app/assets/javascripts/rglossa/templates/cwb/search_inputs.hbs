@@ -2,7 +2,7 @@
   <div class="row-fluid search-input-links">
     <b>Simple</b> |
     <a href="" title="Search for grammatical categories etc." {{action showMultiword}}>Extended</a> |
-    <a href="" title="Regular expressions" {{action showRegex}}>Advanced</a>
+    <a href="" title="Regular expressions" {{action showRegex}}>Regexp</a>
   </div>
   {{#each row in controller}}
     {{cwb-simple query=row.query corpusShortName=row.corpusShortName}}
@@ -12,7 +12,7 @@
       <div class="row-fluid search-input-links">
           <a href="" title="Simple search box" {{action showSimple}}>Simple</a> |
           <b>Extended</b> |
-          <a href="" title="Regular expressions" {{action showRegex}}>Advanced</a>
+          <a href="" title="Regular expressions" {{action showRegex}}>Regexp</a>
       </div>
     {{#each row in controller}}
       {{cwb-multiword query=row.query corpusShortName=row.corpusShortName posAttr=row.posAttr tags=row.tags}}
@@ -21,7 +21,7 @@
       <div class="row-fluid search-input-links">
           <a href="" title="Simple search box" {{action showSimple}}>Simple</a> |
           <a href="" title="Search for grammatical categories etc." {{action showMultiword}}>Extended</a> |
-          <b>Advanced</b>
+          <b>Regexp</b>
       </div>
       {{#each row in controller}}
         {{cwb-regex query=row.query corpusShortName=row.corpusShortName}}
