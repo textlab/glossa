@@ -1,10 +1,3 @@
-GIT
-  remote: git://github.com/emberjs/ember.js.git
-  revision: 6cac51f7aa1a7e216117d622e467d3fe1cb744e5
-  specs:
-    ember-source (1.0.0.rc6)
-      handlebars-source (= 1.0.12)
-
 PATH
   remote: .
   specs:
@@ -17,7 +10,7 @@ PATH
       i18n-js
       jquery-rails
       oj
-      rails (~> 3.2.13)
+      rails (~> 3.2.14)
       sass-rails (~> 3.2.5)
       turbo-sprockets-rails3
       uglifier (>= 1.2.7)
@@ -25,12 +18,12 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
-    actionmailer (3.2.13)
-      actionpack (= 3.2.13)
-      mail (~> 2.5.3)
-    actionpack (3.2.13)
-      activemodel (= 3.2.13)
-      activesupport (= 3.2.13)
+    actionmailer (3.2.14)
+      actionpack (= 3.2.14)
+      mail (~> 2.5.4)
+    actionpack (3.2.14)
+      activemodel (= 3.2.14)
+      activesupport (= 3.2.14)
       builder (~> 3.0.0)
       erubis (~> 2.7.0)
       journey (~> 1.0.4)
@@ -40,21 +33,22 @@ GEM
       sprockets (~> 2.2.1)
     active_model_serializers (0.8.1)
       activemodel (>= 3.0)
-    activemodel (3.2.13)
-      activesupport (= 3.2.13)
+    activemodel (3.2.14)
+      activesupport (= 3.2.14)
       builder (~> 3.0.0)
-    activerecord (3.2.13)
-      activemodel (= 3.2.13)
-      activesupport (= 3.2.13)
+    activerecord (3.2.14)
+      activemodel (= 3.2.14)
+      activesupport (= 3.2.14)
       arel (~> 3.0.2)
       tzinfo (~> 0.3.29)
-    activeresource (3.2.13)
-      activemodel (= 3.2.13)
-      activesupport (= 3.2.13)
-    activesupport (3.2.13)
-      i18n (= 0.6.1)
+    activeresource (3.2.14)
+      activemodel (= 3.2.14)
+      activesupport (= 3.2.14)
+    activesupport (3.2.14)
+      i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
     arel (3.0.2)
+    awesome_print (1.2.0)
     barber (0.4.2)
       ember-source
       execjs
@@ -76,7 +70,7 @@ GEM
     coffee-script (2.2.0)
       coffee-script-source
       execjs
-    coffee-script-source (1.6.2)
+    coffee-script-source (1.6.3)
     colorize (0.5.8)
     daemons (1.1.9)
     devise (2.2.4)
@@ -85,7 +79,7 @@ GEM
       railties (~> 3.1)
       warden (~> 1.2.1)
     diff-lcs (1.2.4)
-    ember-data-source (0.13)
+    ember-data-source (0.14)
       ember-source
     ember-rails (0.13.0)
       active_model_serializers
@@ -95,10 +89,11 @@ GEM
       execjs (>= 1.2)
       handlebars-source
       railties (>= 3.1)
+    ember-source (1.0.0)
+      handlebars-source (= 1.0.12)
     erubis (2.7.0)
     eventmachine (1.0.3)
-    execjs (1.4.0)
-      multi_json (~> 1.0)
+    execjs (2.0.2)
     factory_girl (4.2.0)
       activesupport (>= 3.0.0)
     factory_girl_rails (4.2.1)
@@ -125,7 +120,7 @@ GEM
     hike (1.2.3)
     hirb (0.7.1)
     http_parser.rb (0.5.3)
-    i18n (0.6.1)
+    i18n (0.6.5)
     i18n-js (2.1.2)
       i18n
     journey (1.0.4)
@@ -148,13 +143,13 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     method_source (0.8.1)
-    mime-types (1.23)
+    mime-types (1.25)
     mini_portile (0.5.0)
-    multi_json (1.7.7)
+    multi_json (1.8.1)
     mysql2 (0.3.11)
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
-    oj (2.1.2)
+    oj (2.1.6)
     orm_adapter (0.4.0)
     paper_trail (2.7.2)
       activerecord (~> 3.0)
@@ -178,17 +173,17 @@ GEM
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
-    rails (3.2.13)
-      actionmailer (= 3.2.13)
-      actionpack (= 3.2.13)
-      activerecord (= 3.2.13)
-      activeresource (= 3.2.13)
-      activesupport (= 3.2.13)
+    rails (3.2.14)
+      actionmailer (= 3.2.14)
+      actionpack (= 3.2.14)
+      activerecord (= 3.2.14)
+      activeresource (= 3.2.14)
+      activesupport (= 3.2.14)
       bundler (~> 1.0)
-      railties (= 3.2.13)
-    railties (3.2.13)
-      actionpack (= 3.2.13)
-      activesupport (= 3.2.13)
+      railties (= 3.2.14)
+    railties (3.2.14)
+      actionpack (= 3.2.14)
+      activesupport (= 3.2.14)
       rack-ssl (~> 1.3.2)
       rake (>= 0.8.7)
       rdoc (~> 3.4)
@@ -216,7 +211,7 @@ GEM
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
       rspec-mocks (~> 2.13.0)
-    sass (3.2.9)
+    sass (3.2.12)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
@@ -235,14 +230,14 @@ GEM
       rack (>= 1.0.0)
     thor (0.18.1)
     tilt (1.4.1)
-    treetop (1.4.14)
+    treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
-    turbo-sprockets-rails3 (0.3.6)
+    turbo-sprockets-rails3 (0.3.10)
       railties (> 3.2.8, < 4.0.0)
       sprockets (>= 2.0.0)
-    tzinfo (0.3.37)
-    uglifier (2.1.2)
+    tzinfo (0.3.38)
+    uglifier (2.2.1)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
     uniform_notifier (1.2.0)
@@ -256,10 +251,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  awesome_print
   bullet
   capybara
   devise (~> 2.2.3)
-  ember-source!
   factory_girl_rails
   guard-rspec
   hirb

@@ -19,11 +19,6 @@ gem "jquery-rails"
 gem "mysql2"
 gem "devise", "~> 2.2.3"
 
-gem "ember-source", github: "emberjs/ember.js"
-
-gem 'hirb'
-gem 'table_print'
-
 group :development do
   # Use thin instead of WEBrick in development
   gem 'thin'
@@ -32,4 +27,8 @@ group :development do
   gem 'pry-doc'
 
   gem 'bullet'
+
+  gem 'hirb'
+  gem 'table_print'
+  gem 'awesome_print'
 end
