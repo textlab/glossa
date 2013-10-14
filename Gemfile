@@ -46,6 +46,7 @@ gem "devise", "~> 2.2.3"
 group :development do
   #gem 'thin'
   gem 'pry'
-  gem 'rconsole', '~> 0.1.0'
+  gem 'table_print'
+  gem 'awesome_print'
 end
 
