@@ -21,6 +21,7 @@ App.CorpusView = Em.View.extend
 
   willDestroyElement: ->
     @$().off('click', @hideSidebarSelector, @hideSidebar)
+    @$().off 'keyup'
 
     if @get('controller.metadataCategories.length')
       @$().off('click', '#show-criteria-button, #new-search-button', @showSidebar)
