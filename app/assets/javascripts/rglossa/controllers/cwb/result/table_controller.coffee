@@ -14,8 +14,8 @@ App.CwbResultTableController = Em.Controller.extend
 
     if resultPage
       resultPage.map (row) ->
-        m = row.match(/<s_id (.+)>:\s+(.*)<(.+?)>(.*)/)
-        sId = m[1]
+        m = row.match(/<s_id(.*)>:\s+(.*)<(.+?)>(.*)/)
+        sId = m[1].trim()
         fields = [m[2], m[3], m[4]]
 
         fields = fields.map (field) ->
