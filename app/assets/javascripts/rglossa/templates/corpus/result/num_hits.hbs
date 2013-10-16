@@ -7,6 +7,10 @@
   {{else}}
     {{#if numHits}}
       Found {{numHits}} matches
+    {{else}}
+      <div class="row-fluid">
+        {{view App.HitCounterSpinnerView}} <div class="counting-matches">Counting matches...</div>
+      </div>
     {{/if}}
   {{/if}}
 {{/if}}

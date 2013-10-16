@@ -16,6 +16,7 @@ module Rglossa
 
     after_initialize -> {
       self.current_corpus_part = 0
+      self.num_hits = 0
       self.corpus_part_counts = []
     }
     after_create :run_queries

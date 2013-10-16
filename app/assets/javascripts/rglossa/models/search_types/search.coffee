@@ -3,7 +3,7 @@ defaultMaxHits = 2000
 App.Search = DS.Model.extend
   metadataValueIds:  DS.attr('hash')
   queries:           DS.attr('queries')
-  numHits:           DS.attr('number', defaultValue: 0)
+  numHits:           DS.attr('number')
   maxHits:           DS.attr('number', defaultValue: defaultMaxHits)
 
   # Non-persisted attribute: cache of search result pages. Will be initialized
