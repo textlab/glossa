@@ -14,7 +14,7 @@ module Rglossa
     serialize :metadata_value_ids, Hash
     serialize :corpus_part_counts, Array
 
-    after_initialize -> {
+    before_create -> {
       self.current_corpus_part = 0
       self.num_hits = 0
       self.corpus_part_counts = []
