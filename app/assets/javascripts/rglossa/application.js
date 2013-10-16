@@ -13,8 +13,8 @@
 //= require bootstrap-tags
 //= require opentip-jquery-excanvas.min
 //= require spin.min
-//= require spin_helper
-//= require handlebars
+//= require jquery.spin
+//= require ember_master/handlebars
 //
 // Use ember.js and ember-data.js from the master branches at least until 1.0 comes out
 //= require ember_master/ember
