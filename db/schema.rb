@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130908223643) do
+ActiveRecord::Schema.define(:version => 20131015205819) do
 
   create_table "rglossa_corpora", :force => true do |t|
     t.string   "name",                               :null => false
@@ -82,16 +82,19 @@ ActiveRecord::Schema.define(:version => 20130908223643) do
     t.boolean "boolean_value"
   end
 
+  add_index "rglossa_metadata_values", ["metadata_category_id"], :name => "index_rglossa_metadata_values_on_metadata_category_id"
+
   create_table "rglossa_searches", :force => true do |t|
-    t.integer  "user_id",            :null => false
+    t.integer  "user_id",                           :null => false
     t.string   "type"
-    t.text     "queries",            :null => false
+    t.text     "queries",                           :null => false
     t.text     "search_options"
     t.text     "metadata_value_ids"
-    t.integer  "num_hits"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+    t.integer  "num_hits",           :default => 0, :null => false
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
     t.integer  "max_hits"
+    t.text     "corpus_part_counts",                :null => false
   end
 
   create_table "rglossa_users", :force => true do |t|
