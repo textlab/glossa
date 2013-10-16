@@ -38,7 +38,8 @@ module Rglossa
               id: @search.id,
               num_hits: @search.num_hits,
               max_hits: @search.max_hits,
-              first_two_result_pages: pages
+              first_two_result_pages: pages,
+              current_corpus_part: @search.current_corpus_part
             }
 
           render request.format.to_sym => s.to_json

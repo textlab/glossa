@@ -1,6 +1,10 @@
 module Rglossa
   class Search < ActiveRecord::Base
-    attr_accessible :queries, :metadata_value_ids, :num_hits, :max_hits
+    attr_accessible :queries, :metadata_value_ids, :num_hits, :max_hits, :current_corpus_part
+
+    # Non-persisted attribute that is only used for keeping track of the
+    # corpus part currently being searched (only relevant for multi-part corpora)
+    attr_accessor :current_corpus_part
 
     belongs_to :user
     has_many :deleted_hits, dependent: :destroy
@@ -8,10 +12,15 @@ module Rglossa
     serialize :queries, Array
     serialize :search_options, Hash
     serialize :metadata_value_ids, Hash
+    serialize :corpus_part_counts, Array
 
+    after_initialize -> {
+      self.current_corpus_part = 0
+      self.corpus_part_counts = []
+    }
     after_create :run_queries
 
-    # This is run automatically after the seach record has been created. It
+    # This is run automatically after the search record has been created. It
     # should set num_hits on the model and store either the actual search
     # results or the search itself in some way that makes it possible to
     # retrieve results using get_result_page (which also needs to be

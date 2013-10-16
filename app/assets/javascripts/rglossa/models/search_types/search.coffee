@@ -1,10 +1,10 @@
 defaultMaxHits = 2000
 
 App.Search = DS.Model.extend
-  metadataValueIds: DS.attr('hash')
-  queries: DS.attr('queries')
-  numHits: DS.attr('number')
-  maxHits: DS.attr('number', defaultValue: defaultMaxHits)
+  metadataValueIds:  DS.attr('hash')
+  queries:           DS.attr('queries')
+  numHits:           DS.attr('number', defaultValue: 0)
+  maxHits:           DS.attr('number', defaultValue: defaultMaxHits)
 
   # Non-persisted attribute: cache of search result pages. Will be initialized
   # by the adapter to an Em.Object containing the first two result pages after
@@ -23,6 +23,13 @@ App.Search = DS.Model.extend
       2: json['first_two_result_pages']['2']
     )
 
+    # For corpora that contain several parts (i.e. either for performance
+    # reasons or because it is a "metacorpus" containing several other
+    # corpora) we need to keep track of which part the latest search results
+    # came from
+    @currentCorpusPart = json['current_corpus_part']
+
+
   getResultPage: (pageNo) ->
     pageNo = pageNo + ''
 
@@ -38,7 +45,8 @@ App.Search = DS.Model.extend
     type      = @constructor
     adapter   = @get('store').adapterForType(type)
     root      = adapter.rootForType(type)
-    url       = adapter.buildURL(root, @get('id')) + "/results?pages[]=#{pageNo}"
+    url       = adapter.buildURL(root, @get('id')) +
+      "/results?pages[]=#{pageNo}&current_corpus_part=#{@currentCorpusPart}"
 
     adapter.ajax(url, 'GET').then (data) =>
       @get('resultPages').get(pageNo).setObjects(data.search_results.pages[pageNo])
