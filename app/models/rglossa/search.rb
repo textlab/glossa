@@ -64,14 +64,14 @@ module Rglossa
       num_hits
     end
 
-    ########
-    private
-    ########
-
     def page_size
       # TODO: Get this from the user's preferences or something
       15
     end
+
+    ########
+    private
+    ########
 
     def get_corpus_part_count(part, query)
       raise "Implement this method in a subclass if you use multipart corpora"
