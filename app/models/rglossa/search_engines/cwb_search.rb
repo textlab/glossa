@@ -46,7 +46,7 @@ module Rglossa
 
 
       # Returns a single page of results from CQP
-      def get_result_page(page_no, extra_attributes=['lemma', 'pos', 'type'])
+      def get_result_page(page_no, extra_attributes = %w(lemma pos type))
         q = queries[0]
         cwbCorpusName = q['corpusShortName'].upcase
         named_query = cwbCorpusName + id.to_s

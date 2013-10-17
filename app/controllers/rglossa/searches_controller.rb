@@ -66,7 +66,9 @@ module Rglossa
       # FIXME: USE current_user!!
       # search = current_user.searches.find(model_param_id)
       search = model_class.find(params[:id])
+
       if search
+        search.current_corpus_part = params[:current_corpus_part].to_i
         pages = search.get_result_pages(params[:pages])
 
         @results = {
