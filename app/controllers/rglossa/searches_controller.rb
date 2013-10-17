@@ -25,6 +25,8 @@ module Rglossa
 
     def create
       @search = create_search(params[model_param])
+      corpus = get_corpus_from_query
+      parts = corpus.config[:parts]
 
       respond_to do |format|
         format.any(:json, :xml) do
@@ -32,11 +34,24 @@ module Rglossa
           # until we actually fetch a result page, so we do that explicitly
           # before creating the response
           pages = @search.first_two_result_pages
+
+          # If the corpus does not contain any subparts, we will have figured out the total number
+          # of hits when we found our first two result pages. Alternatively, if the corpus contains
+          # subparts and we have already searched all subparts in order to gather the two result
+          # pages, we also know the total number of hits. Otherwise, we leave num_hits as nil to
+          # force the client to send a separate +count+ request to get the total number.
+          num_hits = if parts.nil? || parts.size == @search.current_corpus_part + 1
+                       @search.num_hits
+                     else
+                       nil
+                     end
+
           root = @search.class.to_s.demodulize.underscore
           s = {}
+
           s[root] = {
               id: @search.id,
-              num_hits: @search.num_hits,
+              num_hits: num_hits,
               max_hits: @search.max_hits,
               first_two_result_pages: pages,
               current_corpus_part: @search.current_corpus_part
@@ -66,7 +81,7 @@ module Rglossa
 
     def count
       @search = model_class.find(params[:id])
-      corpus = Corpus.find_by_short_name(@search.queries.first['corpusShortName'])
+      corpus = get_corpus_from_query
       parts = corpus.config[:parts]
 
       num_hits = parts ? @search.get_total_corpus_part_count(parts) : @search.num_hits
@@ -104,5 +119,10 @@ module Rglossa
         search
       end
     end
+
+    def get_corpus_from_query
+      Corpus.find_by_short_name(@search.queries.first['corpusShortName'])
+    end
+
   end
 end

@@ -57,3 +57,11 @@ App.SearchesController = Em.ArrayController.extend
       $('.result-spinner').hide()
       $('.search-result-toolbar, .search-result-table-container').show()
 
+      # Get the total number of hits unless it was set on the search object already
+      unless search.get('numHits')
+        adapter = @get('store').adapterForType(search.constructor)
+        root    = adapter.rootForType(search.constructor)
+        url     = adapter.buildURL(root, search.get('id')) + '/count'
+
+        adapter.ajax(url, 'GET').then (data) ->
+          search.set('numHits', data)

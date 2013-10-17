@@ -54,14 +54,14 @@ module Rglossa
 
     def get_total_corpus_part_count(parts)
       query = queries.first['query'].gsub('"', '')
-      total = 0
+      self.num_hits = 0
 
       parts.each_with_index do |part, index|
-        total += corpus_part_counts[index] ||= get_corpus_part_count(part, query)
+        self.num_hits += corpus_part_counts[index] ||= get_corpus_part_count(part, query)
       end
       save!  # In case we made any new corpus part counts
 
-      total
+      num_hits
     end
 
     ########
