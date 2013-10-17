@@ -52,6 +52,18 @@ module Rglossa
       raise "Implement in subclasses"
     end
 
+    def get_total_corpus_part_count(parts)
+      query = queries.first['query'].gsub('"', '')
+      total = 0
+
+      parts.each_with_index do |part, index|
+        total += corpus_part_counts[index] ||= get_corpus_part_count(part, query)
+      end
+      save!  # In case we made any new corpus part counts
+
+      total
+    end
+
     ########
     private
     ########
@@ -59,6 +71,10 @@ module Rglossa
     def page_size
       # TODO: Get this from the user's preferences or something
       15
+    end
+
+    def get_corpus_part_count(part, query)
+      raise "Implement this method in a subclass if you use multipart corpora"
     end
 
   end

@@ -15,6 +15,7 @@ Rglossa::Engine.routes.draw do
     resources :cwb_searches do
       member do
         get 'results'
+        get 'count'
       end
     end
   end

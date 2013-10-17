@@ -64,6 +64,20 @@ module Rglossa
       respond_with(@results)
     end
 
+    def count
+      @search = model_class.find(params[:id])
+      corpus = Corpus.find_by_short_name(@search.queries.first['corpusShortName'])
+      parts = corpus.config[:parts]
+
+      num_hits = parts ? @search.get_total_corpus_part_count(parts) : @search.num_hits
+
+      respond_to do |format|
+        format.any(:json, :xml) do
+          render request.format.to_sym => num_hits
+        end
+      end
+    end
+
     ########
     private
     ########
