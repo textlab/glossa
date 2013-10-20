@@ -1,11 +1,13 @@
 App.SearchController = Em.ObjectController.extend
   # NOTE: search input controllers for each individual search engine need to be
   # listed here because Ember won't let us look up controllers dynamically
-  needs: ['searches', 'cwbSearchInputs']
+  needs: ['corpus', 'searches', 'cwbSearchInputs']
 
   content: null
   contentBinding: 'controllers.searches.currentSearch'
 
+  corpusParts: null
+  corpusPartsBinding: 'controllers.corpus.parts'
 
   # Predicates used by conditionals in the handlebars template
 

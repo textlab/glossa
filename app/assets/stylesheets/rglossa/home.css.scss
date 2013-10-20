@@ -22,6 +22,10 @@ h5.category-header {
   margin-bottom: 50px;
 }
 
+.corpus-part-name {
+  margin-left: 10px;
+}
+
 .counting-matches {
   margin-top: 6px;
 }
@@ -119,12 +123,12 @@ h5.category-header {
   overflow: auto;
 
   table {
-    td:nth-child(2) {
+    td.left-context {
       width: 50%;
       text-align: right;
     }
 
-    td:last-child {
+    td.right-context {
       width: 50%;
     }
   }
