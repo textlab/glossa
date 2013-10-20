@@ -1,24 +1,30 @@
 <div class="container-fluid">
 
     <div class="row-fluid">
-        <div class="span3 top-toolbar">
-            {{#if metadataCategories.length}}
-            <button id="hide-criteria-button" class="btn btn-mini" title="Hide search criteria">
-                <i class="icon-double-angle-left"> Hide</i>
-            </button>
-            <button id="show-criteria-button" class="btn btn-mini" style="display:none" title="Show search criteria">
-                <i class="icon-double-angle-right"></i> Filters
-            </button>
-            {{/if}}
+        {{#if hasTags}}
+            <div class="span3 top-toolbar">
+              {{#if metadataCategories.length}}
+                  <button id="hide-criteria-button" class="btn btn-mini" title="Hide search criteria">
+                      <i class="icon-double-angle-left"> Hide</i>
+                  </button>
+                  <button id="show-criteria-button" class="btn btn-mini" style="display:none" title="Show search criteria">
+                      <i class="icon-double-angle-right"></i> Filters
+                  </button>
+              {{/if}}
 
-            <button {{action showCorpusHome}} id="new-search-button" class="btn btn-mini btn-primary"
-                                              style="display:none" title="Reset form">
-                Reset form
-            </button>
-        </div>
-        <div class="span9">
-          {{outlet numHits}}
-        </div>
+                <button {{action showCorpusHome}} id="new-search-button" class="btn btn-mini btn-primary"
+                                                  style="display:none" title="Reset form">
+                    Reset form
+                </button>
+            </div>
+            <div class="span9">
+              {{outlet numHits}}
+            </div>
+        {{else}}
+            <div class="span12">
+              {{outlet numHits}}
+            </div>
+        {{/if}}
     </div>
 
     <div class="row-fluid">

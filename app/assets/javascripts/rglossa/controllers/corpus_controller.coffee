@@ -14,6 +14,9 @@ App.CorpusController = Em.ObjectController.extend
   userPreferences: null
   userPreferencesBinding: 'controllers.currentUser.preferences'
 
+  hasTags: (->
+    @get('langs.firstObject.tags')
+  ).property()
 
   isMultilingual: (->
     @get('model.langs.length') > 1
