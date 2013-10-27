@@ -2,7 +2,8 @@ module Rglossa
   class MetadataCategory < ActiveRecord::Base
     attr_accessible :locale, :short_name, :name, :corpus, :category_type, :value_type
 
-    translates :name, fallbacks_for_empty_translations: true
+    # TODO: Decide wether to use globalize or just do translations in JavaScript
+    #translates :name, fallbacks_for_empty_translations: true
 
     validates_presence_of :short_name
     validates_presence_of :category_type
