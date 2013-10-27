@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'devise', '~> 2.2.3'
   s.add_dependency 'handlebars-source', "~> 1.0.12"
   s.add_dependency 'ember-rails', '~> 0.13.0'
+  s.add_dependency 'globalize3'
   s.add_dependency 'i18n-js'
 
   s.add_development_dependency 'sqlite3'
