@@ -22,7 +22,7 @@ Set this version to be your default Ruby version:
 
 (or see [the RVM documentation](https://rvm.io/workflow/rvmrc/) about how to create an *.rvmrc* file in your application directory that will automatically switch to this version when you enter the directory). Then install the latest version of Ruby on Rails:
 
-    gem install rails
+    gem install rails -N
 
 ### Create your RGlossa application
 
@@ -36,7 +36,7 @@ If you are getting the following message:
 
 you need to update the *bundler* gem:
 
-    gem install bundler
+    gem install bundler -N
 
 Also, if you are using an old version of Rails, you may get the following message:
 
@@ -47,7 +47,7 @@ Also, if you are using an old version of Rails, you may get the following messag
 
 In that case, please install the version of the *rails* gem that is mentioned in the error message, e.g.:
 
-    gem install rails -v3.2.14
+    gem install rails -v3.2.14 -N
 
 As an alternative to creating a new application, you may already have a Rails application and want to make RGlossa part of that. Since RGlossa is implemented as a Rails engine, this can easily be achieved by mounting RGlossa at some subpath within the application. See the [wiki](http://github.com/textlab/rglossa/wiki) for more information.
 
