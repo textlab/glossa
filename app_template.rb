@@ -17,6 +17,7 @@ end
 
 gem "rglossa", github: "textlab/rglossa"
 gem "devise", "~> 2.2.3"
+gem "therubyracer"
 
 run "bundle install"
 
