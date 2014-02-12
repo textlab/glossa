@@ -73,7 +73,7 @@ RGlossa uses [R](http://www.r-project.org/) for various statistics. The R suppor
 
 * Download and unzip the package sources (the plyr package is required by rcqp):
 
-        curl http://cran.r-project.org/src/contrib/plyr_1.7.1.tar.gz | tar xz
+        curl http://cran.r-project.org/src/contrib/plyr_1.8.tar.gz | tar xz
         curl http://cran.r-project.org/src/contrib/rcqp_0.3.tar.gz | tar xz
 
 * Create a registry directory in the standard location expected by CWB (unless it already exists):
