@@ -1,5 +1,6 @@
 {
   "description": "Amharic tagset by the Ethiopian Languages Research Center at Addis Ababa University",
+  "displayAttrs": ["Part-of-speech"],
   "tags": {
     "attr": "pos",
     "name": "part-of-speech",
