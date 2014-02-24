@@ -7,9 +7,11 @@ Rails.application.config.assets.paths <<
 module Rglossa
   @taggers = {}
 
-  Dir.glob(Rglossa::Engine.root.join('config', 'taggers', '*')) do |filename|
-    tagger = File.basename(filename, '.json')
-    @taggers[tagger] = JSON.parse(File.read(filename))
+  [Rglossa::Engine.root, Rails.root].each do |root|
+    Dir.glob(root.join('config', 'taggers', '*')) do |filename|
+      tagger = File.basename(filename, '.json')
+      @taggers[tagger] = JSON.parse(File.read(filename))
+    end
   end
 
   def self.taggers
