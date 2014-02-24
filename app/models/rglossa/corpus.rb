@@ -22,7 +22,14 @@ module Rglossa
 
     def langs
       if languages
-        languages.map { |l| {lang: l[:lang], tags: Rglossa.taggers[l[:tagger].to_s]['tags']} }
+        languages.map do |l|
+          tagger_config = Rglossa.taggers[l[:tagger].to_s]
+          {
+              lang: l[:lang],
+              displayAttrs: tagger_config['displayAttrs'],
+              tags: tagger_config['tags']
+          }
+        end
       else
         []
       end

@@ -1,16 +1,18 @@
 App.CwbResultTableController = Em.Controller.extend
 
-  needs: ['resultTable']
+  needs: ['resultTable', 'corpus']
 
   # We get the actual page of results from the resultTableController; this
   # controller is only responsible for doing CWB-specific formatting of
   # those results
   resultPageBinding: 'controllers.resultTable.content'
+  corpusBinding: 'controllers.corpus.content'
 
   tooltips: {}
 
   arrangedContent: (->
     resultPage = @get('resultPage')
+    displayAttrs = @get('corpus.langs.firstObject.displayAttrs')
 
     if resultPage
       resultPage.map (row) ->
@@ -22,9 +24,10 @@ App.CwbResultTableController = Em.Controller.extend
           tokens = field.split(/\s+/).map (token) ->
             parts = token.split('/')
 
-            labels = ['lemma', 'pos', 'type']
+            labels = displayAttrs
+            maxIndex = labels.length
             ot = []
-            for i in [1..3]
+            for i in [1..maxIndex]
               if parts[i] != '__UNDEF__'
                 ot.push "#{labels[i-1]}: #{parts[i]}"
             "<span data-ot=\"#{ot.join('<br>')}\">#{parts[0]}</span>"

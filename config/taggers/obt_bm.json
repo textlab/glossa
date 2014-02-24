@@ -1,5 +1,6 @@
 {
   "description": "The Oslo Bergen Tagger for Norwegian bokmål",
+  "displayAttrs": ["Lemma", "Part-of-speech", "Type"],
   "tags": {
     "attr": "pos",
     "name": "part-of-speech",

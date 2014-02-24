@@ -1,5 +1,6 @@
 {
   "description": "The Oslo Bergen Tagger for Norwegian bokmål with LBK tags",
+  "displayAttrs": ["Lemma", "Part-of-speech", "Type"],
   "tags": {
     "attr": "ordkl",
     "name": "part-of-speech",
