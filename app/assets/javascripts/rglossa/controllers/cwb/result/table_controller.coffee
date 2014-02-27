@@ -12,25 +12,35 @@ App.CwbResultTableController = Em.Controller.extend
 
   arrangedContent: (->
     resultPage = @get('resultPage')
-    displayAttrs = @get('corpus.langs.firstObject.displayAttrs')
+    labels = @get('corpus.langs.firstObject.displayAttrs') || []
 
     if resultPage
       resultPage.map (row) ->
-        m = row.match(/<s_id(.*)>:\s+(.*)<(.+?)>(.*)/)
-        sId = m[1].trim()
-        fields = [m[2], m[3], m[4]]
+        m = row.match(/<\w+_id(.*)>:\s+(.*)<(.+?)>(.*)/)
+        if m
+          sId = m[1].trim()
+          fields = [m[2], m[3], m[4]]
+        else
+          # No structural attribute surrounding the hit, so just find the colon following the
+          # position number and grab everything following it
+          m = row.match(/:\s+(.*)<(.+?)>(.*)/)
+          sId = ''
+          fields = [m[1], m[2], m[3]]
 
         fields = fields.map (field) ->
           tokens = field.split(/\s+/).map (token) ->
             parts = token.split('/')
 
-            labels = displayAttrs
             maxIndex = labels.length
             ot = []
-            for i in [1..maxIndex]
-              if parts[i] != '__UNDEF__'
-                ot.push "#{labels[i-1]}: #{parts[i]}"
-            "<span data-ot=\"#{ot.join('<br>')}\">#{parts[0]}</span>"
+            if maxIndex
+              for i in [1..maxIndex]
+                if parts[i] != '__UNDEF__'
+                  ot.push "#{labels[i-1]}: #{parts[i]}"
+              "<span data-ot=\"#{ot.join('<br>')}\">#{parts[0]}</span>"
+            else
+              "<span>#{parts[0]}</span>"
+
           tokens.join(' ')
 
         sId:       sId
