@@ -49,22 +49,27 @@ module Rglossa
       def get_result_page(page_no, extra_attributes = %w(lemma pos type))
         q = queries[0]
         cwbCorpusName = q['corpusShortName'].upcase
+        corpus = Corpus.find_by_short_name(q['corpusShortName'])
         named_query = cwbCorpusName + id.to_s
 
         # NOTE: page_no is 1-based while cqp uses 0-based numbering of hits
         start = (page_no - 1) * page_size
         stop  = start + page_size - 1
+        s_tag = corpus.s_tag || "s"
         commands = [
           %Q{set DataDirectory "#{Dir.tmpdir}"},
           cwbCorpusName,  # necessary for "set PrintStructures to work"...
-          "set Context s",
-          "set PrintStructures s_id"]
+          "set Context #{s_tag}",
+          "set PrintStructures #{s_tag}_id"]
 
         if extra_attributes.present?
-          corpus = Corpus.find_by_short_name(q['corpusShortName'])
           # TODO: Handle multilingual corpora - here we just take the first language
-          pos_attr = corpus.langs.first[:tags]['attr']
-          commands << "show " + extra_attributes.map { |a| "+#{a == 'pos' ? pos_attr : a}" }.join(' ')
+          if corpus.langs.present?
+            pos_attr = corpus.langs.first[:tags]['attr']
+            commands << "show " + extra_attributes.map { |a| "+#{a == 'pos' ? pos_attr : a}" }.join(' ')
+          elsif corpus.extra_cwb_attrs
+            commands << "show " + corpus.extra_cwb_attrs.join(' ')
+          end
         end
 
         commands << "cat #{named_query} #{start} #{stop}"
