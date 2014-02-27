@@ -13,8 +13,8 @@ App.CwbSearchInputsController = Em.ArrayController.extend
     @set 'content', [
       query: '',
       corpusShortName: @get('corpus.shortName'),
-      posAttr: tags.attr,
-      tags: tags.options
+      posAttr: tags?.attr,
+      tags: tags?.options
     ]
 
   isShowingSimple: (->
