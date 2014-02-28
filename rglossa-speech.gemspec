@@ -7,7 +7,7 @@ require "rglossa/speech/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "rglossa_speech"
+  s.name        = "rglossa-speech"
   s.version     = Rglossa::Speech::VERSION
   s.authors     = ["Anders Nøklestad"]
   s.email       = ["anders.noklestad@iln.uio.no"]
