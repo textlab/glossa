@@ -31,9 +31,9 @@ PATH
       rserve-client (~> 0.3.1)
 
 PATH
-  remote: /Users/noklesta/rails/tekstlab/plugins/rglossa_speech
+  remote: /Users/noklesta/rails/tekstlab/plugins/rglossa-speech
   specs:
-    rglossa_speech (0.0.1)
+    rglossa-speech (0.0.1)
       rails (~> 3.2.14)
 
 GEM
@@ -206,7 +206,7 @@ DEPENDENCIES
   rglossa!
   rglossa-fcs!
   rglossa-r!
-  rglossa_speech!
+  rglossa-speech!
   sass-rails (~> 3.2.3)
   sqlite3
   table_print
