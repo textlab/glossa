@@ -12,4 +12,5 @@
 //
 //= require rglossa/application
 //= require rglossa/fcs/application
+//= require rglossa/speech/application
 //= require_tree .
