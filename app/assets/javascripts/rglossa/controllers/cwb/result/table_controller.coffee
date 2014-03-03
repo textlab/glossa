@@ -8,6 +8,8 @@ App.CwbResultTableController = Em.Controller.extend
   resultPageBinding: 'controllers.resultTable.content'
   corpusBinding: 'controllers.corpus.content'
 
+  corpusHasSound: (-> @get('corpus.hasSound')).property('corpus')
+
   tooltips: {}
 
   arrangedContent: (->

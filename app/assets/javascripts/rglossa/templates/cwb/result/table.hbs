@@ -1,13 +1,16 @@
 <div class="row-fluid search-result-table-container">
   <table class="table table-striped table-bordered">
-    {{#each arrangedContent}}
+    {{#each result in arrangedContent}}
     <tr>
-    {{#if sId}}
-      <td>{{{sId}}}</td>
+    {{#if result.sId}}
+      <td>{{{result.sId}}}</td>
     {{/if}}
-      <td>{{{preMatch}}}</td>
-      <td>{{{match}}}</td>
-      <td>{{{postMatch}}}</td>
+        {{#if corpusHasSound}}
+      <td class="span1"><i class="icon-volume-up"></i></td>
+    {{/if}}
+      <td>{{{result.preMatch}}}</td>
+      <td>{{{result.match}}}</td>
+      <td>{{{result.postMatch}}}</td>
     </tr>
     {{/each}}
   </table>
