@@ -33,7 +33,7 @@ module Rglossa
           # With certain search engines, the number of hits is not determined
           # until we actually fetch a result page, so we do that explicitly
           # before creating the response
-          pages = @search.first_two_result_pages
+          pages = transform_result_pages(@search.first_two_result_pages)
 
           # If the corpus does not contain any subparts, we will have figured out the total number
           # of hits when we found our first two result pages. Alternatively, if the corpus contains
@@ -69,7 +69,7 @@ module Rglossa
 
       if search
         search.current_corpus_part = params[:current_corpus_part].to_i
-        pages = search.get_result_pages(params[:pages])
+        pages = transform_result_pages(search.get_result_pages(params[:pages]))
 
         @results = {
           search_results: {
@@ -124,6 +124,14 @@ module Rglossa
 
     def get_corpus_from_query
       Corpus.find_by_short_name(@search.queries.first['corpusShortName'])
+    end
+
+    def transform_result_pages(pages)
+      new_pages = {}
+      pages.each do |page_no, page|
+        new_pages[page_no] = page.map { |result|  {text: result} }
+      end
+      new_pages
     end
 
   end
