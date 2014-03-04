@@ -38,4 +38,6 @@ App.CwbSearchInputsController = Em.ArrayController.extend
 
   search: (component, options = {}) ->
     options.queries = @get('content')
-    @get('controllers.searches').createSearch('CwbSearch', options)
+    searchEngine = @get('corpus.searchEngine')
+    searchType = if searchEngine then Em.String.classify(searchEngine) + 'Search' else 'CwbSearch'
+    @get('controllers.searches').createSearch(searchType, options)

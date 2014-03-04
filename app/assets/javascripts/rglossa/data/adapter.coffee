@@ -2,6 +2,7 @@ DS.RESTAdapter.configure 'plurals',
   corpus:     'corpora'
   search:     'searches'
   cwb_search: 'cwb_searches'
+  speech_cwb_search: 'speech_cwb_searches'
   metadata_category: 'metadata_categories'
 
 App.Adapter = DS.RESTAdapter.extend

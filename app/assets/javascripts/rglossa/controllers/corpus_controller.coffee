@@ -10,6 +10,7 @@ App.CorpusController = Em.ObjectController.extend
   # engines
   defaultSearchInterfaceVariant:
     cwb: 'simple'
+    speech_cwb: 'simple'
 
   userPreferences: null
   userPreferencesBinding: 'controllers.currentUser.preferences'
