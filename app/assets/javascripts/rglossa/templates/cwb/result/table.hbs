@@ -1,6 +1,6 @@
 <div class="row-fluid search-result-table-container">
   <table class="table table-striped table-bordered">
-    {{#each result in arrangedContent}}
+    {{#each result in arrangedContent itemController="resultRow"}}
     <tr>
     {{#if result.sId}}
       <td>{{{result.sId}}}</td>
