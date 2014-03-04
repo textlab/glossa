@@ -28,23 +28,29 @@ module Rglossa
           pages.each do |page_no, page|
             new_pages[page_no] = page.map do |result|
               lines = []
+              starttimes = []
+              endtimes = []
               displayed_lines = []
               speakers = []
               overall_starttime = nil
               overall_endtime = nil
 
               result.scan(/<#{endtime_attr}\s+([\d\.]+)><#{starttime_attr}\s+([\d\.]+)>(.*?)<\/#{starttime_attr}><\/#{endtime_attr}>/) do |m|
-                starttime, endtime, line = m
-                lines << line
+                endtime, starttime, line = m
 
                 overall_starttime ||= starttime
-                overall_endtime = endtime
+                overall_endtime     = endtime
+
+                starttimes << starttime
+                endtimes   << endtime
 
                 m2 = line.match(/<#{speaker_attr}\s+(.+?)>(.*?)<\/#{speaker_attr}>/)
                 if m2
                   speakers << m2[1]
                   line = m2[2]
                 end
+
+                lines << line
 
                 # We asked for a context of several units to the left and right of the unit containing
                 # the matching word or phrase, but only the unit with the match (marked by angle
@@ -54,7 +60,8 @@ module Rglossa
                 end
               end
 
-              media_obj = create_media_obj(overall_starttime, overall_endtime, lines, speakers)
+              media_obj = create_media_obj(overall_starttime, overall_endtime,
+                                           starttimes, endtimes, lines, speakers)
 
               # The client code expects a colon at the beginning of each result line, so put it in
               {
@@ -66,13 +73,16 @@ module Rglossa
           new_pages
         end
 
-        def create_media_obj(overall_starttime, overall_endtime, lines, speakers)
+        # Creates the data structure that is needed by jPlayer for a single search result
+        def create_media_obj(overall_starttime, overall_endtime,
+            starttimes, endtimes, lines, speakers)
+          display_attr = 'ort' # TODO: make configurable?
           obj = {
               title: 'hei',
               last_line: '6',
               start_at: '3',
               end_at: '4',
-              display_attribute: 'ort',
+              display_attribute: display_attr,
               mov: {
                   supplied: 'm4v',
                   path: '',
@@ -86,8 +96,16 @@ module Rglossa
               }
           }
           lines.each_with_index do |line, index|
+            token_no = -1
             obj[:divs][:annotation][index] = {
-                speaker: speakers.shift || ''
+                speaker: speakers.shift || '',
+                line: line.split(/\s+/).reduce({}) do |acc, token|
+                  token_no += 1
+                  acc[token_no] = {display_attr => token}
+                  acc
+                end,
+                from: starttimes.shift,
+                to: endtimes.shift
             }
           end
           obj
