@@ -57,8 +57,8 @@ module Rglossa
           commands = [
               %Q{set DataDirectory "#{Dir.tmpdir}"},
               cwbCorpusName,  # necessary for "set PrintStructures to work"...
-              "set Context 10 #{s_tag}",
-              "set PrintStructures \"#{s_tag}_id, turn_starttime, turn_endtime\""]
+              "set Context 7 #{s_tag}",
+              "set PrintStructures #{s_tag}_id"]
 
           if extra_attributes.present?
             # TODO: Handle multilingual corpora - here we just take the first language
@@ -73,32 +73,6 @@ module Rglossa
           commands << "cat #{named_query} #{start} #{stop}"
 
           run_cqp_commands(commands).split("\n")
-        end
-
-        ########
-        private
-        ########
-
-        def run_cqp_commands(commands)
-          corpus = Corpus.find_by_short_name(queries[0]['corpusShortName'].downcase)
-          encoding = corpus.encoding
-
-          Tempfile.open('cqp', encoding: encoding) do |command_file|
-            commands.map! { |cmd| cmd.end_with?(';') ? cmd : cmd + ';' }
-            command_file.puts commands
-            command_file.rewind
-
-            output_file = open("| cqp -c -f#{command_file.path}", external_encoding: encoding)
-            output_file.readline  # throw away the first line with the CQP version
-
-            result = output_file.read
-            if result.include?('PARSE ERROR') || result.include?('CQP Error')
-              raise Rglossa::QueryError, result
-            end
-
-            command_file.unlink
-            result
-          end
         end
       end
     end
