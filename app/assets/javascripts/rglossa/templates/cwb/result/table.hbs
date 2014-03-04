@@ -6,7 +6,9 @@
       <td>{{{result.sId}}}</td>
     {{/if}}
         {{#if corpusHasSound}}
-      <td class="span1"><i class="icon-volume-up" {{action showJplayer}}></i></td>
+      <td class="span1">
+          <button class="btn"><i class="icon-volume-up" {{action toggleJplayer}}></i></button>
+      </td>
     {{/if}}
       <td>{{{result.preMatch}}}</td>
       <td>{{{result.match}}}</td>

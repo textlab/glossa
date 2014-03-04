@@ -11,5 +11,5 @@ App.ResultRowController = Em.ObjectController.extend
     @get('_isShowingSound')
   ).property()
 
-  showJplayer: ->
-    @set('isShowingSound', true)
+  toggleJplayer: ->
+    @set('isShowingSound', not @get('isShowingSound'))
