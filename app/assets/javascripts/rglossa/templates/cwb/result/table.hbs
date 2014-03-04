@@ -6,12 +6,19 @@
       <td>{{{result.sId}}}</td>
     {{/if}}
         {{#if corpusHasSound}}
-      <td class="span1"><i class="icon-volume-up"></i></td>
+      <td class="span1"><i class="icon-volume-up" {{action showJplayer}}></i></td>
     {{/if}}
       <td>{{{result.preMatch}}}</td>
       <td>{{{result.match}}}</td>
       <td>{{{result.postMatch}}}</td>
     </tr>
+      {{#if isShowingSound}}
+    <tr>
+        <td colspan="10">
+            {{j-player mediaObj=result}}
+        </td>
+    </tr>
+      {{/if}}
     {{/each}}
   </table>
 </div>
