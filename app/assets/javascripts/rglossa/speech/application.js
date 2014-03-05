@@ -10,4 +10,4 @@
 //= require_tree ./models
 //= require_tree ./views
 //= require_tree ./components
-
+//= require ./jquery.jplayer.min
