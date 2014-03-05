@@ -122,8 +122,9 @@ module Rglossa
       end
     end
 
-    def get_corpus_from_query
-      Corpus.find_by_short_name(@search.queries.first['corpusShortName'])
+    def get_corpus_from_query(search = nil)
+      search ||= @search || model_class.find(params[:id])
+      Corpus.find_by_short_name(search.queries.first['corpusShortName'])
     end
 
     def transform_result_pages(pages)
