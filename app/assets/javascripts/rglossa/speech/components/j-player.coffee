@@ -52,13 +52,13 @@ App.JPlayerComponent = Em.Component.extend
 
 
     # Slider widget
-    $( "#slider-range" ).slider
+    $( ".slider-range" ).slider
         range: true
         min: 0
         max: last_line
         values: [ @textBox.start_at_line, @textBox.end_at_line+1 ]
 
-        slide: ( event, ui ) ->
+        slide: ( event, ui ) =>
           return false if ui.values[1] - ui.values[0] < 1
 
           first = ui.values[ 0 ]
