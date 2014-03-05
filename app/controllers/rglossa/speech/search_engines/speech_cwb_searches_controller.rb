@@ -73,7 +73,8 @@ module Rglossa
               end
 
               media_obj = create_media_obj(overall_starttime, overall_endtime,
-                                           starttimes, endtimes, lines, speakers)
+                                           starttimes, endtimes, lines, speakers,
+                                           corpus.display_attrs)
 
               # The client code expects a colon at the beginning of each result line, so put it in
               {
@@ -87,14 +88,14 @@ module Rglossa
 
         # Creates the data structure that is needed by jPlayer for a single search result
         def create_media_obj(overall_starttime, overall_endtime,
-            starttimes, endtimes, lines, speakers)
-          display_attr = 'ort' # TODO: make configurable?
+            starttimes, endtimes, lines, speakers, display_attrs)
+          word_attr = 'ort' # TODO: make configurable?
           obj = {
-              title: 'hei',
+              title: '',
               last_line: '6',
               start_at: '3',
               end_at: '4',
-              display_attribute: display_attr,
+              display_attribute: word_attr,
               mov: {
                   supplied: 'm4v',
                   path: '',
@@ -113,7 +114,8 @@ module Rglossa
                 speaker: speakers.shift || '',
                 line: line.split(/\s+/).reduce({}) do |acc, token|
                   token_no += 1
-                  acc[token_no] = {display_attr => token}
+                  attr_values = token.split('/')
+                  acc[token_no] = Hash[[word_attr].concat(display_attrs).zip(attr_values)]
                   acc
                 end,
                 from: starttimes.shift,
