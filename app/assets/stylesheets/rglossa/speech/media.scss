@@ -1,16 +1,25 @@
 .jplayer-container {
   position: relative;
+
+  a {
+    color: black;
+    text-decoration: none;
+  }
 }
 
-.media-player a {
-  font-family: courier;
-  font-size: .8em;
+.media-player {
+  a {
+    font-family: courier;
+    font-size: .8em;
+  }
+
+  a.match{
+    color:#b00;
+    font-weight:bold;
+    font-size:0.9em;
+  }
 }
-.media-player a.match{
-  color:#b00;
-  font-weight:bold;
-  font-size:0.9em;
-}
+
 .autocue{
   display: table;
   position:absolute;
