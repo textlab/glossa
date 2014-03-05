@@ -49,6 +49,7 @@ App.CwbResultTableController = Em.Controller.extend
         preMatch:  fields[0]
         match:     fields[1]
         postMatch: fields[2]
+        mediaObj:  row.media_obj
     else
       []
   ).property('resultPage.@each')
