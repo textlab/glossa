@@ -35,6 +35,14 @@ module Rglossa
               overall_starttime = nil
               overall_endtime = nil
 
+              # If the matching word/phrase is at the beginning of the segment, CQP puts the angle
+              # bracket marking the start of the match before the starting segment tag
+              # (e.g. <<turn_endtime 38.26><turn_starttime 30.34>went/go/PAST>...). Probably a
+              # bug in CQP? In any case we have to fix it by moving the angle bracket to the
+              # start of the segment text instead. Similarly if the match is at the end of a segment.
+              result.gsub!(/<((?:<\S+?\s+?\S+?>\s*)+)/, '\1<') # find start tags with attributes (i.e., not the match)
+              result.gsub!(/((?:<\/\S+?>\s*)+)>/, '>\1')        # find end tags
+
               result.scan(/<#{endtime_attr}\s+([\d\.]+)><#{starttime_attr}\s+([\d\.]+)>(.*?)<\/#{starttime_attr}><\/#{endtime_attr}>/) do |m|
                 endtime, starttime, line = m
 
@@ -48,18 +56,6 @@ module Rglossa
                 if m2
                   speakers << m2[1]
                   line = m2[2]
-                end
-
-                # If the matching word/phrase is at the beginning of the segment, CQP puts the angle
-                # bracket marking the start of the match before the starting segment tag
-                # (e.g. <<turn_endtime 38.26><turn_starttime 30.34>went/go/PAST>...). Probably a
-                # bug in CQP? In any case we have to fix it by putting a new angle bracket at the
-                # start of the segment text. Similarly if the match is at the end of a segment.
-                if line =~ /^[^<]\S*>/
-                  line = '<' + line
-                end
-                if line =~ /<\S*[^>]$/
-                  line = line + '>'
                 end
 
                 lines << line
