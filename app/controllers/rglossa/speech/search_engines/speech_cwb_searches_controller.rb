@@ -50,12 +50,21 @@ module Rglossa
                   line = m2[2]
                 end
 
+                # If the matching word/phrase is at the beginning of the segment, CQP puts the angle
+                # bracket marking the start of the match before the starting segment tag
+                # (e.g. <<turn_endtime 38.26><turn_starttime 30.34>went/go/PAST>...). Probably a
+                # bug in CQP? In any case we have to fix it by putting a new angle bracket at the
+                # start of the segment text.
+                if line =~ /^[^<]\S*>/
+                  line = '<' + line
+                end
+
                 lines << line
 
                 # We asked for a context of several units to the left and right of the unit containing
                 # the matching word or phrase, but only the unit with the match (marked by angle
                 # brackets) should be included in the search result shown in the result table.
-                if line =~ /.+<.+>.+/
+                if line =~ /<\S+>/
                   displayed_lines << line
                 end
               end
