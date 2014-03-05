@@ -86,7 +86,7 @@ module Rglossa
               mov: {
                   supplied: 'm4v',
                   path: '',
-                  movie_loc: 'aaseral_03gm-04gk_800.mp4',
+                  movie_loc: 'The_Story_of_Four_Oxen-Siyoum Abraha.mp3',
                   start: overall_starttime.to_s,
                   stop: overall_endtime.to_s
               },
