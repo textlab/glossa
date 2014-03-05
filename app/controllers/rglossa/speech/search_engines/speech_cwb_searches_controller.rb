@@ -54,9 +54,12 @@ module Rglossa
                 # bracket marking the start of the match before the starting segment tag
                 # (e.g. <<turn_endtime 38.26><turn_starttime 30.34>went/go/PAST>...). Probably a
                 # bug in CQP? In any case we have to fix it by putting a new angle bracket at the
-                # start of the segment text.
+                # start of the segment text. Similarly if the match is at the end of a segment.
                 if line =~ /^[^<]\S*>/
                   line = '<' + line
+                end
+                if line =~ /<\S*[^>]$/
+                  line = line + '>'
                 end
 
                 lines << line
