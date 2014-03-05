@@ -14,7 +14,7 @@ App.CwbResultTableController = Em.Controller.extend
 
   arrangedContent: (->
     resultPage = @get('resultPage')
-    labels = @get('corpus.langs.firstObject.displayAttrs') || []
+    labels = @get('corpus.langs.firstObject.displayAttrs') || @get('corpus.displayAttrs') || []
 
     if resultPage
       resultPage.map (row) ->
