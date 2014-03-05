@@ -129,20 +129,20 @@ App.JPlayerComponent = Em.Component.extend
             if att is "pos"
               # pos tags contain multiple values seperated by colons
               line[i][att] = line[i][att].replace(/:/g,"/")
-              att_string += att + " : " + line[i][att] + "<br>"
+            att_string += att + " : " + line[i][att] + "<br>"
 
-            anchor = $('<a>')
-            .attr("title",att_string)
-            .text(line[i][display_attribute])
+          anchor = $('<a>')
+          .attr("title",att_string)
+          .text(line[i][display_attribute])
 
-            segmentDiv.append(anchor)
-            segmentDiv.append(" ")
+          segmentDiv.append(anchor)
+          segmentDiv.append(" ")
 
-            if match
-              anchor
-              .css({"color":"#b00"})
-              .css({"font-weight":"bold"})
-              .css({"font-size":"0.9em"})
+          if match
+            anchor
+            .css({"color":"#b00"})
+            .css({"font-weight":"bold"})
+            .css({"font-size":"0.9em"})
 
         div.append(speakerDiv)
         div.append(segmentDiv)
