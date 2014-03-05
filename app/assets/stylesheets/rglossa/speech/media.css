@@ -1,3 +1,7 @@
+.jplayer-container {
+  position: relative;
+}
+
 .media-player a {
   font-family: courier;
   font-size: .8em;

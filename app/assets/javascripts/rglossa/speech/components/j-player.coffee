@@ -1,4 +1,5 @@
 App.JPlayerComponent = Em.Component.extend
+  classNames: 'jplayer-container'
 
   didInsertElement: ->
     @textBox = @createTextBox()
