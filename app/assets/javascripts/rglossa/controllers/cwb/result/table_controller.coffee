@@ -16,14 +16,14 @@ App.CwbResultTableController = Em.Controller.extend
 
     if resultPage
       resultPage.map (row) ->
-        m = row.text.match(/<\w+_id(.*)>:\s+(.*)<(.+?)>(.*)/)
+        m = row.text.match(/<\w+_id(.*)>:\s+(.*){{(.+?)}}(.*)/)
         if m
           sId = m[1].trim()
           fields = [m[2], m[3], m[4]]
         else
           # No structural attribute surrounding the hit, so just find the colon following the
           # position number and grab everything following it
-          m = row.text.match(/:\s+(.*)<(.+?)>(.*)/)
+          m = row.text.match(/:\s+(.*){{(.+?)}}(.*)/)
           sId = ''
           fields = [m[1], m[2], m[3]]
 
