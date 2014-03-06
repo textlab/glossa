@@ -89,8 +89,6 @@ module Rglossa
           obj = {
               title: '',
               last_line: lines.size,
-              start_at: '3',
-              end_at: '4',
               display_attribute: word_attr,
               mov: {
                   supplied: 'm4v',
@@ -104,6 +102,7 @@ module Rglossa
                   }
               }
           }
+          matching_line_index = nil
           lines.each_with_index do |line, index|
             token_no = -1
             is_match = false
@@ -114,6 +113,7 @@ module Rglossa
                   m = token.match(/^<(.*)>$/)
                   if m
                     is_match = true
+                    matching_line_index = index
                     token = m[1]
                   end
                   attr_values = token.split('/')
@@ -125,6 +125,12 @@ module Rglossa
             }
             obj[:divs][:annotation][index][:is_match] = is_match
           end
+          start_at = matching_line_index - 1
+          start_at = 0 if start_at < 0
+          end_at   = matching_line_index + 1
+          end_at   = lines.size - 1 if end_at >= lines.size
+          obj[:start_at] = start_at
+          obj[:end_at]   = end_at
           obj
         end
 
