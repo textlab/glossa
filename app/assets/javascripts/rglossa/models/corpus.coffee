@@ -4,6 +4,7 @@ App.Corpus = DS.Model.extend
   shortName: DS.attr('string')
   langs: DS.attr('array')
   displayAttrs: DS.attr('array')
+  extraLineAttrs: DS.attr('array')
   parts: DS.attr('array')
   searchEngine: DS.attr('string')
   hasSound: DS.attr('boolean')
