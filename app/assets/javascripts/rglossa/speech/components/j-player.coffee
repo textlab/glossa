@@ -20,8 +20,8 @@ App.JPlayerComponent = Em.Component.extend
     start = parseInt(@mediaObj.start_at)
     stop  = parseInt(@mediaObj.end_at)
     @textBox.redraw(start,stop, last_line)
-    start = parseFloat($("#"+start).data("start_timecode"))
-    stop  = parseFloat($("#"+stop).data("end_timecode"))
+    start = parseFloat($("#jp-"+start).data("start_timecode"))
+    stop  = parseFloat($("#jp-"+stop).data("end_timecode"))
 
     console.log(@mediaObj)
 
@@ -37,10 +37,9 @@ App.JPlayerComponent = Em.Component.extend
       timeupdate: (event) =>
         ct = event.jPlayer.status.currentTime
         if ct > stop
-          @$(".jp-player").jPlayer("play", start)
-          @$(".jp-player").jPlayer( "pause" )
-
-        if ct > @textBox.currentEndTime
+          @$(".jp-jplayer").jPlayer("play", start)
+          @$(".jp-jplayer").jPlayer( "pause" )
+        else if ct > @textBox.currentEndTime
           @textBox.update(ct)
 
       ended: -> alert("ended!")
@@ -65,8 +64,8 @@ App.JPlayerComponent = Em.Component.extend
           last = ui.values[ 1 ] - 1  #eg,  2 - 3 means play 1 segment
           @textBox.redraw(first,last, last_line)
 
-          start = parseFloat($("#"+first).data("start_timecode"))
-          stop = parseFloat($("#"+last).data("end_timecode"))
+          start = parseFloat($("#jp-"+first).data("start_timecode"))
+          stop = parseFloat($("#jp-"+last).data("end_timecode"))
 
           @$(".js-jplayer").jPlayer("play", start)
 
@@ -100,7 +99,7 @@ App.JPlayerComponent = Em.Component.extend
         div = $('<div>')
         .addClass("textDiv")
         .addClass(timecode.replace(/\./,"_"))
-        .attr("id", n.replace(/_/,""))
+        .attr("id", 'jp-' + n)
         .data("start_timecode",timecode)
         .data("end_timecode",end_timecode)
         .on "click", (e) -> alert($(@).data("start_timecode")+" id:"+$(@).attr("id"))
@@ -156,29 +155,29 @@ App.JPlayerComponent = Em.Component.extend
     redraw: (first, last, last_line) ->
       @currentID = first
       @currentEndTime = 0
-      first_start = $("#"+first).data("start_timecode")
-      last_end = $("#"+last).data("end_timecode")
+      first_start = $("#jp-"+first).data("start_timecode")
+      last_end = $("#jp-"+last).data("end_timecode")
 
       for i in [0..last_line]
-        $("#"+i).css("background-color","#fff")
+        $("#jp-"+i).css("background-color","#fff")
         if i >= first and i <= last
-          $("#"+i).css({"display":"table-row","color":"#000"})
+          $("#jp-"+i).css({"display":"table-row","color":"#000"})
           continue
 
-        if ($("#"+i).data("start_timecode") is first_start) or ($("#"+i).data("end_timecode") is last_end)
+        if ($("#jp-"+i).data("start_timecode") is first_start) or ($("#jp-"+i).data("end_timecode") is last_end)
           # ie, overlapping segments
-          $("#"+i).css({"display":"table-row","color":"#ccc"})
+          $("#jp-"+i).css({"display":"table-row","color":"#ccc"})
           continue
 
-      $("#"+i).css({"display":"none"})
+      $("#jp-"+i).css({"display":"none"})
 
 
     update: (ct) ->
       iterate = true
 
       while iterate
-        currentEndTime = $("#"+@currentID).data("end_timecode")
-        currentStartTime = $("#"+@currentID).data("start_timecode")
+        currentEndTime = $("#jp-"+@currentID).data("end_timecode")
+        currentStartTime = $("#jp-"+@currentID).data("start_timecode")
         if currentEndTime > ct
           @currentEndTime = currentEndTime
           $("."+currentStartTime.replace(/\./,"_")).css("background-color","#eea")

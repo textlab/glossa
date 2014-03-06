@@ -88,7 +88,7 @@ module Rglossa
           word_attr = 'ort' # TODO: make configurable?
           obj = {
               title: '',
-              last_line: lines.size,
+              last_line: lines.size - 1,
               display_attribute: word_attr,
               mov: {
                   supplied: 'm4v',
