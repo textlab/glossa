@@ -71,6 +71,10 @@ App.JPlayerComponent = Em.Component.extend
           @$(".js-jplayer").jPlayer("play", start)
 
 
+  willDestroyElement: ->
+    @$(".jp-jplayer").jPlayer('destroy')
+
+
   createTextBox: =>
     start_at_line:0
     end_at_line:0
