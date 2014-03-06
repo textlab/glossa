@@ -35,13 +35,13 @@ module Rglossa
               overall_starttime = nil
               overall_endtime = nil
 
-              # If the matching word/phrase is at the beginning of the segment, CQP puts the angle
-              # bracket marking the start of the match before the starting segment tag
-              # (e.g. <<turn_endtime 38.26><turn_starttime 30.34>went/go/PAST>...). Probably a
-              # bug in CQP? In any case we have to fix it by moving the angle bracket to the
+              # If the matching word/phrase is at the beginning of the segment, CQP puts the braces
+              # marking the start of the match before the starting segment tag
+              # (e.g. {{<turn_endtime 38.26><turn_starttime 30.34>went/go/PAST>...). Probably a
+              # bug in CQP? In any case we have to fix it by moving the braces to the
               # start of the segment text instead. Similarly if the match is at the end of a segment.
-              result.gsub!(/<((?:<\S+?\s+?\S+?>\s*)+)/, '\1<') # find start tags with attributes (i.e., not the match)
-              result.gsub!(/((?:<\/\S+?>\s*)+)>/, '>\1')        # find end tags
+              result.gsub!(/{{((?:<\S+?\s+?\S+?>\s*)+)/, '\1{{') # find start tags with attributes (i.e., not the match)
+              result.gsub!(/((?:<\/\S+?>\s*)+)}}/, '}}\1')        # find end tags
 
               result.scan(/<#{endtime_attr}\s+([\d\.]+)><#{starttime_attr}\s+([\d\.]+)>(.*?)<\/#{starttime_attr}><\/#{endtime_attr}>/) do |m|
                 endtime, starttime, line = m
@@ -63,7 +63,7 @@ module Rglossa
                 # We asked for a context of several units to the left and right of the unit containing
                 # the matching word or phrase, but only the unit with the match (marked by angle
                 # brackets) should be included in the search result shown in the result table.
-                if line =~ /<\S+>/
+                if line =~ /{{.+}}/
                   displayed_lines << line
                 end
               end
@@ -110,11 +110,14 @@ module Rglossa
                 speaker: speakers.shift || '',
                 line: line.split(/\s+/).reduce({}) do |acc, token|
                   token_no += 1
-                  m = token.match(/^<(.*)>$/)
-                  if m
+
+                  # Note: when matching a phrase, left and right braces will be on different
+                  # tokens!
+                  if token.match(/^{{(.*)/) || token.match(/(.*)}}$/)
                     is_match = true
                     matching_line_index = index
-                    token = m[1]
+                    token.sub!(/^{{/, '')
+                    token.sub!(/}}$/, '')
                   end
                   attr_values = token.split('/')
                   acc[token_no] = Hash[[word_attr].concat(display_attrs).zip(attr_values)]

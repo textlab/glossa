@@ -58,6 +58,8 @@ module Rglossa
               %Q{set DataDirectory "#{Dir.tmpdir}"},
               cwbCorpusName,  # necessary for "set PrintStructures to work"...
               "set Context 7 #{s_tag}",
+              'set LD "{{"',
+              'set RD "}}"',
               "set PrintStructures #{s_tag}_id"]
 
           if extra_attributes.present?
