@@ -54,6 +54,11 @@ App.CwbMultiwordTermComponent = Em.Component.extend
     @get('term.isEnd')
   ).property('term.isEnd')
 
+  didBecomeLast: (->
+    if @get('term.isLast')
+      Em.run.next => @$('[data-add-term-button]').on('click', $.proxy(@addTerm, @))
+  ).observes('term.isLast')
+
   addTerm: (e) ->
     if e.screenX > 0 and e.screenY > 0
       @get('parentView').addTerm()
