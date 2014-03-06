@@ -88,7 +88,7 @@ module Rglossa
           word_attr = 'ort' # TODO: make configurable?
           obj = {
               title: '',
-              last_line: '6',
+              last_line: lines.size,
               start_at: '3',
               end_at: '4',
               display_attribute: word_attr,
@@ -96,8 +96,8 @@ module Rglossa
                   supplied: 'm4v',
                   path: '',
                   movie_loc: 'The_Story_of_Four_Oxen-Siyoum Abraha.mp3',
-                  start: overall_starttime.to_s,
-                  stop: overall_endtime.to_s
+                  start: overall_starttime,
+                  stop: overall_endtime
               },
               divs: {
                   annotation: {
@@ -106,10 +106,16 @@ module Rglossa
           }
           lines.each_with_index do |line, index|
             token_no = -1
+            is_match = false
             obj[:divs][:annotation][index] = {
                 speaker: speakers.shift || '',
                 line: line.split(/\s+/).reduce({}) do |acc, token|
                   token_no += 1
+                  m = token.match(/^<(.*)>$/)
+                  if m
+                    is_match = true
+                    token = m[1]
+                  end
                   attr_values = token.split('/')
                   acc[token_no] = Hash[[word_attr].concat(display_attrs).zip(attr_values)]
                   acc
@@ -117,6 +123,7 @@ module Rglossa
                 from: starttimes.shift,
                 to: endtimes.shift
             }
+            obj[:divs][:annotation][index][:is_match] = is_match
           end
           obj
         end
