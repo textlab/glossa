@@ -1,2 +1,4 @@
-App.SpeechCwbResultView = Em.View.extend
+#= require rglossa/views/cwb/result_view
+
+App.SpeechCwbResultView = App.CwbResultView.extend
   templateName: 'cwb/result'
