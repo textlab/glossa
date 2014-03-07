@@ -19,8 +19,8 @@ App.CorpusRoute = Em.Route.extend
       @controllerFor('cwbSearchInputs').set('content', [{
         query: '',
         corpusShortName: @currentModel.get('shortName'),
-        posAttr: tags.attr,
-        tags: tags.options
+        posAttr: tags?.attr,
+        tags: tags?.options
       }])
 
       @transitionTo("corpus.home")
