@@ -45,7 +45,7 @@ gem "rglossa-speech", :path => "/Users/noklesta/rails/tekstlab/plugins/rglossa-s
 gem "devise", "~> 2.2.3"
 
 group :development do
-  #gem 'thin'
+  gem 'thin'
   gem 'pry'
   gem 'table_print'
   gem 'awesome_print'
