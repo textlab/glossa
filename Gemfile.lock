@@ -1,16 +1,25 @@
+GIT
+  remote: git://github.com/facebook/react-rails.git
+  revision: c09a0c6522301db7cb2bcea6673aa349298847f2
+  specs:
+    react-rails (1.0.0.pre)
+      connection_pool
+      execjs
+      rails (>= 3.1)
+      react-source (= 0.9.0)
+
 PATH
   remote: /Users/noklesta/rails/tekstlab/plugins/rglossa
   specs:
     rglossa (0.0.1)
       coffee-rails (~> 3.2.2)
       devise (~> 2.2.3)
-      ember-rails (~> 0.13.0)
       globalize3
-      handlebars-source (~> 1.0.12)
       i18n-js
       jquery-rails
       oj
       rails (~> 3.2.14)
+      react-rails
       sass-rails (~> 3.2.5)
       turbo-sprockets-rails3
       uglifier (>= 1.2.7)
@@ -52,8 +61,6 @@ GEM
       rack-cache (~> 1.2)
       rack-test (~> 0.6.1)
       sprockets (~> 2.2.1)
-    active_model_serializers (0.8.1)
-      activemodel (>= 3.0)
     activemodel (3.2.14)
       activesupport (= 3.2.14)
       builder (~> 3.0.0)
@@ -70,10 +77,6 @@ GEM
       multi_json (~> 1.0)
     arel (3.0.2)
     awesome_print (1.2.0)
-    barber (0.4.2)
-      ember-source
-      execjs
-      handlebars-source
     bcrypt-ruby (3.1.2)
     builder (3.0.4)
     coderay (1.0.9)
@@ -84,32 +87,20 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.3)
+    connection_pool (2.0.0)
     daemons (1.1.9)
     devise (2.2.7)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.1)
       railties (~> 3.1)
       warden (~> 1.2.1)
-    ember-data-source (0.14)
-      ember-source
-    ember-rails (0.13.0)
-      active_model_serializers
-      barber (>= 0.4.1)
-      ember-data-source
-      ember-source
-      execjs (>= 1.2)
-      handlebars-source
-      railties (>= 3.1)
-    ember-source (1.0.0)
-      handlebars-source (= 1.0.12)
     erubis (2.7.0)
     eventmachine (1.0.3)
     execjs (2.0.1)
-    globalize3 (0.3.0)
+    globalize3 (0.3.1)
       activemodel (>= 3.0.0)
       activerecord (>= 3.0.0)
       paper_trail (~> 2)
-    handlebars-source (1.0.12)
     hike (1.2.3)
     i18n (0.6.5)
     i18n-js (2.1.2)
@@ -129,7 +120,7 @@ GEM
     mysql2 (0.3.15)
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
-    oj (2.1.6)
+    oj (2.9.0)
     orm_adapter (0.4.0)
     paper_trail (2.7.2)
       activerecord (~> 3.0)
@@ -164,6 +155,7 @@ GEM
     rake (10.1.0)
     rdoc (3.12.2)
       json (~> 1.4)
+    react-source (0.9.0)
     rest-client (1.6.7)
       mime-types (>= 1.16)
     rserve-client (0.3.1)
@@ -189,9 +181,9 @@ GEM
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
-    turbo-sprockets-rails3 (0.3.10)
+    turbo-sprockets-rails3 (0.3.11)
       railties (> 3.2.8, < 4.0.0)
-      sprockets (>= 2.0.0)
+      sprockets (>= 2.2.0)
     tzinfo (0.3.37)
     uglifier (2.2.1)
       execjs (>= 0.3.0)
@@ -209,6 +201,7 @@ DEPENDENCIES
   mysql2
   pry
   rails (= 3.2.14)
+  react-rails!
   rglossa!
   rglossa-fcs!
   rglossa-r!
