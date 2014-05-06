@@ -4,13 +4,12 @@ PATH
     rglossa (0.0.1)
       coffee-rails (~> 3.2.2)
       devise (~> 2.2.3)
-      ember-rails (~> 0.13.0)
       globalize3
-      handlebars-source (~> 1.0.12)
       i18n-js
       jquery-rails
       oj
       rails (~> 3.2.14)
+      react-rails
       sass-rails (~> 3.2.5)
       turbo-sprockets-rails3
       uglifier (>= 1.2.7)
@@ -31,8 +30,6 @@ GEM
       rack-cache (~> 1.2)
       rack-test (~> 0.6.1)
       sprockets (~> 2.2.1)
-    active_model_serializers (0.8.1)
-      activemodel (>= 3.0)
     activemodel (3.2.14)
       activesupport (= 3.2.14)
       builder (~> 3.0.0)
@@ -47,12 +44,8 @@ GEM
     activesupport (3.2.14)
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
-    arel (3.0.2)
+    arel (3.0.3)
     awesome_print (1.2.0)
-    barber (0.4.2)
-      ember-source
-      execjs
-      handlebars-source
     bcrypt-ruby (3.0.1)
     builder (3.0.4)
     bullet (4.6.0)
@@ -70,7 +63,7 @@ GEM
     coffee-script (2.2.0)
       coffee-script-source
       execjs
-    coffee-script-source (1.6.3)
+    coffee-script-source (1.7.0)
     colorize (0.5.8)
     daemons (1.1.9)
     devise (2.2.4)
@@ -79,18 +72,6 @@ GEM
       railties (~> 3.1)
       warden (~> 1.2.1)
     diff-lcs (1.2.4)
-    ember-data-source (0.14)
-      ember-source
-    ember-rails (0.13.0)
-      active_model_serializers
-      barber (>= 0.4.1)
-      ember-data-source
-      ember-source
-      execjs (>= 1.2)
-      handlebars-source
-      railties (>= 3.1)
-    ember-source (1.0.0)
-      handlebars-source (= 1.0.12)
     erubis (2.7.0)
     eventmachine (1.0.3)
     execjs (2.0.2)
@@ -103,7 +84,7 @@ GEM
       eventmachine (>= 0.12.0)
     ffi (1.9.0)
     formatador (0.2.4)
-    globalize3 (0.3.0)
+    globalize3 (0.3.1)
       activemodel (>= 3.0.0)
       activerecord (>= 3.0.0)
       paper_trail (~> 2)
@@ -116,7 +97,6 @@ GEM
     guard-rspec (3.0.2)
       guard (>= 1.8)
       rspec (~> 2.13)
-    handlebars-source (1.0.12)
     hike (1.2.3)
     hirb (0.7.1)
     http_parser.rb (0.5.3)
@@ -149,7 +129,7 @@ GEM
     mysql2 (0.3.15)
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
-    oj (2.1.6)
+    oj (2.9.0)
     orm_adapter (0.4.0)
     paper_trail (2.7.2)
       activerecord (~> 3.0)
@@ -158,7 +138,7 @@ GEM
       capybara (~> 2.1.0)
       faye-websocket (>= 0.4.4, < 0.5.0)
       http_parser.rb (~> 0.5.3)
-    polyglot (0.3.3)
+    polyglot (0.3.4)
     pry (0.9.12.2)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
@@ -196,6 +176,11 @@ GEM
       ffi (>= 0.5.0)
     rdoc (3.12.2)
       json (~> 1.4)
+    react-rails (0.10.0.0)
+      execjs
+      rails (>= 3.1)
+      react-source (= 0.10.0)
+    react-source (0.10.0)
     rspec (2.13.0)
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
@@ -211,7 +196,7 @@ GEM
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
       rspec-mocks (~> 2.13.0)
-    sass (3.2.12)
+    sass (3.3.7)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
@@ -233,13 +218,13 @@ GEM
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
-    turbo-sprockets-rails3 (0.3.10)
+    turbo-sprockets-rails3 (0.3.11)
       railties (> 3.2.8, < 4.0.0)
-      sprockets (>= 2.0.0)
-    tzinfo (0.3.38)
-    uglifier (2.2.1)
+      sprockets (>= 2.2.0)
+    tzinfo (0.3.39)
+    uglifier (2.5.0)
       execjs (>= 0.3.0)
-      multi_json (~> 1.0, >= 1.0.2)
+      json (>= 1.8.0)
     uniform_notifier (1.2.0)
     warden (1.2.1)
       rack (>= 1.0)

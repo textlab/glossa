@@ -25,9 +25,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'uglifier',     '>= 1.2.7'
   s.add_dependency 'oj'  # more efficient parsing and generation of JSON
   s.add_dependency 'turbo-sprockets-rails3'  # faster precompilation of assets
+  s.add_dependency 'react-rails'
   s.add_dependency 'devise', '~> 2.2.3'
-  s.add_dependency 'handlebars-source', "~> 1.0.12"
-  s.add_dependency 'ember-rails', '~> 0.13.0'
   s.add_dependency 'globalize3'
   s.add_dependency 'i18n-js'
 
