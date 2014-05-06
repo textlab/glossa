@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131015205819) do
+ActiveRecord::Schema.define(:version => 20140226133446) do
 
   create_table "rglossa_corpora", :force => true do |t|
     t.string   "name",                               :null => false
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(:version => 20131015205819) do
     t.datetime "created_at",              :null => false
     t.datetime "updated_at",              :null => false
     t.integer  "corpus_id"
+    t.string   "type"
   end
 
   create_table "rglossa_corpus_texts_metadata_values", :force => true do |t|
