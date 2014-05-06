@@ -7,7 +7,7 @@ gem 'rails', '3.2.14'
 
 gem 'sqlite3'
 gem 'mysql2'
-gem 'react-rails', github: 'facebook/react-rails'
+gem 'react-rails'
 
 
 # Gems used only for assets and not required
@@ -40,9 +40,9 @@ end
 # gem 'debugger'
 
 gem "rglossa", :path => "/Users/noklesta/rails/tekstlab/plugins/rglossa"
-gem "rglossa-fcs", :path => "/Users/noklesta/rails/tekstlab/plugins/rglossa-fcs"
-gem "rglossa-r", :path => "/Users/noklesta/rails/tekstlab/plugins/rglossa-r"
-gem "rglossa-speech", :path => "/Users/noklesta/rails/tekstlab/plugins/rglossa-speech"
+# gem "rglossa-fcs", :path => "/Users/noklesta/rails/tekstlab/plugins/rglossa-fcs"
+# gem "rglossa-r", :path => "/Users/noklesta/rails/tekstlab/plugins/rglossa-r"
+# gem "rglossa-speech", :path => "/Users/noklesta/rails/tekstlab/plugins/rglossa-speech"
 gem "devise", "~> 2.2.3"
 
 group :development do
