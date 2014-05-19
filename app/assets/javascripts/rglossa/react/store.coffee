@@ -9,7 +9,7 @@ class Store
       do (model) =>
         $.getJSON(model)
           .done( (res) =>
-            @models[model] = res[model])
+            @models[model] = res)
           .fail -> alert('Error fetching data from the server. Please reload the page.')
     $.when.apply(null, promises).done(=> @storeChangedHandler(@))
 
