@@ -1,5 +1,5 @@
-#= require ./navbar
-#= require ./main_area
+#= require ./top/navbar
+#= require ./centre/main_area
 
 ###* @jsx React.DOM ###
 

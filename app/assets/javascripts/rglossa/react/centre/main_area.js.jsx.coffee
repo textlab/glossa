@@ -39,7 +39,7 @@ window.MainArea = React.createClass
         <div className="row-fluid">
           <div className="span3 top-toolbar">
             {true ? this.sideBarButtons() : ''}
-            <button onClick={this.showCorpusHome} id="new-search-button" className="btn btn-mini btn-primary" style={{display: 'none'}} title="Reset form">
+            <button onClick={this.showCorpusHome} id="new-search-button" className="btn btn-mini btn-primary" title="Reset form">
               Reset form
             </button>
           </div>
