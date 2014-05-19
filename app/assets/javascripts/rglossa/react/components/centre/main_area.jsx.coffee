@@ -1,4 +1,6 @@
 #= require ./start
+#= require ./results_top
+#= require ./results_main
 
 ###* @jsx React.DOM ###
 
@@ -23,14 +25,14 @@ window.MainArea = React.createClass
         METADATA_CATEGORIES
       </div>
       <div id="main-content" className="span9">
-        {this.props.statechart.pathContains('start') ? <Start /> : <Results />}
+        {this.props.statechart.pathContains('start') ? <Start /> : <ResultsMain />}
       </div>
     </span>`
 
 
   rowWithoutSidebar: ->
     `<div id="main-content" className="span12">
-      MAIN_AREA
+      {this.props.statechart.pathContains('start') ? <Start /> : <ResultsMain />}
     </div>`
 
 
@@ -49,7 +51,7 @@ window.MainArea = React.createClass
             </button>
           </div>
           <div className="span9">
-            NUMHITS
+            {this.props.statechart.pathContains('start') ? '' : <ResultsTop />}
           </div>
         </div>
         <div className="row-fluid">
