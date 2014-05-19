@@ -1,6 +1,11 @@
+#= require ./start
+
 ###* @jsx React.DOM ###
 
 window.MainArea = React.createClass
+  propTypes:
+    statechart: React.PropTypes.object.isRequired
+
   sideBarButtons: ->
     `<span>
       <button id="hide-criteria-button" className="btn btn-mini" title="Hide search criteria">
@@ -18,7 +23,7 @@ window.MainArea = React.createClass
         METADATA_CATEGORIES
       </div>
       <div id="main-content" className="span9">
-        MAIN_AREA
+        {this.props.statechart.pathContains('start') ? <Start /> : <Results />}
       </div>
     </span>`
 
