@@ -21,5 +21,9 @@ window.App = React.createClass
   render: ->
     `<span>
       <Navbar />
-      <MainArea statechart={this.state.statechart} />
+      {this.state.store.models.corpora.length
+        ? <MainArea
+          statechart={this.state.statechart}
+          corpus={this.state.store.models.corpora[0]} />
+        : ''}
     </span>`
