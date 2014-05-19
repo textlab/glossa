@@ -20,6 +20,4 @@
 //= require i18n/translations
 //
 // app.coffee will require the rest of the app-specific files
-//= require ./react/app
-
-React.renderComponent(window.App({}), document.getElementById('application'));
+//= require ./react/main
