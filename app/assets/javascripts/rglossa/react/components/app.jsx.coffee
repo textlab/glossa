@@ -19,11 +19,12 @@ window.App = React.createClass
     statechart: new Statechart('Main', states, 'start', (sc) => @setState(statechart: sc))
 
   render: ->
+    corpora = @state.store.models.corpora
     `<span>
       <Navbar />
-      {this.state.store.models.corpora.length
+      {corpora.length
         ? <MainArea
           statechart={this.state.statechart}
-          corpus={this.state.store.models.corpora[0]} />
+          corpus={corpora[0]} />
         : ''}
     </span>`
