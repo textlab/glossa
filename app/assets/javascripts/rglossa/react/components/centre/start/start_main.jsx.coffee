@@ -1,5 +1,5 @@
 #= require ./corpus_info
-#= require ../search_inputs
+#= require ../shared/search_inputs
 
 ###* @jsx React.DOM ###
 
