@@ -1,5 +1,5 @@
 #= require ./corpus_info
-#= require ../shared/search_inputs
+#= require ../search_inputs/cwb_search_inputs
 
 ###* @jsx React.DOM ###
 
@@ -14,6 +14,5 @@ window.StartMain = React.createClass
       <CorpusInfo
         corpusName={name}
         corpusLogoUrl={logo} />
-      <SearchInputs
-        statechart={this.props.statechart} />
+      <CwbSearchInputs />
     </span>`

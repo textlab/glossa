@@ -1,11 +1,21 @@
+#= require ../../../statechart
+
 ###* @jsx React.DOM ###
 
-window.SearchInputs = React.createClass
-  propTypes:
-    statechart: React.PropTypes.object.isRequired
+# Search inputs for corpora encoded with the IMS Corpus Workbench
+
+states =
+  simple: {}
+  multiword: {}
+  regex: {}
+
+window.CwbSearchInputs = React.createClass
+  getInitialState: ->
+    statechart: new Statechart(
+      'CwbSearchInputs', states, 'simple', (sc) => @setState(statechart: sc))
 
   render: ->
-    if @props.statechart.pathContains('simple')
+    if @state.statechart.pathContains('simple')
       `<span>
         <div className="row-fluid search-input-links">
           <b>Simple</b>&nbsp;|&nbsp;
@@ -14,7 +24,7 @@ window.SearchInputs = React.createClass
         </div>
       </span>`
 
-    else if @props.statechart.pathContains('multiword')
+    else if @state.statechart.pathContains('multiword')
       `<span>
         <div className="row-fluid search-input-links">
           <a href="" title="Simple search box">Simple</a>&nbsp;|&nbsp;
