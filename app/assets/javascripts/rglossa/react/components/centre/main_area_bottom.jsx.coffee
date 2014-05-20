@@ -9,7 +9,7 @@ window.MainAreaBottom = React.createClass
     corpus: React.PropTypes.object.isRequired
 
   rowWithSidebar: ->
-    `<span>
+    `<div className="row-fluid">
       <div id="left-sidebar" className="span3">
         METADATA_CATEGORIES
       </div>
@@ -18,16 +18,16 @@ window.MainAreaBottom = React.createClass
           ? <StartMain statechart={this.props.statechart} corpus={this.props.corpus} />
           : <ResultsMain />}
       </div>
-    </span>`
+    </div>`
 
   rowWithoutSidebar: ->
-    `<div id="main-content" className="span12">
-      {this.props.statechart.pathContains('start')
-        ? <StartMain statechart={this.props.statechart} corpus={this.props.corpus} />
-        : <ResultsMain />}
+    `<div className="row-fluid">
+      <div id="main-content" className="span12">
+        {this.props.statechart.pathContains('start')
+          ? <StartMain statechart={this.props.statechart} corpus={this.props.corpus} />
+          : <ResultsMain />}
+      </div>
     </div>`
 
   render: ->
-    `<div className="row-fluid">
-      {true ? this.rowWithSidebar() : this.rowWithoutSidebar()}
-      </div>`
+    if true then @rowWithSidebar() else @rowWithoutSidebar()
