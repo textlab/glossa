@@ -2,6 +2,10 @@
 <html>
 <head>
   <title>Glossa</title>
+  <!--[if lt IE 9]>
+  <%= javascript_include_tag 'es5-shim.min', 'es5-sham.min' %>
+  <![endif]-->
+
   <%= csrf_meta_tag %>
   <base href="<%= ENV['RAILS_RELATIVE_URL_ROOT'] %>/" />
 
