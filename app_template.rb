@@ -11,6 +11,15 @@ def install_devise
 end
 
 
+def configure_react(environment)
+  insert_into_file("config/environments/#{environment}.rb",
+    "\n" +
+    "  config.react.variant = :#{environment}\n" +
+    "  config.react.addons = true\n",
+    after: "# Settings specified here will take precedence over those in config/application.rb\n")
+end
+
+
 ##############
 # Main script
 ##############
@@ -18,6 +27,7 @@ end
 gem "rglossa", github: "textlab/rglossa"
 gem "devise", "~> 2.2.3"
 gem "therubyracer"
+gem "react-rails"
 
 run "bundle install"
 
@@ -38,3 +48,6 @@ rake("db:migrate")
 insert_into_file("app/assets/stylesheets/application.css",
                  " *= require rglossa/application\n",
                  after: "*= require_self\n")
+
+configure_react("development")
+configure_react("production")
