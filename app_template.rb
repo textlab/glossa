@@ -21,6 +21,8 @@ gem "therubyracer"
 
 run "bundle install"
 
+rake("rglossa:install:copy_files")
+
 run "rm public/index.html"
 
 route "mount Rglossa::Engine => '/'"
