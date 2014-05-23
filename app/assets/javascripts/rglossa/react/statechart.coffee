@@ -10,10 +10,12 @@ createStates = (statechart, parent, configs) ->
 
 
 class Statechart
-  constructor: (@name, states, initialPath, @currentStateChangedHandler) ->
-    initialPath = '/' + initialPath unless initialPath[0] is '/'
-    @root = new State(@, null, 'root', null, states)
-    @root.transitionTo(initialPath)
+  constructor: (@name, root, @currentStateChangedHandler) ->
+    actions = root.actions or {}
+    substates = root.substates or {}
+    initialSubstate = root.initialSubstate
+    @root = new State(@, null, 'root', actions, substates, initialSubstate)
+    @root.transitionTo(initialSubstate)
 
   setCurrentState: (@currentState) ->
     # Call the handler provided by our creator even if the new state might be the same

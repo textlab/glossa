@@ -4,15 +4,19 @@
 
 # Search inputs for corpora encoded with the IMS Corpus Workbench
 
-states =
-  simple: {}
-  multiword: {}
-  regex: {}
+root =
+  initialSubstate: 'simple'
+  substates:
+    simple: {}
+    multiword: {}
+    regex: {}
+  actions:
+    showMultiword: -> @transitionTo('multiword')
 
 window.CwbSearchInputs = React.createClass
   getInitialState: ->
     statechart: new Statechart(
-      'CwbSearchInputs', states, 'simple', (sc) => @setState(statechart: sc))
+      'CwbSearchInputs', root, (sc) => @setState(statechart: sc))
 
   render: ->
     if @state.statechart.pathContains('simple')
