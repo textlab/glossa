@@ -1,4 +1,6 @@
 #= require ../../../statechart
+#= require ./cwb_simple_input
+#= require ./cwb_multiword_input
 
 ###* @jsx React.DOM ###
 
@@ -18,14 +20,19 @@ window.CwbSearchInputs = React.createClass
     statechart: new Statechart(
       'CwbSearchInputs', root, (sc) => @setState(statechart: sc))
 
+  showMultiword: (e) ->
+    e.preventDefault()
+    @state.statechart.handleAction('showMultiword')
+
   render: ->
     if @state.statechart.pathContains('simple')
       `<span>
         <div className="row-fluid search-input-links">
           <b>Simple</b>&nbsp;|&nbsp;
-          <a href="" title="Search for grammatical categories etc.">Extended</a>&nbsp;|&nbsp;
+          <a href="" title="Search for grammatical categories etc." onClick={this.showMultiword}>Extended</a>&nbsp;|&nbsp;
           <a href="" title="Regular expressions">Regexp</a>
         </div>
+        <CwbSimpleInput />
       </span>`
 
     else if @state.statechart.pathContains('multiword')
@@ -35,6 +42,7 @@ window.CwbSearchInputs = React.createClass
           <b>Extended</b>&nbsp;|&nbsp;
           <a href="" title="Regular expressions">Regexp</a>
         </div>
+        <CwbMultiwordInput />
       </span>`
 
     else
