@@ -22,6 +22,7 @@ window.CwbSearchInputs = React.createClass
   getInitialState: ->
     statechart: new Statechart(
       'CwbSearchInputs', root, (sc) => @setState(statechart: sc))
+    query: ''
 
   showSimple: (e) ->
     e.preventDefault()
@@ -35,6 +36,9 @@ window.CwbSearchInputs = React.createClass
     e.preventDefault()
     @state.statechart.handleAction('showRegex')
 
+  handleQueryChanged: (query) ->
+    @setState(query: query)
+
   render: ->
     if @state.statechart.pathContains('simple')
       `<span>
@@ -43,7 +47,7 @@ window.CwbSearchInputs = React.createClass
           <a href="" title="Search for grammatical categories etc." onClick={this.showMultiword}>Extended</a>&nbsp;|&nbsp;
           <a href="" title="Regular expressions" onClick={this.showRegex}>Regexp</a>
         </div>
-        <CwbSimpleInput />
+        <CwbSimpleInput query={this.state.query} handleQueryChanged={this.handleQueryChanged} />
       </span>`
 
     else if @state.statechart.pathContains('multiword')
@@ -53,7 +57,7 @@ window.CwbSearchInputs = React.createClass
           <b>Extended</b>&nbsp;|&nbsp;
           <a href="" title="Regular expressions" onClick={this.showRegex}>Regexp</a>
         </div>
-        <CwbMultiwordInput />
+        <CwbMultiwordInput query={this.state.query} handleQueryChanged={this.handleQueryChanged} />
       </span>`
 
     else
