@@ -66,6 +66,9 @@ class State
   constructor: (@statechart, @parent, @name, @actions, substates, @initialSubstate) ->
     @substates = createStates(statechart, @, substates)
 
+    unless initialSubstate or @isLeaf()
+      throw new Error("Missing initialSubstate for #{@getPath()}")
+
   # Transitions to a state located at the given path, with path being a UNIX-style
   # absolute or relative path. In the case of a relative path, it will be relative
   # to the `this` state, which is normally a state handling an action and
