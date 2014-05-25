@@ -1,15 +1,18 @@
 ###* @jsx React.DOM ###
 
 window.CwbSimpleInput = React.createClass
-  getInitialState: ->
-    searchText: ''
+  propTypes:
+    query: React.PropTypes.string.isRequired
+    handleQueryChanged: React.PropTypes.func.isRequired
 
   displayedQuery: ->
-    ''
+    # Take the CQP expression and just remove quotes
+    @props.query.replace(/"/g, '')
 
   handleTextChange: (e) ->
-    console.log('text')
-    @setState(searchText: e.target.value)
+    # Wrap each search term in quotes
+    query = ("\"#{term}\"" for term in e.target.value.split(/\s+/)).join(' ')
+    @props.handleQueryChanged(query)
 
   handleSearch: (e) ->
     console.log('search')
@@ -18,7 +21,7 @@ window.CwbSimpleInput = React.createClass
     `<div className="row-fluid">
       <form className="form-inline span12">
         <div className="input-append span10">
-          <input type="text" className="searchfield span12" defaultValue={this.state.searchText} onBlur={this.handleTextChange} />
+          <input type="text" className="searchfield span12" value={this.displayedQuery()} onChange={this.handleTextChange} />
           <button type="button" className="btn btn-success" onClick={this.handleSearch}>Search</button>
         </div>
       </form>
