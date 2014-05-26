@@ -86,15 +86,20 @@ window.CwbMultiwordInput = React.createClass
 
 
   render: ->
+    displayedQuery = @displayedQuery()
+    lastIndex = displayedQuery.length - 1
+
     `<div className="row-fluid">
       <form className="form-inline multiword-search-form">
         <div style={{display: 'table'}}>
           <div style={{display: 'table-row'}}>
-          {this.displayedQuery().map(function(term) {
+          {displayedQuery.map(function(term, index) {
             return (
               <CwbMultiwordTerm
                 term={term}
-                queryHasSingleTerm={this.props.query.length === 1} />
+                queryHasSingleTerm={this.props.query.length === 1}
+                isFirst={index === 0}
+                isLast={index === lastIndex} />
             )
           }, this)}
             <div style={{display: 'table-cell'}}>
