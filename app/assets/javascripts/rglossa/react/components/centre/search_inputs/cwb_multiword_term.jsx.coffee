@@ -20,8 +20,8 @@ window.CwbMultiwordTerm = React.createClass
                 {isFirst ? null :
                 <div className="interval">
                   <h6>Interval</h6>
-                  <input type="text" className="interval" value={term.min} min /><br />
-                  <input type="text" className="interval" value={term.max} max />
+                  <input type="text" className="interval" value={term.min} /> min<br />
+                  <input type="text" className="interval" value={term.max} /> max
                 </div>
                 }
 
@@ -58,9 +58,11 @@ window.CwbMultiwordTerm = React.createClass
                   <label className="checkbox">
                     <input type="checkbox" checked={term.isLemma} /> Lemma
                   </label>
+                  &nbsp;&nbsp;
                   <label className="checkbox">
                     <input type="checkbox" title="Start of word" checked={term.isStart} /> Start
                   </label>
+                  &nbsp;&nbsp;
                   <label className="checkbox">
                     <input type="checkbox" title="End of word" checked={term.isEnd} /> End
                   </label>
