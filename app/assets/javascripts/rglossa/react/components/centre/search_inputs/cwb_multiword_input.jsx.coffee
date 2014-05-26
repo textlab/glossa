@@ -38,10 +38,6 @@ window.CwbMultiwordInput = React.createClass
         min = null
         max = null
 
-    # Ugly hack that is needed because the #each Handlebars helper
-    # does not provide array indices to the templates in the loop :-/
-    # dq[0].isFirst = true
-    # dq[dq.length-1].isLast = true
     dq
 
 
