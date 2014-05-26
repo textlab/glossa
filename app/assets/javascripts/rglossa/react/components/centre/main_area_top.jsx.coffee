@@ -20,12 +20,12 @@ window.MainAreaTop = React.createClass
   render: ->
     `<div className="row-fluid">
       <div className="span3 top-toolbar">
-        {true ? this.sideBarButtons() : ''}
+        {true ? this.sideBarButtons() : null}
         <button onClick={this.showCorpusHome} id="new-search-button" className="btn btn-mini btn-primary" title="Reset form">
           Reset form
         </button>
       </div>
       <div className="span9">
-        {this.props.statechart.pathContains('start') ? '' : <ResultsTop />}
+        {this.props.statechart.pathContains('start') ? null : <ResultsTop />}
       </div>
       </div>`

@@ -28,5 +28,5 @@ window.App = React.createClass
         ? <MainArea
           statechart={this.state.statechart}
           corpus={corpora[0]} />
-        : ''}
+        : null}
     </span>`
