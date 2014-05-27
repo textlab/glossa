@@ -19,4 +19,24 @@ class Store
     $.when.apply(null, promises).done(=> @storeChangedHandler(@))
 
 
+  find: (model, id) ->
+    plural = @getPlural(model)
+    data = @models[plural][id]
+    return data if data?  # Store already contains the model
+
+    # Store does not already contain the model, so fetch it
+    url = "#{plural}/#{id}"
+    $.getJSON(url)
+      .done( (res) =>
+        @models[plural][id] = res[model]
+        # Notify the client that the model has been loaded
+        @storeChangedHandler(@))
+      .fail -> alert('Error fetching data from the server. Please reload the page.')
+
+    # Return null since the store did not contain the model. When the model has been
+    # loaded, @storeChangedHandler will be called, and then the client can call `find`
+    # again to retrieve the model.
+    null
+
+
 window.Store = Store
