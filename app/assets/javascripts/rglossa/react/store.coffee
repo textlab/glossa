@@ -1,8 +1,10 @@
 class Store
-  constructor: (models, @storeChangedHandler, autoLoad = true) ->
+  constructor: (models, @plurals, @storeChangedHandler, autoLoad = false) ->
     @models = {}
     @models[model] = [] for model in models
     @fetchData(models) if autoLoad
+
+  getPlural: (singular) -> @plurals[singular] ? "#{singular}s"
 
   fetchData: (models) ->
     promises = for model in models
