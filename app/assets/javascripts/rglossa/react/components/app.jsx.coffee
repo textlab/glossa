@@ -9,6 +9,9 @@ models = [
   'corpora'
 ]
 
+plurals =
+  corpus: 'corpora'
+
 root =
   initialSubstate: 'start'
   substates:
@@ -17,16 +20,16 @@ root =
 
 window.App = React.createClass
   getInitialState: ->
-    store: new Store(models, (store) => @setState(store: store))
+    store: new Store(models, plurals, (store) => @setState(store: store))
     statechart: new Statechart('Main', root, (sc) => @setState(statechart: sc))
 
   render: ->
-    corpora = @state.store.models.corpora
+    corpus = @state.store.find('corpus', 2)
     `<span>
       <Navbar />
-      {corpora.length
+      {corpus
         ? <MainArea
           statechart={this.state.statechart}
-          corpus={corpora[0]} />
+          corpus={corpus} />
         : null}
     </span>`
