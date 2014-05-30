@@ -8,14 +8,20 @@ window.CwbMultiwordInput = React.createClass
     corpus: React.PropTypes.object.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
 
-  displayedQuery: ->
-    query = @splitQueryTerms()
+  getInitialState: ->
+    queryTerms: @constructQueryTerms(@props.query)
+
+  componentWillReceiveProps: (nextProps) ->
+    @setState(queryTerms: @constructQueryTerms(nextProps.query))
+
+  constructQueryTerms: ->
+    queryParts = @splitQuery(@props.query)
 
     dq = []
     min = null
     max = null
 
-    query.forEach (item) =>
+    queryParts.forEach (item) =>
       if m = item.match(/\[\]\{(.+)\}/)
         [min, max] = @handleIntervalSpecification(m)
       else if m = item.match(/\[(.+)\]/)
@@ -42,8 +48,8 @@ window.CwbMultiwordInput = React.createClass
     dq
 
 
-  splitQueryTerms: ->
-    @props.query.match(/\[\]\{(.+)\}|"[^"\s]+"|\[[^\]]+\]/g) or ['']
+  splitQuery: (query) ->
+    query.match(/\[\]\{(.+)\}|"[^"\s]+"|\[[^\]]+\]/g) or ['']
 
 
   handleIntervalSpecification: (m) ->
@@ -82,21 +88,67 @@ window.CwbMultiwordInput = React.createClass
     term
 
 
+  handleTermChanged: (term, termIndex) ->
+    queryTerms = @state.queryTerms
+    queryTerms[termIndex] = term
+    @props.handleQueryChanged(@constructCQPQuery(queryTerms))
+
+
+  constructCQPQuery: (queryTerms) ->
+    parts = for term in queryTerms
+      {min, max, word, isLemma, isStart, isEnd, pos, features} = term
+      attrs = []
+
+      if isLemma or pos or features.length
+        if word
+          attr = if isLemma then 'lemma' else 'word'
+          word = "#{word}.+" if isStart
+          word = ".+#{word}" if isEnd
+          word = "(#{attr}=\"#{word}\" %c)"
+          attrs.push(word)
+
+        if pos
+          posAttr = @props.corpus.langs[0].tags?.attr
+          pos = "#{posAttr}=\"#{pos.value}\""
+          attrs.push(pos)
+
+        for feature in features
+          f = "#{feature.attr}=\"#{feature.value}\""
+          attrs.push(f)
+
+        str = '[' + attrs.join(' & ') + ']'
+      else
+        # Only the word attribute is specified, so use a simple string
+        str = if word
+          word = "#{word}.+" if isStart
+          word = ".+#{word}" if isEnd
+          "\"#{word}\""
+        else ''
+      if min or max
+        str = "[]{#{min ? ''},#{max ? ''}} " + str
+
+      str
+
+    parts.join(' ')
+
+
   render: ->
-    displayedQuery = @displayedQuery()
-    lastIndex = displayedQuery.length - 1
+    queryTerms = @state.queryTerms
+    lastIndex = queryTerms.length - 1
 
     `<div className="row-fluid">
       <form className="form-inline multiword-search-form">
         <div style={{display: 'table'}}>
           <div style={{display: 'table-row'}}>
-          {displayedQuery.map(function(term, index) {
+          {queryTerms.map(function(term, index) {
             return (
               <CwbMultiwordTerm
                 term={term}
+                termIndex={index}
                 queryHasSingleTerm={this.props.query.length === 1}
                 isFirst={index === 0}
-                isLast={index === lastIndex} />
+                isLast={index === lastIndex}
+                handleTermChanged={this.handleTermChanged} />
             )
           }, this)}
             <div style={{display: 'table-cell'}}>
