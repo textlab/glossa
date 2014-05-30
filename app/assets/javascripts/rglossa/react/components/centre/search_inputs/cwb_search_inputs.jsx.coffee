@@ -19,6 +19,9 @@ root =
     showRegex: -> @transitionTo('regex')
 
 window.CwbSearchInputs = React.createClass
+  propTypes:
+    corpus: React.PropTypes.object.isRequired
+
   getInitialState: ->
     statechart: new Statechart(
       'CwbSearchInputs', root, (sc) => @setState(statechart: sc))
@@ -57,7 +60,10 @@ window.CwbSearchInputs = React.createClass
           <b>Extended</b>&nbsp;|&nbsp;
           <a href="" title="Regular expressions" onClick={this.showRegex}>Regexp</a>
         </div>
-        <CwbMultiwordInput query={this.state.query} handleQueryChanged={this.handleQueryChanged} />
+        <CwbMultiwordInput
+          query={this.state.query}
+          corpus={this.props.corpus}
+          handleQueryChanged={this.handleQueryChanged} />
       </span>`
 
     else

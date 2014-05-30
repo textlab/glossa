@@ -9,10 +9,11 @@ window.StartMain = React.createClass
     corpus: React.PropTypes.object.isRequired
 
   render: ->
-    {name, logo} = @props.corpus
+    corpus = @props.corpus
+    {name, logo} = corpus
     `<span>
       <CorpusInfo
         corpusName={name}
         corpusLogoUrl={logo} />
-      <CwbSearchInputs />
+      <CwbSearchInputs corpus={corpus} />
     </span>`

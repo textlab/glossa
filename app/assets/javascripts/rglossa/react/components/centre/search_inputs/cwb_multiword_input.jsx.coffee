@@ -5,6 +5,7 @@
 window.CwbMultiwordInput = React.createClass
   propTypes:
     query: React.PropTypes.string.isRequired
+    corpus: React.PropTypes.object.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
 
   displayedQuery: ->
