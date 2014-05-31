@@ -10,19 +10,23 @@ window.CwbMultiwordTerm = React.createClass
     handleTermChanged: React.PropTypes.func.isRequired
 
 
-  changeTerm: (attribute, event) ->
+  changeTerm: (attribute, value) ->
     changedTerm = {}
     changedTerm[k] = @props.term[k] for k of @props.term  # clone the old term
-    changedTerm[attribute] = event.target.value
+    changedTerm[attribute] = value
     @props.handleTermChanged(changedTerm, @props.termIndex)
 
-  handleTextChanged: (e) -> @changeTerm('word', e)
+  handleTextChanged: (e) -> @changeTerm('word', e.target.value)
 
-  handleMinChanged: (e) -> @changeTerm('min', e)
+  handleMinChanged: (e) -> @changeTerm('min', e.target.value)
 
-  handleMaxChanged: (e) -> @changeTerm('max', e)
+  handleMaxChanged: (e) -> @changeTerm('max', e.target.value)
 
-  handleIsLemmaChanged: (e) -> @changeTerm('isLemma', e)
+  handleIsLemmaChanged: (e) -> @changeTerm('isLemma', e.target.checked)
+
+  handleIsStartChanged: (e) -> @changeTerm('isStart', e.target.checked)
+
+  handleIsEndChanged: (e) -> @changeTerm('isEnd', e.target.checked)
 
   render: ->
     {term, queryHasSingleTerm, isFirst, isLast} = @props
@@ -78,11 +82,11 @@ window.CwbMultiwordTerm = React.createClass
                   </label>
                   &nbsp;&nbsp;
                   <label className="checkbox">
-                    <input type="checkbox" title="Start of word" checked={term.isStart} /> Start
+                    <input type="checkbox" title="Start of word" checked={term.isStart} onChange={this.handleIsStartChanged} /> Start
                   </label>
                   &nbsp;&nbsp;
                   <label className="checkbox">
-                    <input type="checkbox" title="End of word" checked={term.isEnd} /> End
+                    <input type="checkbox" title="End of word" checked={term.isEnd} onChange={this.handleIsEndChanged} /> End
                   </label>
                   <div style={{display: 'table-cell'}}>
                   </div>

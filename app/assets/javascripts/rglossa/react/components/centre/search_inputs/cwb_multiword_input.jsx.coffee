@@ -14,8 +14,8 @@ window.CwbMultiwordInput = React.createClass
   componentWillReceiveProps: (nextProps) ->
     @setState(queryTerms: @constructQueryTerms(nextProps.query))
 
-  constructQueryTerms: ->
-    queryParts = @splitQuery(@props.query)
+  constructQueryTerms: (query) ->
+    queryParts = @splitQuery(query)
 
     dq = []
     min = null
