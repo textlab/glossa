@@ -10,12 +10,19 @@ window.CwbMultiwordTerm = React.createClass
     handleTermChanged: React.PropTypes.func.isRequired
 
 
-  handleTextChanged: (e) ->
+  changeTerm: (attribute, event) ->
     changedTerm = {}
     changedTerm[k] = @props.term[k] for k of @props.term  # clone the old term
-    changedTerm.word = e.target.value                     # set its text value
+    changedTerm[attribute] = event.target.value
     @props.handleTermChanged(changedTerm, @props.termIndex)
 
+  handleTextChanged: (e) -> @changeTerm('word', e)
+
+  handleMinChanged: (e) -> @changeTerm('min', e)
+
+  handleMaxChanged: (e) -> @changeTerm('max', e)
+
+  handleIsLemmaChanged: (e) -> @changeTerm('isLemma', e)
 
   render: ->
     {term, queryHasSingleTerm, isFirst, isLast} = @props
@@ -30,8 +37,8 @@ window.CwbMultiwordTerm = React.createClass
                 {isFirst ? null :
                 <div className="interval">
                   <h6>Interval</h6>
-                  <input type="text" className="interval" value={term.min} /> min<br />
-                  <input type="text" className="interval" value={term.max} /> max
+                  <input type="text" className="interval" value={term.min} onChange={this.handleMinChanged} /> min<br />
+                  <input type="text" className="interval" value={term.max} onChange={this.handleMaxChanged} /> max
                 </div>
                 }
 
@@ -67,7 +74,7 @@ window.CwbMultiwordTerm = React.createClass
 
                 <div className="word-checkboxes">
                   <label className="checkbox">
-                    <input type="checkbox" checked={term.isLemma} /> Lemma
+                    <input type="checkbox" checked={term.isLemma} onChange={this.handleIsLemmaChanged} /> Lemma
                   </label>
                   &nbsp;&nbsp;
                   <label className="checkbox">
