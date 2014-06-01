@@ -34,9 +34,9 @@ window.CwbMultiwordInput = React.createClass
     max = null
 
     queryParts.forEach (item) =>
-      if m = item.match(/\[\]\{(.+)\}/)
+      if m = item.match(/\[\]\{(.+?)\}/)
         [min, max] = @handleIntervalSpecification(m)
-      else if m = item.match(/\[(.+)\]/)
+      else if m = item.match(/\[(.+?)\]/)
         dq.push @handleAttributes(m, min, max)
         min = null
         max = null
@@ -61,7 +61,7 @@ window.CwbMultiwordInput = React.createClass
 
 
   splitQuery: (query) ->
-    query.match(/\[\]\{(.+)\}|".*?"|\[[^\]]+\]/g) or ['']
+    query.match(/\[\]\{(.+?)\}|".*?"|\[[^\]]+?\]/g) or ['']
 
 
   handleIntervalSpecification: (m) ->
