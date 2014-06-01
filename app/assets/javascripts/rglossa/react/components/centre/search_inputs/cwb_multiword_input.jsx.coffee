@@ -2,16 +2,22 @@
 
 ###* @jsx React.DOM ###
 
-createTerm = ->
-  word:     ''
-  pos:      null
-  features: []
-  min:      null
-  max:      null
+createTerm = (overrides = {}) ->
+  term =
+    word:     ''
+    pos:      null
+    features: []
+    min:      null
+    max:      null
 
-  isLemma: false
-  isStart: false
-  isEnd:   false
+    isLemma: false
+    isStart: false
+    isEnd:   false
+
+  for k, v of overrides
+    term[k] = v
+
+  term
 
 
 window.CwbMultiwordInput = React.createClass
@@ -46,13 +52,8 @@ window.CwbMultiwordInput = React.createClass
         isEnd   = /^\.\+/.test(word)
         word = word.replace(/^(?:\.\+)?(.+?)/, "$1").replace(/(.+?)(?:\.\+)?$/, "$1")
 
-        dq.push
-          word:     word
-          features: []
-          min:      min
-          max:      max
-          isStart:  isStart
-          isEnd:    isEnd
+        term = createTerm(word: word, min: min, max: max, isStart: isStart, isEnd: isEnd)
+        dq.push(term)
 
         min = null
         max = null
@@ -79,10 +80,7 @@ window.CwbMultiwordInput = React.createClass
 
   handleAttributes: (m, min, max) ->
     attributes = m[1].split(/\s*&\s*/)
-    term =
-      min: min
-      max: max
-      features: []
+    term = createTerm(min: min, max: max)
 
     for attr in attributes
       m2 = attr.match(/\(?(\S+)\s*=\s*"(\S+)"/)
