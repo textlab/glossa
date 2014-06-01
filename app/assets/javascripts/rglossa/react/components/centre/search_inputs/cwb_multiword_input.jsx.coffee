@@ -2,6 +2,18 @@
 
 ###* @jsx React.DOM ###
 
+createTerm = ->
+  word:     ''
+  pos:      null
+  features: []
+  min:      null
+  max:      null
+
+  isLemma: false
+  isStart: false
+  isEnd:   false
+
+
 window.CwbMultiwordInput = React.createClass
   propTypes:
     query: React.PropTypes.string.isRequired
@@ -49,7 +61,7 @@ window.CwbMultiwordInput = React.createClass
 
 
   splitQuery: (query) ->
-    query.match(/\[\]\{(.+)\}|"[^"\s]+"|\[[^\]]+\]/g) or ['']
+    query.match(/\[\]\{(.+)\}|".*?"|\[[^\]]+\]/g) or ['']
 
 
   handleIntervalSpecification: (m) ->
@@ -94,6 +106,12 @@ window.CwbMultiwordInput = React.createClass
     @props.handleQueryChanged(@constructCQPQuery(queryTerms))
 
 
+  handleAddTerm: ->
+    queryTerms = @state.queryTerms
+    queryTerms.push(createTerm())
+    @props.handleQueryChanged(@constructCQPQuery(queryTerms))
+
+
   constructCQPQuery: (queryTerms) ->
     parts = for term in queryTerms
       {min, max, word, isLemma, isStart, isEnd, pos, features} = term
@@ -119,11 +137,9 @@ window.CwbMultiwordInput = React.createClass
         str = '[' + attrs.join(' & ') + ']'
       else
         # Only the word attribute is specified, so use a simple string
-        str = if word
-          word = "#{word}.+" if isStart
-          word = ".+#{word}" if isEnd
-          "\"#{word}\""
-        else ''
+        word = "#{word}.+" if isStart
+        word = ".+#{word}" if isEnd
+        str = "\"#{word}\""
       if min or max
         str = "[]{#{min ? ''},#{max ? ''}} " + str
 
@@ -148,7 +164,8 @@ window.CwbMultiwordInput = React.createClass
                 queryHasSingleTerm={this.props.query.length === 1}
                 isFirst={index === 0}
                 isLast={index === lastIndex}
-                handleTermChanged={this.handleTermChanged} />
+                handleTermChanged={this.handleTermChanged}
+                handleAddTerm={this.handleAddTerm} />
             )
           }, this)}
             <div style={{display: 'table-cell'}}>

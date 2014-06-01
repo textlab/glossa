@@ -8,6 +8,7 @@ window.CwbMultiwordTerm = React.createClass
     isFirst: React.PropTypes.bool.isRequired
     isLast: React.PropTypes.bool.isRequired
     handleTermChanged: React.PropTypes.func.isRequired
+    handleAddTerm: React.PropTypes.func.isRequired
 
 
   changeTerm: (attribute, value) ->
@@ -27,6 +28,10 @@ window.CwbMultiwordTerm = React.createClass
   handleIsStartChanged: (e) -> @changeTerm('isStart', e.target.checked)
 
   handleIsEndChanged: (e) -> @changeTerm('isEnd', e.target.checked)
+
+  handleAddTerm: (e) ->
+    e.preventDefault()
+    @props.handleAddTerm()
 
   render: ->
     {term, queryHasSingleTerm, isFirst, isLast} = @props
@@ -62,7 +67,7 @@ window.CwbMultiwordTerm = React.createClass
 
                 {isLast ?
                 <div className="add-search-word">
-                  <button className="btn btn-small" data-add-term-button="" title="Add search word">
+                  <button className="btn btn-small" data-add-term-button="" title="Add search word" onClick={this.handleAddTerm} >
                     <i className="icon-plus" />
                   </button>
                 </div>
