@@ -27,6 +27,7 @@ end
 gem "rglossa", github: "textlab/rglossa"
 gem "devise", "~> 2.2.3"
 gem "therubyracer"
+gem "thin"
 gem "react-rails"
 
 run "bundle install"
