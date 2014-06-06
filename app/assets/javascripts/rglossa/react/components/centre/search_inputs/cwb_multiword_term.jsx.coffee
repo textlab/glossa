@@ -13,6 +13,7 @@ window.CwbMultiwordTerm = React.createClass
     handleTermChanged: React.PropTypes.func.isRequired
     handleAddTerm: React.PropTypes.func.isRequired
     handleRemoveTerm: React.PropTypes.func.isRequired
+    handleAddPos: React.PropTypes.func.isRequired
 
 
   changeTerm: (attribute, value) ->
@@ -39,6 +40,9 @@ window.CwbMultiwordTerm = React.createClass
 
   handleRemoveTerm: (e) ->
     @props.handleRemoveTerm(@props.termIndex)
+
+  handleAddPos: (pos) ->
+    @props.handleAddPos(pos, @props.termIndex)
 
   render: ->
     {term, queryHasSingleTerm, isFirst, isLast} = @props
@@ -68,7 +72,7 @@ window.CwbMultiwordTerm = React.createClass
                     <span className="add-on" title="Remove word" style={{cursor: 'pointer'}} onClick={this.handleRemoveTerm} ><i className="icon-minus" /></span>
                     }
 
-                    <CwbMultiwordMenu tags={this.props.tags.options} />
+                    <CwbMultiwordMenu tags={this.props.tags.options} handleAddPos={this.handleAddPos} />
                   </div>
                 </div>
 
