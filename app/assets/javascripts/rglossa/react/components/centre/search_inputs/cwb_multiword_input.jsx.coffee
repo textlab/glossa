@@ -165,7 +165,7 @@ window.CwbMultiwordInput = React.createClass
               <CwbMultiwordTerm
                 term={term}
                 termIndex={index}
-                queryHasSingleTerm={this.props.query.length === 1}
+                queryHasSingleTerm={this.state.queryTerms.length === 1}
                 isFirst={index === 0}
                 isLast={index === lastIndex}
                 handleTermChanged={this.handleTermChanged}
