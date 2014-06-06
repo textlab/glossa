@@ -1,3 +1,5 @@
+#= require ./cwb_multiword_menu
+
 ###* @jsx React.DOM ###
 
 window.CwbMultiwordTerm = React.createClass
@@ -7,6 +9,7 @@ window.CwbMultiwordTerm = React.createClass
     queryHasSingleTerm: React.PropTypes.bool.isRequired
     isFirst: React.PropTypes.bool.isRequired
     isLast: React.PropTypes.bool.isRequired
+    tags: React.PropTypes.array.isRequired
     handleTermChanged: React.PropTypes.func.isRequired
     handleAddTerm: React.PropTypes.func.isRequired
     handleRemoveTerm: React.PropTypes.func.isRequired
@@ -65,7 +68,7 @@ window.CwbMultiwordTerm = React.createClass
                     <span className="add-on" title="Remove word" style={{cursor: 'pointer'}} onClick={this.handleRemoveTerm} ><i className="icon-minus" /></span>
                     }
 
-                    MENU
+                    <CwbMultiwordMenu tags={this.props.tags.options} />
                   </div>
                 </div>
 
