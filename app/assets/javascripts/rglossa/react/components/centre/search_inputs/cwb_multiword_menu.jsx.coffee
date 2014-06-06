@@ -4,6 +4,7 @@ window.CwbMultiwordMenu = React.createClass
   propTypes:
     tags: React.PropTypes.array
     handleAddPos: React.PropTypes.func.isRequired
+    handleAddFeature: React.PropTypes.func.isRequired
 
   getDefaultProps: ->
     tags: []
@@ -16,7 +17,7 @@ window.CwbMultiwordMenu = React.createClass
       `<li className="dropdown-submenu">
         <a onClick={this.handleAddPos.bind(null, pos)}>{pos.name}</a>
         <ul className="dropdown-menu">
-          {pos.features.map(this.createFeatureMenu)}
+          {pos.features.map(this.createFeatureMenu.bind(this, pos))}
         </ul>
       </li>`
     else
@@ -25,12 +26,12 @@ window.CwbMultiwordMenu = React.createClass
       </li>`
 
 
-  createFeatureMenu: (feature) ->
+  createFeatureMenu: (pos, feature) ->
     heading = if feature.name then `<li className="pos-feature-heading">{feature.name}</li>` else null
-    options = feature.options.map (option) ->
+    options = feature.options.map ((option) ->
       `<li>
-        <a>{option.name}</a>
-      </li>`
+        <a onClick={this.props.handleAddFeature.bind(null, option, feature, pos)}>{option.name}</a>
+      </li>`), this
     [heading, options]
 
 

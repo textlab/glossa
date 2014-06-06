@@ -122,6 +122,14 @@ window.CwbMultiwordInput = React.createClass
     @props.handleQueryChanged(@constructCQPQuery(queryTerms))
 
 
+  handleAddFeature: (option, feature, pos, termIndex) ->
+    queryTerms = @state.queryTerms
+    queryTerms[termIndex].features.push
+      attr: feature.attr
+      value: option.value
+    @props.handleQueryChanged(@constructCQPQuery(queryTerms))
+
+
   constructCQPQuery: (queryTerms) ->
     parts = for term in queryTerms
       {min, max, word, isLemma, isStart, isEnd, pos, features} = term
@@ -178,7 +186,8 @@ window.CwbMultiwordInput = React.createClass
                 handleTermChanged={this.handleTermChanged}
                 handleAddTerm={this.handleAddTerm}
                 handleRemoveTerm={this.handleRemoveTerm}
-                handleAddPos={this.handleAddPos} />
+                handleAddPos={this.handleAddPos}
+                handleAddFeature={this.handleAddFeature} />
             )
           }, this)}
             <div style={{display: 'table-cell'}}>
