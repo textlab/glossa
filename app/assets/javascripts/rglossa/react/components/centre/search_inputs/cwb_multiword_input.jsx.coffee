@@ -25,6 +25,7 @@ window.CwbMultiwordInput = React.createClass
     query: React.PropTypes.string.isRequired
     corpus: React.PropTypes.object.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
+    handleSearch: React.PropTypes.func.isRequired
 
   getInitialState: ->
     queryTerms: @constructQueryTerms(@props.query)
@@ -191,7 +192,7 @@ window.CwbMultiwordInput = React.createClass
             )
           }, this)}
             <div style={{display: 'table-cell'}}>
-              <button type="button" className="btn btn-success search">Search</button>
+              <button type="button" className="btn btn-success search" onClick={this.props.handleSearch}>Search</button>
             </div>
           </div>
         </div>

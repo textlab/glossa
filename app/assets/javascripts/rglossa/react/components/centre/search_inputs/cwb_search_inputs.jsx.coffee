@@ -42,6 +42,21 @@ window.CwbSearchInputs = React.createClass
   handleQueryChanged: (query) ->
     @setState(query: query)
 
+  handleSearch: ->
+    searchEngine = @props.corpus.search_engine ?= 'cwb'
+    url = "search_engines/#{searchEngine}_searches"
+    query =
+      query: @state.query
+      corpusShortName: @props.corpus.short_name
+
+    $.ajax(
+      url: url
+      method: 'POST'
+      data: JSON.stringify({queries: [query]})
+      dataType: 'json'
+      contentType: 'application/json'
+    ).then -> console.log 'ja'
+
   render: ->
     if @state.statechart.pathContains('simple')
       `<span>
@@ -50,7 +65,7 @@ window.CwbSearchInputs = React.createClass
           <a href="" title="Search for grammatical categories etc." onClick={this.showMultiword}>Extended</a>&nbsp;|&nbsp;
           <a href="" title="Regular expressions" onClick={this.showRegex}>Regexp</a>
         </div>
-        <CwbSimpleInput query={this.state.query} handleQueryChanged={this.handleQueryChanged} />
+        <CwbSimpleInput query={this.state.query} handleQueryChanged={this.handleQueryChanged} handleSearch={this.handleSearch} />
       </span>`
 
     else if @state.statechart.pathContains('multiword')
@@ -63,7 +78,7 @@ window.CwbSearchInputs = React.createClass
         <CwbMultiwordInput
           query={this.state.query}
           corpus={this.props.corpus}
-          handleQueryChanged={this.handleQueryChanged} />
+          handleQueryChanged={this.handleQueryChanged} handleSearch={this.handleSearch} />
       </span>`
 
     else
@@ -73,5 +88,5 @@ window.CwbSearchInputs = React.createClass
           <a href="" title="Search for grammatical categories etc." onClick={this.showMultiword}>Extended</a>&nbsp;|&nbsp;
           <b>Regexp</b>
         </div>
-        <CwbRegexInput query={this.state.query} handleQueryChanged={this.handleQueryChanged} />
+        <CwbRegexInput query={this.state.query} handleQueryChanged={this.handleQueryChanged} handleSearch={this.handleSearch} />
       </span>`
