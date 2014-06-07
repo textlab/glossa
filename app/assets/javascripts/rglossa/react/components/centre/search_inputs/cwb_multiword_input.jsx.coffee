@@ -191,7 +191,7 @@ window.CwbMultiwordInput = React.createClass
             )
           }, this)}
             <div style={{display: 'table-cell'}}>
-              <button type="submit" className="btn btn-success" data-search="">Search</button>
+              <button type="button" className="btn btn-success search">Search</button>
             </div>
           </div>
         </div>
