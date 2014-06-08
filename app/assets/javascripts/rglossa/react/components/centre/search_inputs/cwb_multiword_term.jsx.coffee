@@ -17,6 +17,20 @@ window.CwbMultiwordTerm = React.createClass
     handleAddFeature: React.PropTypes.func.isRequired
 
 
+  componentDidMount: ->
+    tagsInput = $(@refs.taglist.getDOMNode()).tags(
+        promptText: ' '
+        afterDeletingTag: @handleTagRemoved)
+
+    term = @props.term
+    tagsInput.addTag(term.pos) if term.pos
+    tagsInput.addTag(feature.value) for feature in term.features
+
+
+  componentWillUnmount: ->
+    $(@refs.taglist.getDOMNode()).tags('destroy')
+
+
   changeTerm: (attribute, value) ->
     changedTerm = {}
     changedTerm[k] = @props.term[k] for k of @props.term  # clone the old term
@@ -47,6 +61,9 @@ window.CwbMultiwordTerm = React.createClass
 
   handleAddFeature: (option, feature, pos) ->
     @props.handleAddFeature(option, feature, pos, @props.termIndex)
+
+  handleTagRemoved: ->
+    console.log('tag removed')
 
   render: ->
     {term, queryHasSingleTerm, isFirst, isLast} = @props
@@ -119,7 +136,7 @@ window.CwbMultiwordTerm = React.createClass
                 </div>
                 }
 
-                <div className="tag-list" data-term-tags=""><div className="tags" /></div>
+                <div className="tag-list" ref="taglist"><div className="tags" /></div>
               </div>
             </div>
           </div>
