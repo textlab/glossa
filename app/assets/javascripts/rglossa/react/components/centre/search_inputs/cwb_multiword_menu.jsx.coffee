@@ -9,28 +9,25 @@ window.CwbMultiwordMenu = React.createClass
   getDefaultProps: ->
     tags: []
 
-  handleAddPos: (pos) ->
-    @props.handleAddPos(pos)
-
   createPosMenu: (pos) ->
     if pos.features
       `<li className="dropdown-submenu">
-        <a onClick={this.handleAddPos.bind(null, pos)}>{pos.name}</a>
+        <a onClick={this.props.handleAddPos.bind(null, pos)}>{pos.name}</a>
         <ul className="dropdown-menu">
-          {pos.features.map(this.createFeatureMenu.bind(this, pos))}
+          {pos.features.map(this.createFeatureMenu)}
         </ul>
       </li>`
     else
       `<li>
-        <a>{pos.name}</a>
+        <a onClick={this.props.handleAddPos.bind(null, pos)}>{pos.name}</a>
       </li>`
 
 
-  createFeatureMenu: (pos, feature) ->
+  createFeatureMenu: (feature) ->
     heading = if feature.name then `<li className="pos-feature-heading">{feature.name}</li>` else null
     options = feature.options.map ((option) ->
       `<li>
-        <a onClick={this.props.handleAddFeature.bind(null, option, feature, pos)}>{option.name}</a>
+        <a onClick={this.props.handleAddFeature.bind(null, option, feature)}>{option.name}</a>
       </li>`), this
     [heading, options]
 

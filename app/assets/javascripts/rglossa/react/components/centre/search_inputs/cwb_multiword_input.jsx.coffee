@@ -85,13 +85,15 @@ window.CwbMultiwordInput = React.createClass
 
     for attr in attributes
       m2 = attr.match(/\(?(\S+)\s*=\s*"(\S+)"/)
+      posAttr = @props.corpus.langs[0].tags?.attr
+
       switch m2[1]
         when 'word', 'lemma'
           term.word = m2[2]
           term.isLemma = m2[1] is 'lemma'
           term.isStart = /\.\+$/.test(m2[2])
           term.isEnd = /^\.\+/.test(m2[2])
-        when 'pos' then term[@.props.posAttr] = m2[2]
+        when posAttr then term.pos = m2[2]
         else term.features.push(attr: m2[1], value: m2[2])
 
       # Remove any .+ at the beginning and/or end of the displayed form
@@ -117,20 +119,6 @@ window.CwbMultiwordInput = React.createClass
     @props.handleQueryChanged(@constructCQPQuery(queryTerms))
 
 
-  handleAddPos: (pos, termIndex) ->
-    queryTerms = @state.queryTerms
-    queryTerms[termIndex].pos = pos
-    @props.handleQueryChanged(@constructCQPQuery(queryTerms))
-
-
-  handleAddFeature: (option, feature, pos, termIndex) ->
-    queryTerms = @state.queryTerms
-    queryTerms[termIndex].features.push
-      attr: feature.attr
-      value: option.value
-    @props.handleQueryChanged(@constructCQPQuery(queryTerms))
-
-
   constructCQPQuery: (queryTerms) ->
     parts = for term in queryTerms
       {min, max, word, isLemma, isStart, isEnd, pos, features} = term
@@ -146,8 +134,8 @@ window.CwbMultiwordInput = React.createClass
 
         if pos
           posAttr = @props.corpus.langs[0].tags?.attr
-          pos = "#{posAttr}=\"#{pos.value}\""
-          attrs.push(pos)
+          posStr = "#{posAttr}=\"#{pos}\""
+          attrs.push(posStr)
 
         for feature in features
           f = "#{feature.attr}=\"#{feature.value}\""
@@ -186,9 +174,7 @@ window.CwbMultiwordInput = React.createClass
                 tags={this.props.corpus.langs[0].tags}
                 handleTermChanged={this.handleTermChanged}
                 handleAddTerm={this.handleAddTerm}
-                handleRemoveTerm={this.handleRemoveTerm}
-                handleAddPos={this.handleAddPos}
-                handleAddFeature={this.handleAddFeature} />
+                handleRemoveTerm={this.handleRemoveTerm} />
             )
           }, this)}
             <div style={{display: 'table-cell'}}>

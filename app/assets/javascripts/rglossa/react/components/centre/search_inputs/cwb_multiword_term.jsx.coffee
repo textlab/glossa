@@ -13,14 +13,11 @@ window.CwbMultiwordTerm = React.createClass
     handleTermChanged: React.PropTypes.func.isRequired
     handleAddTerm: React.PropTypes.func.isRequired
     handleRemoveTerm: React.PropTypes.func.isRequired
-    handleAddPos: React.PropTypes.func.isRequired
-    handleAddFeature: React.PropTypes.func.isRequired
-
 
   componentDidMount: ->
     tagsInput = $(@refs.taglist.getDOMNode()).tags(
         promptText: ' '
-        afterDeletingTag: @handleTagRemoved)
+        afterDeletingTag: @afterDeletingTag)
 
     term = @props.term
     tagsInput.addTag(term.pos) if term.pos
@@ -29,6 +26,22 @@ window.CwbMultiwordTerm = React.createClass
 
   componentWillUnmount: ->
     $(@refs.taglist.getDOMNode()).tags('destroy')
+
+
+  componentWillReceiveProps: (nextProps) ->
+    tagsInput = $(@refs.taglist.getDOMNode()).tags()
+
+    if nextProps.term.pos isnt @props.term.pos
+      if @props.term.pos
+        tagsInput.renameTag(@props.term.pos, nextProps.term.pos)
+      else
+        tagsInput.addTag(nextProps.term.pos)
+
+    currentFeatures = @props.term.features
+    newFeatures = nextProps.term.features.filter (f) ->
+      not currentFeatures.some (cf) -> cf.attr is f.attr and cf.value is f.value
+
+    tagsInput.addTag(feature.value) for feature in newFeatures
 
 
   changeTerm: (attribute, value) ->
@@ -49,6 +62,15 @@ window.CwbMultiwordTerm = React.createClass
 
   handleIsEndChanged: (e) -> @changeTerm('isEnd', e.target.checked)
 
+  handleAddPos: (pos) -> @changeTerm('pos', pos.value)
+
+  handleAddFeature: (option, feature) ->
+    features = @props.term.features.slice(0)
+    features.push
+      attr: feature.attr
+      value: option.value
+    @changeTerm('features', features)
+
   handleAddTerm: (e) ->
     e.preventDefault()
     @props.handleAddTerm()
@@ -56,14 +78,17 @@ window.CwbMultiwordTerm = React.createClass
   handleRemoveTerm: (e) ->
     @props.handleRemoveTerm(@props.termIndex)
 
-  handleAddPos: (pos) ->
-    @props.handleAddPos(pos, @props.termIndex)
+  # Called by the bootstrap-tags plugin after it has removed a tag
+  afterDeletingTag: (tag) ->
+    term = @props.term
+    if tag is term.pos then @removePos() else @removeFeature(tag)
 
-  handleAddFeature: (option, feature, pos) ->
-    @props.handleAddFeature(option, feature, pos, @props.termIndex)
+  removePos: -> @changeTerm('pos', null)
 
-  handleTagRemoved: ->
-    console.log('tag removed')
+  removeFeature: (tag) ->
+    features = @props.term.features.filter (f) -> f.value isnt tag
+    @changeTerm('features', features)
+
 
   render: ->
     {term, queryHasSingleTerm, isFirst, isLast} = @props
