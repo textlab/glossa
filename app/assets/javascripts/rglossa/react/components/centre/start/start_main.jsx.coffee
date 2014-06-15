@@ -5,15 +5,19 @@
 
 window.StartMain = React.createClass
   propTypes:
+    store: React.PropTypes.object.isRequired
     statechart: React.PropTypes.object.isRequired
     corpus: React.PropTypes.object.isRequired
 
   render: ->
-    corpus = @props.corpus
+    {store, statechart, corpus} = @props
     {name, logo} = corpus
     `<span>
       <CorpusInfo
         corpusName={name}
         corpusLogoUrl={logo} />
-      <CwbSearchInputs corpus={corpus} />
+      <CwbSearchInputs
+        store={store}
+        statechart={statechart}
+        corpus={corpus}  />
     </span>`

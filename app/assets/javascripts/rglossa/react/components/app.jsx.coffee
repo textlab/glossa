@@ -7,15 +7,21 @@
 
 models = [
   'corpora'
+  'searches'
+  'results'
 ]
 
 plurals =
   corpus: 'corpora'
+  search: 'searches'
 
 root =
   initialSubstate: 'start'
   substates:
-    start: {}
+    start:
+      actions:
+        showResults: (searchId) ->
+          @transitionTo('../results', {searchId: searchId})
     results: {}
 
 window.App = React.createClass
@@ -29,6 +35,7 @@ window.App = React.createClass
       <Navbar />
       {corpus
         ? <MainArea
+          store={this.state.store}
           statechart={this.state.statechart}
           corpus={corpus} />
         : null}

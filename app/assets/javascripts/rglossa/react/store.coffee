@@ -28,7 +28,7 @@ class Store
     url = "#{plural}/#{id}"
     $.getJSON(url)
       .done( (res) =>
-        @models[plural][id] = res[model]
+        @setData(plural, id, res[model])
         # Notify the client that the model has been loaded
         @storeChangedHandler(@))
       .fail -> alert('Error fetching data from the server. Please reload the page.')
@@ -37,6 +37,10 @@ class Store
     # loaded, @storeChangedHandler will be called, and then the client can call `find`
     # again to retrieve the model.
     null
+
+
+  setData: (model, id, data) ->
+    @models[model][id] = data
 
 
 window.Store = Store

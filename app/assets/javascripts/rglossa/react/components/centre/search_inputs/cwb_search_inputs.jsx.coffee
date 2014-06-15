@@ -20,7 +20,9 @@ root =
 
 window.CwbSearchInputs = React.createClass
   propTypes:
+    store: React.PropTypes.object.isRequired
     corpus: React.PropTypes.object.isRequired
+    statechart: React.PropTypes.object.isRequired
 
   getInitialState: ->
     statechart: new Statechart(
@@ -52,10 +54,16 @@ window.CwbSearchInputs = React.createClass
     $.ajax(
       url: url
       method: 'POST'
-      data: JSON.stringify({queries: [query]})
+      data: JSON.stringify
+        queries: [query]
+        max_hits: 2000
       dataType: 'json'
       contentType: 'application/json'
-    ).then -> console.log 'ja'
+    ).then (res) =>
+      searchModel = "#{searchEngine}_search"
+      id = res[searchModel].id
+      @props.store.setData('searches', id, res[searchModel])
+      @props.statechart.handleAction('showResults', id)
 
   render: ->
     if @state.statechart.pathContains('simple')
