@@ -9,45 +9,44 @@ window.MainAreaBottom = React.createClass
     statechart: React.PropTypes.object.isRequired
     corpus: React.PropTypes.object.isRequired
 
-  rowWithSidebar: (results, currentResultPageNo) ->
+
+  mainComponent: ->
+    if @props.statechart.pathContains('start')
+      `<StartMain
+          store={this.props.store}
+          statechart={this.props.statechart}
+          corpus={this.props.corpus} />`
+    else
+      searchId = @props.statechart.getArgumentValue('searchId')
+      results = if searchId then @props.store.find('search', searchId) else null
+      currentResultPageNo = @props.statechart.getArgumentValue('currentResultPageNo')
+      `<ResultsMain
+          statechart={this.props.statechart}
+          results={results}
+          currentResultPageNo={currentResultPageNo} />`
+
+
+  rowWithSidebar: ->
     `<div className="row-fluid">
       <div id="left-sidebar" className="span3">
         METADATA_CATEGORIES
       </div>
       <div id="main-content" className="span9">
-        {this.props.statechart.pathContains('start')
-          ? <StartMain
-              store={this.props.store}
-              statechart={this.props.statechart}
-              corpus={this.props.corpus} />
-          : <ResultsMain
-              statechart={this.props.statechart}
-              results={results}
-              currentResultPageNo={currentResultPageNo} />}
+        {this.mainComponent()}
       </div>
     </div>`
 
-  rowWithoutSidebar: (results, currentResultPageNo) ->
+
+  rowWithoutSidebar: ->
     `<div className="row-fluid">
       <div id="main-content" className="span12">
-        {this.props.statechart.pathContains('start')
-          ? <StartMain
-              store={this.props.store}
-              statechart={this.props.statechart}
-              corpus={this.props.corpus} />
-          : <ResultsMain
-              statechart={this.props.statechart}
-              results={results}
-              currentResultPageNo={currentResultPageNo} />}
+        {this.mainComponent()}
       </div>
     </div>`
 
-  render: ->
-    searchId = @props.statechart.getArgumentValue('searchId')
-    results = if searchId then @props.store.find('search', searchId) else null
-    currentResultPageNo = @props.statechart.getArgumentValue('currentResultPageNo')
 
+  render: ->
     if true
-      @rowWithSidebar(results, currentResultPageNo)
+      @rowWithSidebar()
     else
-      @rowWithoutSidebar(results, currentResultPageNo)
+      @rowWithoutSidebar()
