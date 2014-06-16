@@ -61,8 +61,11 @@ window.CwbSearchInputs = React.createClass
       contentType: 'application/json'
     ).then (res) =>
       searchModel = "#{searchEngine}_search"
-      id = res[searchModel].id
-      @props.store.setData('searches', id, res[searchModel])
+      search = res[searchModel]
+      search.pages = search.first_two_result_pages
+      delete search.first_two_result_pages
+      id = search.id
+      @props.store.setData('searches', id, search)
       @props.statechart.handleAction('showResults', id)
 
   render: ->

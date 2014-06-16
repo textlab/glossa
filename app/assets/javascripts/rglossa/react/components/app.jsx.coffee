@@ -20,8 +20,10 @@ root =
   substates:
     start:
       actions:
-        showResults: (searchId) ->
-          @transitionTo('../results', {searchId: searchId})
+        showResults: (searchId, pageNo = 1) ->
+          @transitionTo('../results',
+            searchId: searchId
+            currentResultPageNo: pageNo)
     results: {}
 
 window.App = React.createClass

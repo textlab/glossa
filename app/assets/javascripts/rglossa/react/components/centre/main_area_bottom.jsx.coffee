@@ -9,7 +9,7 @@ window.MainAreaBottom = React.createClass
     statechart: React.PropTypes.object.isRequired
     corpus: React.PropTypes.object.isRequired
 
-  rowWithSidebar: (results) ->
+  rowWithSidebar: (results, currentResultPageNo) ->
     `<div className="row-fluid">
       <div id="left-sidebar" className="span3">
         METADATA_CATEGORIES
@@ -22,11 +22,12 @@ window.MainAreaBottom = React.createClass
               corpus={this.props.corpus} />
           : <ResultsMain
               statechart={this.props.statechart}
-              results={results} />}
+              results={results}
+              currentResultPageNo={currentResultPageNo} />}
       </div>
     </div>`
 
-  rowWithoutSidebar: (results) ->
+  rowWithoutSidebar: (results, currentResultPageNo) ->
     `<div className="row-fluid">
       <div id="main-content" className="span12">
         {this.props.statechart.pathContains('start')
@@ -36,11 +37,17 @@ window.MainAreaBottom = React.createClass
               corpus={this.props.corpus} />
           : <ResultsMain
               statechart={this.props.statechart}
-              results={results} />}
+              results={results}
+              currentResultPageNo={currentResultPageNo} />}
       </div>
     </div>`
 
   render: ->
     searchId = @props.statechart.getArgumentValue('searchId')
     results = if searchId then @props.store.find('search', searchId) else null
-    if true then @rowWithSidebar(results) else @rowWithoutSidebar(results)
+    currentResultPageNo = @props.statechart.getArgumentValue('currentResultPageNo')
+
+    if true
+      @rowWithSidebar(results, currentResultPageNo)
+    else
+      @rowWithoutSidebar(results, currentResultPageNo)
