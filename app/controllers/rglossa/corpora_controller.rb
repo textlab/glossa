@@ -28,7 +28,7 @@ module Rglossa
           render json: {
               corpus: @corpus.as_json(
                   only: [:id, :name, :logo, :short_name, :search_engine],
-                  methods: [:langs, :display_attrs, :extra_line_attrs,
+                  methods: [:langs, :display_attrs, :extra_row_attrs,
                             :parts, :has_sound, :metadata_categories]
               )
           }
