@@ -65,7 +65,7 @@ window.CwbResultsTable = React.createClass
     match = (value for key, value of @get('mediaObj.divs.annotation') when value.is_match)[0]
     rowContents = (value.orig for key, value of match.line).join(' ')
     `<tr>
-      {result.sIdBB ? <td /> : null}
+      {result.sId ? <td /> : null}
       {corpusHasSound ? <td className="span1" /> : null}
       <td colSpan="3">{rowContents}</td>
     </tr>`

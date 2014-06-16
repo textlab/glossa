@@ -13,11 +13,10 @@ window.ResultsMain = React.createClass
     {statechart, results, currentResultPageNo, corpus} = @props
     resultPage = results.pages[currentResultPageNo]
 
-    # Construct a component name based on the search engine name, e.g. CwbResultsTable
+    # Select a component based on the search engine name, e.g. CwbResultsTable
     searchEngine = corpus.search_engine or 'cwb'
-    component = "#{searchEngine[0].toUpperCase() + searchEngine.slice(1)}ResultsTable"
+    component = window["#{searchEngine[0].toUpperCase() + searchEngine.slice(1)}ResultsTable"]
 
-    # Render the component whose name we constructed above
-    window[component]
+    component
       resultPage: resultPage
       corpus: corpus

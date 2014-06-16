@@ -12,12 +12,17 @@ window.StartMain = React.createClass
   render: ->
     {store, statechart, corpus} = @props
     {name, logo} = corpus
+
+    # Select a component based on the search engine name, e.g. CwbSearchInputs
+    searchEngine = corpus.search_engine or 'cwb'
+    searchInputs = window["#{searchEngine[0].toUpperCase() + searchEngine.slice(1)}SearchInputs"]
+
     `<span>
       <CorpusInfo
         corpusName={name}
         corpusLogoUrl={logo} />
-      <CwbSearchInputs
-        store={store}
-        statechart={statechart}
-        corpus={corpus}  />
+      {searchInputs({
+        store: store,
+        statechart: statechart,
+        corpus: corpus})}
     </span>`
