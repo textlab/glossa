@@ -11,19 +11,21 @@ window.MainAreaBottom = React.createClass
 
 
   mainComponent: ->
-    if @props.statechart.pathContains('start')
+    {store, statechart, corpus} = @props
+    if statechart.pathContains('start')
       `<StartMain
-          store={this.props.store}
-          statechart={this.props.statechart}
-          corpus={this.props.corpus} />`
+          store={store}
+          statechart={statechart}
+          corpus={corpus} />`
     else
-      searchId = @props.statechart.getArgumentValue('searchId')
-      results = if searchId then @props.store.find('search', searchId) else null
-      currentResultPageNo = @props.statechart.getArgumentValue('currentResultPageNo')
+      searchId = statechart.getArgumentValue('searchId')
+      results = if searchId then store.find('search', searchId) else null
+      currentResultPageNo = statechart.getArgumentValue('currentResultPageNo')
       `<ResultsMain
-          statechart={this.props.statechart}
+          statechart={statechart}
           results={results}
-          currentResultPageNo={currentResultPageNo} />`
+          currentResultPageNo={currentResultPageNo}
+          corpus={corpus} />`
 
 
   rowWithSidebar: ->
