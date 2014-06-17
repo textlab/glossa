@@ -5,6 +5,8 @@
 window.MainAreaTop = React.createClass
   propTypes:
     statechart: React.PropTypes.object.isRequired
+    results: React.PropTypes.object
+    corpus: React.PropTypes.object.isRequired
 
   sideBarButtons: ->
     `<span>
@@ -26,6 +28,8 @@ window.MainAreaTop = React.createClass
         </button>
       </div>
       <div className="span9">
-        {this.props.statechart.pathContains('start') ? null : <ResultsTop />}
+        {this.props.statechart.pathContains('start')
+          ? null
+          : <ResultsTop results={this.props.results} corpus={this.props.corpus} />}
       </div>
       </div>`

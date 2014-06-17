@@ -13,16 +13,21 @@ window.MainArea = React.createClass
     alert 'showCorpusHome'
 
   render: ->
+    {store, statechart, corpus} = @props
+    searchId = statechart.getArgumentValue('searchId')
+    results = if searchId then store.find('search', searchId) else null
     `<span>
       <div className="container-fluid">
 
         <MainAreaTop
-          statechart={this.props.statechart} />
+          statechart={statechart}
+          results={results}
+          corpus={corpus} />
 
         <MainAreaBottom
-          store={this.props.store}
-          statechart={this.props.statechart}
-          corpus={this.props.corpus} />
-
+          store={store}
+          statechart={statechart}
+          results={results}
+          corpus={corpus} />
       </div>
     </span>`

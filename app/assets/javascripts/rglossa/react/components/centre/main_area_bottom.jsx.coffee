@@ -8,18 +8,17 @@ window.MainAreaBottom = React.createClass
     store: React.PropTypes.object.isRequired
     statechart: React.PropTypes.object.isRequired
     corpus: React.PropTypes.object.isRequired
+    results: React.PropTypes.object.isRequired
 
 
   mainComponent: ->
-    {store, statechart, corpus} = @props
+    {store, statechart, corpus, results} = @props
     if statechart.pathContains('start')
       `<StartMain
           store={store}
           statechart={statechart}
           corpus={corpus} />`
     else
-      searchId = statechart.getArgumentValue('searchId')
-      results = if searchId then store.find('search', searchId) else null
       currentResultPageNo = statechart.getArgumentValue('currentResultPageNo')
       `<ResultsMain
           statechart={statechart}
