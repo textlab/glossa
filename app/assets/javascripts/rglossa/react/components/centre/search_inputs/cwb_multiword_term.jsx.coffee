@@ -9,7 +9,7 @@ window.CwbMultiwordTerm = React.createClass
     queryHasSingleTerm: React.PropTypes.bool.isRequired
     isFirst: React.PropTypes.bool.isRequired
     isLast: React.PropTypes.bool.isRequired
-    tags: React.PropTypes.array.isRequired
+    tags: React.PropTypes.object.isRequired
     handleTermChanged: React.PropTypes.func.isRequired
     handleAddTerm: React.PropTypes.func.isRequired
     handleRemoveTerm: React.PropTypes.func.isRequired
