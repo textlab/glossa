@@ -10,6 +10,7 @@ window.CwbMultiwordTerm = React.createClass
     isFirst: React.PropTypes.bool.isRequired
     isLast: React.PropTypes.bool.isRequired
     tags: React.PropTypes.object.isRequired
+    handleKeyDown: React.PropTypes.func.isRequired
     handleTermChanged: React.PropTypes.func.isRequired
     handleAddTerm: React.PropTypes.func.isRequired
     handleRemoveTerm: React.PropTypes.func.isRequired
@@ -111,8 +112,10 @@ window.CwbMultiwordTerm = React.createClass
                 {isFirst ? null :
                 <div className="interval">
                   <h6>Interval</h6>
-                  <input type="text" className="interval" value={term.min} onChange={this.handleMinChanged} /> min<br />
-                  <input type="text" className="interval" value={term.max} onChange={this.handleMaxChanged} /> max
+                  <input type="text" className="interval" value={term.min}
+                    onChange={this.handleMinChanged} onKeyDown={this.props.handleKeyDown} /> min<br />
+                  <input type="text" className="interval" value={term.max}
+                    onChange={this.handleMaxChanged} onKeyDown={this.props.handleKeyDown} /> max
                 </div>
                 }
 
@@ -120,7 +123,7 @@ window.CwbMultiwordTerm = React.createClass
                   <div className="dropdown">
                     <span data-toggle="dropdown" className="add-on dropdown-toggle" style={{cursor: 'pointer'}}><i className="icon-cog" /></span>
                     <input type="text" className="searchfield multiword-field removable"
-                      defaultValue={term.word} onChange={this.handleTextChanged} />
+                      defaultValue={term.word} onChange={this.handleTextChanged} onKeyDown={this.props.handleKeyDown} />
 
                     {queryHasSingleTerm ? null :
                     <span className="add-on" title="Remove word" style={{cursor: 'pointer'}} onClick={this.handleRemoveTerm} ><i className="icon-minus" /></span>

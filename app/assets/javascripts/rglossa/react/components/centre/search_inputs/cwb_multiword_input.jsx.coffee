@@ -33,6 +33,13 @@ window.CwbMultiwordInput = React.createClass
   componentWillReceiveProps: (nextProps) ->
     @setState(queryTerms: @constructQueryTerms(nextProps.query))
 
+
+  handleKeyDown: (e) ->
+    if e.key is 'Enter'
+      e.preventDefault()
+      @props.handleSearch()
+
+
   constructQueryTerms: (query) ->
     queryParts = @splitQuery(query)
 
@@ -172,6 +179,7 @@ window.CwbMultiwordInput = React.createClass
                 isFirst={index === 0}
                 isLast={index === lastIndex}
                 tags={this.props.corpus.langs[0].tags}
+                handleKeyDown={this.handleKeyDown}
                 handleTermChanged={this.handleTermChanged}
                 handleAddTerm={this.handleAddTerm}
                 handleRemoveTerm={this.handleRemoveTerm} />
