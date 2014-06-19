@@ -21,8 +21,8 @@ window.StartMain = React.createClass
       <CorpusInfo
         corpusName={name}
         corpusLogoUrl={logo} />
-      {searchInputs({
-        store: store,
-        statechart: statechart,
-        corpus: corpus})}
+      <searchInputs
+        store={store}
+        statechart={statechart}
+        corpus={corpus} />
     </span>`
