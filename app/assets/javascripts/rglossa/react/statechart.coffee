@@ -30,13 +30,13 @@ class Statechart
   # Searches for a state argument (i.e. data stored in the args property on a state)
   # that matches the given name, beginning at the current state and working upwards
   # towards the root state.
-  getArgumentValue: (argname) ->
+  getArgumentValue: (argname, defaultValue = null) ->
     state = @currentState
     while state
       value = state.args?[argname]
       return value if value?
       state = state.parent
-    return null
+    return defaultValue
 
   # Checks whether the current state path contains the given subpath, which
   # should be a string of one or more state names separated by a slash
