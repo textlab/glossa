@@ -23,6 +23,8 @@ window.CwbSearchInputs = React.createClass
     store: React.PropTypes.object.isRequired
     corpus: React.PropTypes.object.isRequired
     statechart: React.PropTypes.object.isRequired
+    query: React.PropTypes.string.isRequired
+    handleQueryChanged: React.PropTypes.func.isRequired
 
   getInitialState: ->
     statechart: new Statechart(
@@ -41,13 +43,13 @@ window.CwbSearchInputs = React.createClass
     @state.statechart.handleAction('showRegex')
 
   handleQueryChanged: (query) ->
-    @props.statechart.handleAction('setQuery', query)
+    @props.handleQueryChanged(query)
 
   handleSearch: ->
     searchEngine = @props.corpus.search_engine ?= 'cwb'
     url = "search_engines/#{searchEngine}_searches"
     query =
-      query: @props.statechart.getArgumentValue('query', '')
+      query: @props.query
       corpusShortName: @props.corpus.short_name
 
     $.ajax(
@@ -68,7 +70,6 @@ window.CwbSearchInputs = React.createClass
       @props.statechart.handleAction('showResults', id)
 
   render: ->
-    query = @props.statechart.getArgumentValue('query', '')
     if @state.statechart.pathContains('simple')
       `<span>
         <div className="row-fluid search-input-links">
@@ -76,7 +77,7 @@ window.CwbSearchInputs = React.createClass
           <a href="" title="Search for grammatical categories etc." onClick={this.showMultiword}>Extended</a>&nbsp;|&nbsp;
           <a href="" title="Regular expressions" onClick={this.showRegex}>Regexp</a>
         </div>
-        <CwbSimpleInput query={query} handleQueryChanged={this.handleQueryChanged} handleSearch={this.handleSearch} />
+        <CwbSimpleInput query={this.props.query} handleQueryChanged={this.handleQueryChanged} handleSearch={this.handleSearch} />
       </span>`
 
     else if @state.statechart.pathContains('multiword')
@@ -87,7 +88,7 @@ window.CwbSearchInputs = React.createClass
           <a href="" title="Regular expressions" onClick={this.showRegex}>Regexp</a>
         </div>
         <CwbMultiwordInput
-          query={query}
+          query={this.props.query}
           corpus={this.props.corpus}
           handleQueryChanged={this.handleQueryChanged} handleSearch={this.handleSearch} />
       </span>`
@@ -99,5 +100,5 @@ window.CwbSearchInputs = React.createClass
           <a href="" title="Search for grammatical categories etc." onClick={this.showMultiword}>Extended</a>&nbsp;|&nbsp;
           <b>Regexp</b>
         </div>
-        <CwbRegexInput query={query} handleQueryChanged={this.handleQueryChanged} handleSearch={this.handleSearch} />
+        <CwbRegexInput query={this.props.query} handleQueryChanged={this.handleQueryChanged} handleSearch={this.handleSearch} />
       </span>`

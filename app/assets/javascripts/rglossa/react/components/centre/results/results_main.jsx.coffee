@@ -10,9 +10,12 @@ window.ResultsMain = React.createClass
     results: React.PropTypes.object.isRequired
     currentResultPageNo: React.PropTypes.number.isRequired
     corpus: React.PropTypes.object.isRequired
+    query: React.PropTypes.string.isRequired
+    handleQueryChanged: React.PropTypes.func.isRequired
 
   render: ->
-    {store, statechart, results, currentResultPageNo, corpus} = @props
+    {store, statechart, results,
+      currentResultPageNo, corpus, query, handleQueryChanged} = @props
     resultPage = results.pages[currentResultPageNo]
 
     # Select components based on the search engine name,
@@ -23,6 +26,11 @@ window.ResultsMain = React.createClass
     resultTable = window["#{capSearchEngine}ResultsTable"]
 
     `<span>
-      <searchInputs store={store} corpus={corpus} statechart={statechart} />
+      <searchInputs
+        store={store}
+        corpus={corpus}
+        statechart={statechart}
+        query={query}
+        handleQueryChanged={handleQueryChanged} />
       <resultTable resultPage={resultPage} corpus={corpus} />
     </span>`

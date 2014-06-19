@@ -10,6 +10,11 @@ window.MainAreaBottom = React.createClass
     corpus: React.PropTypes.object.isRequired
     results: React.PropTypes.object
 
+  getInitialState: ->
+    query: ''
+
+  handleQueryChanged: (query) ->
+    @setState(query: query)
 
   mainComponent: ->
     {store, statechart, corpus, results} = @props
@@ -17,7 +22,9 @@ window.MainAreaBottom = React.createClass
       `<StartMain
           store={store}
           statechart={statechart}
-          corpus={corpus} />`
+          corpus={corpus}
+          query={this.state.query}
+          handleQueryChanged={this.handleQueryChanged} />`
     else
       currentResultPageNo = statechart.getArgumentValue('currentResultPageNo')
       `<ResultsMain
@@ -25,7 +32,9 @@ window.MainAreaBottom = React.createClass
           statechart={statechart}
           results={results}
           currentResultPageNo={currentResultPageNo}
-          corpus={corpus} />`
+          corpus={corpus}
+          query={this.state.query}
+          handleQueryChanged={this.handleQueryChanged} />`
 
 
   rowWithSidebar: ->
