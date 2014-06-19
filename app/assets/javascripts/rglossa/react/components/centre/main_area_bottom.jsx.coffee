@@ -8,7 +8,7 @@ window.MainAreaBottom = React.createClass
     store: React.PropTypes.object.isRequired
     statechart: React.PropTypes.object.isRequired
     corpus: React.PropTypes.object.isRequired
-    results: React.PropTypes.object.isRequired
+    results: React.PropTypes.object
 
 
   mainComponent: ->
