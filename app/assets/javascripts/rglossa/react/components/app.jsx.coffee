@@ -17,13 +17,13 @@ plurals =
 
 root =
   initialSubstate: 'start'
+  actions:
+    showResults: (searchId, pageNo = 1) ->
+      @transitionTo('results',
+        searchId: searchId
+        currentResultPageNo: pageNo)
   substates:
-    start:
-      actions:
-        showResults: (searchId, pageNo = 1) ->
-          @transitionTo('../results',
-            searchId: searchId
-            currentResultPageNo: pageNo)
+    start: {}
     results: {}
 
 window.App = React.createClass

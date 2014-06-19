@@ -21,6 +21,7 @@ window.MainAreaBottom = React.createClass
     else
       currentResultPageNo = statechart.getArgumentValue('currentResultPageNo')
       `<ResultsMain
+          store={store}
           statechart={statechart}
           results={results}
           currentResultPageNo={currentResultPageNo}
