@@ -1,4 +1,5 @@
 #= require ../search_inputs/cwb_search_inputs
+#= require ./results_toolbar
 #= require ./cwb_results_table
 
 ###* @jsx React.DOM ###
@@ -32,5 +33,9 @@ window.ResultsMain = React.createClass
         statechart={statechart}
         query={query}
         handleQueryChanged={handleQueryChanged} />
-      <resultTable resultPage={resultPage} corpus={corpus} />
+      <ResultsToolbar
+        results={results} />
+      <resultTable
+        resultPage={resultPage}
+        corpus={corpus} />
     </span>`
