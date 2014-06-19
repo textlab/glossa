@@ -45,6 +45,7 @@ window.CwbSearchInputs = React.createClass
   handleQueryChanged: (query) ->
     @props.handleQueryChanged(query)
 
+
   handleSearch: ->
     searchEngine = @props.corpus.search_engine ?= 'cwb'
     url = "search_engines/#{searchEngine}_searches"
@@ -64,10 +65,14 @@ window.CwbSearchInputs = React.createClass
       searchModel = "#{searchEngine}_search"
       search = res[searchModel]
       search.pages = search.first_two_result_pages
+
+      delete search.pages['2'] if search.pages['2'].length is 0
       delete search.first_two_result_pages
       id = search.id
+
       @props.store.setData('searches', id, search)
       @props.statechart.handleAction('showResults', id)
+
 
   render: ->
     if @state.statechart.pathContains('simple')
