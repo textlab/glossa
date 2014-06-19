@@ -101,7 +101,8 @@ class State
     # traverse further by following initialSubstate properties until we reach a leaf state.
     if args?
       targetState.args = args
-      argsMsg = " with the following args set on #{targetState.getPath()}:" if window.console
+      path = targetState.getPath() or 'root'
+      argsMsg = " with the following args set on #{path}:" if window.console
 
     # Unless targetState is already a leaf state, traverse further until we reach one
     while targetState.initialSubstate
