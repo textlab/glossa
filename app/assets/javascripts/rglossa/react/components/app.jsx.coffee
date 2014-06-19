@@ -18,6 +18,8 @@ plurals =
 root =
   initialSubstate: 'start'
   actions:
+    setQuery: (query) ->
+      @transitionTo('.', query: query) # don't really transition, just set query arg
     showResults: (searchId, pageNo = 1) ->
       @transitionTo('results',
         searchId: searchId
