@@ -16,6 +16,9 @@ window.CwbMultiwordTerm = React.createClass
     handleRemoveTerm: React.PropTypes.func.isRequired
 
   componentDidMount: ->
+    if @props.termIndex is 0
+      @refs.searchfield.getDOMNode().focus()
+
     tagsInput = $(@refs.taglist.getDOMNode()).tags(
         promptText: ' '
         afterDeletingTag: @afterDeletingTag)
@@ -122,7 +125,7 @@ window.CwbMultiwordTerm = React.createClass
                 <div className="input-prepend input-append word">
                   <div className="dropdown">
                     <span data-toggle="dropdown" className="add-on dropdown-toggle" style={{cursor: 'pointer'}}><i className="icon-cog" /></span>
-                    <input type="text" className="searchfield multiword-field removable"
+                    <input ref="searchfield" type="text" className="searchfield multiword-field removable"
                       defaultValue={term.word} onChange={this.handleTextChanged} onKeyDown={this.props.handleKeyDown} />
 
                     {queryHasSingleTerm ? null :
