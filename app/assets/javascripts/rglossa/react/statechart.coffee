@@ -38,6 +38,21 @@ class Statechart
       state = state.parent
     return defaultValue
 
+
+  # Changes the value of a state argument (i.e. data stored in the args property on a
+  # state) with the given name. Looks for the argument, beginning at the current state
+  # and working upwards towards the root state. Throws if no argument with this name
+  # was found.
+  changeValue: (argname, newValue) ->
+    state = @currentState
+    while state
+      if state.args?[argname]
+        state.args[argname] = newValue
+        @currentStateChangedHandler(@) if @currentStateChangedHandler
+        return newValue
+    throw new Error("No state value #{argname} found")
+
+
   # Checks whether the current state path contains the given subpath, which
   # should be a string of one or more state names separated by a slash
   # (e.g. "posts" or "posts/editing"). Components can use this to customize
