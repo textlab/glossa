@@ -26,7 +26,7 @@ window.MainAreaBottom = React.createClass
           query={this.state.query}
           handleQueryChanged={this.handleQueryChanged} />`
     else
-      currentResultPageNo = statechart.getArgumentValue('currentResultPageNo')
+      currentResultPageNo = statechart.getValue('currentResultPageNo')
       `<ResultsMain
           store={store}
           statechart={statechart}

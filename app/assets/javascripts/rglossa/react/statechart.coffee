@@ -30,7 +30,7 @@ class Statechart
   # Searches for a state argument (i.e. data stored in the args property on a state)
   # that matches the given name, beginning at the current state and working upwards
   # towards the root state.
-  getArgumentValue: (argname, defaultValue = null) ->
+  getValue: (argname, defaultValue = null) ->
     state = @currentState
     while state
       value = state.args?[argname]
