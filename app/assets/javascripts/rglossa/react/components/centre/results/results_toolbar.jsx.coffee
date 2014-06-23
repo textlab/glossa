@@ -1,4 +1,4 @@
-#= require rglossa/react/debounce
+#= require rglossa/react/utils
 
 ###* @jsx React.DOM ###
 
