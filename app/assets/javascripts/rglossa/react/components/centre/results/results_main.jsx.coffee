@@ -34,7 +34,9 @@ window.ResultsMain = React.createClass
         query={query}
         handleQueryChanged={handleQueryChanged} />
       <ResultsToolbar
-        results={results} />
+        statechart={statechart}
+        results={results}
+        currentResultPageNo={currentResultPageNo} />
       <resultTable
         resultPage={resultPage}
         corpus={corpus} />

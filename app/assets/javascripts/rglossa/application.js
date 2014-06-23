@@ -19,5 +19,4 @@
 //= require i18n
 //= require i18n/translations
 //
-// app.coffee will require the rest of the app-specific files
 //= require ./react/main
