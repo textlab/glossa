@@ -1,3 +1,4 @@
+#= require rglossa/react/utils
 #= require ../search_inputs/cwb_search_inputs
 #= require ./results_toolbar
 #= require ./cwb_results_table
@@ -22,7 +23,7 @@ window.ResultsMain = React.createClass
     # Select components based on the search engine name,
     # e.g. CwbSearchInputs and CwbResultsTable
     searchEngine = corpus.search_engine or 'cwb'
-    capSearchEngine = "#{searchEngine[0].toUpperCase() + searchEngine.slice(1)}"
+    capSearchEngine = capitalize(searchEngine)
     searchInputs = window["#{capSearchEngine}SearchInputs"]
     resultTable = window["#{capSearchEngine}ResultsTable"]
 

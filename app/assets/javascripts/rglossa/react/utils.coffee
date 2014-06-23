@@ -1,3 +1,6 @@
+window.capitalize = (str) ->
+  if str.length then str[0].toUpperCase() + str.slice(1) else ''
+
 # From http://davidwalsh.name/javascript-debounce-function
 
 # Returns a function, that, as long as it continues to be invoked, will not

@@ -1,3 +1,4 @@
+#= require rglossa/react/utils
 #= require ./corpus_info
 #= require ../search_inputs/cwb_search_inputs
 
@@ -17,7 +18,7 @@ window.StartMain = React.createClass
 
     # Select a component based on the search engine name, e.g. CwbSearchInputs
     searchEngine = corpus.search_engine or 'cwb'
-    searchInputs = window["#{searchEngine[0].toUpperCase() + searchEngine.slice(1)}SearchInputs"]
+    searchInputs = window["#{capitalize(searchEngine)}SearchInputs"]
 
     `<span>
       <CorpusInfo
