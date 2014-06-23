@@ -4,7 +4,9 @@
 
 window.ResultsToolbar = React.createClass
   propTypes:
+    store: React.PropTypes.object.isRequired
     statechart: React.PropTypes.object.isRequired
+    corpus: React.PropTypes.object.isRequired
     results: React.PropTypes.object.isRequired
     currentResultPageNo: React.PropTypes.number.isRequired
 
@@ -51,11 +53,24 @@ window.ResultsToolbar = React.createClass
     @setCurrentPageNo(@getNumPages())
 
   setCurrentPageNo: (pageNo) ->
-    numPages = @getNumPages()
-    page = if pageNo < 1 then 1 else (if numPages > 0 and pageNo > numPages then numPages else pageNo)
+    {store, statechart, corpus, results, currentResultPageNo} = @props
 
-    if page isnt @props.currentResultPageNo
-      @props.statechart.changeValue('currentResultPageNo', page)
+    numPages = @getNumPages()
+    clippedPageNo = if pageNo < 1 then 1 else (if numPages > 0 and pageNo > numPages then numPages else pageNo)
+
+    if clippedPageNo isnt currentResultPageNo
+      if results.pages[clippedPageNo]
+        statechart.changeValue('currentResultPageNo', clippedPageNo)
+      else
+        searchEngine = corpus.search_engine or 'cwb'
+        url = "search_engines/#{searchEngine}_searches/#{results.id}/results?pages[]=#{clippedPageNo}
+          &current_corpus_part=#{results.current_corpus_part}"
+        $.getJSON(url).done (res) ->
+          {search_id, pages} = res.search_results
+          model = store.find('search', search_id)
+          model.pages[clippedPageNo] = pages[clippedPageNo]
+          store.setData('search', search_id, model)
+          statechart.changeValue('currentResultPageNo', clippedPageNo)
 
 
   render: ->
