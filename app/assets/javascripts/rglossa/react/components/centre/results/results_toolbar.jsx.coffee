@@ -20,7 +20,8 @@ window.ResultsToolbar = React.createClass
     Object.keys(@props.results.pages).length > 1
 
   getNumPages: ->
-    Math.ceil(@props.results.num_hits / @props.results.pages['1'].length)
+    pageLength = @props.results.pages['1'].length
+    if pageLength then Math.ceil(@props.results.num_hits / pageLength) else 0
 
   handlePageNoChanged: (e) ->
     # We cannot send the e argument directly into the debounced function,
