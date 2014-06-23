@@ -70,7 +70,7 @@ window.CwbSearchInputs = React.createClass
       delete search.first_two_result_pages
       id = search.id
 
-      @props.store.setData('searches', id, search)
+      @props.store.setData('search', id, search)
       @props.statechart.handleAction('showResults', id)
 
 

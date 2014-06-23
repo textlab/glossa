@@ -16,6 +16,7 @@ window.MainArea = React.createClass
     {store, statechart, corpus} = @props
     searchId = statechart.getValue('searchId')
     results = if searchId then store.find('search', searchId) else null
+
     `<span>
       <div className="container-fluid">
 

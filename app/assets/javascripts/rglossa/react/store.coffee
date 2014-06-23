@@ -28,7 +28,7 @@ class Store
     url = "#{plural}/#{id}"
     $.getJSON(url)
       .done( (res) =>
-        @setData(plural, id, res[model])
+        @setData(model, id, res[model])
         # Notify the client that the model has been loaded
         @storeChangedHandler(@))
       .fail -> alert('Error fetching data from the server. Please reload the page.')
@@ -40,7 +40,8 @@ class Store
 
 
   setData: (model, id, data) ->
-    @models[model][id] = data
+    plural = @getPlural(model)
+    @models[plural][id] = data
 
 
 window.Store = Store
