@@ -9,6 +9,16 @@ window.MainArea = React.createClass
     statechart: React.PropTypes.object.isRequired
     corpus: React.PropTypes.object.isRequired
 
+  getInitialState: ->
+    query: ''
+    maxHits: 2000
+
+  handleQueryChanged: (query) ->
+    @setState(query: query)
+
+  handleMaxHitsChanged: (maxHits) ->
+    @setState(maxHits: maxHits)
+
   showCorpusHome: ->
     alert 'showCorpusHome'
 
@@ -23,12 +33,19 @@ window.MainArea = React.createClass
         <MainAreaTop
           statechart={statechart}
           results={results}
-          corpus={corpus} />
+          corpus={corpus}
+          query={this.state.query}
+          handleQueryChanged={this.handleQueryChanged}
+          maxHits={this.state.maxHits}
+          handleMaxHitsChanged={this.handleMaxHitsChanged} />
 
         <MainAreaBottom
           store={store}
           statechart={statechart}
           results={results}
-          corpus={corpus} />
+          corpus={corpus}
+          query={this.state.query}
+          handleQueryChanged={this.handleQueryChanged}
+          maxHits={this.state.maxHits} />
       </div>
     </span>`

@@ -25,6 +25,7 @@ window.CwbSearchInputs = React.createClass
     statechart: React.PropTypes.object.isRequired
     query: React.PropTypes.string.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
+    maxHits: React.PropTypes.number.isRequired
 
   getInitialState: ->
     statechart: new Statechart(
@@ -58,7 +59,7 @@ window.CwbSearchInputs = React.createClass
       method: 'POST'
       data: JSON.stringify
         queries: [query]
-        max_hits: 2000
+        max_hits: @props.maxHits
       dataType: 'json'
       contentType: 'application/json'
     ).then (res) =>
