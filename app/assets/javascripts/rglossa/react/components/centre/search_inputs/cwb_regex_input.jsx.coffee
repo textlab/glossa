@@ -5,7 +5,6 @@ window.CwbRegexInput = React.createClass
     query: React.PropTypes.string.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
     handleSearch: React.PropTypes.func.isRequired
-    handleKeyDown: React.PropTypes.func.isRequired
 
   componentDidMount: ->
     @refs.searchfield.getDOMNode().focus()
