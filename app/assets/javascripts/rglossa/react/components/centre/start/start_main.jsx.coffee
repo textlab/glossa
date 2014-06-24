@@ -11,10 +11,10 @@ window.StartMain = React.createClass
     corpus: React.PropTypes.object.isRequired
     query: React.PropTypes.string.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
-    maxHits: React.PropTypes.number.isRequired
+    handleSearch: React.PropTypes.func.isRequired
 
   render: ->
-    {store, statechart, corpus, query, handleQueryChanged, maxHits, handleMaxHitsChanged} = @props
+    {store, statechart, corpus, query, handleQueryChanged, handleSearch} = @props
     {name, logo} = corpus
 
     # Select a component based on the search engine name, e.g. CwbSearchInputs
@@ -31,5 +31,5 @@ window.StartMain = React.createClass
         corpus={corpus}
         query={query}
         handleQueryChanged={handleQueryChanged}
-        maxHits={maxHits} />
+        handleSearch={handleSearch} />
     </span>`

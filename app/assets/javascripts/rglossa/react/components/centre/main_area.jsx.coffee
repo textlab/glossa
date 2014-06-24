@@ -18,9 +18,39 @@ window.MainArea = React.createClass
 
   handleMaxHitsChanged: (maxHits) ->
     @setState(maxHits: maxHits)
+    @handleSearch()
 
   showCorpusHome: ->
     alert 'showCorpusHome'
+
+  handleSearch: ->
+    {store, statechart, corpus} = @props
+    searchEngine = corpus.search_engine ?= 'cwb'
+    url = "search_engines/#{searchEngine}_searches"
+    query =
+      query: @state.query
+      corpusShortName: corpus.short_name
+
+    $.ajax(
+      url: url
+      method: 'POST'
+      data: JSON.stringify
+        queries: [query]
+        max_hits: @state.maxHits
+      dataType: 'json'
+      contentType: 'application/json'
+    ).then (res) =>
+      searchModel = "#{searchEngine}_search"
+      search = res[searchModel]
+      search.pages = search.first_two_result_pages
+
+      delete search.pages['2'] if search.pages['2'].length is 0
+      delete search.first_two_result_pages
+      id = search.id
+
+      store.setData('search', id, search)
+      statechart.handleAction('showResults', id)
+
 
   render: ->
     {store, statechart, corpus} = @props
@@ -32,10 +62,8 @@ window.MainArea = React.createClass
 
         <MainAreaTop
           statechart={statechart}
-          results={results}
           corpus={corpus}
-          query={this.state.query}
-          handleQueryChanged={this.handleQueryChanged}
+          results={results}
           maxHits={this.state.maxHits}
           handleMaxHitsChanged={this.handleMaxHitsChanged} />
 
@@ -46,6 +74,7 @@ window.MainArea = React.createClass
           results={results}
           query={this.state.query}
           handleQueryChanged={this.handleQueryChanged}
-          maxHits={this.state.maxHits} />
+          maxHits={this.state.maxHits}
+          handleSearch={this.handleSearch} />
       </div>
     </span>`

@@ -12,9 +12,10 @@ window.MainAreaBottom = React.createClass
     query: React.PropTypes.string.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
     maxHits: React.PropTypes.number.isRequired
+    handleSearch: React.PropTypes.func.isRequired
 
   mainComponent: ->
-    {store, statechart, corpus, results, query, handleQueryChanged, maxHits} = @props
+    {store, statechart, corpus, results, query, handleQueryChanged, maxHits, handleSearch} = @props
     if statechart.pathContains('start')
       `<StartMain
           store={store}
@@ -22,7 +23,7 @@ window.MainAreaBottom = React.createClass
           corpus={corpus}
           query={query}
           handleQueryChanged={handleQueryChanged}
-          maxHits={maxHits} />`
+          handleSearch={handleSearch} />`
     else
       currentResultPageNo = statechart.getValue('currentResultPageNo')
       `<ResultsMain
@@ -33,7 +34,8 @@ window.MainAreaBottom = React.createClass
           corpus={corpus}
           query={query}
           handleQueryChanged={handleQueryChanged}
-          maxHits={maxHits} />`
+          maxHits={maxHits}
+          handleSearch={handleSearch} />`
 
 
   rowWithSidebar: ->
