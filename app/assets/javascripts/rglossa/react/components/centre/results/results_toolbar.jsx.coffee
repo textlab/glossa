@@ -33,7 +33,7 @@ window.ResultsToolbar = React.createClass
     pageNo = parseInt(e.target.value)
     unless isNaN(pageNo)
       # Set displayedPageNo right away so that the text box shows the updated number...
-      @setState(displayedPageNo: pageNo)
+      @setState(displayedPageNo: e.target.value)
       # ...but debounce the actual switching to a new page in order to give the user
       # time to finish writing the new page number
       @debouncedHandlePageNoChanged(pageNo)
