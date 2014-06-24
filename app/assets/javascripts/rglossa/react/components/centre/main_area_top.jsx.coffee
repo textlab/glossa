@@ -5,8 +5,8 @@
 window.MainAreaTop = React.createClass
   propTypes:
     statechart: React.PropTypes.object.isRequired
-    results: React.PropTypes.object
     corpus: React.PropTypes.object.isRequired
+    results: React.PropTypes.object
     maxHits: React.PropTypes.number.isRequired
     handleMaxHitsChanged: React.PropTypes.func.isRequired
 
@@ -22,7 +22,7 @@ window.MainAreaTop = React.createClass
 
 
   render: ->
-    {statechart, results, corpus, maxHits, handleMaxHitsChanged} = @props
+    {statechart, corpus, results, maxHits, handleMaxHitsChanged} = @props
     `<div className="row-fluid">
       <div className="span3 top-toolbar">
         {true ? this.sideBarButtons() : null}
@@ -34,8 +34,8 @@ window.MainAreaTop = React.createClass
         {statechart.pathContains('start')
           ? null
           : <ResultsTop
-              results={results}
               corpus={corpus}
+              results={results}
               maxHits={maxHits}
               handleMaxHitsChanged={handleMaxHitsChanged} />}
       </div>

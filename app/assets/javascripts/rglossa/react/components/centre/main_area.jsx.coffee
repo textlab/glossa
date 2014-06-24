@@ -42,8 +42,8 @@ window.MainArea = React.createClass
         <MainAreaBottom
           store={store}
           statechart={statechart}
-          results={results}
           corpus={corpus}
+          results={results}
           query={this.state.query}
           handleQueryChanged={this.handleQueryChanged}
           maxHits={this.state.maxHits} />

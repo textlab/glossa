@@ -4,8 +4,8 @@
 
 window.NumHits = React.createClass
   propTypes:
-    results: React.PropTypes.object.isRequired
     corpus: React.PropTypes.object.isRequired
+    results: React.PropTypes.object.isRequired
     maxHits: React.PropTypes.number.isRequired
     handleMaxHitsChanged: React.PropTypes.func.isRequired
 
@@ -29,7 +29,7 @@ window.NumHits = React.createClass
   debouncedHandleMaxHitsChanged: debounce ((maxHits) -> @props.handleMaxHitsChanged(maxHits)), 500
 
   render: ->
-    {results, corpus, maxHits} = @props
+    {corpus, results, maxHits} = @props
     hitsAreCutOff = results.num_hits is maxHits
     noResultsFound = results.num_hits is 0
     hasReceivedResults = typeof(results.num_hits) isnt 'undefined'

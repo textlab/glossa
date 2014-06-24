@@ -21,8 +21,8 @@ root =
 window.CwbSearchInputs = React.createClass
   propTypes:
     store: React.PropTypes.object.isRequired
-    corpus: React.PropTypes.object.isRequired
     statechart: React.PropTypes.object.isRequired
+    corpus: React.PropTypes.object.isRequired
     query: React.PropTypes.string.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
     maxHits: React.PropTypes.number.isRequired
