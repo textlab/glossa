@@ -38,7 +38,7 @@ window.ResultsToolbar = React.createClass
       # time to finish writing the new page number
       @debouncedHandlePageNoChanged(pageNo)
 
-  debouncedHandlePageNoChanged: debounce ((pageNo) -> @setCurrentPageNo(pageNo)), 500
+  debouncedHandlePageNoChanged: rglossaUtils.debounce ((pageNo) -> @setCurrentPageNo(pageNo)), 500
 
   showFirstPage: ->
     @setCurrentPageNo(1)

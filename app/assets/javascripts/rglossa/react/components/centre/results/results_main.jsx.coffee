@@ -25,7 +25,7 @@ window.ResultsMain = React.createClass
     # Select components based on the search engine name,
     # e.g. CwbSearchInputs and CwbResultsTable
     searchEngine = corpus.search_engine or 'cwb'
-    capSearchEngine = capitalize(searchEngine)
+    capSearchEngine = rglossaUtils.capitalize(searchEngine)
     searchInputs = window["#{capSearchEngine}SearchInputs"]
     resultTable = window["#{capSearchEngine}ResultsTable"]
 

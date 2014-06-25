@@ -19,7 +19,7 @@ window.StartMain = React.createClass
 
     # Select a component based on the search engine name, e.g. CwbSearchInputs
     searchEngine = corpus.search_engine or 'cwb'
-    searchInputs = window["#{capitalize(searchEngine)}SearchInputs"]
+    searchInputs = window["#{rglossaUtils.capitalize(searchEngine)}SearchInputs"]
 
     `<span>
       <CorpusInfo
