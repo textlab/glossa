@@ -1,3 +1,4 @@
+#= require rglossa/react/utils
 #= require ./main_area_top
 #= require ./main_area_bottom
 
@@ -17,18 +18,20 @@ window.MainArea = React.createClass
     @setState(query: query)
 
   handleMaxHitsChanged: (maxHits) ->
-    @setState(maxHits: maxHits)
-    @handleSearch()
+    newState = maxHits: maxHits
+    @setState(newState)
+    @handleSearch(newState)
 
   showCorpusHome: ->
     alert 'showCorpusHome'
 
-  handleSearch: ->
+  handleSearch: (newState = {}) ->
+    state = rglossaUtils.merge(@state, newState)
     {store, statechart, corpus} = @props
     searchEngine = corpus.search_engine ?= 'cwb'
     url = "search_engines/#{searchEngine}_searches"
     query =
-      query: @state.query
+      query: state.query
       corpusShortName: corpus.short_name
 
     $.ajax(
@@ -36,7 +39,7 @@ window.MainArea = React.createClass
       method: 'POST'
       data: JSON.stringify
         queries: [query]
-        max_hits: @state.maxHits
+        max_hits: state.maxHits
       dataType: 'json'
       contentType: 'application/json'
     ).then (res) =>
