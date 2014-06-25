@@ -26,29 +26,44 @@ window.NumHits = React.createClass
       # the new page number
       @debouncedHandleMaxHitsChanged(maxHits) if maxHits > 0
 
-  debouncedHandleMaxHitsChanged: debounce ((maxHits) -> @props.handleMaxHitsChanged(maxHits)), 500
+  debouncedHandleMaxHitsChanged: rglossaUtils.debounce ((maxHits) -> @props.handleMaxHitsChanged(maxHits)), 500
+
+  handleShowAll: ->
+    @props.handleMaxHitsChanged(null)
+
+  numHitsInfo: ->
+    results = @props.results
+    noResultsFound = results.num_hits is 0
+    hasReceivedResults = !!results.num_hits
+
+    res = []
+    if noResultsFound
+      res.push `<span>No matches found</span>`
+    else
+      if hasReceivedResults
+        res.push `<span>Found {results.num_hits} {results.num_hits === 1 ? 'match' : 'matches'}</span>`
+      else
+        res.push `<div className="row-fluid">
+                    AAview App.HitCounterSpinnerViewBB <div className="counting-matches">Counting matches...</div>
+                  </div>`
+    res
+
 
   render: ->
     {corpus, results, maxHits} = @props
-    hitsAreCutOff = results.num_hits is maxHits
-    noResultsFound = results.num_hits is 0
-    hasReceivedResults = typeof(results.num_hits) isnt 'undefined'
     parts = corpus.parts or []
+    hitsAreCutOff = results.num_hits is maxHits
 
     `<div>
+      {this.numHitsInfo()}
       {hitsAreCutOff
-        ? <span>Showing the first <input type="text" className="span1 max-hits"
+        ? <span>; showing the first <input type="text" className="span1 max-hits"
             value={this.state.displayedMaxHits}
-            onChange={this.handleMaxHitsChanged} /> matches  
-            <button className="btn btn-small" AAaction="" showallhitsBB="">Show all</button></span>
-        : noResultsFound
-          ? <span>No matches found</span>
-          : hasReceivedResults
-            ? <span>Found {results.num_hits} matches</span>
-            : <div className="row-fluid">
-                AAview App.HitCounterSpinnerViewBB <div className="counting-matches">Counting matches...</div>
-              </div>}
-
+            onChange={this.handleMaxHitsChanged} />
+            <button style={{marginLeft: 10, marginBottom: 3}} className="btn btn-small" onClick={this.handleShowAll}>Show all</button>
+          </span>
+        : null
+      }
       {parts.map(function(part) {
         <span className="corpus-part-name">{part.short_name} = {part.name}</span>
       })}
