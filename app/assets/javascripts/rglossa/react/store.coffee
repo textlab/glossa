@@ -29,8 +29,7 @@ class Store
     $.getJSON(url)
       .done( (res) =>
         @setData(model, id, res[model])
-        # Notify the client that the model has been loaded
-        @storeChangedHandler(@))
+      )
       .fail -> alert('Error fetching data from the server. Please reload the page.')
 
     # Return null since the store did not contain the model. When the model has been
@@ -42,6 +41,8 @@ class Store
   setData: (model, id, data) ->
     plural = @getPlural(model)
     @models[plural][id] = data
+    # Notify the client that the model has been loaded
+    @storeChangedHandler(@)
 
 
 window.Store = Store
