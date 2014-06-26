@@ -12,13 +12,13 @@ window.ResultsMain = React.createClass
     results: React.PropTypes.object.isRequired
     currentResultPageNo: React.PropTypes.number.isRequired
     corpus: React.PropTypes.object.isRequired
-    query: React.PropTypes.string.isRequired
+    searchQuery: React.PropTypes.string.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
     maxHits: React.PropTypes.number.isRequired
     handleSearch: React.PropTypes.func.isRequired
 
   render: ->
-    {store, statechart, results, currentResultPageNo, corpus, query,
+    {store, statechart, results, currentResultPageNo, corpus, searchQuery,
         handleQueryChanged, maxHits, handleSearch} = @props
     resultPage = results.pages[currentResultPageNo]
 
@@ -34,7 +34,7 @@ window.ResultsMain = React.createClass
         store={store}
         corpus={corpus}
         statechart={statechart}
-        query={query}
+        searchQuery={searchQuery}
         handleQueryChanged={handleQueryChanged}
         maxHits={maxHits}
         handleSearch={handleSearch} />

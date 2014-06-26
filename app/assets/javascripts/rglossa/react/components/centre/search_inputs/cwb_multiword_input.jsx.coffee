@@ -22,16 +22,16 @@ createTerm = (overrides = {}) ->
 
 window.CwbMultiwordInput = React.createClass
   propTypes:
-    query: React.PropTypes.string.isRequired
+    searchQuery: React.PropTypes.string.isRequired
     corpus: React.PropTypes.object.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
     handleSearch: React.PropTypes.func.isRequired
 
   getInitialState: ->
-    queryTerms: @constructQueryTerms(@props.query)
+    queryTerms: @constructQueryTerms(@props.searchQuery)
 
   componentWillReceiveProps: (nextProps) ->
-    @setState(queryTerms: @constructQueryTerms(nextProps.query))
+    @setState(queryTerms: @constructQueryTerms(nextProps.searchQuery))
 
 
   handleKeyDown: (e) ->

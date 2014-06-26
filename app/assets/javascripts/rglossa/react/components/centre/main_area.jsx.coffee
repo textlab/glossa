@@ -11,11 +11,11 @@ window.MainArea = React.createClass
     corpus: React.PropTypes.object.isRequired
 
   getInitialState: ->
-    query: ''
+    searchQuery: ''
     maxHits: 2000
 
   handleQueryChanged: (query) ->
-    @setState(query: query)
+    @setState(searchQuery: query)
 
   handleMaxHitsChanged: (maxHits) ->
     newState = maxHits: maxHits
@@ -31,7 +31,7 @@ window.MainArea = React.createClass
     searchEngine = corpus.search_engine ?= 'cwb'
     searchUrl = "search_engines/#{searchEngine}_searches"
     query =
-      query: state.query
+      query: state.searchQuery
       corpusShortName: corpus.short_name
 
     $.ajax(
@@ -87,7 +87,7 @@ window.MainArea = React.createClass
           statechart={statechart}
           corpus={corpus}
           results={results}
-          query={this.state.query}
+          searchQuery={this.state.searchQuery}
           handleQueryChanged={this.handleQueryChanged}
           maxHits={this.state.maxHits}
           handleSearch={this.handleSearch} />

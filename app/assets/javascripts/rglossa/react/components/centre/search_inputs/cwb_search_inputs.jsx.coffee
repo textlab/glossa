@@ -23,7 +23,7 @@ window.CwbSearchInputs = React.createClass
     store: React.PropTypes.object.isRequired
     statechart: React.PropTypes.object.isRequired
     corpus: React.PropTypes.object.isRequired
-    query: React.PropTypes.string.isRequired
+    searchQuery: React.PropTypes.string.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
     handleSearch: React.PropTypes.func.isRequired
 
@@ -45,7 +45,7 @@ window.CwbSearchInputs = React.createClass
 
 
   render: ->
-    {corpus, query, handleQueryChanged, handleSearch} = @props
+    {corpus, searchQuery, handleQueryChanged, handleSearch} = @props
     if @state.statechart.pathContains('simple')
       `<span>
         <div className="row-fluid search-input-links">
@@ -53,7 +53,7 @@ window.CwbSearchInputs = React.createClass
           <a href="" title="Search for grammatical categories etc." onClick={this.showMultiword}>Extended</a>&nbsp;|&nbsp;
           <a href="" title="Regular expressions" onClick={this.showRegex}>Regexp</a>
         </div>
-        <CwbSimpleInput query={query} handleQueryChanged={handleQueryChanged} handleSearch={handleSearch} />
+        <CwbSimpleInput searchQuery={searchQuery} handleQueryChanged={handleQueryChanged} handleSearch={handleSearch} />
       </span>`
 
     else if @state.statechart.pathContains('multiword')
@@ -64,7 +64,7 @@ window.CwbSearchInputs = React.createClass
           <a href="" title="Regular expressions" onClick={this.showRegex}>Regexp</a>
         </div>
         <CwbMultiwordInput
-          query={query}
+          searchQuery={searchQuery}
           corpus={corpus}
           handleQueryChanged={handleQueryChanged} handleSearch={handleSearch} />
       </span>`
@@ -76,5 +76,5 @@ window.CwbSearchInputs = React.createClass
           <a href="" title="Search for grammatical categories etc." onClick={this.showMultiword}>Extended</a>&nbsp;|&nbsp;
           <b>Regexp</b>
         </div>
-        <CwbRegexInput query={query} handleQueryChanged={handleQueryChanged} handleSearch={handleSearch} />
+        <CwbRegexInput searchQuery={searchQuery} handleQueryChanged={handleQueryChanged} handleSearch={handleSearch} />
       </span>`

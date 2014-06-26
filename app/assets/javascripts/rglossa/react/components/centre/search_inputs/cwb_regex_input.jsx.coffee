@@ -2,7 +2,7 @@
 
 window.CwbRegexInput = React.createClass
   propTypes:
-    query: React.PropTypes.string.isRequired
+    searchQuery: React.PropTypes.string.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
     handleSearch: React.PropTypes.func.isRequired
 
@@ -21,7 +21,7 @@ window.CwbRegexInput = React.createClass
     `<div className="row-fluid">
       <form className="form-inline span12">
         <div className="input-append span10">
-          <input ref="searchfield" type="text" className="searchfield span12" value={this.props.query}
+          <input ref="searchfield" type="text" className="searchfield span12" value={this.props.searchQuery}
             onChange={this.handleTextChanged} onKeyDown={this.handleKeyDown} />
           <button type="button" className="btn btn-success" onClick={this.props.handleSearch}>Search</button>
         </div>

@@ -9,19 +9,19 @@ window.MainAreaBottom = React.createClass
     statechart: React.PropTypes.object.isRequired
     corpus: React.PropTypes.object.isRequired
     results: React.PropTypes.object
-    query: React.PropTypes.string.isRequired
+    searchQuery: React.PropTypes.string.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
     maxHits: React.PropTypes.number.isRequired
     handleSearch: React.PropTypes.func.isRequired
 
   mainComponent: ->
-    {store, statechart, corpus, results, query, handleQueryChanged, maxHits, handleSearch} = @props
+    {store, statechart, corpus, results, searchQuery, handleQueryChanged, maxHits, handleSearch} = @props
     if statechart.pathContains('start')
       `<StartMain
           store={store}
           statechart={statechart}
           corpus={corpus}
-          query={query}
+          searchQuery={searchQuery}
           handleQueryChanged={handleQueryChanged}
           handleSearch={handleSearch} />`
     else
@@ -32,7 +32,7 @@ window.MainAreaBottom = React.createClass
           results={results}
           currentResultPageNo={currentResultPageNo}
           corpus={corpus}
-          query={query}
+          searchQuery={searchQuery}
           handleQueryChanged={handleQueryChanged}
           maxHits={maxHits}
           handleSearch={handleSearch} />`

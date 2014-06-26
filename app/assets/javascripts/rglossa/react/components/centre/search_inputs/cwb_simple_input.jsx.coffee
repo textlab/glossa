@@ -2,7 +2,7 @@
 
 window.CwbSimpleInput = React.createClass
   propTypes:
-    query: React.PropTypes.string.isRequired
+    searchQuery: React.PropTypes.string.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
     handleSearch: React.PropTypes.func.isRequired
 
@@ -11,7 +11,7 @@ window.CwbSimpleInput = React.createClass
 
   displayedQuery: ->
     # Take the CQP expression and just remove quotes
-    @props.query.replace(/"/g, '')
+    @props.searchQuery.replace(/"/g, '')
 
   handleTextChanged: (e) ->
     # Wrap each search term in quotes
