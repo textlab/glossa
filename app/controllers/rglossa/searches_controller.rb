@@ -85,7 +85,7 @@ module Rglossa
       corpus = get_corpus_from_query
       parts = corpus.config[:parts]
 
-      num_hits = parts ? @search.get_total_corpus_part_count(parts) : @search.num_hits
+      num_hits = parts ? @search.get_total_corpus_part_count(parts) : @search.count
 
       respond_to do |format|
         format.any(:json, :xml) do

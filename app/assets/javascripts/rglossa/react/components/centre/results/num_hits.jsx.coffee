@@ -41,7 +41,7 @@ window.NumHits = React.createClass
       res.push `<span>No matches found</span>`
     else
       if hasReceivedResults
-        res.push `<span>Found {results.num_hits} {results.num_hits === 1 ? 'match' : 'matches'}</span>`
+        res.push `<span>Found {results.total} {results.num_hits === 1 ? 'match' : 'matches'}</span>`
       else
         res.push `<div className="row-fluid">
                     AAview App.HitCounterSpinnerViewBB <div className="counting-matches">Counting matches...</div>

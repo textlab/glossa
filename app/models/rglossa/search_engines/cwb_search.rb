@@ -17,6 +17,7 @@ module Rglossa
         }
       end
 
+
       def run_queries
         named_query = query_info[:named_query]
         query = query_info[:query]
@@ -81,6 +82,17 @@ module Rglossa
 
         run_cqp_commands(commands).split("\n")
       end
+
+
+      def count
+        commands = [
+          query_info[:cwb_corpus_name],
+          query_info[:query],
+          "size Last"
+        ]
+        run_cqp_commands(commands).split("\n").first.to_i
+      end
+
 
       ########
       private

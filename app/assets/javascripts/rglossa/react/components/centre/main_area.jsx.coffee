@@ -29,13 +29,13 @@ window.MainArea = React.createClass
     state = rglossaUtils.merge(@state, newState)
     {store, statechart, corpus} = @props
     searchEngine = corpus.search_engine ?= 'cwb'
-    url = "search_engines/#{searchEngine}_searches"
+    searchUrl = "search_engines/#{searchEngine}_searches"
     query =
       query: state.query
       corpusShortName: corpus.short_name
 
     $.ajax(
-      url: url
+      url: searchUrl
       method: 'POST'
       data: JSON.stringify
         queries: [query]
@@ -45,11 +45,23 @@ window.MainArea = React.createClass
     ).then (res) =>
       searchModel = "#{searchEngine}_search"
       search = res[searchModel]
+      id = search.id
+
+      if search.num_hits < @state.maxHits
+        # There were fewer than maxHits occurrences in the corpus
+        search.total = search.num_hits
+      else
+        # There were at least maxHits occurrences in the corpus; find out the total
+        $.getJSON("#{searchUrl}/#{id}/count").then (count) =>
+          # Update the search model in the store with the total
+          model = store.find('search', id)
+          model.total = count
+          store.setData('search', id, model)
+
       search.pages = search.first_two_result_pages
 
       delete search.pages['2'] if search.pages['2'].length is 0
       delete search.first_two_result_pages
-      id = search.id
 
       store.setData('search', id, search)
       statechart.handleAction('showResults', id)

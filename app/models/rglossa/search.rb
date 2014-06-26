@@ -52,6 +52,10 @@ module Rglossa
       raise "Implement in subclasses"
     end
 
+    def count
+      raise "Implement in subclasses"
+    end
+
     def get_total_corpus_part_count(parts)
       query = queries.first['query'].gsub('"', '')
       self.num_hits = 0
