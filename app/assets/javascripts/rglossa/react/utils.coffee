@@ -10,6 +10,7 @@ window.rglossaUtils =
   # N milliseconds. If `immediate` is passed, trigger the function on the
   # leading edge, instead of the trailing.
   debounce: (func, wait, immediate) ->
+    timeout = null
     ->
       context = @
       args = arguments
