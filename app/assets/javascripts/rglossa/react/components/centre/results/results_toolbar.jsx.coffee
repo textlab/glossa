@@ -40,6 +40,9 @@ window.ResultsToolbar = React.createClass
 
   debouncedHandlePageNoChanged: rglossaUtils.debounce ((pageNo) -> @setCurrentPageNo(pageNo)), 500
 
+  handlePageNoClicked: ->
+    @refs.pageNoInput.getDOMNode().select()
+
   showFirstPage: ->
     @setCurrentPageNo(1)
 
@@ -93,8 +96,8 @@ window.ResultsToolbar = React.createClass
               </li>
               <li><span>Page</span></li>
               <li><span className="paginator-counter">
-                <input type="text" className="input-mini" value={this.state.displayedPageNo}
-                  onChange={this.handlePageNoChanged} /></span>
+                <input ref="pageNoInput" type="text" className="input-mini" value={this.state.displayedPageNo}
+                  onClick={this.handlePageNoClicked} onChange={this.handlePageNoChanged} /></span>
               </li>
               <li><span>of {numPages} pages</span></li>
               <li className={isLastPage ? 'disabled' : ''}>
