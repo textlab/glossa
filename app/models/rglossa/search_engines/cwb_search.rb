@@ -5,15 +5,21 @@ module Rglossa
   module SearchEngines
     class CwbSearch < Search
 
-      def run_queries
-        # TODO: Handle several queries at once
-        q = queries[0]
-        corpus = q['corpusShortName'].upcase
-        query = q['query']
+      def query_info
+        @query_info ||= {
+          query: queries[0]['query'],  # TODO: Handle several queries at once
+          cwb_corpus_name: queries[0]['corpusShortName'].upcase,
+          corpus: Corpus.find_by_short_name(queries[0]['corpusShortName'].downcase),
 
-        # The query will be saved under a name composed of the name of the
-        # corpus edition followed by the database ID of the search object
-        named_query = corpus + id.to_s
+          # The query will be saved under a name composed of the name of the
+          # corpus edition followed by the database ID of the search object
+          named_query: queries[0]['corpusShortName'].upcase + id.to_s
+        }
+      end
+
+      def run_queries
+        named_query = query_info[:named_query]
+        query = query_info[:query]
 
         if metadata_value_ids.empty?
           query_commands = "#{named_query} = #{query}"
@@ -34,7 +40,7 @@ module Rglossa
 
         commands = [
           %Q{set DataDirectory "#{Dir.tmpdir}"},
-          corpus,
+          query_info[:cwb_corpus_name],
           query_commands,
           "save #{named_query}",
           "size Last"
@@ -47,10 +53,7 @@ module Rglossa
 
       # Returns a single page of results from CQP
       def get_result_page(page_no, extra_attributes = %w(lemma pos type))
-        q = queries[0]
-        cwbCorpusName = q['corpusShortName'].upcase
-        corpus = Corpus.find_by_short_name(q['corpusShortName'])
-        named_query = cwbCorpusName + id.to_s
+        corpus = query_info[:corpus]
 
         # NOTE: page_no is 1-based while cqp uses 0-based numbering of hits
         start = (page_no - 1) * page_size
@@ -58,7 +61,7 @@ module Rglossa
         s_tag = corpus.s_tag || "s"
         commands = [
           %Q{set DataDirectory "#{Dir.tmpdir}"},
-          cwbCorpusName,  # necessary for "set PrintStructures to work"...
+          query_info[:cwb_corpus_name],  # necessary for "set PrintStructures to work"...
           "set Context #{s_tag}",
           'set LD "{{"',
           'set RD "}}"',
@@ -74,7 +77,7 @@ module Rglossa
           end
         end
 
-        commands << "cat #{named_query} #{start} #{stop}"
+        commands << "cat #{query_info[:named_query]} #{start} #{stop}"
 
         run_cqp_commands(commands).split("\n")
       end
@@ -84,8 +87,7 @@ module Rglossa
       ########
 
       def run_cqp_commands(commands)
-        corpus = Corpus.find_by_short_name(queries[0]['corpusShortName'].downcase)
-        encoding = corpus.encoding
+        encoding = query_info[:corpus].encoding
 
         Tempfile.open('cqp', encoding: encoding) do |command_file|
           commands.map! { |cmd| cmd.end_with?(';') ? cmd : cmd + ';' }
@@ -104,6 +106,7 @@ module Rglossa
           result
         end
       end
+
     end
   end
 end
