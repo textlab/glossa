@@ -31,9 +31,14 @@ window.App = React.createClass
     store: new Store(models, plurals, (store) => @setState(store: store))
     statechart: new Statechart('Main', root, (sc) => @setState(statechart: sc))
 
+  preloadImages: ->
+    `[<img style={{display: 'none'}} src="assets/rglossa/spinner-small.gif" />,
+      <img style={{display: 'none'}} src="assets/rglossa/spinner-large.gif" />]`
+
   render: ->
     corpus = @state.store.find('corpus', 2)
     `<span>
+      {this.preloadImages()}
       <Navbar />
       {corpus
         ? <MainArea
