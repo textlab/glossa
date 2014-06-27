@@ -50,6 +50,7 @@ class Statechart
         state.args[argname] = newValue
         @currentStateChangedHandler(@) if @currentStateChangedHandler
         return newValue
+      state = state.parent
     throw new Error("No state value #{argname} found")
 
 
