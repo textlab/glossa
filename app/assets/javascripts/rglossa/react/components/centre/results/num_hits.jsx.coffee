@@ -10,12 +10,13 @@ window.NumHits = React.createClass
     handleMaxHitsChanged: React.PropTypes.func.isRequired
 
   getInitialState: ->
-    displayedMaxHits: @props.results.num_hits # see comments in handleMaxHitsChanged below
+    displayedMaxHits: @props.results?.num_hits # see comments in handleMaxHitsChanged below
 
   componentWillReceiveProps: (nextProps) ->
-    if nextProps.results.num_hits isnt @state.displayedMaxHits
+    num_hits = nextProps.results?.num_hits ? null
+    if num_hits isnt @state.displayedMaxHits
       # see comments in handleMaxHitsChanged below for why we need displayedMaxHits
-      @setState(displayedMaxHits: nextProps.results.num_hits)
+      @setState(displayedMaxHits: num_hits)
 
   handleMaxHitsChanged: (e) ->
     maxHits = parseInt(e.target.value)
@@ -51,20 +52,25 @@ window.NumHits = React.createClass
 
   render: ->
     {corpus, results, maxHits} = @props
-    parts = corpus.parts or []
-    hitsAreCutOff = results.num_hits is maxHits
 
-    `<div>
-      {this.numHitsInfo()}
-      {hitsAreCutOff
-        ? <span>; showing the first <input type="text" className="span1 max-hits"
-            value={this.state.displayedMaxHits}
-            onChange={this.handleMaxHitsChanged} />
-            <button style={{marginLeft: 10, marginBottom: 3}} className="btn btn-small" onClick={this.handleShowAll}>Show all</button>
-          </span>
-        : null
-      }
-      {parts.map(function(part) {
-        <span className="corpus-part-name">{part.short_name} = {part.name}</span>
-      })}
-    </div>`
+    if results
+      parts = corpus.parts or []
+      hitsAreCutOff = results.num_hits is maxHits
+
+      `<div>
+        {this.numHitsInfo()}
+        {hitsAreCutOff
+          ? <span>; showing the first <input type="text" className="span1 max-hits"
+              value={this.state.displayedMaxHits}
+              onChange={this.handleMaxHitsChanged} />
+              <button style={{marginLeft: 10, marginBottom: 3}} className="btn btn-small" onClick={this.handleShowAll}>Show all</button>
+            </span>
+          : null
+        }
+        {parts.map(function(part) {
+          <span className="corpus-part-name">{part.short_name} = {part.name}</span>
+        })}
+      </div>`
+    else
+      `<div><div className="inline-spinner" />Searching...</div>`
+

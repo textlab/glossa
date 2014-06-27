@@ -20,7 +20,7 @@ window.ResultsMain = React.createClass
   render: ->
     {store, statechart, results, currentResultPageNo, corpus, searchQuery,
         handleQueryChanged, maxHits, handleSearch} = @props
-    resultPage = results.pages[currentResultPageNo]
+    resultPage = results?.pages[currentResultPageNo]
 
     # Select components based on the search engine name,
     # e.g. CwbSearchInputs and CwbResultsTable

@@ -19,10 +19,10 @@ window.ResultsToolbar = React.createClass
       @setState(displayedPageNo: nextProps.currentResultPageNo)
 
   hasMultipleResultPages: ->
-    Object.keys(@props.results.pages).length > 1
+    @props.results and (Object.keys(@props.results.pages).length > 1)
 
   getNumPages: ->
-    pageLength = @props.results.pages['1'].length
+    pageLength = @props.results?.pages['1'].length
     if pageLength then Math.ceil(@props.results.num_hits / pageLength) else 0
 
   handlePageNoChanged: (e) ->
@@ -57,6 +57,8 @@ window.ResultsToolbar = React.createClass
 
   setCurrentPageNo: (pageNo) ->
     {store, statechart, corpus, results, currentResultPageNo} = @props
+
+    return unless results
 
     numPages = @getNumPages()
     clippedPageNo = if pageNo < 1 then 1 else (if numPages > 0 and pageNo > numPages then numPages else pageNo)

@@ -71,7 +71,11 @@ window.CwbResultsTable = React.createClass
     </tr>`
 
 
-  render: ->
+  loadingIndicator: ->
+    `<div className="result-spinner"></div>`
+
+
+  resultTable: ->
     results = @parseResults(@props.resultPage)
     extraRowAttrs = @props.corpus.extra_row_attrs or []
 
@@ -96,3 +100,7 @@ window.CwbResultsTable = React.createClass
       </tbody>
       </table>
     </div>`
+
+
+  render: ->
+    if @props.resultPage then @resultTable() else @loadingIndicator()
