@@ -72,7 +72,7 @@ window.CwbResultsTable = React.createClass
 
 
   loadingIndicator: ->
-    `<div className="result-spinner"></div>`
+    `<div className="spinner-searching-large"></div>`
 
 
   resultTable: ->

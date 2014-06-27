@@ -35,18 +35,16 @@ window.NumHits = React.createClass
   numHitsInfo: ->
     results = @props.results
     noResultsFound = results.num_hits is 0
-    hasReceivedResults = !!results.num_hits
+    hasReceivedTotal = results.total?
 
     res = []
     if noResultsFound
       res.push `<span>No matches found</span>`
     else
-      if hasReceivedResults
+      if hasReceivedTotal
         res.push `<span>Found {results.total} {results.num_hits === 1 ? 'match' : 'matches'}</span>`
       else
-        res.push `<div className="row-fluid">
-                    AAview App.HitCounterSpinnerViewBB <div className="counting-matches">Counting matches...</div>
-                  </div>`
+        res.push `<span><div className="spinner-counting-matches" />Counting matches</span>`
     res
 
 
@@ -72,5 +70,5 @@ window.NumHits = React.createClass
         })}
       </div>`
     else
-      `<div><div className="inline-spinner" />Searching...</div>`
+      `<div><div className="spinner-searching-small" />Searching...</div>`
 

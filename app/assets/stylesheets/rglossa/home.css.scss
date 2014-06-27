@@ -31,12 +31,25 @@ h5.category-header {
   margin-top: 6px;
 }
 
-.inline-spinner {
+.spinner-searching-large {
+  background-image: url(spinner-large.gif);
+  width: 66px;
+  height: 66px;
+  margin-left: 250px;
+  margin-top: 70px;
+}
+
+.spinner-searching-small {
   background-image: url(spinner-small.gif);
   width: 16px;
   height: 16px;
   margin: 2px 8px 0px 0;
   float: left;
+}
+
+.spinner-counting-matches {
+  @extend .spinner-searching-small;
+  margin-top: 14px;
 }
 
 .minmax-field {
@@ -104,14 +117,6 @@ h5.category-header {
   &:first-of-type {
     margin-top: 0;
   }
-}
-
-.result-spinner {
-  background-image: url(spinner-large.gif);
-  width: 66px;
-  height: 66px;
-  margin-left: 250px;
-  margin-top: 70px;
 }
 
 .row-fluid {
