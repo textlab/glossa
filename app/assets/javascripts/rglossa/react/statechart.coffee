@@ -43,7 +43,7 @@ class Statechart
   # state) with the given name. Looks for the argument, beginning at the current state
   # and working upwards towards the root state. Throws if no argument with this name
   # was found.
-  changeValue: (argname, newValue) ->
+  changeValue: (argname, newValue, ignoreNotFound = false) ->
     state = @currentState
     while state
       if state.args?[argname]
@@ -51,7 +51,7 @@ class Statechart
         @currentStateChangedHandler(@) if @currentStateChangedHandler
         return newValue
       state = state.parent
-    throw new Error("No state value #{argname} found")
+    throw new Error("No state value #{argname} found") unless ignoreNotFound
 
 
   # Checks whether the current state path contains the given subpath, which
