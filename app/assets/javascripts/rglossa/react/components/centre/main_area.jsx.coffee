@@ -13,12 +13,25 @@ window.MainArea = React.createClass
   getInitialState: ->
     searchQuery: ''
     maxHits: 2000
+    lastSelectedMaxHits: null
 
   handleQueryChanged: (query) ->
-    @setState(searchQuery: query)
+    # When the query changes, also set maxHits to the last requested number of
+    # hits if we have asked to see all hits in the mean time, in which case
+    # @state.maxHits will be null. This way, we will always limit the number of
+    # hits each time we do a new query.
+    newState = searchQuery: query
+    if !@state.maxHits and @state.lastSelectedMaxHits
+      newState.maxHits = @state.lastSelectedMaxHits
+    @setState(newState)
 
   handleMaxHitsChanged: (maxHits) ->
     newState = maxHits: maxHits
+    if maxHits is null and @state.maxHits
+      # if we ask for all hits, remember what number of hits we asked for
+      # last time so that we can use the same number when doing the next search
+      newState.lastSelectedMaxHits = @state.maxHits
+
     @setState(newState)
     @handleSearch(newState)
 
