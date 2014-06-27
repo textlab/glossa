@@ -31,6 +31,14 @@ h5.category-header {
   margin-top: 6px;
 }
 
+.inline-spinner {
+  background-image: url(spinner-small.gif);
+  width: 16px;
+  height: 16px;
+  margin: 2px 8px 0px 0;
+  float: left;
+}
+
 .minmax-field {
   width: 20px;
 }
@@ -99,7 +107,11 @@ h5.category-header {
 }
 
 .result-spinner {
-  margin-top: 40px;
+  background-image: url(spinner-large.gif);
+  width: 66px;
+  height: 66px;
+  margin-left: 250px;
+  margin-top: 70px;
 }
 
 .row-fluid {
