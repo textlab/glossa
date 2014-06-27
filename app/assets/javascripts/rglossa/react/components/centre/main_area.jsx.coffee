@@ -52,7 +52,7 @@ window.MainArea = React.createClass
       search = res[searchModel]
       id = search.id
 
-      if search.num_hits < @state.maxHits
+      if !@state.maxHits or search.num_hits < @state.maxHits
         # There were fewer than maxHits occurrences in the corpus
         search.total = search.num_hits
       else
