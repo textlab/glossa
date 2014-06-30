@@ -14,7 +14,7 @@ window.ResultsMain = React.createClass
     corpus: React.PropTypes.object.isRequired
     searchQuery: React.PropTypes.string.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
-    maxHits: React.PropTypes.number.isRequired
+    maxHits: React.PropTypes.number
     handleSearch: React.PropTypes.func.isRequired
 
   render: ->

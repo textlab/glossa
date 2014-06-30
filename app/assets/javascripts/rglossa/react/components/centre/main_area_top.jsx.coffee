@@ -7,7 +7,7 @@ window.MainAreaTop = React.createClass
     statechart: React.PropTypes.object.isRequired
     corpus: React.PropTypes.object.isRequired
     results: React.PropTypes.object
-    maxHits: React.PropTypes.number.isRequired
+    maxHits: React.PropTypes.number
     handleMaxHitsChanged: React.PropTypes.func.isRequired
 
   sideBarButtons: ->

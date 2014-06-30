@@ -6,7 +6,7 @@ window.NumHits = React.createClass
   propTypes:
     corpus: React.PropTypes.object.isRequired
     results: React.PropTypes.object
-    maxHits: React.PropTypes.number.isRequired
+    maxHits: React.PropTypes.number
     handleMaxHitsChanged: React.PropTypes.func.isRequired
 
   getInitialState: ->
