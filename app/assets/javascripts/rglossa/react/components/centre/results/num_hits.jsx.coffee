@@ -66,7 +66,7 @@ window.NumHits = React.createClass
           : null
         }
         {parts.map(function(part) {
-          <span className="corpus-part-name">{part.short_name} = {part.name}</span>
+          <span key={part.short_name} className="corpus-part-name">{part.short_name} = {part.name}</span>
         })}
       </div>`
     else

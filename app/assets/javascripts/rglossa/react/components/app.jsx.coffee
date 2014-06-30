@@ -32,8 +32,8 @@ window.App = React.createClass
     statechart: new Statechart('Main', root, (sc) => @setState(statechart: sc))
 
   preloadImages: ->
-    `[<img style={{display: 'none'}} src="assets/rglossa/spinner-small.gif" />,
-      <img style={{display: 'none'}} src="assets/rglossa/spinner-large.gif" />]`
+    `[<img key="spinner-small" style={{display: 'none'}} src="assets/rglossa/spinner-small.gif" />,
+      <img key="spinner-large" style={{display: 'none'}} src="assets/rglossa/spinner-large.gif" />]`
 
   render: ->
     corpus = @state.store.find('corpus', 2)
