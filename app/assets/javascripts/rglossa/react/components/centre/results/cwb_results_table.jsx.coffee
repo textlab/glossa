@@ -9,7 +9,7 @@ window.CwbResultsTable = React.createClass
   componentDidUpdate: (prevProps) ->
     # Create tooltips after a new result page is displayed
     if @props.resultPage and @props.resultPage[0] isnt prevProps.resultPage?[0]
-      $('[data-ot]', @getDOMNode()).forEach (token, index) ->
+      $('[data-ot]', @getDOMNode()).each (index, token) ->
         new Opentip token, $(token).data('ot'),
           style: 'dark'
           fixed: true
