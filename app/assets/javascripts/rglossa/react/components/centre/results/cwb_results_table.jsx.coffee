@@ -2,7 +2,7 @@
 
 window.CwbResultsTable = React.createClass
   propTypes:
-    resultPage: React.PropTypes.array.isRequired
+    resultPage: React.PropTypes.array
     corpus: React.PropTypes.object.isRequired
     rowNoShowingPlayer: React.PropTypes.number
 

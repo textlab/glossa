@@ -9,7 +9,7 @@ window.ResultsMain = React.createClass
   propTypes:
     store: React.PropTypes.object.isRequired
     statechart: React.PropTypes.object.isRequired
-    results: React.PropTypes.object.isRequired
+    results: React.PropTypes.object
     currentResultPageNo: React.PropTypes.number.isRequired
     corpus: React.PropTypes.object.isRequired
     searchQuery: React.PropTypes.string.isRequired

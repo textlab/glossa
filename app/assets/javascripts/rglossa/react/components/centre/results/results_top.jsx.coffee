@@ -5,7 +5,7 @@
 window.ResultsTop = React.createClass
   propTypes:
     corpus: React.PropTypes.object.isRequired
-    results: React.PropTypes.object.isRequired
+    results: React.PropTypes.object
     maxHits: React.PropTypes.number.isRequired
     handleMaxHitsChanged: React.PropTypes.func.isRequired
 
