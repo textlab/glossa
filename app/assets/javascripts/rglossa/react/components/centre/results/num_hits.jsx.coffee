@@ -37,15 +37,13 @@ window.NumHits = React.createClass
     noResultsFound = results.num_hits is 0
     hasReceivedTotal = results.total?
 
-    res = []
     if noResultsFound
-      res.push `<span>No matches found</span>`
+      `<span>No matches found</span>`
     else
       if hasReceivedTotal
-        res.push `<span>Found {results.total} {results.num_hits === 1 ? 'match' : 'matches'}</span>`
+        `<span>Found {results.total} {results.num_hits === 1 ? 'match' : 'matches'}</span>`
       else
-        res.push `<span><div className="spinner-counting-matches" />Counting matches</span>`
-    res
+        `<span><div className="spinner-counting-matches" />Counting matches</span>`
 
 
   render: ->
