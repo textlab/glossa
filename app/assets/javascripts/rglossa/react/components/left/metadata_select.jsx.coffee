@@ -3,6 +3,8 @@
 window.MetadataSelect = React.createClass
   propTypes:
     category: React.PropTypes.object.isRequired
+    collectMetadataValues: React.PropTypes.func.isRequired
+    handleMetadataSelectionsChanged: React.PropTypes.func.isRequired
 
   componentDidMount: ->
     node = @getDOMNode()
@@ -39,20 +41,26 @@ window.MetadataSelect = React.createClass
         url: "metadata_categories/#{@props.category.id}/metadata_values"
         dataType: 'json'
 
-        # data: (term, page) =>
-        #   selectedMetadata = @get('controller').collectMetadataValues()
-        #   {query: term, page: page, metadata_value_ids: selectedMetadata}
+        data: (term, page) =>
+          selectedMetadata = @props.collectMetadataValues()
+          {query: term, page: page, metadata_value_ids: selectedMetadata}
 
         results: (data, page) =>
           {results: data.metadata_values}
 
-    # $(node).on 'change', =>
-    #   @get('controller').send('metadataSelectionsChanged')
+    $(node).on 'change', =>
+      @props.handleMetadataSelectionsChanged()
 
 
   destroySelect: (node) ->
     $(node).select2('destroy')
     $(node).val(null)
 
+  getName: ->
+    @props.category.id
+
+  getValue: ->
+    @refs.hidden.getDOMNode().value
+
   render: ->
-    `<input type="hidden" name={this.props.category.id} data-metadata-selection="data-metadata-selection" />`
+    `<input ref="hidden" type="hidden" name={this.props.category.id} />`

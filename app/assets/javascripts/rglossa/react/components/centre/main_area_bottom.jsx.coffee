@@ -15,6 +15,9 @@ window.MainAreaBottom = React.createClass
     maxHits: React.PropTypes.number
     handleSearch: React.PropTypes.func.isRequired
 
+  handleMetadataSelectionsChanged: ->
+    @props.handleSearch()
+
   mainComponent: ->
     {store, statechart, corpus, results, searchQuery, handleQueryChanged, maxHits, handleSearch} = @props
     if statechart.pathContains('start')
@@ -41,7 +44,11 @@ window.MainAreaBottom = React.createClass
 
   render: ->
     `<div className="row-fluid">
-      {true ? <MetadataCategories corpus={this.props.corpus} /> : null}
+      {true
+        ? <MetadataCategories
+            corpus={this.props.corpus}
+            handleMetadataSelectionsChanged={this.handleMetadataSelectionsChanged} />
+        : null}
       <div id="main-content" className="span9">
         {this.mainComponent()}
       </div>
