@@ -40,6 +40,8 @@ window.MainArea = React.createClass
 
   handleSearch: (newState = {}) ->
     state = rglossaUtils.merge(@state, newState)
+    return unless state.searchQuery and state.searchQuery isnt '""'
+
     {store, statechart, corpus} = @props
 
     # Remove any previous search results so that a spinner will be
