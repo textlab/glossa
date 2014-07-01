@@ -1,4 +1,5 @@
 #= require ./start/start_main
+#= require ../left/metadata_categories
 #= require ./results/results_main
 
 ###* @jsx React.DOM ###
@@ -38,27 +39,10 @@ window.MainAreaBottom = React.createClass
           handleSearch={handleSearch} />`
 
 
-  rowWithSidebar: ->
+  render: ->
     `<div className="row-fluid">
-      <div id="left-sidebar" className="span3">
-        METADATA_CATEGORIES
-      </div>
+      {true ? <MetadataCategories corpus={this.props.corpus} /> : null}
       <div id="main-content" className="span9">
         {this.mainComponent()}
       </div>
     </div>`
-
-
-  rowWithoutSidebar: ->
-    `<div className="row-fluid">
-      <div id="main-content" className="span12">
-        {this.mainComponent()}
-      </div>
-    </div>`
-
-
-  render: ->
-    if true
-      @rowWithSidebar()
-    else
-      @rowWithoutSidebar()
