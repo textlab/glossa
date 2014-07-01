@@ -26,22 +26,19 @@ window.MetadataCategories = React.createClass
 
 
   metadataCategory: (category) ->
-    `<span key={category.id}>
-      <h5 className="category-header">{category.name}</h5>
-      <div>
-        <MetadataSelect
-          ref={category.id}
-          category={category}
-          collectMetadataValues={this.collectMetadataValues}
-          handleMetadataSelectionsChanged={this.props.handleMetadataSelectionsChanged} />
-      </div>
-    </span>`
 
   render: ->
     `<div id="left-sidebar" className="span3">
        <div>
          <form>
-          {this.props.corpus.metadata_categories.map(this.metadataCategory)}
+          {this.props.corpus.metadata_categories.map(function(category) {
+            return <MetadataSelect
+                    key={category.id}
+                    ref={category.id}
+                    category={category}
+                    collectMetadataValues={this.collectMetadataValues}
+                    handleMetadataSelectionsChanged={this.props.handleMetadataSelectionsChanged} />
+          }.bind(this))}
         </form>
       </div>
     </div>`

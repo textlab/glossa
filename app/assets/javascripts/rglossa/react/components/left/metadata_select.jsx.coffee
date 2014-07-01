@@ -6,31 +6,27 @@ window.MetadataSelect = React.createClass
     collectMetadataValues: React.PropTypes.func.isRequired
     handleMetadataSelectionsChanged: React.PropTypes.func.isRequired
 
-  componentDidMount: ->
-    node = @getDOMNode()
-    @header = $(node).parent().prev()
-
-    @header.on 'click', =>
-      if @isOpen
-        @closeSelect(node)
-      else
-        @openSelect(node)
-
+  getInitialState: ->
+    isActive: false
 
   componentWillUnmount: ->
-    @header.off 'click'
+    $(@getDOMNode()).select2('destroy') if @state.isActive
+
+  handleHeaderClick: ->
+    node = @refs.hidden.getDOMNode()
+    if @state.isActive
+      @closeSelect(node)
+    else
+      @openSelect(node)
 
   openSelect: (node) ->
     @createSelect(node)
     $(node).select2('open')
-
-    @isOpen = true
-    @header.addClass('active-category')
+    @setState(isActive: true)
 
   closeSelect: (node) ->
     @destroySelect(node)
-    @header.removeClass('active-category')
-    @isOpen = false
+    @setState(isActive: false)
 
   createSelect: (node) ->
     $(node).select2
@@ -63,4 +59,11 @@ window.MetadataSelect = React.createClass
     @refs.hidden.getDOMNode().value
 
   render: ->
-    `<input ref="hidden" type="hidden" name={this.props.category.id} />`
+      headerClasses = React.addons.classSet
+        'category-header': true
+        'active-category': @state.isActive
+
+      `<span>
+        <h5 className={headerClasses} onClick={this.handleHeaderClick}>{this.props.category.name}</h5>
+        <input ref="hidden" type="hidden" name={this.props.category.id} />
+      </span>`
