@@ -12,6 +12,18 @@ window.MetadataSelect = React.createClass
   componentWillUnmount: ->
     $(@refs.hidden.getDOMNode()).select2('destroy') if @state.isActive
 
+  componentDidUpdate: (prevProps, prevState) ->
+    if prevState.isActive and !@state.isActive
+      # We need setTimeout here because if the dropdown was closed by pressing
+      # the escape key, select2 wants to focus the text field afterwards, and
+      # it will throw an error if we have removed the field. By waiting until
+      # the next run of the JavaScript run loop, we let select2 finish its thing
+      # before removing it.
+      setTimeout((=>
+        $(@refs.hidden.getDOMNode()).select2('destroy')),
+        0)
+
+
   handleHeaderClick: ->
     node = @refs.hidden.getDOMNode()
     if @state.isActive
@@ -46,6 +58,15 @@ window.MetadataSelect = React.createClass
 
     $(node).on 'change', =>
       @props.handleMetadataSelectionsChanged()
+
+    $(node).on 'select2-close', (e) =>
+      unless e.target.value
+        # If we close the dropdown (by clicking elsewhere or pressing
+        # the escape key) and no values have been selected, set isActive
+        # to false, which will cause the component to update and the text
+        # field to be removed as well in componentDidUpdate (since we don't
+        # want empty metadata text fields to stay around)
+        @setState(isActive: false)
 
 
   destroySelect: (node) ->
