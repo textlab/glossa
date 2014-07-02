@@ -9,15 +9,20 @@ window.MainAreaTop = React.createClass
     results: React.PropTypes.object
     maxHits: React.PropTypes.number
     handleMaxHitsChanged: React.PropTypes.func.isRequired
+    isShowingSidebar: React.PropTypes.bool.isRequired
+    toggleSidebar: React.PropTypes.func.isRequired
 
   sideBarButtons: ->
     `<span>
-      <button id="hide-criteria-button" className="btn btn-mini" title="Hide search criteria">
-        <i className="icon-double-angle-left"> Hide</i>
-      </button>
-      <button id="show-criteria-button" className="btn btn-mini" style={{display: 'none'}} title="Show search criteria">
-        <i className="icon-double-angle-right" /> Filters
-      </button>
+      {this.props.isShowingSidebar
+        ? <button id="hide-criteria-button" className="btn btn-mini" title="Hide search criteria"
+            onClick={this.props.toggleSidebar.bind(null, false)}>
+            <i className="icon-double-angle-left"> Hide</i>
+          </button>
+        : <button id="show-criteria-button" className="btn btn-mini" title="Show search criteria"
+            onClick={this.props.toggleSidebar.bind(null, true)}>
+          <i className="icon-double-angle-right"> Filters</i>
+        </button>}
     </span>`
 
 

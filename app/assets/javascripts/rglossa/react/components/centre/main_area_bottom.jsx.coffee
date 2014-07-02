@@ -14,6 +14,7 @@ window.MainAreaBottom = React.createClass
     handleQueryChanged: React.PropTypes.func.isRequired
     maxHits: React.PropTypes.number
     handleSearch: React.PropTypes.func.isRequired
+    isShowingSidebar: React.PropTypes.bool.isRequired
 
   handleMetadataSelectionsChanged: ->
     @props.handleSearch()
@@ -44,7 +45,7 @@ window.MainAreaBottom = React.createClass
 
   render: ->
     `<div className="row-fluid">
-      {true
+      {this.props.isShowingSidebar
         ? <MetadataCategories
             corpus={this.props.corpus}
             handleMetadataSelectionsChanged={this.handleMetadataSelectionsChanged} />

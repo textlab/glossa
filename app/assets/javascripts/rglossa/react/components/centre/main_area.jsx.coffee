@@ -14,6 +14,10 @@ window.MainArea = React.createClass
     searchQuery: ''
     maxHits: 2000
     lastSelectedMaxHits: null
+    isShowingSidebar: true
+
+  toggleSidebar: (shouldShow) ->
+    @setState(isShowingSidebar: shouldShow)
 
   handleQueryChanged: (query) ->
     # When the query changes, also set maxHits to the last requested number of
@@ -91,6 +95,8 @@ window.MainArea = React.createClass
 
   render: ->
     {store, statechart, corpus} = @props
+    {searchQuery, maxHits, isShowingSidebar} = @state
+
     searchId = statechart.getValue('searchId')
     results = if searchId then store.find('search', searchId) else null
 
@@ -101,17 +107,20 @@ window.MainArea = React.createClass
           statechart={statechart}
           corpus={corpus}
           results={results}
-          maxHits={this.state.maxHits}
-          handleMaxHitsChanged={this.handleMaxHitsChanged} />
+          maxHits={maxHits}
+          handleMaxHitsChanged={this.handleMaxHitsChanged}
+          isShowingSidebar={isShowingSidebar}
+          toggleSidebar={this.toggleSidebar} />
 
         <MainAreaBottom
           store={store}
           statechart={statechart}
           corpus={corpus}
           results={results}
-          searchQuery={this.state.searchQuery}
+          searchQuery={searchQuery}
           handleQueryChanged={this.handleQueryChanged}
-          maxHits={this.state.maxHits}
-          handleSearch={this.handleSearch} />
+          maxHits={maxHits}
+          handleSearch={this.handleSearch}
+          isShowingSidebar={isShowingSidebar} />
       </div>
     </span>`
