@@ -64,6 +64,8 @@ window.MetadataSelect = React.createClass
         'active-category': @state.isActive
 
       `<span>
-        <h5 className={headerClasses} onClick={this.handleHeaderClick}>{this.props.category.name}</h5>
+        <h5 className={headerClasses} onClick={this.handleHeaderClick}>
+          {this.props.category.name}{this.state.isActive ? <span>  <i className="icon-remove-sign"></i></span> : null}
+        </h5>
         <input ref="hidden" type="hidden" name={this.props.category.id} />
       </span>`
