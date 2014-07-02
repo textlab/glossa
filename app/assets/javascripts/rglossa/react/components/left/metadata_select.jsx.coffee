@@ -10,7 +10,7 @@ window.MetadataSelect = React.createClass
     isActive: false
 
   componentWillUnmount: ->
-    $(@getDOMNode()).select2('destroy') if @state.isActive
+    $(@refs.hidden.getDOMNode()).select2('destroy') if @state.isActive
 
   handleHeaderClick: ->
     node = @refs.hidden.getDOMNode()
