@@ -58,8 +58,11 @@ window.MainArea = React.createClass
     @setState(newState)
     @handleSearch(newState)
 
-  showCorpusHome: ->
-    alert 'showCorpusHome'
+
+  resetSearchForm: ->
+    @setState(searchQuery: '')
+    @props.statechart.handleAction('resetSearchForm')
+
 
   handleSearch: (newState = {}) ->
     state = rglossaUtils.merge(@state, newState)
@@ -129,7 +132,8 @@ window.MainArea = React.createClass
           maxHits={maxHits}
           handleMaxHitsChanged={this.handleMaxHitsChanged}
           isShowingSidebar={isShowingSidebar}
-          toggleSidebar={this.toggleSidebar} />
+          toggleSidebar={this.toggleSidebar}
+          resetSearchForm={this.resetSearchForm} />
 
         <MainAreaBottom
           store={store}

@@ -22,6 +22,8 @@ root =
       @transitionTo('results',
         searchId: searchId
         currentResultPageNo: pageNo)
+    resetSearchForm: ->
+      @transitionTo('start')
   substates:
     start: {}
     results: {}
