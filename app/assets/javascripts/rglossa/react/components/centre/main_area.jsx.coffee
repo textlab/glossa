@@ -16,8 +16,27 @@ window.MainArea = React.createClass
     lastSelectedMaxHits: null
     isShowingSidebar: true
 
+  # Transitioning the toggling of the sidebar requires several steps because we need to
+  # coordinate the sizing of the sidebar and the main content area (otherwise, we could
+  # probably just have used React.addons.CSSTransitionGroup):
+  # 1) Use React.addons.TransitionGroup, which provides some extra lifecycle hooks on
+  #    MetadataCategories
+  # 2) If the sidebar is being shown, decrease the width of the main content area in
+  #    toggleSidebar(); otherwise, do nothing
+  # 3) If the sidebar is being hidden, use componentWillLeave() and componentDidLeave() in
+  #    MetadataCategories to transition its width to zero and then call handleSidebarHidden()
+  #    in MainAreaBottom to increase the width of the main content area when the transition
+  #    is done. If, on the other hand, the sidebar is being shown, use componentWillEnter() and
+  #    componentDidEnter() to transition the width of the sidebar from zero to span3.
+  #
+  # The animation mechanisms in React are under development, and we can hopefully change this
+  # procedure to something simpler (and more unified) in the future.
   toggleSidebar: (shouldShow) ->
+    if shouldShow
+      $('#main-content', @getDOMNode()).removeClass('span12 no-sidebar').addClass('span9')
+
     @setState(isShowingSidebar: shouldShow)
+
 
   handleQueryChanged: (query) ->
     # When the query changes, also set maxHits to the last requested number of

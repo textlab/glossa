@@ -155,8 +155,12 @@ h5.category-header {
 .sidebar {
   transition: width .1s;
 
+  &.sidebar-enter {
+    width: 0 !important;
+  }
+
   &.sidebar-leave-active {
-    width: 0;
+    width: 0 !important;
   }
 }
 

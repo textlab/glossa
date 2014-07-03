@@ -20,6 +20,10 @@ window.MainAreaBottom = React.createClass
     @props.handleSearch()
 
   handleSidebarHidden: ->
+    # When the sidebar is hidden, we make the content area full width. We also need to add
+    # the no-sidebar class to remove its left margin (bootstrap removes left margin on the
+    # first child with a 'spanX' class, but the transition group containing the sidebar
+    # leaves a span in the markup that prevents the main content from becoming the first child).
     $('#main-content', @getDOMNode()).removeClass('span9').addClass('span12 no-sidebar')
 
   mainComponent: ->
