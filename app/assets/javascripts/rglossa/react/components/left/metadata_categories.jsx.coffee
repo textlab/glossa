@@ -6,7 +6,16 @@ window.MetadataCategories = React.createClass
   propTypes:
     corpus: React.PropTypes.object.isRequired
     handleMetadataSelectionsChanged: React.PropTypes.func.isRequired
+    handleSidebarHidden: React.PropTypes.func.isRequired
 
+  componentWillLeave: (cb) ->
+    $(@getDOMNode()).addClass('sidebar-leave-active')  # starts width transition
+    # calling the callback removes the sidebar div (we wait until the transition ends)
+    # and calls componentDidLeave()
+    setTimeout(cb, 100)
+
+  componentDidLeave: ->
+    @props.handleSidebarHidden()
 
   # Iterates through all the MetadataSelect components in the category list
   # and collects the ids of any selected metadata values. Will be called by the
@@ -28,7 +37,7 @@ window.MetadataCategories = React.createClass
   metadataCategory: (category) ->
 
   render: ->
-    `<div id="left-sidebar" className="span3">
+    `<div id="left-sidebar" className="span3 sidebar">
        <div>
          <form>
           {this.props.corpus.metadata_categories.map(function(category) {

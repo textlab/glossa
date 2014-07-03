@@ -30,7 +30,7 @@ window.MainAreaTop = React.createClass
     {statechart, corpus, results, maxHits, handleMaxHitsChanged} = @props
     `<div className="row-fluid">
       <div className="span3 top-toolbar">
-        {true ? this.sideBarButtons() : null}
+        {this.props.corpus.metadata_categories.length ? this.sideBarButtons() : null}
         <button onClick={this.showCorpusHome} id="new-search-button" className="btn btn-mini btn-primary" title="Reset form">
           Reset form
         </button>

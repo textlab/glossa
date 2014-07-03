@@ -19,6 +19,9 @@ window.MainAreaBottom = React.createClass
   handleMetadataSelectionsChanged: ->
     @props.handleSearch()
 
+  handleSidebarHidden: ->
+    $('#main-content', @getDOMNode()).removeClass('span9').addClass('span12 no-sidebar')
+
   mainComponent: ->
     {store, statechart, corpus, results, searchQuery, handleQueryChanged, maxHits, handleSearch} = @props
     if statechart.pathContains('start')
@@ -44,11 +47,18 @@ window.MainAreaBottom = React.createClass
 
 
   render: ->
+    ReactTransitionGroup = React.addons.TransitionGroup
+
     `<div className="row-fluid">
-      {this.props.isShowingSidebar
-        ? <MetadataCategories
-            corpus={this.props.corpus}
-            handleMetadataSelectionsChanged={this.handleMetadataSelectionsChanged} />
+      {this.props.corpus.metadata_categories.length
+        ? <ReactTransitionGroup transitionName="sidebar">
+            {this.props.isShowingSidebar
+              ? <MetadataCategories
+                  corpus={this.props.corpus}
+                  handleMetadataSelectionsChanged={this.handleMetadataSelectionsChanged}
+                  handleSidebarHidden={this.handleSidebarHidden} />
+              : []}
+          </ReactTransitionGroup>
         : null}
       <div id="main-content" className="span9">
         {this.mainComponent()}

@@ -152,6 +152,14 @@ h5.category-header {
   }
 }
 
+.sidebar {
+  transition: width .1s;
+
+  &.sidebar-leave-active {
+    width: 0;
+  }
+}
+
 .table-cell {
   display: table-cell;
 }
