@@ -28,6 +28,7 @@ window.MetadataSelect = React.createClass
     node = @refs.hidden.getDOMNode()
     if @state.isActive
       @closeSelect(node)
+      @props.handleSelectedValuesChanged()
     else
       @openSelect(node)
 
