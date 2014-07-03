@@ -60,7 +60,6 @@ window.MetadataCategories = React.createClass
     metadataValueIds
 
 
-  metadataCategory: (category) ->
 
   render: ->
     `<div id="left-sidebar" className="span3 sidebar">
