@@ -10,11 +10,21 @@ window.MainArea = React.createClass
     statechart: React.PropTypes.object.isRequired
     corpus: React.PropTypes.object.isRequired
 
+  # If the width of the browser window is <= this, we automatically hide the sidebar
+  # to make more room for search results.
+  maxAutoHideSidebarWidth: 1100
+
   getInitialState: ->
     searchQuery: ''
     maxHits: 2000
     lastSelectedMaxHits: null
     isShowingSidebar: true
+    isNarrowView: false
+
+  componentDidMount: ->
+    # determine if the window is narrow, because then we want to automatically hide
+    # the sidebar before showing search results
+    @setState(isNarrowView: $('body').width() <= @maxAutoHideSidebarWidth)
 
   # Transitioning the toggling of the sidebar requires several steps because we need to
   # coordinate the sizing of the sidebar and the main content area (otherwise, we could
@@ -107,6 +117,10 @@ window.MainArea = React.createClass
 
       store.setData('search', id, search)
       statechart.handleAction('showResults', id)
+
+    if @state.isShowingSidebar and @state.isNarrowView
+      # automatically hide the sidebar before showing results if the window is narrow
+      @toggleSidebar(false)
 
     # Show the result page with empty search results so that a spinner
     # will be shown until the new results are received from the server
