@@ -70,10 +70,6 @@ window.MainArea = React.createClass
 
     {store, statechart, corpus} = @props
 
-    # Remove any previous search results so that a spinner will be
-    # shown until the new results are received from the server
-    statechart.changeValue('searchId', null, true)
-
     searchEngine = corpus.search_engine ?= 'cwb'
     searchUrl = "search_engines/#{searchEngine}_searches"
     query =
@@ -112,6 +108,8 @@ window.MainArea = React.createClass
       store.setData('search', id, search)
       statechart.handleAction('showResults', id)
 
+    # Show the result page with empty search results so that a spinner
+    # will be shown until the new results are received from the server
     statechart.handleAction('showResults', null)
 
 
