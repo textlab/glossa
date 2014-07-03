@@ -69,7 +69,7 @@ window.MainArea = React.createClass
     @handleSearch(newState)
 
 
-  resetSearchForm: ->
+  handleResetSearchForm: ->
     @setState(searchQuery: '')
     @props.statechart.handleAction('resetSearchForm')
 
@@ -145,7 +145,7 @@ window.MainArea = React.createClass
           handleMaxHitsChanged={this.handleMaxHitsChanged}
           isShowingSidebar={isShowingSidebar}
           toggleSidebar={this.toggleSidebar}
-          resetSearchForm={this.resetSearchForm} />
+          handleResetSearchForm={this.handleResetSearchForm} />
 
         <MainAreaBottom
           store={store}

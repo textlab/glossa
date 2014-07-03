@@ -11,7 +11,7 @@ window.MainAreaTop = React.createClass
     handleMaxHitsChanged: React.PropTypes.func.isRequired
     isShowingSidebar: React.PropTypes.bool.isRequired
     toggleSidebar: React.PropTypes.func.isRequired
-    resetSearchForm: React.PropTypes.func.isRequired
+    handleResetSearchForm: React.PropTypes.func.isRequired
 
   sideBarButtons: ->
     `<span>
@@ -32,7 +32,7 @@ window.MainAreaTop = React.createClass
     `<div className="row-fluid">
       <div className="span3 top-toolbar">
         {this.props.corpus.metadata_categories.length ? this.sideBarButtons() : null}
-        <button onClick={this.props.resetSearchForm} id="new-search-button" className="btn btn-mini btn-primary" title="Reset form">
+        <button onClick={this.props.handleResetSearchForm} id="new-search-button" className="btn btn-mini btn-primary" title="Reset form">
           Reset form
         </button>
       </div>
