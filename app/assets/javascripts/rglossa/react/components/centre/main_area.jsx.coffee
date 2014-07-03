@@ -16,6 +16,7 @@ window.MainArea = React.createClass
 
   getInitialState: ->
     searchQuery: ''
+    selectedMetadataIds: {}
     maxHits: 2000
     lastSelectedMaxHits: null
     isShowingSidebar: true
@@ -74,6 +75,12 @@ window.MainArea = React.createClass
     @props.statechart.handleAction('resetSearchForm')
 
 
+  handleMetadataSelectionsChanged: (selectedMetadataIds) ->
+    newState = {selectedMetadataIds: selectedMetadataIds}
+    @setState(newState)
+    @handleSearch(newState)
+
+
   handleSearch: (newState = {}) ->
     state = rglossaUtils.merge(@state, newState)
     return unless state.searchQuery and state.searchQuery isnt '""'
@@ -91,6 +98,7 @@ window.MainArea = React.createClass
       method: 'POST'
       data: JSON.stringify
         queries: [query]
+        metadata_value_ids: state.selectedMetadataIds
         max_hits: state.maxHits
       dataType: 'json'
       contentType: 'application/json'
@@ -156,6 +164,7 @@ window.MainArea = React.createClass
           handleQueryChanged={this.handleQueryChanged}
           maxHits={maxHits}
           handleSearch={this.handleSearch}
+          handleMetadataSelectionsChanged={this.handleMetadataSelectionsChanged}
           isShowingSidebar={isShowingSidebar} />
       </div>
     </span>`

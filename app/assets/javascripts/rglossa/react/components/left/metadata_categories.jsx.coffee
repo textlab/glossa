@@ -39,10 +39,14 @@ window.MetadataCategories = React.createClass
     # class).
     $(@getDOMNode()).removeClass('sidebar-enter')
 
+  handleSelectedValuesChanged: ->
+    @props.handleMetadataSelectionsChanged(@collectMetadataValues())
+
   # Iterates through all the MetadataSelect components in the category list
-  # and collects the ids of any selected metadata values. Will be called by the
-  # MetadataSelect components to restrict the set of values fetched from the server;
-  # the server will only return values that are associated with those texts that are
+  # and collects the ids of any selected metadata values. Will be used by owner components
+  # to build the metadata selection that is to be included in the search. Will also be
+  # called by the MetadataSelect components to restrict the set of values fetched from the
+  # server; the server will only return values that are associated with those texts that are
   # also associated with the already selected values.
   collectMetadataValues: ->
     metadataValueIds = {}
@@ -68,7 +72,7 @@ window.MetadataCategories = React.createClass
                     ref={category.id}
                     category={category}
                     collectMetadataValues={this.collectMetadataValues}
-                    handleMetadataSelectionsChanged={this.props.handleMetadataSelectionsChanged} />
+                    handleSelectedValuesChanged={this.handleSelectedValuesChanged} />
           }.bind(this))}
         </form>
       </div>

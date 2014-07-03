@@ -4,7 +4,7 @@ window.MetadataSelect = React.createClass
   propTypes:
     category: React.PropTypes.object.isRequired
     collectMetadataValues: React.PropTypes.func.isRequired
-    handleMetadataSelectionsChanged: React.PropTypes.func.isRequired
+    handleSelectedValuesChanged: React.PropTypes.func.isRequired
 
   getInitialState: ->
     isActive: false
@@ -57,7 +57,7 @@ window.MetadataSelect = React.createClass
           {results: data.metadata_values}
 
     $(node).on 'change', =>
-      @props.handleMetadataSelectionsChanged()
+      @props.handleSelectedValuesChanged()
 
     $(node).on 'select2-close', (e) =>
       unless e.target.value
