@@ -7,6 +7,15 @@ window.MetadataCategories = React.createClass
     corpus: React.PropTypes.object.isRequired
     handleMetadataSelectionsChanged: React.PropTypes.func.isRequired
     handleSidebarHidden: React.PropTypes.func.isRequired
+    isMetadataSelectionEmpty: React.PropTypes.bool.isRequired
+
+  componentWillReceiveProps: (nextProps) ->
+    if nextProps.isMetadataSelectionEmpty and !@props.isMetadataSelectionEmpty
+      # This indicates that the metadata selection was just cleared, possibly
+      # through a click on the 'Reset form' button. Because the select2 lists are
+      # stateful objects, we need to act on this trigger and destroy any open
+      # select2 lists now.
+      @closeAllSelects()
 
   componentWillLeave: (cb) ->
     $(@getDOMNode()).addClass('sidebar-leave-active')  # starts width transition
@@ -60,6 +69,8 @@ window.MetadataCategories = React.createClass
     metadataValueIds
 
 
+  closeAllSelects: ->
+    select.closeSelect() for name, select of @refs
 
   render: ->
     `<div id="left-sidebar" className="span3 sidebar">

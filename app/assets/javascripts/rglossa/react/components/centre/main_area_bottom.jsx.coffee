@@ -16,6 +16,7 @@ window.MainAreaBottom = React.createClass
     handleSearch: React.PropTypes.func.isRequired
     handleMetadataSelectionsChanged: React.PropTypes.func.isRequired
     isShowingSidebar: React.PropTypes.bool.isRequired
+    isMetadataSelectionEmpty: React.PropTypes.bool.isRequired
 
   handleSidebarHidden: ->
     # When the sidebar is hidden, we make the content area full width. We also need to add
@@ -56,6 +57,7 @@ window.MainAreaBottom = React.createClass
         ? <ReactTransitionGroup transitionName="sidebar">
             {this.props.isShowingSidebar
               ? <MetadataCategories
+                  isMetadataSelectionEmpty={this.props.isMetadataSelectionEmpty}
                   corpus={this.props.corpus}
                   handleMetadataSelectionsChanged={this.props.handleMetadataSelectionsChanged}
                   handleSidebarHidden={this.handleSidebarHidden} />

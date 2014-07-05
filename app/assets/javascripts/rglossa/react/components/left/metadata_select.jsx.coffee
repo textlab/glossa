@@ -37,7 +37,7 @@ window.MetadataSelect = React.createClass
     $(node).select2('open')
     @setState(isActive: true)
 
-  closeSelect: (node) ->
+  closeSelect: (node = @refs.hidden.getDOMNode()) ->
     @destroySelect(node)
     @setState(isActive: false)
 

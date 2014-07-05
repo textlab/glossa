@@ -71,7 +71,10 @@ window.MainArea = React.createClass
 
 
   handleResetSearchForm: ->
-    @setState(searchQuery: '')
+    @setState
+      searchQuery: ''
+      selectedMetadataIds: {}
+
     @props.statechart.handleAction('resetSearchForm')
 
 
@@ -165,6 +168,7 @@ window.MainArea = React.createClass
           maxHits={maxHits}
           handleSearch={this.handleSearch}
           handleMetadataSelectionsChanged={this.handleMetadataSelectionsChanged}
-          isShowingSidebar={isShowingSidebar} />
+          isShowingSidebar={isShowingSidebar}
+          isMetadataSelectionEmpty={Object.keys(this.state.selectedMetadataIds).length === 0} />
       </div>
     </span>`
