@@ -24,12 +24,16 @@ module Rglossa
     def langs
       if languages
         languages.map do |l|
+          res = {lang: l[:lang]}
           tagger_config = Rglossa.taggers[l[:tagger].to_s]
-          {
-              lang: l[:lang],
+
+          if tagger_config
+            res.merge!({
               displayAttrs: tagger_config['displayAttrs'],
               tags: tagger_config['tags']
-          }
+            })
+          end
+          res
         end
       else
         []
