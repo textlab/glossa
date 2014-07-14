@@ -19,13 +19,14 @@ window.CwbMultiwordTerm = React.createClass
     if @props.termIndex is 0
       @refs.searchfield.getDOMNode().focus()
 
-    tagsInput = $(@refs.taglist.getDOMNode()).tags(
-        promptText: ' '
-        afterDeletingTag: @afterDeletingTag)
-
-    term = @props.term
-    tagsInput.addTag(term.pos) if term.pos
-    tagsInput.addTag(feature.value) for feature in term.features
+    if @props.term.pos or @props.term.features.length
+      # If the term already contains a POS or grammatical features when the
+      # multiword term view is mounted, we need to create the bootstrap-tags input
+      # and fill it in
+      tagsInput = @getTagsInput()
+      term = @props.term
+      tagsInput.addTag(term.pos) if term.pos
+      tagsInput.addTag(feature.value) for feature in term.features
 
 
   componentWillUnmount: ->
@@ -40,8 +41,7 @@ window.CwbMultiwordTerm = React.createClass
     # search expression in the regex view, in which case the multiword view
     # will be mounted anew when we switch to it and the tags will be set up
     # by componentDidMount.
-
-    tagsInput = $(@refs.taglist.getDOMNode()).tags()
+    tagsInput = @getTagsInput()
 
     if nextProps.term.pos isnt @props.term.pos
       if @props.term.pos
@@ -54,6 +54,19 @@ window.CwbMultiwordTerm = React.createClass
       not currentFeatures.some (cf) -> cf.attr is f.attr and cf.value is f.value
 
     tagsInput.addTag(feature.value) for feature in newFeatures
+
+
+  getTagsInput: ->
+    tagListNode = $(@refs.taglist.getDOMNode())
+
+    if $(@getDOMNode()).find('.tags-input').length
+      # the bootstrap-tags input has already been created, so just return that
+      tagListNode.tags()
+    else
+      # create a new one
+      tagListNode.tags(
+        promptText: ' '
+        afterDeletingTag: @afterDeletingTag)
 
 
   changeTerm: (attribute, value) ->
