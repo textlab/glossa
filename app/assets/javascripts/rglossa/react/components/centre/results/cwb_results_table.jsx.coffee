@@ -18,7 +18,7 @@ window.CwbResultsTable = React.createClass
           removeElementsOnHide: true
 
   parseResults: (resultPage) ->
-    labels = corpus.getLabels(@props.corpus)
+    labels = corpusNs.getLabels(@props.corpus)
     resultPage.map (result) ->
       m = result.text.match(/<\w+_id(.*)>:\s+(.*){{(.+?)}}(.*)/)
       if m

@@ -23,4 +23,5 @@ class Corpus
     language.tags
 
 
-window.corpus = new Corpus
+
+window.corpusNs = new Corpus

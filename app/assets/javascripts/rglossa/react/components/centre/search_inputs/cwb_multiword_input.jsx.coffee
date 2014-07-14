@@ -113,7 +113,7 @@ window.CwbMultiwordInput = React.createClass
 
     for attr in attributes
       m2 = attr.match(/\(?(\S+)\s*=\s*"(\S+)"/)
-      posAttr = corpus.getPOSAttribute(@props.corpus)
+      posAttr = corpusNs.getPOSAttribute(@props.corpus)
 
       switch m2[1]
         when 'word', 'lemma'
@@ -169,7 +169,7 @@ window.CwbMultiwordInput = React.createClass
           attrs.push(word)
 
         if pos
-          posAttr = corpus.getPOSAttribute(@props.corpus)
+          posAttr = corpusNs.getPOSAttribute(@props.corpus)
           posStr = "#{posAttr}=\"#{pos}\""
           attrs.push(posStr)
 
@@ -208,7 +208,7 @@ window.CwbMultiwordInput = React.createClass
                 queryHasSingleTerm={this.state.queryTerms.length === 1}
                 isFirst={index === 0}
                 isLast={index === lastIndex}
-                tags={corpus.getTags(this.props.corpus)}
+                tags={corpusNs.getTags(this.props.corpus)}
                 handleKeyDown={this.handleKeyDown}
                 handleTermChanged={this.handleTermChanged}
                 handleAddTerm={this.handleAddTerm}
