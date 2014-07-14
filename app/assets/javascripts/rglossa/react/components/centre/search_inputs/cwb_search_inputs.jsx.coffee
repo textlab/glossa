@@ -46,21 +46,24 @@ window.CwbSearchInputs = React.createClass
     @state.statechart.handleAction('showRegex')
 
   languageSelect: ->
-    if corpusNs.isMultilingual(@props.corpus)
-      `<LanguageSelect corpus={this.props.corpus} />`
-    else
-      null
+    `<LanguageSelect corpus={this.props.corpus} />`
+
+  languageAddButton: ->
+    `<button className="btn" style={{marginLeft: 100}}>Add language</button>`
 
   render: ->
     {corpus, searchQuery, handleQueryChanged, handleSearch} = @props
+    isMultilingual = corpusNs.isMultilingual(@props.corpus)
+
     if @state.statechart.pathContains('simple')
       `<span>
         <div className="row-fluid search-input-links">
           <b>Simple</b>&nbsp;|&nbsp;
           <a href="" title="Search for grammatical categories etc." onClick={this.showMultiword}>Extended</a>&nbsp;|&nbsp;
           <a href="" title="Regular expressions" onClick={this.showRegex}>Regexp</a>
+          {isMultilingual ? this.languageAddButton() : null}
         </div>
-        {this.languageSelect()}
+        {isMultilingual ? this.languageSelect() : null}
         <CwbSimpleInput searchQuery={searchQuery} handleQueryChanged={handleQueryChanged} handleSearch={handleSearch} />
       </span>`
 
@@ -70,8 +73,9 @@ window.CwbSearchInputs = React.createClass
           <a href="" title="Simple search box" onClick={this.showSimple}>Simple</a>&nbsp;|&nbsp;
           <b>Extended</b>&nbsp;|&nbsp;
           <a href="" title="Regular expressions" onClick={this.showRegex}>Regexp</a>
+          {isMultilingual ? this.languageAddButton() : null}
         </div>
-        {this.languageSelect()}
+        {isMultilingual ? this.languageSelect() : null}
         <CwbMultiwordInput
           searchQuery={searchQuery}
           corpus={corpus}
@@ -84,7 +88,8 @@ window.CwbSearchInputs = React.createClass
           <a href="" title="Simple search box" onClick={this.showSimple}>Simple</a>&nbsp;|&nbsp;
           <a href="" title="Search for grammatical categories etc." onClick={this.showMultiword}>Extended</a>&nbsp;|&nbsp;
           <b>Regexp</b>
+          {isMultilingual ? this.languageAddButton() : null}
         </div>
-        {this.languageSelect()}
+        {isMultilingual ? this.languageSelect() : null}
         <CwbRegexInput searchQuery={searchQuery} handleQueryChanged={handleQueryChanged} handleSearch={handleSearch} />
       </span>`
