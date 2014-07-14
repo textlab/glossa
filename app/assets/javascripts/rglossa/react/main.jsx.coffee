@@ -1,3 +1,4 @@
+#= require ./translations/translations
 #= require ./components/app
 
 ###* @jsx React.DOM ###
