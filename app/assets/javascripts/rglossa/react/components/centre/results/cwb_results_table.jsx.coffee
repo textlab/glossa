@@ -1,3 +1,5 @@
+#= require rglossa/react/models/corpus
+
 ###* @jsx React.DOM ###
 
 window.CwbResultsTable = React.createClass
@@ -16,7 +18,7 @@ window.CwbResultsTable = React.createClass
           removeElementsOnHide: true
 
   parseResults: (resultPage) ->
-    labels = @props.corpus.langs[0].displayAttrs or corpus.displayAttrs or []
+    labels = corpus.getLabels(@props.corpus)
     resultPage.map (result) ->
       m = result.text.match(/<\w+_id(.*)>:\s+(.*){{(.+?)}}(.*)/)
       if m
