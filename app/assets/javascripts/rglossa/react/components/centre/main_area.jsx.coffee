@@ -19,7 +19,7 @@ window.MainArea = React.createClass
     selectedMetadataIds: {}
     maxHits: 2000
     lastSelectedMaxHits: null
-    isShowingSidebar: true
+    isShowingSidebar: !!(@props.corpus.metadata_categories.length)
     isNarrowView: false
 
   componentDidMount: ->

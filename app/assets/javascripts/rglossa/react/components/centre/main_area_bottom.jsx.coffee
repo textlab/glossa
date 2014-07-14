@@ -64,7 +64,7 @@ window.MainAreaBottom = React.createClass
               : []}
           </ReactTransitionGroup>
         : null}
-      <div id="main-content" className="span9">
+      <div id="main-content" className={this.props.corpus.metadata_categories.length ? 'span9' : 'span12'}>
         {this.mainComponent()}
       </div>
     </div>`
