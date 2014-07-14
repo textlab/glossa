@@ -1,6 +1,12 @@
 class Corpus
   getLanguages: (corpus) -> corpus.langs
 
+  getLanguageList: (corpus) ->
+    languages = @getLanguages(corpus)
+    for language in languages
+      value: language.lang
+      text: i18n.translate(language.lang).onDomain('languages').fetch()
+
   getLanguage: (corpus, languageCode) ->
     languages = @getLanguages(corpus)
 
@@ -22,6 +28,8 @@ class Corpus
     language = @getLanguage(corpus, languageCode)
     language.tags
 
+  isMultilingual: (corpus) ->
+    @getLanguages(corpus).length > 1
 
 
 window.corpusNs = new Corpus

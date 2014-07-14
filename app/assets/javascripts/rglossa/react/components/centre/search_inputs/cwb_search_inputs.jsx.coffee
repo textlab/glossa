@@ -1,4 +1,6 @@
 #= require ../../../statechart
+#= require rglossa/react/models/corpus
+#= require ./language_select
 #= require ./cwb_simple_input
 #= require ./cwb_multiword_input
 #= require ./cwb_regex_input
@@ -43,6 +45,11 @@ window.CwbSearchInputs = React.createClass
     e.preventDefault()
     @state.statechart.handleAction('showRegex')
 
+  languageSelect: ->
+    if corpusNs.isMultilingual(@props.corpus)
+      `<LanguageSelect corpus={this.props.corpus} />`
+    else
+      null
 
   render: ->
     {corpus, searchQuery, handleQueryChanged, handleSearch} = @props
@@ -53,6 +60,7 @@ window.CwbSearchInputs = React.createClass
           <a href="" title="Search for grammatical categories etc." onClick={this.showMultiword}>Extended</a>&nbsp;|&nbsp;
           <a href="" title="Regular expressions" onClick={this.showRegex}>Regexp</a>
         </div>
+        {this.languageSelect()}
         <CwbSimpleInput searchQuery={searchQuery} handleQueryChanged={handleQueryChanged} handleSearch={handleSearch} />
       </span>`
 
@@ -63,6 +71,7 @@ window.CwbSearchInputs = React.createClass
           <b>Extended</b>&nbsp;|&nbsp;
           <a href="" title="Regular expressions" onClick={this.showRegex}>Regexp</a>
         </div>
+        {this.languageSelect()}
         <CwbMultiwordInput
           searchQuery={searchQuery}
           corpus={corpus}
@@ -76,5 +85,6 @@ window.CwbSearchInputs = React.createClass
           <a href="" title="Search for grammatical categories etc." onClick={this.showMultiword}>Extended</a>&nbsp;|&nbsp;
           <b>Regexp</b>
         </div>
+        {this.languageSelect()}
         <CwbRegexInput searchQuery={searchQuery} handleQueryChanged={handleQueryChanged} handleSearch={handleSearch} />
       </span>`

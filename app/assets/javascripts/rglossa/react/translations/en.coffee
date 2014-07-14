@@ -8,3 +8,4 @@ window.translations['en'] =
     "no": [null, "Norwegian"]
     "nb": [null, "Norwegian bokmål"]
     "nn": [null, "Norwegian nynorsk"]
+    "ru": [null, "Russian"]
