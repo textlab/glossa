@@ -1,4 +1,5 @@
 #= require rglossa/react/utils
+#= reqruie rglossa/react/models/corpus
 #= require ./main_area_top
 #= require ./main_area_bottom
 
@@ -15,12 +16,17 @@ window.MainArea = React.createClass
   maxAutoHideSidebarWidth: 1100
 
   getInitialState: ->
-    searchQuery: ''
+    searchQueries: @createEmptyQueries()
     selectedMetadataIds: {}
     maxHits: 2000
     lastSelectedMaxHits: null
     isShowingSidebar: !!(@props.corpus.metadata_categories.length)
     isNarrowView: false
+
+  createEmptyQueries: ->
+    corpus = @props.corpus
+    lang = if corpusNs.isMultilingual(corpus) then corpusNs.getLanguages(corpus)[0].lang else 'single'
+    [{lang: lang, query: ''}]
 
   componentDidMount: ->
     # determine if the window is narrow, because then we want to automatically hide
@@ -54,7 +60,7 @@ window.MainArea = React.createClass
     # hits if we have asked to see all hits in the mean time, in which case
     # @state.maxHits will be null. This way, we will always limit the number of
     # hits each time we do a new query.
-    newState = searchQuery: query
+    newState = searchQueries: [query]
     if !@state.maxHits and @state.lastSelectedMaxHits
       newState.maxHits = @state.lastSelectedMaxHits
     @setState(newState)
@@ -72,7 +78,7 @@ window.MainArea = React.createClass
 
   handleResetSearchForm: ->
     @setState
-      searchQuery: ''
+      searchQueries: @createEmptyQueries()
       selectedMetadataIds: {}
 
     @props.statechart.handleAction('resetSearchForm')
@@ -86,21 +92,20 @@ window.MainArea = React.createClass
 
   handleSearch: (newState = {}) ->
     state = rglossaUtils.merge(@state, newState)
-    return unless state.searchQuery and state.searchQuery isnt '""'
+    firstQueryString = state.searchQueries[0].query
+    return unless firstQueryString and firstQueryString isnt '""'
 
     {store, statechart, corpus} = @props
 
     searchEngine = corpus.search_engine ?= 'cwb'
     searchUrl = "search_engines/#{searchEngine}_searches"
-    query =
-      query: state.searchQuery
-      corpusShortName: corpus.short_name
 
     $.ajax(
       url: searchUrl
       method: 'POST'
       data: JSON.stringify
-        queries: [query]
+        corpusShortName: corpus.short_name
+        queries: state.searchQueries
         metadata_value_ids: state.selectedMetadataIds
         max_hits: state.maxHits
       dataType: 'json'
@@ -140,7 +145,7 @@ window.MainArea = React.createClass
 
   render: ->
     {store, statechart, corpus} = @props
-    {searchQuery, maxHits, isShowingSidebar} = @state
+    {searchQueries, maxHits, isShowingSidebar} = @state
 
     searchId = statechart.getValue('searchId')
     results = if searchId then store.find('search', searchId) else null
@@ -163,7 +168,7 @@ window.MainArea = React.createClass
           statechart={statechart}
           corpus={corpus}
           results={results}
-          searchQuery={searchQuery}
+          searchQueries={searchQueries}
           handleQueryChanged={this.handleQueryChanged}
           maxHits={maxHits}
           handleSearch={this.handleSearch}

@@ -2,7 +2,7 @@
 
 window.CwbSimpleInput = React.createClass
   propTypes:
-    searchQuery: React.PropTypes.string.isRequired
+    searchQuery: React.PropTypes.object.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
     handleSearch: React.PropTypes.func.isRequired
 
@@ -11,12 +11,14 @@ window.CwbSimpleInput = React.createClass
 
   displayedQuery: ->
     # Take the CQP expression and just remove quotes
-    @props.searchQuery.replace(/"/g, '')
+    @props.searchQuery.query.replace(/"/g, '')
 
   handleTextChanged: (e) ->
     # Wrap each search term in quotes
     query = ("\"#{term}\"" for term in e.target.value.split(/\s+/)).join(' ')
-    @props.handleQueryChanged(query)
+    @props.handleQueryChanged
+      lang: @props.searchQuery.lang
+      query: query
 
   handleKeyDown: (e) ->
     if e.key is 'Enter'

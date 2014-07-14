@@ -39,7 +39,7 @@ createTerm = (overrides = {}) ->
 
 window.CwbMultiwordInput = React.createClass
   propTypes:
-    searchQuery: React.PropTypes.string.isRequired
+    searchQuery: React.PropTypes.object.isRequired
     corpus: React.PropTypes.object.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
     handleSearch: React.PropTypes.func.isRequired
@@ -61,8 +61,8 @@ window.CwbMultiwordInput = React.createClass
       @props.handleSearch()
 
 
-  constructQueryTerms: (query) ->
-    queryParts = @splitQuery(query)
+  constructQueryTerms: (queryObj) ->
+    queryParts = @splitQuery(queryObj.query)
 
     dq = []
     min = null
@@ -132,7 +132,9 @@ window.CwbMultiwordInput = React.createClass
   handleTermChanged: (term, termIndex) ->
     queryTerms = @state.queryTerms
     queryTerms[termIndex] = term
-    @props.handleQueryChanged(@constructCQPQuery(queryTerms))
+    @props.handleQueryChanged
+      lang: @props.searchQuery.lang
+      query: @constructCQPQuery(queryTerms)
 
 
   handleAddTerm: ->
@@ -142,7 +144,9 @@ window.CwbMultiwordInput = React.createClass
     queryTermIds.push(lastQueryTermId++)
 
     @setState(queryTermIds: queryTermIds)
-    @props.handleQueryChanged(@constructCQPQuery(queryTerms))
+    @props.handleQueryChanged
+      lang: @props.searchQuery.lang
+      query: @constructCQPQuery(queryTerms)
 
 
   handleRemoveTerm: (termIndex) ->
@@ -152,7 +156,9 @@ window.CwbMultiwordInput = React.createClass
     queryTermIds.splice(termIndex, 1)
 
     @setState(queryTermIds: queryTermIds)
-    @props.handleQueryChanged(@constructCQPQuery(queryTerms))
+    @props.handleQueryChanged
+      lang: @props.searchQuery.lang
+      query: @constructCQPQuery(queryTerms)
 
 
   constructCQPQuery: (queryTerms) ->

@@ -25,7 +25,7 @@ window.CwbSearchInputs = React.createClass
     store: React.PropTypes.object.isRequired
     statechart: React.PropTypes.object.isRequired
     corpus: React.PropTypes.object.isRequired
-    searchQuery: React.PropTypes.string.isRequired
+    searchQueries: React.PropTypes.array.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
     handleSearch: React.PropTypes.func.isRequired
 
@@ -52,7 +52,7 @@ window.CwbSearchInputs = React.createClass
     `<button className="btn" style={{marginLeft: 100}}>Add language</button>`
 
   render: ->
-    {corpus, searchQuery, handleQueryChanged, handleSearch} = @props
+    {corpus, searchQueries, handleQueryChanged, handleSearch} = @props
     isMultilingual = corpusNs.isMultilingual(@props.corpus)
 
     if @state.statechart.pathContains('simple')
@@ -64,7 +64,13 @@ window.CwbSearchInputs = React.createClass
           {isMultilingual ? this.languageAddButton() : null}
         </div>
         {isMultilingual ? this.languageSelect() : null}
-        <CwbSimpleInput searchQuery={searchQuery} handleQueryChanged={handleQueryChanged} handleSearch={handleSearch} />
+        {searchQueries.map(function(searchQuery) {
+          return (
+            <CwbSimpleInput
+              searchQuery={searchQuery}
+              handleQueryChanged={handleQueryChanged}
+              handleSearch={handleSearch} />)
+        })}
       </span>`
 
     else if @state.statechart.pathContains('multiword')
@@ -76,10 +82,13 @@ window.CwbSearchInputs = React.createClass
           {isMultilingual ? this.languageAddButton() : null}
         </div>
         {isMultilingual ? this.languageSelect() : null}
-        <CwbMultiwordInput
-          searchQuery={searchQuery}
-          corpus={corpus}
-          handleQueryChanged={handleQueryChanged} handleSearch={handleSearch} />
+        {searchQueries.map(function(searchQuery) {
+          return (
+            <CwbMultiwordInput
+              searchQuery={searchQuery}
+              corpus={corpus}
+              handleQueryChanged={handleQueryChanged} handleSearch={handleSearch} />)
+        })}
       </span>`
 
     else
@@ -91,5 +100,11 @@ window.CwbSearchInputs = React.createClass
           {isMultilingual ? this.languageAddButton() : null}
         </div>
         {isMultilingual ? this.languageSelect() : null}
-        <CwbRegexInput searchQuery={searchQuery} handleQueryChanged={handleQueryChanged} handleSearch={handleSearch} />
+        {searchQueries.map(function(searchQuery) {
+          return (
+            <CwbRegexInput
+              searchQuery={searchQuery}
+              handleQueryChanged={handleQueryChanged}
+              handleSearch={handleSearch} />)
+        })}
       </span>`
