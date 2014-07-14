@@ -12,6 +12,6 @@ window.LanguageSelect = React.createClass
 
     `<select>
       {languageList.map(function(language) {
-        return <option value={language.value}>{language.text}</option>
+        return <option key={language.value} value={language.value}>{language.text}</option>
       })}
     </select>`
