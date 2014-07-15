@@ -55,12 +55,14 @@ window.MainArea = React.createClass
     @setState(isShowingSidebar: shouldShow)
 
 
-  handleQueryChanged: (query) ->
+  handleQueryChanged: (queryIndex, query) ->
     # When the query changes, also set maxHits to the last requested number of
     # hits if we have asked to see all hits in the mean time, in which case
     # @state.maxHits will be null. This way, we will always limit the number of
     # hits each time we do a new query.
-    newState = searchQueries: [query]
+    queries = @state.searchQueries
+    queries[queryIndex] = query
+    newState = searchQueries: queries
     if !@state.maxHits and @state.lastSelectedMaxHits
       newState.maxHits = @state.lastSelectedMaxHits
     @setState(newState)

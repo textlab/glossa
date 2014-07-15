@@ -64,11 +64,11 @@ window.CwbSearchInputs = React.createClass
           {isMultilingual ? this.languageAddButton() : null}
         </div>
         {isMultilingual ? this.languageSelect() : null}
-        {searchQueries.map(function(searchQuery) {
+        {searchQueries.map(function(searchQuery, index) {
           return (
             <CwbSimpleInput
               searchQuery={searchQuery}
-              handleQueryChanged={handleQueryChanged}
+              handleQueryChanged={handleQueryChanged.bind(null, index)}
               handleSearch={handleSearch} />)
         })}
       </span>`
@@ -82,12 +82,13 @@ window.CwbSearchInputs = React.createClass
           {isMultilingual ? this.languageAddButton() : null}
         </div>
         {isMultilingual ? this.languageSelect() : null}
-        {searchQueries.map(function(searchQuery) {
+        {searchQueries.map(function(searchQuery, index) {
           return (
             <CwbMultiwordInput
               searchQuery={searchQuery}
               corpus={corpus}
-              handleQueryChanged={handleQueryChanged} handleSearch={handleSearch} />)
+              handleQueryChanged={handleQueryChanged.bind(null, index)}
+              handleSearch={handleSearch} />)
         })}
       </span>`
 
@@ -100,11 +101,11 @@ window.CwbSearchInputs = React.createClass
           {isMultilingual ? this.languageAddButton() : null}
         </div>
         {isMultilingual ? this.languageSelect() : null}
-        {searchQueries.map(function(searchQuery) {
+        {searchQueries.map(function(searchQuery, index) {
           return (
             <CwbRegexInput
               searchQuery={searchQuery}
-              handleQueryChanged={handleQueryChanged}
+              handleQueryChanged={handleQueryChanged.bind(null, index)}
               handleSearch={handleSearch} />)
         })}
       </span>`
