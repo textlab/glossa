@@ -52,11 +52,12 @@ window.CwbSearchInputs = React.createClass
       selectedValue={query.lang} />`
 
   languageAddButton: ->
-    `<button className="btn" style={{marginLeft: 100}} onClick={this.props.handleAddLanguage}>Add language</button>`
+    `<button className="btn" style={{marginLeft: 20}} onClick={this.props.handleAddLanguage}>Add language</button>`
 
-  searchButton: ->
+  searchButton: (isMultilingual) ->
+    marginLeft = if isMultilingual then 80 else 40  # adjust position relative to the language select
     `<button type="button" className="btn btn-success"
-        style={{marginLeft: 60}} onClick={this.props.handleSearch}>Search</button>`
+        style={{marginLeft: marginLeft}} onClick={this.props.handleSearch}>Search</button>`
 
 
   render: ->
@@ -69,8 +70,8 @@ window.CwbSearchInputs = React.createClass
           <b>Simple</b>&nbsp;|&nbsp;
           <a href="" title="Search for grammatical categories etc." onClick={this.showMultiword}>Extended</a>&nbsp;|&nbsp;
           <a href="" title="Regular expressions" onClick={this.showRegex}>Regexp</a>
+          {this.searchButton(isMultilingual)}
           {isMultilingual ? this.languageAddButton() : null}
-          {this.searchButton()}
         </div>
         {searchQueries.map(function(searchQuery, index) {
           return ([
@@ -89,8 +90,8 @@ window.CwbSearchInputs = React.createClass
           <a href="" title="Simple search box" onClick={this.showSimple}>Simple</a>&nbsp;|&nbsp;
           <b>Extended</b>&nbsp;|&nbsp;
           <a href="" title="Regular expressions" onClick={this.showRegex}>Regexp</a>
+          {this.searchButton(isMultilingual)}
           {isMultilingual ? this.languageAddButton() : null}
-          {this.searchButton()}
         </div>
         {searchQueries.map(function(searchQuery, index) {
           return ([
@@ -110,8 +111,8 @@ window.CwbSearchInputs = React.createClass
           <a href="" title="Simple search box" onClick={this.showSimple}>Simple</a>&nbsp;|&nbsp;
           <a href="" title="Search for grammatical categories etc." onClick={this.showMultiword}>Extended</a>&nbsp;|&nbsp;
           <b>Regexp</b>
+          {this.searchButton(isMultilingual)}
           {isMultilingual ? this.languageAddButton() : null}
-          {this.searchButton()}
         </div>
         {searchQueries.map(function(searchQuery, index) {
           return ([
