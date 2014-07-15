@@ -133,7 +133,7 @@ window.MainArea = React.createClass
       url: searchUrl
       method: 'POST'
       data: JSON.stringify
-        corpusShortName: corpus.short_name
+        corpus_short_name: corpus.short_name
         queries: state.searchQueries
         metadata_value_ids: state.selectedMetadataIds
         max_hits: state.maxHits

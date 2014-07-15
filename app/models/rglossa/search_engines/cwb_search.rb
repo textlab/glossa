@@ -8,12 +8,12 @@ module Rglossa
       def query_info
         @query_info ||= {
           query: queries[0]['query'],  # TODO: Handle several queries at once
-          cwb_corpus_name: queries[0]['corpusShortName'].upcase,
-          corpus: Corpus.find_by_short_name(queries[0]['corpusShortName'].downcase),
+          cwb_corpus_name: corpus_short_name.upcase,
+          corpus: Corpus.find_by_short_name(corpus_short_name.downcase),
 
           # The query will be saved under a name composed of the name of the
           # corpus edition followed by the database ID of the search object
-          named_query: queries[0]['corpusShortName'].upcase + id.to_s
+          named_query: corpus_short_name.upcase + id.to_s
         }
       end
 

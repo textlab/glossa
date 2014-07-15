@@ -1,6 +1,6 @@
 module Rglossa
   class Search < ActiveRecord::Base
-    attr_accessible :queries, :metadata_value_ids, :num_hits, :max_hits, :current_corpus_part
+    attr_accessible :corpus_short_name, :queries, :metadata_value_ids, :num_hits, :max_hits, :current_corpus_part
 
     # Non-persisted attribute that is only used for keeping track of the
     # corpus part currently being searched (only relevant for multi-part corpora)

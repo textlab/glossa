@@ -123,7 +123,7 @@ module Rglossa
 
     def get_corpus_from_query(search = nil)
       search ||= @search || model_class.find(params[:id])
-      Corpus.find_by_short_name(search.queries.first['corpusShortName'])
+      Corpus.find_by_short_name(search.corpus_short_name.downcase)
     end
 
     def transform_result_pages(pages)
