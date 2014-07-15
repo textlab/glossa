@@ -54,6 +54,11 @@ window.CwbSearchInputs = React.createClass
   languageAddButton: ->
     `<button className="btn" style={{marginLeft: 100}} onClick={this.props.handleAddLanguage}>Add language</button>`
 
+  searchButton: ->
+    `<button type="button" className="btn btn-success"
+        style={{marginLeft: 60}} onClick={this.props.handleSearch}>Search</button>`
+
+
   render: ->
     {corpus, searchQueries, handleQueryChanged, handleSearch} = @props
     isMultilingual = corpusNs.isMultilingual(@props.corpus)
@@ -65,6 +70,7 @@ window.CwbSearchInputs = React.createClass
           <a href="" title="Search for grammatical categories etc." onClick={this.showMultiword}>Extended</a>&nbsp;|&nbsp;
           <a href="" title="Regular expressions" onClick={this.showRegex}>Regexp</a>
           {isMultilingual ? this.languageAddButton() : null}
+          {this.searchButton()}
         </div>
         {searchQueries.map(function(searchQuery, index) {
           return ([
@@ -84,6 +90,7 @@ window.CwbSearchInputs = React.createClass
           <b>Extended</b>&nbsp;|&nbsp;
           <a href="" title="Regular expressions" onClick={this.showRegex}>Regexp</a>
           {isMultilingual ? this.languageAddButton() : null}
+          {this.searchButton()}
         </div>
         {searchQueries.map(function(searchQuery, index) {
           return ([
@@ -104,6 +111,7 @@ window.CwbSearchInputs = React.createClass
           <a href="" title="Search for grammatical categories etc." onClick={this.showMultiword}>Extended</a>&nbsp;|&nbsp;
           <b>Regexp</b>
           {isMultilingual ? this.languageAddButton() : null}
+          {this.searchButton()}
         </div>
         {searchQueries.map(function(searchQuery, index) {
           return ([

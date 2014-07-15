@@ -221,9 +221,6 @@ window.CwbMultiwordInput = React.createClass
                 handleRemoveTerm={this.handleRemoveTerm} />
             )
           }, this)}
-            <div style={{display: 'table-cell'}}>
-              <button type="button" className="btn btn-success search" onClick={this.props.handleSearch}>Search</button>
-            </div>
           </div>
         </div>
       </form>

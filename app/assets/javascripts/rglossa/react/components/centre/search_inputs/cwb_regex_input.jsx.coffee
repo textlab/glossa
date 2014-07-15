@@ -26,10 +26,9 @@ window.CwbRegexInput = React.createClass
   render: ->
     `<div className="row-fluid">
       <form className="form-inline span12">
-        <div className="input-append span10">
-          <input ref="searchfield" type="text" className="searchfield span12" value={this.displayedQuery()}
+        <div className="span10">
+          <input ref="searchfield" type="text" className="span12" value={this.displayedQuery()}
             onChange={this.handleTextChanged} onKeyDown={this.handleKeyDown} />
-          <button type="button" className="btn btn-success" onClick={this.props.handleSearch}>Search</button>
         </div>
       </form>
     </div>`
