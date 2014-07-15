@@ -23,10 +23,15 @@ window.MainArea = React.createClass
     isShowingSidebar: !!(@props.corpus.metadata_categories.length)
     isNarrowView: false
 
+
   createEmptyQueries: ->
     corpus = @props.corpus
+
+    # If the corpus is multilingual, the first query will be associated with the first language
+    # in the language list of the corpus. Otherwise, we set the language to 'single'.
     lang = if corpusNs.isMultilingual(corpus) then corpusNs.getLanguages(corpus)[0].lang else 'single'
     [{lang: lang, query: ''}]
+
 
   componentDidMount: ->
     # determine if the window is narrow, because then we want to automatically hide
@@ -60,12 +65,34 @@ window.MainArea = React.createClass
     # hits if we have asked to see all hits in the mean time, in which case
     # @state.maxHits will be null. This way, we will always limit the number of
     # hits each time we do a new query.
-    queries = @state.searchQueries
+    queries = @state.searchQueries.slice(0)
     queries[queryIndex] = query
     newState = searchQueries: queries
+
     if !@state.maxHits and @state.lastSelectedMaxHits
       newState.maxHits = @state.lastSelectedMaxHits
     @setState(newState)
+
+
+  handleAddLanguage: ->
+    queries = @state.searchQueries.slice(0)
+    languages = corpusNs.getLanguages(@props.corpus)
+
+    # When we add a new language row to the queries, we initialize the row to the first
+    # language we find that is not used in any other query (since we cannot have multiple
+    # queries in the same language for multilingual searches).
+    unusedLanguage = null
+    for l in languages
+      unless (queries.some (query) -> query.lang is l.lang)
+        unusedLanguage = l.lang
+        break
+
+    queries.push
+      lang: unusedLanguage
+      query: ''
+
+    @setState(searchQueries: queries)
+
 
   handleMaxHitsChanged: (maxHits) ->
     newState = maxHits: maxHits
@@ -174,6 +201,7 @@ window.MainArea = React.createClass
           handleQueryChanged={this.handleQueryChanged}
           maxHits={maxHits}
           handleSearch={this.handleSearch}
+          handleAddLanguage={this.handleAddLanguage}
           handleMetadataSelectionsChanged={this.handleMetadataSelectionsChanged}
           isShowingSidebar={isShowingSidebar}
           isMetadataSelectionEmpty={Object.keys(this.state.selectedMetadataIds).length === 0} />

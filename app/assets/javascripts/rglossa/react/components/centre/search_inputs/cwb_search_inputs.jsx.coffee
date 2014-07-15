@@ -28,6 +28,7 @@ window.CwbSearchInputs = React.createClass
     searchQueries: React.PropTypes.array.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
     handleSearch: React.PropTypes.func.isRequired
+    handleAddLanguage: React.PropTypes.func.isRequired
 
   getInitialState: ->
     statechart: new Statechart(
@@ -45,11 +46,13 @@ window.CwbSearchInputs = React.createClass
     e.preventDefault()
     @state.statechart.handleAction('showRegex')
 
-  languageSelect: ->
-    `<LanguageSelect corpus={this.props.corpus} />`
+  languageSelect: (query) ->
+    `<LanguageSelect
+      corpus={this.props.corpus}
+      selectedValue={query.lang} />`
 
   languageAddButton: ->
-    `<button className="btn" style={{marginLeft: 100}}>Add language</button>`
+    `<button className="btn" style={{marginLeft: 100}} onClick={this.props.handleAddLanguage}>Add language</button>`
 
   render: ->
     {corpus, searchQueries, handleQueryChanged, handleSearch} = @props
@@ -63,14 +66,15 @@ window.CwbSearchInputs = React.createClass
           <a href="" title="Regular expressions" onClick={this.showRegex}>Regexp</a>
           {isMultilingual ? this.languageAddButton() : null}
         </div>
-        {isMultilingual ? this.languageSelect() : null}
         {searchQueries.map(function(searchQuery, index) {
-          return (
+          return ([
+            isMultilingual ? this.languageSelect(searchQuery) : null,
             <CwbSimpleInput
               searchQuery={searchQuery}
               handleQueryChanged={handleQueryChanged.bind(null, index)}
-              handleSearch={handleSearch} />)
-        })}
+              handleSearch={handleSearch} />
+          ])
+        }.bind(this))}
       </span>`
 
     else if @state.statechart.pathContains('multiword')
@@ -81,15 +85,16 @@ window.CwbSearchInputs = React.createClass
           <a href="" title="Regular expressions" onClick={this.showRegex}>Regexp</a>
           {isMultilingual ? this.languageAddButton() : null}
         </div>
-        {isMultilingual ? this.languageSelect() : null}
         {searchQueries.map(function(searchQuery, index) {
-          return (
+          return ([
+            isMultilingual ? this.languageSelect(searchQuery) : null,
             <CwbMultiwordInput
               searchQuery={searchQuery}
               corpus={corpus}
               handleQueryChanged={handleQueryChanged.bind(null, index)}
-              handleSearch={handleSearch} />)
-        })}
+              handleSearch={handleSearch} />
+          ])
+        }.bind(this))}
       </span>`
 
     else
@@ -100,12 +105,13 @@ window.CwbSearchInputs = React.createClass
           <b>Regexp</b>
           {isMultilingual ? this.languageAddButton() : null}
         </div>
-        {isMultilingual ? this.languageSelect() : null}
         {searchQueries.map(function(searchQuery, index) {
-          return (
+          return ([
+            isMultilingual ? this.languageSelect(searchQuery) : null,
             <CwbRegexInput
               searchQuery={searchQuery}
               handleQueryChanged={handleQueryChanged.bind(null, index)}
-              handleSearch={handleSearch} />)
-        })}
+              handleSearch={handleSearch} />
+          ])
+        }.bind(this))}
       </span>`

@@ -17,6 +17,7 @@ window.MainAreaBottom = React.createClass
     handleMetadataSelectionsChanged: React.PropTypes.func.isRequired
     isShowingSidebar: React.PropTypes.bool.isRequired
     isMetadataSelectionEmpty: React.PropTypes.bool.isRequired
+    handleAddLanguage: React.PropTypes.func.isRequired
 
   handleSidebarHidden: ->
     # When the sidebar is hidden, we make the content area full width. We also need to add
@@ -26,7 +27,8 @@ window.MainAreaBottom = React.createClass
     $('#main-content', @getDOMNode()).removeClass('span9').addClass('span12 no-sidebar')
 
   mainComponent: ->
-    {store, statechart, corpus, results, searchQueries, handleQueryChanged, maxHits, handleSearch} = @props
+    {store, statechart, corpus, results, searchQueries,
+      handleQueryChanged, handleAddLanguage, maxHits, handleSearch} = @props
     if statechart.pathContains('start')
       `<StartMain
           store={store}
@@ -34,7 +36,8 @@ window.MainAreaBottom = React.createClass
           corpus={corpus}
           searchQueries={searchQueries}
           handleQueryChanged={handleQueryChanged}
-          handleSearch={handleSearch} />`
+          handleSearch={handleSearch}
+          handleAddLanguage={handleAddLanguage} />`
     else
       currentResultPageNo = statechart.getValue('currentResultPageNo')
       `<ResultsMain
@@ -45,6 +48,7 @@ window.MainAreaBottom = React.createClass
           corpus={corpus}
           searchQueries={searchQueries}
           handleQueryChanged={handleQueryChanged}
+          handleAddLanguage={handleAddLanguage}
           maxHits={maxHits}
           handleSearch={handleSearch} />`
 

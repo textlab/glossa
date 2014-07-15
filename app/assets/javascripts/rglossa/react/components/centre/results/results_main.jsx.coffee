@@ -16,10 +16,11 @@ window.ResultsMain = React.createClass
     handleQueryChanged: React.PropTypes.func.isRequired
     maxHits: React.PropTypes.number
     handleSearch: React.PropTypes.func.isRequired
+    handleAddLanguage: React.PropTypes.func.isRequired
 
   render: ->
     {store, statechart, results, currentResultPageNo, corpus, searchQueries,
-        handleQueryChanged, maxHits, handleSearch} = @props
+        handleQueryChanged, handleAddLanguage, maxHits, handleSearch} = @props
     resultPage = results?.pages[currentResultPageNo]
 
     # Select components based on the search engine name,
@@ -37,7 +38,8 @@ window.ResultsMain = React.createClass
         searchQueries={searchQueries}
         handleQueryChanged={handleQueryChanged}
         maxHits={maxHits}
-        handleSearch={handleSearch} />
+        handleSearch={handleSearch}
+        handleAddLanguage={handleAddLanguage} />
       <ResultsToolbar
         store={store}
         statechart={statechart}

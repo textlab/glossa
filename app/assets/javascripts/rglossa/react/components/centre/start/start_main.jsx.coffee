@@ -12,9 +12,10 @@ window.StartMain = React.createClass
     searchQueries: React.PropTypes.array.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
     handleSearch: React.PropTypes.func.isRequired
+    handleAddLanguage: React.PropTypes.func.isRequired
 
   render: ->
-    {store, statechart, corpus, searchQueries, handleQueryChanged, handleSearch} = @props
+    {store, statechart, corpus, searchQueries, handleQueryChanged, handleSearch, handleAddLanguage} = @props
     {name, logo} = corpus
 
     # Select a component based on the search engine name, e.g. CwbSearchInputs
@@ -31,5 +32,6 @@ window.StartMain = React.createClass
         corpus={corpus}
         searchQueries={searchQueries}
         handleQueryChanged={handleQueryChanged}
-        handleSearch={handleSearch} />
+        handleSearch={handleSearch}
+        handleAddLanguage={handleAddLanguage} />
     </span>`
