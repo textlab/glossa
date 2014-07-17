@@ -28,12 +28,12 @@ module Rglossa
           # Print corpus positions of texts matching the metadata selection to a file marked with
           # the database ID of the search object
           positions_filename = "#{Dir.tmpdir}/positions_#{id}"
-          CorpusText.print_positions_matching_metadata(metadata_value_ids,
-           positions_filename)
+          CorpusText.print_positions_matching_metadata(metadata_value_ids, positions_filename)
 
           raise Rglossa::IncompatibleMetadataError unless File.size?(positions_filename)
 
-          query_commands = ["undump #{named_query} < '#{positions_filename}';",
+          query_commands = [
+            "undump #{named_query} < '#{positions_filename}';",
             "#{named_query};",
             "#{named_query} = #{query};"].join("\n")
         end
