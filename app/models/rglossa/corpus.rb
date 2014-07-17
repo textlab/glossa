@@ -17,6 +17,10 @@ module Rglossa
     store :config, accessors: [:languages, :extra_cwb_attrs, :display_attrs, :extra_row_attrs,
                                :s_tag, :parts, :has_sound], coder: JSON
 
+    def multilingual?
+      languages.class == Array && languages.size > 1
+    end
+
     def metadata_category_ids
       metadata_categories.pluck(:id)
     end

@@ -20,16 +20,28 @@ window.CwbResultsTable = React.createClass
   parseResults: (resultPage) ->
     labels = corpusNs.getLabels(@props.corpus)
     resultPage.map (result) ->
-      m = result.text.match(/<\w+_id(.*)>:\s+(.*){{(.+?)}}(.*)/)
-      if m
-        sId = m[1].trim()
-        fields = [m[2], m[3], m[4]]
+      if result.text.indexOf('{{') isnt -1
+        # The result contains {{, which is the left delimiter of a match, meaning that
+        # this is a result from a monolingual search or from the first language of a
+        # multilingual search.
+
+        # There will only be a surrounding structural attribute if the corpus has some
+        # kind of s-unit segmentation
+        m = result.text.match(/<(\w+_id)(.*?)>(.*){{(.+?)}}(.*)<\/\1>$/)
+        if m
+          sId = m[2].trim()
+          fields = [m[3], m[4], m[5]]
+        else
+          # Try again without the surrounding structural attribue
+          m = result.text.match(/(.*){{(.+?)}}(.*)/)
+          sId = ''
+          fields = [m[1], m[2], m[3]]
       else
-        # No structural attribute surrounding the hit, so just find the colon following the
-        # position number and grab everything following it
-        m = result.text.match(/:\s+(.*){{(.+?)}}(.*)/)
-        sId = ''
-        fields = [m[1], m[2], m[3]]
+        # No {{ was found, so this is a result from a non-first language in a multilingual search
+        m = result.text.match(/<(\w+_id)(.*?)>(.*)<\/\1>?$/)
+        if m
+          sId = m[2].trim()
+          fields = [m[3]]
 
       fields = fields.map (field) ->
         tokens = field.split(/\s+/).map (token) ->
@@ -57,16 +69,39 @@ window.CwbResultsTable = React.createClass
   mainRow: (result) ->
     corpusHasSound = @props.corpus.has_sound
     `<tr>
-      {result.sId ? <td>{result.sId}</td> : null}
+      {this.idColumn(result)}
       {corpusHasSound
         ? <td className="span1">
             <button className="btn" AAaction="" togglejplayerBB=""><i className="icon-volume-up" /></button>
           </td>
         : null}
-      <td dangerouslySetInnerHTML={{__html: result.preMatch}} />
-      <td dangerouslySetInnerHTML={{__html: result.match}} />
-      <td dangerouslySetInnerHTML={{__html: result.postMatch}} />
+      {this.textColumns(result)}
     </tr>`
+
+
+  idColumn: (result) ->
+    # If the 'match' property is defined, we know that we have a result from a monolingual
+    # search or the first language of a multilingual one. If that is the case, and sId is
+    # defined, we print it in the first column (if we have a non-first language result, we
+    # will include it in the next column instead).
+    if result.match and result.sId then `<td>{result.sId}</td>` else null
+
+
+  textColumns: (result) ->
+    if result.match
+      # If the 'match' property is defined, we know that we have a result from a monolingual
+      # search or the first language of a multilingual one, and then we want preMatch, match
+      # and postMatch in separate columns.
+      `[<td dangerouslySetInnerHTML={{__html: result.preMatch}} />,
+        <td className="match" dangerouslySetInnerHTML={{__html: result.match}} />,
+        <td dangerouslySetInnerHTML={{__html: result.postMatch}} />]`
+    else
+      # Otherwise, we have a result from a non-first language of a multilingual search. In that
+      # case, CQP doesn't mark the match, so we leave the first column blank and put all of the
+      # text in a single following column.
+      `[<td />,
+        <td className="aligned-text" colSpan="3"
+            dangerouslySetInnerHTML={{__html: result.sId + ': ' + result.preMatch}} />]`
 
 
   extraRow: (attr) ->

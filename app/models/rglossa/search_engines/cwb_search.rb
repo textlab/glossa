@@ -7,12 +7,11 @@ module Rglossa
 
       def query_info
         @query_info ||= {
-          query: queries[0]['query'],  # TODO: Handle several queries at once
           cwb_corpus_name: corpus_short_name.upcase,
           corpus: Corpus.find_by_short_name(corpus_short_name.downcase),
 
           # The query will be saved under a name composed of the name of the
-          # corpus edition followed by the database ID of the search object
+          # corpus followed by the database ID of the search object
           named_query: corpus_short_name.upcase + id.to_s
         }
       end
@@ -20,7 +19,20 @@ module Rglossa
 
       def run_queries
         named_query = query_info[:named_query]
-        query = query_info[:query]
+
+        cwb_corpus_name = get_cwb_corpus_name
+
+        if query_info[:corpus].multilingual?
+          # Add any queries in aligned languages to the first one. For instance, a search for "she"
+          # in RUN_EN aligned with "hun" in RUN_NO and also aligned with RUN_RU (without any query string)
+          # will result in the following query:
+          # "she" :RUN_NO "hun" :RUN_RU [];
+          query = queries.drop(1).reduce(queries.first[:query]) do |accumulated_query, aligned_query|
+            aq = aligned_query[:query]
+            q = if aq.present? and aq != '""' then aq else '[]' end
+            "#{accumulated_query} :#{query_info[:cwb_corpus_name]}_#{aligned_query[:lang].upcase} #{q}"
+          end
+        end
 
         if metadata_value_ids.empty?
           query_commands = "#{named_query} = #{query}"
@@ -41,7 +53,7 @@ module Rglossa
 
         commands = [
           %Q{set DataDirectory "#{Dir.tmpdir}"},
-          query_info[:cwb_corpus_name],
+          cwb_corpus_name,
           query_commands,
           "save #{named_query}",
           "size Last"
@@ -62,11 +74,17 @@ module Rglossa
         s_tag = corpus.s_tag || "s"
         commands = [
           %Q{set DataDirectory "#{Dir.tmpdir}"},
-          query_info[:cwb_corpus_name],  # necessary for "set PrintStructures to work"...
+          get_cwb_corpus_name,  # necessary for the display of id tags to work
           "set Context #{s_tag}",
           'set LD "{{"',
           'set RD "}}"',
-          "set PrintStructures #{s_tag}_id"]
+          "show +#{s_tag}_id"]
+
+        if corpus.multilingual?
+          # Add commands to show aligned text for each additional language included in the search
+          short_name = corpus_short_name.downcase
+          commands << "show " + queries.drop(1).map { |q| "+#{short_name}_#{q[:lang]}" }.join(' ')
+        end
 
         if extra_attributes.present?
           # TODO: Handle multilingual corpora - here we just take the first language
@@ -80,7 +98,13 @@ module Rglossa
 
         commands << "cat #{query_info[:named_query]} #{start} #{stop}"
 
-        run_cqp_commands(commands).split("\n")
+        res = run_cqp_commands(commands).split("\n")
+
+        # Remove the beginning of the search result, which will be a position number in the
+        # case of a monolingual result or the first language of a multilingual result, or
+        # an arrow in the case of subsequent languages in a multilingual result.
+        res.map! { |r| r.sub(/^\s*\d+:\s*/, '').sub(/^-->.+?:\s*/, '') }
+        res
       end
 
 
@@ -116,6 +140,18 @@ module Rglossa
 
           command_file.unlink
           result
+        end
+      end
+
+
+      def get_cwb_corpus_name
+        if query_info[:corpus].multilingual?
+          # The CWB corpus we select before running our query will be the one named by the
+          # short_name attribute of the corpus plus the name of the language of the first
+          # submitted query row (e.g. RUN_EN).
+          "#{query_info[:cwb_corpus_name]}_#{queries.first[:lang].upcase}"
+        else
+          query_info[:cwb_corpus_name]
         end
       end
 
