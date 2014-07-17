@@ -32,6 +32,8 @@ module Rglossa
             q = if aq.present? and aq != '""' then aq else '[]' end
             "#{accumulated_query} :#{query_info[:cwb_corpus_name]}_#{aligned_query[:lang].upcase} #{q}"
           end
+        else
+          query = queries.first[:query]
         end
 
         if metadata_value_ids.empty?
