@@ -32,16 +32,19 @@ window.CwbResultsTable = React.createClass
           sId = m[2].trim()
           fields = [m[3], m[4], m[5]]
         else
-          # Try again without the surrounding structural attribue
+          # Try again without the surrounding structural attribute
           m = result.text.match(/(.*){{(.+?)}}(.*)/)
           sId = ''
           fields = [m[1], m[2], m[3]]
       else
         # No {{ was found, so this is a result from a non-first language in a multilingual search
-        m = result.text.match(/<(\w+_id)(.*?)>(.*)<\/\1>?$/)
+        m = result.text.match(/<(\w+_id)(.*?)>(.*)<\/\1>$/)
         if m
           sId = m[2].trim()
           fields = [m[3]]
+        else
+          # Without a surrounding structural attribute we just use the entire text
+          fields = [result.text]
 
       fields = fields.map (field) ->
         tokens = field.split(/\s+/).map (token) ->
