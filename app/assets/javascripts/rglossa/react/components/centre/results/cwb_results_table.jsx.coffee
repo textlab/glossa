@@ -27,7 +27,7 @@ window.CwbResultsTable = React.createClass
 
         # There will only be a surrounding structural attribute if the corpus has some
         # kind of s-unit segmentation
-        m = result.text.match(/<(\w+_id)(.*?)>(.*){{(.+?)}}(.*)<\/\1>$/)
+        m = result.text.match(/<(\w+_id)(.*?)>(.*){{(.+?)}}(.*?)<\/\1>$/)
         if m
           sId = m[2].trim()
           fields = [m[3], m[4], m[5]]
@@ -37,17 +37,17 @@ window.CwbResultsTable = React.createClass
           sId = ''
           fields = [m[1], m[2], m[3]]
       else
-        # No {{ was found, so this is a result from a non-first language in a multilingual search
-        m = result.text.match(/<(\w+_id)(.*?)>(.*)<\/\1>$/)
-        if m
-          sId = m[2].trim()
-          fields = [m[3]]
-        else
-          # Without a surrounding structural attribute we just use the entire text
-          fields = [result.text]
+        # No {{ was found, so this is a result from a non-first language in a multilingual search.
+        # Extract the IDs of all s-units (typically sentences) and put them in front of their
+        # respective s-units.
+        text = result.text.replace(/<(\w+_id)\s*(.+?)>(.*?)<\/\1>/g,
+          '<span class="aligned-id">$2</span>: $3')
+        fields = [text]
 
       fields = fields.map (field) ->
-        tokens = field.split(/\s+/).map (token) ->
+        tokens = field.replace(/span class=/g, 'span_class=').split(/\s+/).map (token) ->
+          return token if token.indexOf('span_class=') isnt -1 # don't touch HTML spans
+
           parts = token.split('/')  # the slash separates CWB attributes
 
           maxIndex = labels.length
@@ -63,7 +63,7 @@ window.CwbResultsTable = React.createClass
             # No CWB attributes, so no data-ot attribute needed
             "<span>#{parts[0]}</span>"
 
-        tokens.join(' ')
+        tokens.join(' ').replace(/span_class=/g, 'span class=')
 
       sId:       sId
       preMatch:  fields[0]
@@ -107,7 +107,7 @@ window.CwbResultsTable = React.createClass
       # text in a single following column.
       `[<td />,
         <td className="aligned-text" colSpan="3"
-            dangerouslySetInnerHTML={{__html: result.sId + ': ' + result.preMatch}} />]`
+            dangerouslySetInnerHTML={{__html: result.preMatch}} />]`
 
 
   extraRow: (attr) ->
