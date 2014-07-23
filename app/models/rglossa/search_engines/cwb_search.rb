@@ -149,10 +149,13 @@ module Rglossa
 
       def build_monolingual_query
         # For monolingual queries, the query expressions are joined together with '|' (i.e., "or")
-        query = queries.map { |q| q[:query] }
-        if query.length > 1
-          query = query.map { |q| "(#{q})"}.join(' | ')
+        q = queries.map { |q| q[:query] }
+        if q.length > 1
+          q = q.map { |part| "(#{part})"}.join(' | ')
+        else
+          q = q.first.to_s
         end
+        q
       end
 
 
