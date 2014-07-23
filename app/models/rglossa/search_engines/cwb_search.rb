@@ -22,10 +22,10 @@ module Rglossa
 
         cwb_corpus_name = get_cwb_corpus_name
 
-        query = query_info[:corpus].multilingual? ? build_multilingual_query : build_monolingual_query
+        query_str = query_info[:corpus].multilingual? ? build_multilingual_query : build_monolingual_query
 
         if metadata_value_ids.empty?
-          query_commands = "#{named_query} = #{query}"
+          query_commands = "#{named_query} = #{query_str}"
         else
           # Print corpus positions of texts matching the metadata selection to a file marked with
           # the database ID of the search object
@@ -37,7 +37,7 @@ module Rglossa
           query_commands = [
             "undump #{named_query} < '#{positions_filename}';",
             "#{named_query};",
-            "#{named_query} = #{query};"].join("\n")
+            "#{named_query} = #{query_str};"].join("\n")
         end
         query_commands += " cut #{max_hits}" if max_hits.present?
 
@@ -99,10 +99,10 @@ module Rglossa
 
 
       def count
-        query = query_info[:corpus].multilingual? ? build_multilingual_query : build_monolingual_query
+        query_str = query_info[:corpus].multilingual? ? build_multilingual_query : build_monolingual_query
         commands = [
           query_info[:cwb_corpus_name],
-          query,
+          query_str,
           "size Last"
         ]
         run_cqp_commands(commands).split("\n").first.to_i
@@ -161,7 +161,7 @@ module Rglossa
         # in RUN_EN aligned with "hun" in RUN_NO and also aligned with RUN_RU (without any query string)
         # will result in the following query:
         # "she" :RUN_NO "hun" :RUN_RU [];
-        query = queries.drop(1).reduce(queries.first[:query]) do |accumulated_query, aligned_query|
+        queries.drop(1).reduce(queries.first[:query]) do |accumulated_query, aligned_query|
           aq = aligned_query[:query]
           q = if aq.present? and aq != '""' then aq else '[]' end
           "#{accumulated_query} :#{query_info[:cwb_corpus_name]}_#{aligned_query[:lang].upcase} #{q}"
