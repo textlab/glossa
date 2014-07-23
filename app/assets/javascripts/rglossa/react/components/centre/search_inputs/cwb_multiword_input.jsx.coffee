@@ -190,7 +190,7 @@ window.CwbMultiwordInput = React.createClass
         word = ".+#{word}" if isEnd
         str = "\"#{word}\""
       if min or max
-        str = "[]{#{min ? ''},#{max ? ''}} " + str
+        str = "[]{#{min ? 0},#{max ? ''}} " + str
 
       str
 
