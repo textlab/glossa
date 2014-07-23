@@ -22,19 +22,7 @@ module Rglossa
 
         cwb_corpus_name = get_cwb_corpus_name
 
-        if query_info[:corpus].multilingual?
-          # Add any queries in aligned languages to the first one. For instance, a search for "she"
-          # in RUN_EN aligned with "hun" in RUN_NO and also aligned with RUN_RU (without any query string)
-          # will result in the following query:
-          # "she" :RUN_NO "hun" :RUN_RU [];
-          query = queries.drop(1).reduce(queries.first[:query]) do |accumulated_query, aligned_query|
-            aq = aligned_query[:query]
-            q = if aq.present? and aq != '""' then aq else '[]' end
-            "#{accumulated_query} :#{query_info[:cwb_corpus_name]}_#{aligned_query[:lang].upcase} #{q}"
-          end
-        else
-          query = queries.first[:query]
-        end
+        query = query_info[:corpus].multilingual? ? build_multilingual_query : build_monolingual_query
 
         if metadata_value_ids.empty?
           query_commands = "#{named_query} = #{query}"
@@ -111,9 +99,10 @@ module Rglossa
 
 
       def count
+        query = query_info[:corpus].multilingual? ? build_multilingual_query : build_monolingual_query
         commands = [
           query_info[:cwb_corpus_name],
-          query_info[:query],
+          query,
           "size Last"
         ]
         run_cqp_commands(commands).split("\n").first.to_i
@@ -154,6 +143,28 @@ module Rglossa
           "#{query_info[:cwb_corpus_name]}_#{queries.first[:lang].upcase}"
         else
           query_info[:cwb_corpus_name]
+        end
+      end
+
+
+      def build_monolingual_query
+        # For monolingual queries, the query expressions are joined together with '|' (i.e., "or")
+        query = queries.map { |q| q[:query] }
+        if query.length > 1
+          query = query.map { |q| "(#{q})"}.join(' | ')
+        end
+      end
+
+
+      def build_multilingual_query
+        # Add any queries in aligned languages to the first one. For instance, a search for "she"
+        # in RUN_EN aligned with "hun" in RUN_NO and also aligned with RUN_RU (without any query string)
+        # will result in the following query:
+        # "she" :RUN_NO "hun" :RUN_RU [];
+        query = queries.drop(1).reduce(queries.first[:query]) do |accumulated_query, aligned_query|
+          aq = aligned_query[:query]
+          q = if aq.present? and aq != '""' then aq else '[]' end
+          "#{accumulated_query} :#{query_info[:cwb_corpus_name]}_#{aligned_query[:lang].upcase} #{q}"
         end
       end
 

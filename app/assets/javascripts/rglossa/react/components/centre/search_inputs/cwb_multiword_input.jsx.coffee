@@ -201,7 +201,7 @@ window.CwbMultiwordInput = React.createClass
     queryTerms = @state.queryTerms
     lastIndex = queryTerms.length - 1
 
-    `<div className="row-fluid">
+    `<div className="row-fluid multiword-container">
       <form className="form-inline multiword-search-form">
         <div style={{display: 'table'}}>
           <div style={{display: 'table-row'}}>

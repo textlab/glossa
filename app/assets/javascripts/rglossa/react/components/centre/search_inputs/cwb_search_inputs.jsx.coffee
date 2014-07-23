@@ -29,6 +29,7 @@ window.CwbSearchInputs = React.createClass
     handleQueryChanged: React.PropTypes.func.isRequired
     handleSearch: React.PropTypes.func.isRequired
     handleAddLanguage: React.PropTypes.func.isRequired
+    handleAddPhrase: React.PropTypes.func.isRequired
 
   getInitialState: ->
     statechart: new Statechart(
@@ -59,6 +60,9 @@ window.CwbSearchInputs = React.createClass
     `<button type="button" className="btn btn-success"
         style={{marginLeft: marginLeft}} onClick={this.props.handleSearch}>Search</button>`
 
+  addPhraseButton: ->
+    `<button className="btn add-phrase-btn" onClick={this.props.handleAddPhrase}>Or...</button>`
+
 
   render: ->
     {corpus, searchQueries, handleQueryChanged, handleSearch} = @props
@@ -82,6 +86,7 @@ window.CwbSearchInputs = React.createClass
               handleSearch={handleSearch} />
           ])
         }.bind(this))}
+        {isMultilingual ? null : this.addPhraseButton()}
       </span>`
 
     else if @state.statechart.pathContains('multiword')
@@ -103,6 +108,7 @@ window.CwbSearchInputs = React.createClass
               handleSearch={handleSearch} />
           ])
         }.bind(this))}
+        {isMultilingual ? null : this.addPhraseButton()}
       </span>`
 
     else
@@ -123,4 +129,5 @@ window.CwbSearchInputs = React.createClass
               handleSearch={handleSearch} />
           ])
         }.bind(this))}
+        {isMultilingual ? null : this.addPhraseButton()}
       </span>`

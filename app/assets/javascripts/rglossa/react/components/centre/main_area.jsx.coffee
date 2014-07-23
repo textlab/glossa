@@ -94,6 +94,12 @@ window.MainArea = React.createClass
     @setState(searchQueries: queries)
 
 
+  handleAddPhrase: ->
+    queries = @state.searchQueries.slice(0)
+    queries.push(lang: 'single', query: '')
+    @setState(searchQueries: queries)
+
+
   handleMaxHitsChanged: (maxHits) ->
     newState = maxHits: maxHits
     if maxHits is null and @state.maxHits
@@ -202,6 +208,7 @@ window.MainArea = React.createClass
           maxHits={maxHits}
           handleSearch={this.handleSearch}
           handleAddLanguage={this.handleAddLanguage}
+          handleAddPhrase={this.handleAddPhrase}
           handleMetadataSelectionsChanged={this.handleMetadataSelectionsChanged}
           isShowingSidebar={isShowingSidebar}
           isMetadataSelectionEmpty={Object.keys(this.state.selectedMetadataIds).length === 0} />

@@ -31,6 +31,10 @@ h5.category-header {
   margin-top: 6px;
 }
 
+.multiword-container ~ .add-phrase-btn {
+  margin-top: -15px;
+}
+
 .spinner-searching-large {
   background-image: url(spinner-large.gif);
   width: 66px;
