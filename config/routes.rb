@@ -3,7 +3,13 @@ Rglossa::Engine.routes.draw do
 
   root :to => 'home#index'
 
-  resources :corpora, :metadata_values
+  resources :corpora do
+    collection do
+      get 'find_by'
+    end
+  end
+
+  resources :metadata_values
 
   resources :metadata_categories do
     resources :metadata_values

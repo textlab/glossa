@@ -38,7 +38,10 @@ window.App = React.createClass
       <img key="spinner-large" style={{display: 'none'}} src="assets/rglossa/spinner-large.gif" />]`
 
   render: ->
-    corpus = @state.store.find('corpus', 2)
+    corpusShortName = location.search.match(/corpus=(.+)/)?[1]
+    alert('Please provide a corpus name in the query string') unless corpusShortName
+
+    corpus = @state.store.findBy('corpus', 'short_name', corpusShortName)
     `<span>
       {this.preloadImages()}
       <Navbar />

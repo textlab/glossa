@@ -11,16 +11,32 @@ module Rglossa
 
 
     def show
-      @corpus = Corpus.scoped
+      @corpus = @corpus.find(params[:id])
+      create_response
+    end
 
-      # params[:id] can be either the short_name of the corpus or its database
-      # id as usual
-      if params[:id].to_i > 0
-        @corpus = @corpus.find(params[:id])
-      else
-        @corpus = @corpus.where(short_name: params[:id].downcase).first
+
+    def find_by
+      raise "No short_name provided" unless params[:short_name]
+      @corpus = Corpus.where(short_name: params[:short_name]).first
+      create_response
+    end
+
+
+    ########
+    private
+    ########
+
+    def set_query_params
+      query = params[:query]
+      if query
+        query.each_pair do |key, value|
+          @corpora = @corpora.where(key.underscore.to_sym => value)
+        end
       end
+    end
 
+    def create_response
       respond_to do |format|
         format.json do
           @metadata_categories = @corpus.metadata_categories.includes(:translations)
@@ -35,19 +51,6 @@ module Rglossa
         end
 
         format.xml { render @corpus }  # don't include metadata in XML
-      end
-    end
-
-    ########
-    private
-    ########
-
-    def set_query_params
-      query = params[:query]
-      if query
-        query.each_pair do |key, value|
-          @corpora = @corpora.where(key.underscore.to_sym => value)
-        end
       end
     end
 
