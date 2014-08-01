@@ -70,7 +70,7 @@ module Rglossa
           'set RD "}}"',
           "show +#{s_tag}_id"]
 
-        if corpus.multilingual?
+        if corpus.multilingual? && queries.size > 1
           # Add commands to show aligned text for each additional language included in the search
           short_name = corpus_short_name.downcase
           commands << "show " + queries.drop(1).map { |q| "+#{short_name}_#{q[:lang]}" }.join(' ')
@@ -101,7 +101,7 @@ module Rglossa
       def count
         query_str = query_info[:corpus].multilingual? ? build_multilingual_query : build_monolingual_query
         commands = [
-          query_info[:cwb_corpus_name],
+          get_cwb_corpus_name,
           query_str,
           "size Last"
         ]
@@ -150,7 +150,7 @@ module Rglossa
       def build_monolingual_query
         # For monolingual queries, the query expressions are joined together with '|' (i.e., "or")
         q = queries.map { |q| q[:query] }
-        if q.length > 1
+        if q.size > 1
           q = q.map { |part| "(#{part})"}.join(' | ')
         else
           q = q.first.to_s
@@ -160,14 +160,18 @@ module Rglossa
 
 
       def build_multilingual_query
-        # Add any queries in aligned languages to the first one. For instance, a search for "she"
-        # in RUN_EN aligned with "hun" in RUN_NO and also aligned with RUN_RU (without any query string)
-        # will result in the following query:
-        # "she" :RUN_NO "hun" :RUN_RU [];
-        queries.drop(1).reduce(queries.first[:query]) do |accumulated_query, aligned_query|
-          aq = aligned_query[:query]
-          q = if aq.present? and aq != '""' then aq else '[]' end
-          "#{accumulated_query} :#{query_info[:cwb_corpus_name]}_#{aligned_query[:lang].upcase} #{q}"
+        if queries.size > 1
+          # Add any queries in aligned languages to the first one. For instance, a search for "she"
+          # in RUN_EN aligned with "hun" in RUN_NO and also aligned with RUN_RU (without any query string)
+          # will result in the following query:
+          # "she" :RUN_NO "hun" :RUN_RU [];
+          queries.drop(1).reduce(queries.first[:query]) do |accumulated_query, aligned_query|
+            aq = aligned_query[:query]
+            q = if aq.present? and aq != '""' then aq else '[]' end
+            "#{accumulated_query} :#{query_info[:cwb_corpus_name]}_#{aligned_query[:lang].upcase} #{q}"
+          end
+        else
+          queries.first[:query]
         end
       end
 
