@@ -1,6 +1,7 @@
 window.rglossaUtils =
   capitalize: (str) ->
-    if str.length then str[0].toUpperCase() + str.slice(1) else ''
+    return '' unless str.length
+    (str.split('_').map (part) -> part[0].toUpperCase() + part.slice(1)).join('')
 
 
   # From http://davidwalsh.name/javascript-debounce-function
