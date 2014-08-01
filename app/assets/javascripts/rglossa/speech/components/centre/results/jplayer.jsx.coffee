@@ -1,7 +1,7 @@
-App.JPlayerComponent = Em.Component.extend
-  classNames: 'jplayer-container'
+###* @jsx React.DOM ###
 
-  didInsertElement: ->
+window.Jplayer = React.createClass
+  componentDidMount: ->
     @textBox = @createTextBox()
 
     $(document).tooltip
@@ -70,7 +70,7 @@ App.JPlayerComponent = Em.Component.extend
           @$(".js-jplayer").jPlayer("play", start)
 
 
-  willDestroyElement: ->
+  componentWillUnmount: ->
     @$(".jp-jplayer").jPlayer('destroy')
 
 
@@ -190,3 +190,50 @@ App.JPlayerComponent = Em.Component.extend
       @nextID++
       @currentEndTime
 
+
+  render: ->
+    `<span>
+      <div class="jp-video jp-video-270p" id="jp_container_1">
+         <div class="jp-type-single">
+             <div class="jp-jplayer" style="width: 480px; height: 270px;">
+                 <img id="jp_poster_1" src="http://www.hf.uio.no/iln/om/organisasjon/tekstlab/BILDER/_6.6-%27T%27_ligo.skev.graa.jpg" style="width: 480px; height: 270px; display: none;" />
+                 <object id="jp_flash_1" name="jp_flash_1" data="assets/rglossa/speech/Jplayer.swf" type="application/x-shockwave-flash" width="1" height="1" tabindex="-1" style="width: 1px; height: 1px;">
+                     <param name="flashvars" value="jQuery=jQuery&amp;id=jplayer&amp;vol=0.8&amp;muted=false" />
+                     <param name="allowscriptaccess" value="always" />
+                     <param name="bgcolor" value="#000000" />
+                     <param name="wmode" value="opaque" />
+                 </object>
+             </div>
+             <div class="jp-gui">
+                 <div class="jp-video-play" style="display: none;">
+                     <a href="javascript:;" class="jp-video-play-icon" tabindex="1">play</a>
+                 </div>
+                 <div class="jp-interface">
+                     <div>&nbsp;</div>
+                     <div class="jp-controls-holder">
+                         <ul class="jp-controls">
+                             <li><a href="javascript:;" class="jp-play" tabindex="1" title="play" style="display: block;">play</a></li>
+                             <li><a href="javascript:;" class="jp-pause" tabindex="1" title="pause" style="display: none;">pause</a></li>
+                             <li><a href="javascript:;" class="jp-mute" tabindex="1" title="mute">mute</a></li>
+                             <li><a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute" style="display: none;">unmute</a></li>
+                             <li><a href="javascript:;" class="jp-volume-max" tabindex="1" title="volume max">volume-max</a></li>
+                         </ul>
+                         <div class="jp-volume-bar">
+                             <div class="jp-volume-bar-value" style="width: 80%;"></div>
+                         </div>
+                     </div>
+                     <div class="jp-title"><ul><li id="movietitle">kristiansand_01um-02uk</li></ul></div>
+                 </div>
+             </div>
+             <div class="jp-no-solution" style="display: none;">
+                 <span>Update required</span><a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>
+             </div>
+         </div>
+      </div>
+      <div class="jplayer-text autocue"></div>
+      <div class="slider-range ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" aria-disabled="false">
+          <div class="ui-slider-range ui-widget-header ui-corner-all" style="left: 40%; width: 40%;"></div>
+          <a class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 40%;"></a>
+          <a class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 80%;"></a>
+      </div>
+    </span>`
