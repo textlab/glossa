@@ -38,16 +38,20 @@ window.ResultsPaginator = React.createClass
   handlePageNoClicked: ->
     @refs.pageNoInput.getDOMNode().select()
 
-  showFirstPage: ->
+  showFirstPage: (e) ->
+    e.preventDefault()
     @setCurrentPageNo(1)
 
-  showPreviousPage: ->
+  showPreviousPage: (e) ->
+    e.preventDefault()
     @setCurrentPageNo(@props.currentResultPageNo - 1)
 
-  showNextPage: ->
+  showNextPage: (e) ->
+    e.preventDefault()
     @setCurrentPageNo(@props.currentResultPageNo + 1)
 
-  showLastPage: ->
+  showLastPage: (e) ->
+    e.preventDefault()
     @setCurrentPageNo(@getNumPages())
 
   setCurrentPageNo: (pageNo) ->
