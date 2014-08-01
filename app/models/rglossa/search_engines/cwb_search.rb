@@ -65,7 +65,7 @@ module Rglossa
         commands = [
           %Q{set DataDirectory "#{Dir.tmpdir}"},
           get_cwb_corpus_name,  # necessary for the display of id tags to work
-          "set Context #{s_tag}",
+          "set Context #{default_context_size} #{s_tag}",
           'set LD "{{"',
           'set RD "}}"',
           "show +#{s_tag}_id"]
@@ -112,6 +112,10 @@ module Rglossa
       ########
       private
       ########
+
+      def default_context_size
+        1
+      end
 
       def run_cqp_commands(commands)
         encoding = query_info[:corpus].encoding
