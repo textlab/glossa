@@ -1,4 +1,4 @@
-#= require rglossa/react/utils
+#= require rglossa/utils
 
 ###* @jsx React.DOM ###
 

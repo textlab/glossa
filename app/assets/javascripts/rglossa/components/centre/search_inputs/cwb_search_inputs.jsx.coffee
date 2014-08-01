@@ -1,5 +1,5 @@
 #= require ../../../statechart
-#= require rglossa/react/models/corpus
+#= require rglossa/models/corpus
 #= require ./language_select
 #= require ./cwb_simple_input
 #= require ./cwb_multiword_input

@@ -1,5 +1,5 @@
-#= require rglossa/react/utils
-#= reqruie rglossa/react/models/corpus
+#= require rglossa/utils
+#= reqruie rglossa/models/corpus
 #= require ./main_area_top
 #= require ./main_area_bottom
 

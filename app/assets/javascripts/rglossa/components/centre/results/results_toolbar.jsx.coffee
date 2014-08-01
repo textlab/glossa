@@ -1,4 +1,4 @@
-#= require rglossa/react/utils
+#= require rglossa/utils
 #= require ./results_paginator
 
 ###* @jsx React.DOM ###

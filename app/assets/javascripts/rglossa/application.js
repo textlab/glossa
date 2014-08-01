@@ -19,4 +19,4 @@
 //= require i18n
 //= require i18n/translations
 //
-//= require ./react/main
+//= require ./main

@@ -1,4 +1,4 @@
-#= require rglossa/react/models/corpus
+#= require rglossa/models/corpus
 
 ###* @jsx React.DOM ###
 

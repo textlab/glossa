@@ -1,4 +1,4 @@
-#= require rglossa/react/utils
+#= require rglossa/utils
 #= require ./corpus_info
 #= require ../search_inputs/cwb_search_inputs
 

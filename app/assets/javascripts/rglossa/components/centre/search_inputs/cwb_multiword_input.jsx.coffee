@@ -1,4 +1,4 @@
-#= require rglossa/react/models/corpus
+#= require rglossa/models/corpus
 #= require ./cwb_multiword_term
 
 ###* @jsx React.DOM ###
