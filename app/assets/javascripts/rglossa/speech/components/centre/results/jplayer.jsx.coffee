@@ -2,37 +2,39 @@
 
 window.Jplayer = React.createClass
   componentDidMount: ->
+    $node = $(@getDOMNode())
+    mediaObj = @props.mediaObj
     @textBox = @createTextBox()
 
     $(document).tooltip
-      content: -> $(@).prop('title')
+      content: -> $node.prop('title')
 
-    mov = @mediaObj.mov.movie_loc
-    path = @mediaObj.mov.path
-    supplied = @mediaObj.mov.supplied
-    $("#movietitle").text(@mediaObj.title)
-    last_line = parseInt(@mediaObj.last_line)
+    mov = mediaObj.mov.movie_loc
+    path = mediaObj.mov.path
+    supplied = mediaObj.mov.supplied
+    $("#movietitle").text(mediaObj.title)
+    last_line = parseInt(mediaObj.last_line)
 
-    @textBox.init(@, @mediaObj)
+    @textBox.init($node, mediaObj)
 
-    @textBox.currentID = parseInt(@mediaObj.start_at)
+    @textBox.currentID = parseInt(mediaObj.start_at)
 
-    start = parseInt(@mediaObj.start_at)
-    stop  = parseInt(@mediaObj.end_at)
+    start = parseInt(mediaObj.start_at)
+    stop  = parseInt(mediaObj.end_at)
     @textBox.redraw(start,stop, last_line)
     start = parseFloat($("#jp-"+start).data("start_timecode"))
     stop  = parseFloat($("#jp-"+stop).data("end_timecode"))
 
-    console.log(@mediaObj)
+    console.log(mediaObj)
 
-    @$(".jp-jplayer").jPlayer
+    $node.find(".jp-jplayer").jPlayer
       solution: "flash, html"
       ready: ->
-        $(@).jPlayer "setMedia",
+        $node.jPlayer "setMedia",
           rtmpv: path + mov
           m4v: path+mov
           poster: "assets/rglossa/speech/_6.6-%27T%27_ligo.skev.graa.jpg"
-        $(@).jPlayer( "play", start)
+        $node.jPlayer( "play", start)
 
       timeupdate: (event) =>
         ct = event.jPlayer.status.currentTime
@@ -82,7 +84,7 @@ window.Jplayer = React.createClass
     currentEndTime:0
     currentStartTime:0
 
-    init: (view, mediaObj) ->
+    init: ($view, mediaObj) ->
       display_attribute = mediaObj.display_attribute
       annotation = mediaObj.divs.annotation
       @start_at_line = parseInt(mediaObj.start_at)
@@ -102,7 +104,7 @@ window.Jplayer = React.createClass
         .attr("id", 'jp-' + n)
         .data("start_timecode",timecode)
         .data("end_timecode",end_timecode)
-        .on "click", (e) -> alert($(@).data("start_timecode")+" id:"+$(@).attr("id"))
+        .on "click", (e) -> alert($view.data("start_timecode")+" id:"+$view.attr("id"))
 
         if n < @start_at_line or n > @end_at_line
           div.css({"display":"none"})
@@ -149,7 +151,7 @@ window.Jplayer = React.createClass
 
         div.append(speakerDiv)
         div.append(segmentDiv)
-        view.$('.jplayer-text').append(div)
+        $view.find('.jplayer-text').append(div)
 
 
     redraw: (first, last, last_line) ->
@@ -197,7 +199,7 @@ window.Jplayer = React.createClass
          <div className="jp-type-single">
              <div className="jp-jplayer" style={{width: 480, height: 270}}>
                  <img id="jp_poster_1" src="http://www.hf.uio.no/iln/om/organisasjon/tekstlab/BILDER/_6.6-%27T%27_ligo.skev.graa.jpg" style={{width: 480, height: 270, display: 'none'}} />
-                 <object id="jp_flash_1" name="jp_flash_1" data="assets/rglossa/speech/Jplayer.swf" type="application/x-shockwave-flash" width="1" height="1" tabIndex="-1" style={{width: 1, height: 1}}>
+                 <object id="jp_flash_1" name="jp_flash_1" data="Jplayer.swf" type="application/x-shockwave-flash" width="1" height="1" tabIndex="-1" style={{width: 1, height: 1}}>
                      <param name="flashvars" value="jQuery=jQuery&amp;id=jplayer&amp;vol=0.8&amp;muted=false" />
                      <param name="allowscriptaccess" value="always" />
                      <param name="bgcolor" value="#000000" />
