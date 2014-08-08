@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Glossa2</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= csrf_meta_tags %>
+  <title>Glossa</title>
+  <!--[if lt IE 9]>
+  <%= javascript_include_tag 'es5-shim.min', 'es5-sham.min' %>
+  <![endif]-->
+
+  <%= csrf_meta_tag %>
+  <base href="<%= ENV['RAILS_RELATIVE_URL_ROOT'] %>/" />
+
+  <%= stylesheet_link_tag 'application' %>
+
+  <script type="text/javascript">
+    var authenticityToken = '<%= form_authenticity_token %>';
+  </script>
 </head>
 <body>
   <span id="application"></span>
-  <%= javascript_include_tag "application" %>
+  <%= javascript_include_tag 'application' %>
 </body>
 </html>
