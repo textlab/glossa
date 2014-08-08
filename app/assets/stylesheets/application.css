@@ -10,5 +10,6 @@
  *
  *= require_self
  *= require rglossa/application
+ *= require rglossa/speech/application
  *= require_tree .
  */
