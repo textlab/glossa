@@ -6,7 +6,9 @@ window.CwbResultsTable = React.createClass
   propTypes:
     resultPage: React.PropTypes.array
     corpus: React.PropTypes.object.isRequired
-    rowNoShowingPlayer: React.PropTypes.number
+
+  getInitialState: ->
+    rowNoShowingPlayer: null
 
   componentDidUpdate: (prevProps) ->
     # Create tooltips after a new result page is displayed
@@ -72,13 +74,18 @@ window.CwbResultsTable = React.createClass
       mediaObj:  result.media_obj
 
 
-  mainRow: (result) ->
+  toggleJPlayer: (index) ->
+    rowNo = if @state.rowNoShowingPlayer is index then null else index
+    @setState(rowNoShowingPlayer: rowNo)
+
+
+  mainRow: (result, index) ->
     corpusHasSound = @props.corpus.has_sound
     `<tr>
       {this.idColumn(result)}
       {corpusHasSound
         ? <td className="span1">
-            <button className="btn" AAaction="" togglejplayerBB=""><i className="icon-volume-up" /></button>
+            <button className="btn" onClick={this.toggleJPlayer.bind(null, index)}><i className="icon-volume-up" /></button>
           </td>
         : null}
       {this.textColumns(result)}
@@ -134,10 +141,10 @@ window.CwbResultsTable = React.createClass
       <table className="table table-striped table-bordered">
         <tbody>
         {results.map(function(result, index) {
-          var mainRow = this.mainRow(result),
+          var mainRow = this.mainRow(result, index),
               extraRows = extraRowAttrs.map(this.extraRow);
               rows = [mainRow, extraRows];
-          if(this.props.rowNoShowingPlayer === index) {
+          if(this.state.rowNoShowingPlayer === index) {
             rows.push(
               <tr>
                 <td colSpan="10">
