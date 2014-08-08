@@ -27,20 +27,22 @@ window.Jplayer = React.createClass
 
     console.log(mediaObj)
 
-    $node.find(".jp-jplayer").jPlayer
+    $playerNode = $node.find(".jp-jplayer")
+    $playerNode.jPlayer
       solution: "flash, html"
       ready: ->
-        $node.jPlayer "setMedia",
+        $playerNode.jPlayer "setMedia",
           rtmpv: path + mov
           m4v: path+mov
           poster: "assets/rglossa/speech/_6.6-%27T%27_ligo.skev.graa.jpg"
-        $node.jPlayer( "play", start)
+        $playerNode.jPlayer( "play", start)
 
       timeupdate: (event) =>
         ct = event.jPlayer.status.currentTime
         if ct > stop
-          @$(".jp-jplayer").jPlayer("play", start)
-          @$(".jp-jplayer").jPlayer( "pause" )
+          $playerNode = $node.find(".jp-jplayer")
+          $playerNode.jPlayer("play", start)
+          $playerNode.jPlayer( "pause" )
         else if ct > @textBox.currentEndTime
           @textBox.update(ct)
 
@@ -69,11 +71,11 @@ window.Jplayer = React.createClass
           start = parseFloat($("#jp-"+first).data("start_timecode"))
           stop = parseFloat($("#jp-"+last).data("end_timecode"))
 
-          @$(".js-jplayer").jPlayer("play", start)
+          $node.find(".js-jplayer").jPlayer("play", start)
 
 
   componentWillUnmount: ->
-    @$(".jp-jplayer").jPlayer('destroy')
+    $(@getDOMNode()).find(".jp-jplayer").jPlayer('destroy')
 
 
   createTextBox: =>
@@ -194,7 +196,7 @@ window.Jplayer = React.createClass
 
 
   render: ->
-    `<span>
+    `<div style={{position: 'relative'}}>
       <div className="jp-video jp-video-270p" id="jp_container_1">
          <div className="jp-type-single">
              <div className="jp-jplayer" style={{width: 480, height: 270}}>
@@ -238,4 +240,4 @@ window.Jplayer = React.createClass
           <a className="ui-slider-handle ui-state-default ui-corner-all" href="#" style={{left: '40%'}}></a>
           <a className="ui-slider-handle ui-state-default ui-corner-all" href="#" style={{left: '80%'}}></a>
       </div>
-    </span>`
+    </div>`
