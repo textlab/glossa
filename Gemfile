@@ -42,7 +42,7 @@ gem 'jquery-rails'
 gem "rglossa", :path => "/Users/noklesta/rails/tekstlab/plugins/rglossa"
 # gem "rglossa-fcs", :path => "/Users/noklesta/rails/tekstlab/plugins/rglossa-fcs"
 # gem "rglossa-r", :path => "/Users/noklesta/rails/tekstlab/plugins/rglossa-r"
-# gem "rglossa-speech", :path => "/Users/noklesta/rails/tekstlab/plugins/rglossa-speech"
+gem "rglossa-speech", :path => "/Users/noklesta/rails/tekstlab/plugins/rglossa-speech"
 gem "devise", "~> 2.2.3"
 
 group :development do
