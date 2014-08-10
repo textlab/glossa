@@ -10,15 +10,24 @@ window.ResultsToolbar = React.createClass
     corpus: React.PropTypes.object.isRequired
     results: React.PropTypes.object
     currentResultPageNo: React.PropTypes.number.isRequired
+    showFrequencies: React.PropTypes.func.isRequired
 
   hasMultipleResultPages: ->
     @props.results and (Object.keys(@props.results.pages).length > 1)
 
   render: ->
-    {store, statechart, corpus, results, currentResultPageNo} = @props
+    {store, statechart, corpus, results, currentResultPageNo, showFrequencies} = @props
 
-    `<div className="row-fluid search-result-toolbar">
-      <div className="pull-left"></div>
+    `<div className="row-fluid search-result-toolbar" style={{marginTop: 15}}>
+      <div className="dropdown pull-left">
+        <a className="btn dropdown-toggle" data-toggle="dropdown" href="#">
+          Statistics
+          &nbsp;<span className="caret"></span>
+        </a>
+        <ul className="dropdown-menu">
+          <li><a onClick={showFrequencies} href="#">Frequencies</a></li>
+        </ul>
+      </div>
       {this.hasMultipleResultPages()
         ? <ResultsPaginator
             store={store}
