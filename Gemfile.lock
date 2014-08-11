@@ -15,6 +15,13 @@ PATH
       uglifier (>= 1.2.7)
 
 PATH
+  remote: /Users/noklesta/rails/tekstlab/plugins/rglossa-r
+  specs:
+    rglossa-r (0.0.1)
+      rails (~> 3.2.14)
+      rserve-client (~> 0.3.1)
+
+PATH
   remote: /Users/noklesta/rails/tekstlab/plugins/rglossa-speech
   specs:
     rglossa-speech (0.0.1)
@@ -133,6 +140,7 @@ GEM
       rails (>= 3.1)
       react-source (= 0.10.0)
     react-source (0.10.0)
+    rserve-client (0.3.1)
     sass (3.3.7)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -178,6 +186,7 @@ DEPENDENCIES
   rails (= 3.2.14)
   react-rails
   rglossa!
+  rglossa-r!
   rglossa-speech!
   sass-rails (~> 3.2.3)
   sqlite3
