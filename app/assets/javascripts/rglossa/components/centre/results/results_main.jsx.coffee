@@ -23,7 +23,7 @@ window.ResultsMain = React.createClass
   getInitialState: ->
     frequencies: null
 
-  showFrequencies: (e) ->
+  showFrequencies: (attribute, e) ->
     e.preventDefault()
 
     # Prevents the dialog box from showing stale results and instead
@@ -37,6 +37,7 @@ window.ResultsMain = React.createClass
       data: JSON.stringify
         corpus: @props.corpus.short_name
         query: @props.searchQueries
+        attribute: attribute
       dataType: 'json'
       contentType: 'application/json'
     ).done (res) =>

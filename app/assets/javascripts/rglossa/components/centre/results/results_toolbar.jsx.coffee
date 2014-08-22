@@ -25,7 +25,13 @@ window.ResultsToolbar = React.createClass
           &nbsp;<span className="caret"></span>
         </a>
         <ul className="dropdown-menu">
-          <li><a onClick={showFrequencies} href="#">Frequencies</a></li>
+          <li className="dropdown-submenu">
+            <a onClick={showFrequencies.bind(null, 'word')} href="#">Frequencies</a>
+              <ul className="dropdown-menu">
+                  <li><a onClick={showFrequencies.bind(null, 'word')}>Word forms</a></li>
+                  <li><a onClick={showFrequencies.bind(null, 'lemma')}>Lemmas</a></li>
+              </ul>
+          </li>
         </ul>
       </div>
       {this.hasMultipleResultPages()
