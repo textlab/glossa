@@ -31,7 +31,7 @@ window.ResultsMain = React.createClass
     @setState(frequencies: null)
 
     $.ajax(
-      # TODO: Support other search engines than CWB
+      # TODO: Support other search engines besides CWB
       url: 'r/search_engines/cwb/query_freq'
       method: 'POST'
       data: JSON.stringify

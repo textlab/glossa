@@ -4,6 +4,7 @@
  * the top of the compiled file, but it's generally better to create a new file per style scope.
  *= require_self
  *= require bootstrap-2.3.1/bootstrap
+ *= require rglossa/bootstrap_overrides
  *= require font-awesome.min
  *= require select2
  *= require bootstrap-tags

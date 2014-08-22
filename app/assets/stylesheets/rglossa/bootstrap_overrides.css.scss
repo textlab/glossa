@@ -1,0 +1,7 @@
+.modal.fade {
+  /* Need to change this from -50% to prevent modals from covering
+     links on the page even after they are hidden (since half of the
+     modal still exists on the page as an invisible cover which prevents
+     links from working) */
+  top: -100%;
+}
