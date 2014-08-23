@@ -6,7 +6,7 @@
 //
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
-//= require react
+//= require ./bundle
 //= require jquery
 //= require bootstrap-2.3.1/bootstrap
 //= require jquery-ui.min

@@ -1,0 +1,1 @@
+window.React = require('../../../../bower_components/react/react-with-addons.min')
