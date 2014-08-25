@@ -1,5 +1,6 @@
 #= require rglossa/utils
 #= require ./results_paginator
+#= require rglossa/models/corpus
 
 ###* @jsx React.DOM ###
 
@@ -49,6 +50,7 @@ window.ResultsToolbar = React.createClass
               <ul className="dropdown-menu">
                   <li><a onClick={showFrequencies.bind(null, 'word')}>Word forms</a></li>
                   <li><a onClick={showFrequencies.bind(null, 'lemma')}>Lemmas</a></li>
+                  <li><a onClick={showFrequencies.bind(null, corpusNs.getPOSAttribute(corpus))}>Parts-of-speech</a></li>
               </ul>
           </li>
         </ul>
