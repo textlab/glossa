@@ -6,6 +6,7 @@ window.ResultsPaginator = React.createClass
     statechart: React.PropTypes.object.isRequired
     corpus: React.PropTypes.object.isRequired
     results: React.PropTypes.object
+    sortBy: React.PropTypes.string.isRequired
     currentResultPageNo: React.PropTypes.number.isRequired
 
   getInitialState: ->
@@ -55,7 +56,7 @@ window.ResultsPaginator = React.createClass
     @setCurrentPageNo(@getNumPages())
 
   setCurrentPageNo: (pageNo) ->
-    {store, statechart, corpus, results, currentResultPageNo} = @props
+    {store, statechart, corpus, results, sortBy, currentResultPageNo} = @props
 
     return unless results
 
@@ -67,8 +68,8 @@ window.ResultsPaginator = React.createClass
         statechart.changeValue('currentResultPageNo', clippedPageNo)
       else
         searchEngine = corpus.search_engine or 'cwb'
-        url = "search_engines/#{searchEngine}_searches/#{results.id}/results?pages[]=#{clippedPageNo}
-          &current_corpus_part=#{results.current_corpus_part}"
+        url =  "search_engines/#{searchEngine}_searches/#{results.id}/results?pages[]=#{clippedPageNo}&current_corpus_part=#{results.current_corpus_part}&sortBy=#{sortBy}"
+
         $.getJSON(url).done (res) ->
           {search_id, pages} = res.search_results
           model = store.find('search', search_id)

@@ -17,8 +17,7 @@ module Rglossa
           render request.format.to_sym =>
             @search.to_json(
               root: true,
-              only: [:id, :num_hits],
-              methods: :first_two_result_pages)
+              only: [:id, :num_hits])
         end
       end
     end
@@ -33,7 +32,7 @@ module Rglossa
           # With certain search engines, the number of hits is not determined
           # until we actually fetch a result page, so we do that explicitly
           # before creating the response
-          pages = transform_result_pages(@search.first_two_result_pages)
+          pages = transform_result_pages(@search.first_two_result_pages(sort_by: params[:sortBy]))
 
           # If the corpus does not contain any subparts, we will have figured out the total number
           # of hits when we found our first two result pages. Alternatively, if the corpus contains
@@ -68,7 +67,8 @@ module Rglossa
 
       if search
         search.current_corpus_part = params[:current_corpus_part].to_i
-        pages = transform_result_pages(search.get_result_pages(params[:pages]))
+        pages = transform_result_pages(search.get_result_pages(params[:pages],
+                                                               sort_by: params[:sortBy]))
 
         @results = {
           search_results: {

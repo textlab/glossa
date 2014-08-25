@@ -20,6 +20,7 @@ window.MainArea = React.createClass
     selectedMetadataIds: {}
     maxHits: 2000
     lastSelectedMaxHits: null
+    sortBy: 'position'
     isShowingSidebar: !!(@props.corpus.metadata_categories.length)
     isNarrowView: false
 
@@ -125,6 +126,13 @@ window.MainArea = React.createClass
     @handleSearch(newState)
 
 
+  handleSortByChanged: (sortBy, e) ->
+    e.preventDefault()
+    newState = {sortBy: sortBy}
+    @setState(newState)
+    @handleSearch(newState)
+
+
   handleSearch: (newState = {}) ->
     state = rglossaUtils.merge(@state, newState)
     firstQueryString = state.searchQueries[0].query
@@ -143,6 +151,7 @@ window.MainArea = React.createClass
         queries: state.searchQueries
         metadata_value_ids: state.selectedMetadataIds
         max_hits: state.maxHits
+        sortBy: state.sortBy
       dataType: 'json'
       contentType: 'application/json'
     ).then (res) =>
@@ -180,7 +189,7 @@ window.MainArea = React.createClass
 
   render: ->
     {store, statechart, corpus} = @props
-    {searchQueries, maxHits, isShowingSidebar} = @state
+    {searchQueries, maxHits, sortBy, isShowingSidebar} = @state
 
     searchId = statechart.getValue('searchId')
     results = if searchId then store.find('search', searchId) else null
@@ -205,6 +214,8 @@ window.MainArea = React.createClass
           results={results}
           searchQueries={searchQueries}
           handleQueryChanged={this.handleQueryChanged}
+          sortBy={sortBy}
+          handleSortByChanged={this.handleSortByChanged}
           maxHits={maxHits}
           handleSearch={this.handleSearch}
           handleAddLanguage={this.handleAddLanguage}

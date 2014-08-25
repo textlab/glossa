@@ -35,20 +35,20 @@ module Rglossa
     # so that we don't have to send an extra request in order to get the first
     # two result pages after creating the search (we get two pages in order to
     # preload the second page when the user views the first page)
-    def first_two_result_pages
-      get_result_pages([1, 2])
+    def first_two_result_pages(options = {})
+      get_result_pages([1, 2], options)
     end
 
     # Returns a hash with page numbers as keys and page results as values
-    def get_result_pages(page_nos)
+    def get_result_pages(page_nos, options = {})
       pages = {}
       page_nos.map(&:to_i).each do |page_no|
-        pages[page_no] = get_result_page(page_no)
+        pages[page_no] = get_result_page(page_no, options)
       end
       pages
     end
 
-    def get_result_page(page_no)
+    def get_result_page(page_no, options = {})
       raise "Implement in subclasses"
     end
 

@@ -55,7 +55,8 @@ module Rglossa
 
 
       # Returns a single page of results from CQP
-      def get_result_page(page_no, extra_attributes = %w(lemma pos type))
+      def get_result_page(page_no, options = {})
+        extra_attributes = options[:extra_attributes] || %w(lemma pos type)
         corpus = query_info[:corpus]
 
         # NOTE: page_no is 1-based while cqp uses 0-based numbering of hits
@@ -84,6 +85,15 @@ module Rglossa
           elsif corpus.extra_cwb_attrs
             commands << "show " + corpus.extra_cwb_attrs.join(' ')
           end
+        end
+
+        if options[:sort_by] && options[:sort_by] != 'position'
+          sort_by = case options[:sort_by]
+                      when 'match' then 'match'
+                      when 'left' then 'match[-1]'
+                      when 'right' then 'matchend[1]'
+                    end
+          commands << "sort #{query_info[:named_query]} by word on #{sort_by}"
         end
 
         commands << "cat #{query_info[:named_query]} #{start} #{stop}"

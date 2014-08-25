@@ -15,6 +15,8 @@ window.ResultsMain = React.createClass
     corpus: React.PropTypes.object.isRequired
     searchQueries: React.PropTypes.string.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
+    sortBy: React.PropTypes.string.isRequired
+    handleSortByChanged: React.PropTypes.func.isRequired
     maxHits: React.PropTypes.number
     handleSearch: React.PropTypes.func.isRequired
     handleAddLanguage: React.PropTypes.func.isRequired
@@ -55,8 +57,9 @@ window.ResultsMain = React.createClass
 
 
   render: ->
-    {store, statechart, results, currentResultPageNo, corpus, searchQueries,
-        handleQueryChanged, handleAddLanguage, handleAddPhrase, maxHits, handleSearch} = @props
+    {store, statechart, results, currentResultPageNo, corpus, searchQueries, handleQueryChanged,
+      sortBy, handleSortByChanged, handleAddLanguage, handleAddPhrase,
+      maxHits, handleSearch} = @props
     resultPage = results?.pages[currentResultPageNo]
 
     # Select components based on the search engine name,
@@ -83,6 +86,8 @@ window.ResultsMain = React.createClass
         corpus={corpus}
         results={results}
         currentResultPageNo={currentResultPageNo}
+        sortBy={sortBy}
+        handleSortByChanged={handleSortByChanged}
         showFrequencies={this.showFrequencies} />
       <resultTable
         resultPage={resultPage}

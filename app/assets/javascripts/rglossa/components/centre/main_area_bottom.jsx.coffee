@@ -12,6 +12,8 @@ window.MainAreaBottom = React.createClass
     results: React.PropTypes.object
     searchQueries: React.PropTypes.array.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
+    sortBy: React.PropTypes.string.isRequired
+    handleSortByChanged: React.PropTypes.func.isRequired
     maxHits: React.PropTypes.number
     handleSearch: React.PropTypes.func.isRequired
     handleMetadataSelectionsChanged: React.PropTypes.func.isRequired
@@ -28,8 +30,8 @@ window.MainAreaBottom = React.createClass
     $('#main-content', @getDOMNode()).removeClass('span9').addClass('span12 no-sidebar')
 
   mainComponent: ->
-    {store, statechart, corpus, results, searchQueries,
-      handleQueryChanged, handleAddLanguage, handleAddPhrase, maxHits, handleSearch} = @props
+    {store, statechart, corpus, results, searchQueries, handleQueryChanged, sortBy,
+    handleSortByChanged, handleAddLanguage,  handleAddPhrase, maxHits, handleSearch} = @props
     if statechart.pathContains('start')
       `<StartMain
           store={store}
@@ -50,6 +52,8 @@ window.MainAreaBottom = React.createClass
           corpus={corpus}
           searchQueries={searchQueries}
           handleQueryChanged={handleQueryChanged}
+          sortBy={sortBy}
+          handleSortByChanged={handleSortByChanged}
           handleAddLanguage={handleAddLanguage}
           handleAddPhrase={handleAddPhrase}
           maxHits={maxHits}
