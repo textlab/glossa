@@ -6,7 +6,7 @@
 //
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
-//= require react
+//= require rglossa/bundle
 //= require jquery
 //= require_tree ./components
 //= require ./jquery.jplayer.min
