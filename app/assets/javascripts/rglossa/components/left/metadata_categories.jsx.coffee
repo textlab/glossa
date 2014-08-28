@@ -18,7 +18,8 @@ window.MetadataCategories = React.createClass
       @closeAllSelects()
 
   componentWillLeave: (cb) ->
-    $(@getDOMNode()).addClass('sidebar-leave-active')  # starts width transition
+    # Start transitioning the width to zero
+    $(@getDOMNode()).addClass('sidebar-leave-active')
 
     # Calling the callback removes the sidebar div (we wait until the transition ends)
     # and calls componentDidLeave()
@@ -44,8 +45,8 @@ window.MetadataCategories = React.createClass
   componentDidEnter: ->
     # Remove the sidebar-enter class that we added in componentWillEnter(). This will
     # cause the width of the component to be defined by its span3 class again, and the
-    # width will transition from zero to the new width (as defined by the 'sidebar' CSS
-    # class).
+    # width will transition from zero to the new width (the 'sidebar' CSS class defines
+    # the transition).
     $(@getDOMNode()).removeClass('sidebar-enter')
 
   handleSelectedValuesChanged: ->
