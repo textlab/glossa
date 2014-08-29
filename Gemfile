@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.14'
+gem 'rails', '3.2.19'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -39,11 +39,10 @@ gem 'jquery-rails'
 # To use debugger
 # gem 'debugger'
 
-gem "rglossa", :path => "/Users/noklesta/rails/tekstlab/plugins/rglossa"
-# gem "rglossa-fcs", :path => "/Users/noklesta/rails/tekstlab/plugins/rglossa-fcs"
-gem "rglossa-r", :path => "/Users/noklesta/rails/tekstlab/plugins/rglossa-r"
-gem "rglossa-speech", :path => "/Users/noklesta/rails/tekstlab/plugins/rglossa-speech"
-gem "devise", "~> 2.2.3"
+gem 'rglossa', :github => 'textlab/rglossa', :branch => 'react'
+gem 'rglossa-speech', :github => 'textlab/rglossa-speech', :branch => 'react'
+gem 'rglossa-r', :github => 'textlab/rglossa-r'
+gem 'devise', '~> 2.2.3'
 
 group :development do
   gem 'thin'
