@@ -1,0 +1,8 @@
+fig.yml
+.git/
+.gitignore
+logs/
+tmp/
+*.sublime-project
+*.sublime-workspace
+.idea/
