@@ -12,13 +12,13 @@ Rglossa is currently under active development. It is functional but still has so
 ## Installation instructions
 
 ### Install Ruby and Rails
-Unless you have Ruby >= 1.9.2 installed, you need to install it. The easiest way is to use the [Ruby Version Manager (RVM)](https://rvm.io/), which lets you install Ruby without root access to the server and run several Ruby versions side by side. Installation instructions can be found [here](https://rvm.io/rvm/install/). After installing RVM, get the latest Ruby version (1.9.3 at the time of writing):
+Unless you have Ruby >= 1.9.2 installed, you need to install it. The easiest way is to use the [Ruby Version Manager (RVM)](https://rvm.io/), which lets you install Ruby without root access to the server and run several Ruby versions side by side. Installation instructions can be found [here](https://rvm.io/rvm/install/). After installing RVM, get the latest Ruby version (2.1 at the time of writing):
 
-    rvm install 1.9.3
+    rvm install 2.1
 
 Set this version to be your default Ruby version:
 
-    rvm use 1.9.3 --default
+    rvm use 2.1 --default
 
 (or see [the RVM documentation](https://rvm.io/workflow/rvmrc/) about how to create an *.rvmrc* file in your application directory that will automatically switch to this version when you enter the directory). Then install the latest version of Ruby on Rails:
 
