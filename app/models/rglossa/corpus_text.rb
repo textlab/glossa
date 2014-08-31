@@ -43,7 +43,16 @@ module Rglossa
         end
 
         sql = cat_sqls.join(' INNER JOIN ')
-        sql << " WHERE #{conditions.join(" AND ")} INTO OUTFILE '#{positions_filename}'"
+
+        if ActiveRecord::Base.configurations[Rails.env]['adapter'] == 'sqlite3'
+          # for SQLite
+          sql << " WHERE #{conditions.join(" AND ")}"
+          rows = connection.select_rows(sql)
+          File.write(positions_filename, rows.map {|r| r.join("\t")}.join("\n"))
+        else
+          # for MySQL
+          sql << " WHERE #{conditions.join(" AND ")} INTO OUTFILE '#{positions_filename}'"
+        end
         connection.execute(sql)
       end
 
