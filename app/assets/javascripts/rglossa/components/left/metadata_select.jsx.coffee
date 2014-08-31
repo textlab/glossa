@@ -58,7 +58,11 @@ window.MetadataSelect = React.createClass
           {results: data.metadata_values}
 
     $(node).on 'change', =>
-      @props.handleSelectedValuesChanged()
+      # Since our event handling sets state and hence triggers a re-render,
+      # we need to wait until the next JavaScript run loop in order to give
+      # select2 a chance to finish cleaning up if the change means that the
+      # selection is now empty and the select should be closed.
+      setTimeout (=> @props.handleSelectedValuesChanged()), 0
 
     $(node).on 'select2-close', (e) =>
       unless e.target.value
