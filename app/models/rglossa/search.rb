@@ -73,10 +73,6 @@ module Rglossa
       15
     end
 
-    ########
-    private
-    ########
-
     def get_corpus_part_count(part, query)
       raise "Implement this method in a subclass if you use multipart corpora"
     end
