@@ -23,7 +23,7 @@ module Rglossa
     end
 
     def create
-      @search = create_search(params[model_param])
+      @search = create_search(params[model_param].except(:sortBy))
       corpus = get_corpus_from_query
       parts = corpus.config[:parts]
 
