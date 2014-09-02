@@ -30,7 +30,12 @@ module Rglossa
           # Print corpus positions of texts matching the metadata selection to a file marked with
           # the database ID of the search object
           positions_filename = "#{Dir.tmpdir}/positions_#{id}"
-          CorpusText.print_positions_matching_metadata(metadata_value_ids, positions_filename)
+          text_class = if query_info[:corpus].speech_corpus?
+                         Rglossa::Speech::Speaker
+                       else
+                         Rglossa::CorpusText
+                       end
+          text_class.print_positions_matching_metadata(metadata_value_ids, positions_filename)
 
           raise Rglossa::IncompatibleMetadataError unless File.size?(positions_filename)
 
@@ -62,14 +67,15 @@ module Rglossa
         # NOTE: page_no is 1-based while cqp uses 0-based numbering of hits
         start = (page_no - 1) * page_size
         stop  = start + page_size - 1
-        s_tag = corpus.s_tag || "s"
+        s_tag = corpus.s_tag || 's'
+        s_tag_id = corpus.s_tag_id || "#{s_tag}_id"
         commands = [
           %Q{set DataDirectory "#{Dir.tmpdir}"},
           get_cwb_corpus_name,  # necessary for the display of id tags to work
           "set Context #{default_context_size} #{s_tag}",
           'set LD "{{"',
           'set RD "}}"',
-          "show +#{s_tag}_id"]
+          "show +#{s_tag_id}"]
 
         if corpus.multilingual? && queries.size > 1
           # Add commands to show aligned text for each additional language included in the search

@@ -20,7 +20,7 @@ module Rglossa
       # within the same category and an AND relationship between categories.
       # TODO: This is MySQL-specific syntax - implement for other databases as well
       def print_positions_matching_metadata(metadata, positions_filename)
-        cat_sqls = ["SELECT DISTINCT startpos, endpos FROM rglossa_corpus_texts t"]
+        cat_sqls = ["SELECT DISTINCT #{position_field_str} FROM rglossa_corpus_texts t"]
         i = 0
         conditions = []
 
@@ -47,13 +47,35 @@ module Rglossa
         if ActiveRecord::Base.configurations[Rails.env]['adapter'] == 'sqlite3'
           # for SQLite
           sql << " WHERE #{conditions.join(" AND ")}"
-          rows = connection.select_rows(sql)
-          File.write(positions_filename, rows.map {|r| r.join("\t")}.join("\n"))
+          rows = run_query(sql)
+          write_positions(positions_filename, rows)
         else
           # for MySQL
           sql << " WHERE #{conditions.join(" AND ")} INTO OUTFILE '#{positions_filename}'"
         end
         connection.execute(sql)
+      end
+
+      ########
+      private
+      ########
+
+      # Overridden by Speaker
+      def position_field_str
+        'startpos, endpos'
+      end
+
+      # Overridden by Speaker
+      def run_query(sql)
+        connection.select_rows(sql)
+      end
+
+      # Overridden by Speaker
+      def write_positions(filename, rows)
+        raise "hallo"
+        # in CorpusText, each row cotains a pair of start and end positions that
+        # need to be joined by tab before being written to file
+        File.write(filename, rows.map {|r| r.join("\t")}.join("\n"))
       end
 
     end

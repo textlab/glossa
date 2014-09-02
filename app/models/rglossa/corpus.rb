@@ -15,10 +15,14 @@ module Rglossa
              before_add: :set_metadata_value_type
 
     store :config, accessors: [:languages, :extra_cwb_attrs, :display_attrs, :extra_row_attrs,
-                               :s_tag, :parts, :has_sound], coder: JSON
+                               :s_tag, :s_tag_id, :parts, :has_sound, :has_video], coder: JSON
 
     def multilingual?
       languages.class == Array && languages.size > 1
+    end
+
+    def speech_corpus?
+      has_sound || has_video
     end
 
     def metadata_category_ids
