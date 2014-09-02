@@ -9,11 +9,15 @@ module Rglossa
       desc "categories", "Import metadata categories from _categories file "
       method_option :corpus, required: true,
                     desc: "The CWB ID of the corpus (i.e., the name of its registry file)"
+      method_option :speech, type: :boolean,
+                    desc: "Indicates that this is a speech corpus with a 'bounds' column " +
+                        "instead of 'startpos' and 'endpos' columns"
 
       def categories
         setup
         return unless corpus
-        create_categories
+        position_columns = options[:speech] ? ['bounds'] : ['startpos', 'endpos']
+        create_categories(position_columns)
       end
 
 
@@ -22,6 +26,9 @@ module Rglossa
                     desc: "The CWB ID of the corpus (i.e., the name of its registry file)"
       method_option :remove_existing, type: :boolean,
                     desc: "Remove existing values for this corpus before import?"
+      method_option :speech, type: :boolean,
+                    desc: "Indicates that this is a speech corpus with a 'bounds' column " +
+                        "instead of 'startpos' and 'endpos' columns"
 
       def values
         setup
@@ -63,12 +70,13 @@ module Rglossa
         end
       end
 
-      def create_categories
+      def create_categories(position_columns)
         category_lines = File.readlines(category_file)
         category_lines.each do |line|
           columns = line.split("\t").map { |col| col.strip }
           short_name = columns[0]
-          next if short_name.in?(%w(startpos endpos)) # these are not metadata categories
+          next if short_name == 'id'               # don't include the database id column
+          next if short_name.in?(position_columns) # these are not metadata categories
 
           # The "human-readable" name of the category can be set in column 2.
           # Defaults to capitalized version of the short name.
@@ -105,11 +113,15 @@ module Rglossa
         end
 
         # Find which columns contain start and end positions for corpus texts (if any)
-        startpos_col = categories.index('startpos')
-        endpos_col = categories.index('endpos')
+        if options[:speech]
+          positions_col = categories.index('bounds')
+        else
+          startpos_col = categories.index('startpos')
+          endpos_col = categories.index('endpos')
+        end
 
         # Map the category names to category objects. Names that have not been imported as
-        # categories in RGlossa (such as startpos and endpos) will leave nils in the array,
+        # categories in RGlossa (such as id, startpos and endpos) will leave nils in the array,
         # which we can use to skip the corresponding columns in the metadata value lines.
         categories.map! { |cat| corpus.metadata_categories.find_by_short_name(cat) }
 
@@ -135,6 +147,16 @@ module Rglossa
 
           text = corpus.corpus_texts.create!
 
+          if positions_col
+            begin
+              # get rid of escaped tabs inside the 'bounds' column
+              line.gsub!(/\\\t/, ' ')
+            rescue ArgumentError
+              report_charset_problem(line)
+              raise
+            end
+          end
+
           # Note: '\N' represents a NULL in MySQL database exports
           begin
             columns = line.split("\t").map do |col|
@@ -146,8 +168,9 @@ module Rglossa
             raise
           end
 
-          text.startpos = columns[startpos_col].to_i if startpos_col
-          text.endpos   = columns[endpos_col].to_i   if endpos_col
+          text.startpos  = columns[startpos_col].to_i if startpos_col   # for written corpora
+          text.endpos    = columns[endpos_col].to_i   if endpos_col     # for written corpora
+          text.positions = columns[positions_col]     if positions_col  # for speech corpora
 
           columns.zip(categories) do |column, category|
             # Skip columns for which no category has been created (e.g. startpos and endpos)
