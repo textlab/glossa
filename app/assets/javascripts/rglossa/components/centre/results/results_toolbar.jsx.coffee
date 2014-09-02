@@ -23,7 +23,7 @@ window.ResultsToolbar = React.createClass
       handleSortByChanged, showFrequencies} = @props
 
     `<div className="row-fluid search-result-toolbar" style={{marginTop: 15}}>
-      <div className="dropdown pull-left" style={{marginRight: 10}}>
+      <div className="dropdown pull-left" style={{marginRight: 10, marginBottom: 15}}>
         <a className="btn dropdown-toggle" data-toggle="dropdown" href="#">
           Sort
           &nbsp;<span className="caret"></span>
@@ -39,7 +39,7 @@ window.ResultsToolbar = React.createClass
             {sortBy === 'right' && <i className="icon-ok">&nbsp;</i>}By right context</a></li>
         </ul>
       </div>
-      <div className="dropdown pull-left">
+      <div className="dropdown pull-left" style={{marginBottom: 15}}>
         <a className="btn dropdown-toggle" data-toggle="dropdown" href="#">
           Statistics
           &nbsp;<span className="caret"></span>
