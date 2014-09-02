@@ -70,8 +70,9 @@ module Rglossa
           short_name = columns[0]
           next if short_name.in?(%w(startpos endpos)) # these are not metadata categories
 
-          # The "human-readable" name of the category can be set in column 2. Defaults to empty string.
-          name = columns.size > 1 ? columns[1] : ''
+          # The "human-readable" name of the category can be set in column 2.
+          # Defaults to capitalized version of the short name.
+          name = columns.size > 1 ? columns[1] : short_name.capitalize
 
           # The category type ('list', 'short_list' etc.) can be set in column 3. Defaults to 'list'.
           category_type = columns.size > 2 ? columns[2] : 'list'
