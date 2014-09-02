@@ -20,7 +20,8 @@ module Rglossa
       desc "values", "Import metadata values from _data file "
       method_option :corpus, required: true,
                     desc: "The CWB ID of the corpus (i.e., the name of its registry file)"
-      method_option :remove_existing, default: false
+      method_option :remove_existing, type: :boolean,
+                    desc: "Remove existing values for this corpus before import?"
 
       def values
         setup
