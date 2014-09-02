@@ -50,5 +50,10 @@ insert_into_file("app/assets/stylesheets/application.css",
                  " *= require rglossa/application\n",
                  after: "*= require_self\n")
 
+insert_into_file("config/application.rb",
+                 "\n    # Silence deprecation notice from i18n\n" +
+                     "    config.i18n.enforce_available_locales = true\n",
+                 after: "config.assets.version = '1.0'\n")
+
 configure_react("development")
 configure_react("production")
