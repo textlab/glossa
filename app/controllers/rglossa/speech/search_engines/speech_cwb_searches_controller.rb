@@ -16,8 +16,8 @@ module Rglossa
           corpus = get_corpus_from_query
 
           if corpus.extra_cwb_attrs
-            starttime_attr = corpus.extra_cwb_attrs.detect { |a| a.ends_with?('_starttime') }.sub(/^\+/, '')
-            endtime_attr   = corpus.extra_cwb_attrs.detect { |a| a.ends_with?('_endtime')   }.sub(/^\+/, '')
+            starttime_attr = corpus.extra_cwb_attrs.detect { |a| a.match(/_(?:start)?time$/) }.sub(/^\+/, '')
+            endtime_attr   = corpus.extra_cwb_attrs.detect { |a| a.match(/_end(?:time)?$/)   }.sub(/^\+/, '')
             speaker_attr   = corpus.extra_cwb_attrs.detect { |a| a.ends_with?('_name')   }.sub(/^\+/, '')
           end
           starttime_attr = 'turn_starttime' unless starttime_attr
@@ -27,6 +27,7 @@ module Rglossa
           new_pages = {}
           pages.each do |page_no, page|
             new_pages[page_no] = page.map do |result|
+              puts result
               lines = []
               starttimes = []
               endtimes = []
@@ -43,7 +44,7 @@ module Rglossa
               result.gsub!(/{{((?:<\S+?\s+?\S+?>\s*)+)/, '\1{{') # find start tags with attributes (i.e., not the match)
               result.gsub!(/((?:<\/\S+?>\s*)+)}}/, '}}\1')        # find end tags
 
-              result.scan(/<#{endtime_attr}\s+([\d\.]+)><#{starttime_attr}\s+([\d\.]+)>(.*?)<\/#{starttime_attr}><\/#{endtime_attr}>/) do |m|
+              result.scan(/<#{starttime_attr}\s+([\d\.]+)><#{endtime_attr}\s+([\d\.]+)>(.*?)<\/#{endtime_attr}><\/#{starttime_attr}>/) do |m|
                 endtime, starttime, line = m
 
                 overall_starttime ||= starttime
@@ -52,13 +53,10 @@ module Rglossa
                 starttimes << starttime
                 endtimes   << endtime
 
-                m2 = line.match(/<#{speaker_attr}\s+(.+?)>(.*?)<\/#{speaker_attr}>/)
-                if m2
-                  speakers << m2[1]
-                  line = m2[2]
+                line.scan(/<#{speaker_attr}\s+(.+?)>(.*?)<\/#{speaker_attr}>/) do |m2|
+                  speakers << m2[0]
+                  lines << m2[1]
                 end
-
-                lines << line
 
                 # We asked for a context of several units to the left and right of the unit containing
                 # the matching word or phrase, but only the unit with the match (marked by angle
@@ -74,7 +72,7 @@ module Rglossa
 
               # The client code expects a colon at the beginning of each result line, so put it in
               {
-                  text: ': ' + displayed_lines.join,
+                  text: displayed_lines.join,
                   media_obj: media_obj
               }
             end
@@ -85,7 +83,7 @@ module Rglossa
         # Creates the data structure that is needed by jPlayer for a single search result
         def create_media_obj(overall_starttime, overall_endtime,
             starttimes, endtimes, lines, speakers, display_attrs)
-          word_attr = 'ort' # TODO: make configurable?
+          word_attr = 'word' # TODO: make configurable?
           obj = {
               title: '',
               last_line: lines.size - 1,
