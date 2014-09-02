@@ -29,7 +29,7 @@ window.CwbResultsTable = React.createClass
 
         # There will only be a surrounding structural attribute if the corpus has some
         # kind of s-unit segmentation
-        m = result.text.match(/<(\w+_id)(.*?)>(.*){{(.+?)}}(.*?)<\/\1>$/)
+        m = result.text.match(/<(\w+_(?:id|name))(.*?)>(.*){{(.+?)}}(.*?)<\/\1>$/)
         if m
           sId = m[2].trim()
           fields = [m[3], m[4], m[5]]
