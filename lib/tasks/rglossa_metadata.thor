@@ -136,9 +136,14 @@ module Rglossa
           text = corpus.corpus_texts.create!
 
           # Note: '\N' represents a NULL in MySQL database exports
-          columns = line.split("\t").map do |col|
-            col.strip!
-            col.empty? || col == '\N' ? nil : col
+          begin
+            columns = line.split("\t").map do |col|
+              col.strip!
+              col.empty? || col == '\N' ? nil : col
+            end
+          rescue ArgumentError
+            report_charset_problem(line)
+            raise
           end
 
           text.startpos = columns[startpos_col].to_i if startpos_col
@@ -158,6 +163,12 @@ module Rglossa
         puts "Done"
       end
 
+      def report_charset_problem(line)
+        puts line
+        puts "NOTE: Problem importing metadata values. You probably need to convert the \n" +
+                 "data to UTF-8 using thor (see \"thor help rglossa:metadata:old_glossa:convert\")."
+      end
     end
-  end
+
+    end
 end
