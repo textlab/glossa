@@ -4,6 +4,7 @@
 
 window.CwbMultiwordTerm = React.createClass
   propTypes:
+    hasPhoneticForm: React.PropTypes.bool.isRequired
     term: React.PropTypes.object.isRequired
     termIndex: React.PropTypes.number.isRequired
     queryHasSingleTerm: React.PropTypes.bool.isRequired
@@ -82,6 +83,8 @@ window.CwbMultiwordTerm = React.createClass
   handleMaxChanged: (e) -> @changeTerm('max', e.target.value)
 
   handleIsLemmaChanged: (e) -> @changeTerm('isLemma', e.target.checked)
+
+  handleIsPhoneticChanged: (e) -> @changeTerm('isPhonetic', e.target.checked)
 
   handleIsStartChanged: (e) -> @changeTerm('isStart', e.target.checked)
 
@@ -179,6 +182,11 @@ window.CwbMultiwordTerm = React.createClass
                   </label>
                   <div style={{display: 'table-cell'}}>
                   </div>
+                </div>
+                <div>
+                  <label className="checkbox">
+                    <input type="checkbox" checked={term.isPhonetic} onChange={this.handleIsPhoneticChanged} /> Phonetic form
+                  </label>
                 </div>
               </div>
               <div style={{display: 'table-row'}}>

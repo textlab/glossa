@@ -21,15 +21,16 @@ lastQueryTermId = 0
 
 createTerm = (overrides = {}) ->
   term =
-    word:     ''
-    pos:      null
-    features: []
-    min:      null
-    max:      null
+    word:        ''
+    pos:         null
+    features:    []
+    min:         null
+    max:         null
 
-    isLemma: false
-    isStart: false
-    isEnd:   false
+    isLemma:    false
+    isPhonetic: false
+    isStart:    false
+    isEnd:      false
 
   for k, v of overrides
     term[k] = v
@@ -116,9 +117,10 @@ window.CwbMultiwordInput = React.createClass
       posAttr = corpusNs.getPOSAttribute(@props.corpus)
 
       switch m2[1]
-        when 'word', 'lemma'
+        when 'word', 'lemma', 'phon'
           term.word = m2[2]
           term.isLemma = m2[1] is 'lemma'
+          term.isPhonetic = m2[1] is 'phon'
           term.isStart = /\.\+$/.test(m2[2])
           term.isEnd = /^\.\+/.test(m2[2])
         when posAttr then term.pos = m2[2]
@@ -163,12 +165,12 @@ window.CwbMultiwordInput = React.createClass
 
   constructCQPQuery: (queryTerms) ->
     parts = for term in queryTerms
-      {min, max, word, isLemma, isStart, isEnd, pos, features} = term
+      {min, max, word, isLemma, isPhonetic, isStart, isEnd, pos, features} = term
       attrs = []
 
-      if isLemma or pos or features.length
+      if isLemma or isPhonetic or pos or features.length
         if word
-          attr = if isLemma then 'lemma' else 'word'
+          attr = if isLemma then 'lemma' else if isPhonetic then 'phon' else 'word'
           word = "#{word}.+" if isStart
           word = ".+#{word}" if isEnd
           word = "(#{attr}=\"#{word}\" %c)"
@@ -209,6 +211,7 @@ window.CwbMultiwordInput = React.createClass
             return (
               <CwbMultiwordTerm
                 key={this.state.queryTermIds[index]}
+                hasPhoneticForm={this.props.corpus.has_phonetic}
                 term={term}
                 termIndex={index}
                 queryHasSingleTerm={this.state.queryTerms.length === 1}
