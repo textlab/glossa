@@ -81,6 +81,7 @@ window.CwbSearchInputs = React.createClass
           return ([
             isMultilingual ? this.languageSelect(searchQuery) : null,
             <CwbSimpleInput
+              hasPhoneticForm={corpus.has_phonetic}
               searchQuery={searchQuery}
               handleQueryChanged={handleQueryChanged.bind(null, index)}
               handleSearch={handleSearch} />
@@ -102,6 +103,7 @@ window.CwbSearchInputs = React.createClass
           return ([
             isMultilingual ? this.languageSelect(searchQuery) : null,
             <CwbMultiwordInput
+              hasPhoneticForm={corpus.has_phonetic}
               searchQuery={searchQuery}
               corpus={corpus}
               handleQueryChanged={handleQueryChanged.bind(null, index)}
@@ -124,6 +126,7 @@ window.CwbSearchInputs = React.createClass
           return ([
             isMultilingual ? this.languageSelect(searchQuery) : null,
             <CwbRegexInput
+              hasPhoneticForm={corpus.has_phonetic}
               searchQuery={searchQuery}
               handleQueryChanged={handleQueryChanged.bind(null, index)}
               handleSearch={handleSearch} />

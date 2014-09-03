@@ -10,12 +10,25 @@ window.CwbSimpleInput = React.createClass
     @refs.searchfield.getDOMNode().focus()
 
   displayedQuery: ->
-    # Take the CQP expression and just remove quotes
-    @props.searchQuery.query.replace(/"/g, '')
+    # Convert the CQP expression into a pure text search phrase
+    @props.searchQuery.query.replace(/\[\w+="(.+?)"\]/, '$1')
+
+  isPhonetic: ->
+    @props.searchQuery.query.indexOf('phon=') isnt -1
 
   handleTextChanged: (e) ->
-    # Wrap each search term in quotes
-    query = ("\"#{term}\"" for term in e.target.value.split(/\s+/)).join(' ')
+    # Convert the search phrase to CQP
+    attr = if @isPhonetic() then 'phon' else 'word'
+    query = ("[#{attr}=\"#{term}\"]" for term in e.target.value.split(/\s+/)).join(' ')
+    @props.handleQueryChanged
+      lang: @props.searchQuery.lang
+      query: query
+
+  handlePhoneticChanged: (e) ->
+    query = if e.target.checked
+              @props.searchQuery.query.replace('word=', 'phon=')
+            else
+              @props.searchQuery.query.replace('phon=', 'word=')
     @props.handleQueryChanged
       lang: @props.searchQuery.lang
       query: query
@@ -31,6 +44,7 @@ window.CwbSimpleInput = React.createClass
         <div className="span10">
           <input ref="searchfield" type="text" className="span12" value={this.displayedQuery()}
             onChange={this.handleTextChanged} onKeyDown={this.handleKeyDown} />
+          {this.props.hasPhoneticForm && <label style={{marginTop: 5}}><input name="phonetic" type="checkbox" style={{marginTop: -3}} checked={this.isPhonetic()} onChange={this.handlePhoneticChanged}/>&nbsp;Phonetic form</label>}
         </div>
       </form>
     </div>`
