@@ -82,12 +82,12 @@ window.CwbResultsTable = React.createClass
   mainRow: (result, index) ->
     corpusHasSound = @props.corpus.has_sound
     `<tr>
-      {this.idColumn(result)}
       {corpusHasSound
         ? <td className="span1">
             <button className="btn" onClick={this.toggleJPlayer.bind(null, index)}><i className="icon-volume-up" /></button>
           </td>
         : null}
+      {this.idColumn(result)}
       {this.textColumns(result)}
     </tr>`
 
