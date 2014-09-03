@@ -2,6 +2,7 @@
 
 window.CwbSimpleInput = React.createClass
   propTypes:
+    hasPhoneticForm: React.PropTypes.bool.isRequired
     searchQuery: React.PropTypes.object.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
     handleSearch: React.PropTypes.func.isRequired
