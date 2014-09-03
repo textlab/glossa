@@ -11,24 +11,32 @@ window.CwbSimpleInput = React.createClass
 
   displayedQuery: ->
     # Convert the CQP expression into a pure text search phrase
-    @props.searchQuery.query.replace(/\[\w+="(.+?)"\]/, '$1')
+    @props.searchQuery.query.replace(/\[\w+="(.+?)"\]/g, '$1')
 
   isPhonetic: ->
     @props.searchQuery.query.indexOf('phon=') isnt -1
 
+
   handleTextChanged: (e) ->
     # Convert the search phrase to CQP
-    attr = if @isPhonetic() then 'phon' else 'word'
-    query = ("[#{attr}=\"#{term}\"]" for term in e.target.value.split(/\s+/)).join(' ')
+    if e.target.value is ''
+      query = ''
+    else
+      attr = if @isPhonetic() then 'phon' else 'word'
+      terms = for term in e.target.value.split(/\s+/)
+        if term is '' then ' ' else "[#{attr}=\"#{term}\"]"
+      query = terms.join(' ')
+
     @props.handleQueryChanged
       lang: @props.searchQuery.lang
       query: query
 
+
   handlePhoneticChanged: (e) ->
     query = if e.target.checked
-              @props.searchQuery.query.replace('word=', 'phon=')
+              @props.searchQuery.query.replace(/word=/g, 'phon=')
             else
-              @props.searchQuery.query.replace('phon=', 'word=')
+              @props.searchQuery.query.replace(/phon=/g, 'word=')
     @props.handleQueryChanged
       lang: @props.searchQuery.lang
       query: query
