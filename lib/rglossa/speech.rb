@@ -1,5 +1,6 @@
-require "rglossa/engine"
 require "rglossa/speech/engine"
 
 module Rglossa
+  module Speech
+  end
 end
