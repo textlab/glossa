@@ -117,11 +117,10 @@ window.CwbResultsTable = React.createClass
             dangerouslySetInnerHTML={{__html: result.preMatch}} />]`
 
 
-  extraRow: (attr) ->
-    return `<tr><td colSpan={3}>hei</td></tr>`
+  extraRow: (result, attr) ->
     corpusHasSound = @props.corpus.has_sound
-    match = (value for key, value of @get('mediaObj.divs.annotation') when value.is_match)[0]
-    rowContents = (value.orig for key, value of match.line).join(' ')
+    match = (value for key, value of result.mediaObj.divs.annotation when value.is_match)[0]
+    rowContents = (value[attr] for key, value of match.line).join(' ')
     `<tr>
       {result.sId ? <td /> : null}
       {corpusHasSound ? <td className="span1" /> : null}
@@ -142,7 +141,7 @@ window.CwbResultsTable = React.createClass
         <tbody>
         {results.map(function(result, index) {
           var mainRow = this.mainRow(result, index),
-              extraRows = extraRowAttrs.map(this.extraRow);
+              extraRows = extraRowAttrs.map(this.extraRow.bind(null, result));
               rows = [mainRow, extraRows];
           if(this.state.rowNoShowingPlayer === index) {
             rows.push(
