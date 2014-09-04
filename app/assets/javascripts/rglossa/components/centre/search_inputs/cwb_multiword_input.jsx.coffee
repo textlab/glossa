@@ -70,16 +70,30 @@ window.CwbMultiwordInput = React.createClass
     max = null
 
     queryParts.forEach (item) =>
-      if m = item.match(/\[\]\{(.+?)\}/)
+
+      # a single unspecified token
+      if m is '[]'
+        min = 1
+        max = 1
+
+      # an interval, e.g. []{1,2}
+      else if m = item.match(/\[\]\{(.+?)\}/)
         [min, max] = @handleIntervalSpecification(m)
-      else if m = item.match(/\[(.+?)\]/)
+
+      # an attribute/value expression such as [lemma="car" %c] or [(lemma="car" & pos="n")]
+      else if m = item.match(/\[\(?(.+?)(?:\s+%c)?\)?\]/)
         dq.push @handleAttributes(m, min, max)
         min = null
         max = null
+
+      # just a quoted string
       else
         word    = item.substring(1, item.length-1)
         isStart = /\.\+$/.test(word)
         isEnd   = /^\.\+/.test(word)
+
+        # Remove wildcard symbols at the beginning or end since they should not be
+        # shown in the text boxes (but as check boxes instead)
         word = word.replace(/^(?:\.\+)?(.+?)/, "$1").replace(/(.+?)(?:\.\+)?$/, "$1")
 
         term = createTerm(word: word, min: min, max: max, isStart: isStart, isEnd: isEnd)
@@ -92,7 +106,7 @@ window.CwbMultiwordInput = React.createClass
 
 
   splitQuery: (query) ->
-    query.match(/\[\]\{(.+?)\}|".*?"|\[[^\]]+?\]/g) or ['']
+    query.match(/\[\]\{(.+?)\}|".*?"|\[[^\]]*?\]/g) or ['']
 
 
   handleIntervalSpecification: (m) ->
@@ -168,29 +182,24 @@ window.CwbMultiwordInput = React.createClass
       {min, max, word, isLemma, isPhonetic, isStart, isEnd, pos, features} = term
       attrs = []
 
-      if isLemma or isPhonetic or pos or features.length
-        if word
-          attr = if isLemma then 'lemma' else if isPhonetic then 'phon' else 'word'
-          word = "#{word}.+" if isStart
-          word = ".+#{word}" if isEnd
-          word = "(#{attr}=\"#{word}\" %c)"
-          attrs.push(word)
-
-        if pos
-          posAttr = corpusNs.getPOSAttribute(@props.corpus)
-          posStr = "#{posAttr}=\"#{pos}\""
-          attrs.push(posStr)
-
-        for feature in features
-          f = "#{feature.attr}=\"#{feature.value}\""
-          attrs.push(f)
-
-        str = '[' + attrs.join(' & ') + ']'
-      else
-        # Only the word attribute is specified, so use a simple string
+      if word
+        attr = if isLemma then 'lemma' else if isPhonetic then 'phon' else 'word'
         word = "#{word}.+" if isStart
         word = ".+#{word}" if isEnd
-        str = "\"#{word}\""
+        word = "(#{attr}=\"#{word}\" %c)"
+        attrs.push(word)
+
+      if pos
+        posAttr = corpusNs.getPOSAttribute(@props.corpus)
+        posStr = "#{posAttr}=\"#{pos}\""
+        attrs.push(posStr)
+
+      for feature in features
+        f = "#{feature.attr}=\"#{feature.value}\""
+        attrs.push(f)
+
+      str = '[' + attrs.join(' & ') + ']'
+
       if min or max
         str = "[]{#{min ? 0},#{max ? ''}} " + str
 
