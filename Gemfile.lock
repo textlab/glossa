@@ -7,17 +7,9 @@ GIT
       rserve-client (~> 0.3.1)
 
 GIT
-  remote: git://github.com/textlab/rglossa-speech.git
-  revision: e470b78d804b85e4f3e0dbbdb2f7f71965f08304
-  branch: react
-  specs:
-    rglossa-speech (0.0.1)
-      rails (~> 3.2.14)
-
-GIT
   remote: git://github.com/textlab/rglossa.git
-  revision: 122253dbc4050ac4e4b6e64961bbedbc48c979e6
-  branch: react
+  revision: c22565d4c79d6f49d7dc0ee92702c2e30004913a
+  branch: react-mergespeech
   specs:
     rglossa (0.0.1)
       coffee-rails (~> 3.2.2)
@@ -26,7 +18,7 @@ GIT
       i18n-js
       jquery-rails
       oj
-      rails (~> 3.2.14)
+      rails (~> 3.2.19)
       react-rails
       sass-rails (~> 3.2.5)
       turbo-sprockets-rails3
@@ -195,7 +187,6 @@ DEPENDENCIES
   react-rails
   rglossa!
   rglossa-r!
-  rglossa-speech!
   sass-rails (~> 3.2.3)
   sqlite3
   table_print
