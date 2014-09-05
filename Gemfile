@@ -39,8 +39,7 @@ gem 'jquery-rails'
 # To use debugger
 # gem 'debugger'
 
-gem 'rglossa', :github => 'textlab/rglossa', :branch => 'react'
-gem 'rglossa-speech', :github => 'textlab/rglossa-speech', :branch => 'react'
+gem 'rglossa', :github => 'textlab/rglossa', :branch => 'react-mergespeech'
 gem 'rglossa-r', :github => 'textlab/rglossa-r'
 gem 'devise', '~> 2.2.3'
 
