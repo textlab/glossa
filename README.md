@@ -43,11 +43,11 @@ Also, if you are using an old version of Rails, you may get the following messag
     Bundler could not find compatible versions for gem "rails"
       In Gemfile:
         rglossa (>= 0) ruby depends on
-          rails (~> 3.2.14) ruby
+          rails (~> 3.2.19) ruby
 
 In that case, please install the version of the *rails* gem that is mentioned in the error message, e.g.:
 
-    gem install rails -v3.2.14 -N
+    gem install rails -v3.2.19 -N
 
 As an alternative to creating a new application, you may already have a Rails application and want to make RGlossa part of that. Since RGlossa is implemented as a Rails engine, this can easily be achieved by mounting RGlossa at some subpath within the application. See the [wiki](http://github.com/textlab/rglossa/wiki) for more information.
 
