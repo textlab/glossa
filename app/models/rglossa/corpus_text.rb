@@ -72,7 +72,6 @@ module Rglossa
 
       # Overridden by Speaker
       def write_positions(filename, rows)
-        raise "hallo"
         # in CorpusText, each row cotains a pair of start and end positions that
         # need to be joined by tab before being written to file
         File.write(filename, rows.map {|r| r.join("\t")}.join("\n"))
