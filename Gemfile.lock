@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: git://github.com/textlab/rglossa.git
-  revision: c22565d4c79d6f49d7dc0ee92702c2e30004913a
+  revision: 67b16d6bc9c4542ad971eabe678ae45f0d2abd2e
   branch: react-mergespeech
   specs:
     rglossa (0.0.1)
@@ -86,7 +86,7 @@ GEM
     i18n-js (2.1.2)
       i18n
     journey (1.0.4)
-    jquery-rails (3.1.1)
+    jquery-rails (3.1.2)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
     json (1.8.1)
@@ -139,7 +139,7 @@ GEM
     react-source (0.11.1)
     ref (1.0.5)
     rserve-client (0.3.1)
-    sass (3.4.2)
+    sass (3.4.3)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
