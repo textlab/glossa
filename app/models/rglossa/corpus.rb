@@ -13,6 +13,7 @@ module Rglossa
              dependent: :destroy,
              order: :short_name,
              before_add: :set_metadata_value_type
+    has_many :media_files, dependent: :destroy
 
     store :config,
           accessors: [:languages, :extra_cwb_attrs, :display_attrs, :extra_row_attrs,
