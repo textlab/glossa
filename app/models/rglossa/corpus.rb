@@ -17,7 +17,8 @@ module Rglossa
 
     store :config,
           accessors: [:languages, :extra_cwb_attrs, :display_attrs, :extra_row_attrs,
-                               :s_tag, :s_tag_id, :parts, :has_sound, :has_video, :has_phonetic],
+                               :s_tag, :s_tag_id, :parts, :has_sound, :has_video, :has_phonetic,
+                               :media_path],
           coder: JSON
 
     def multilingual?

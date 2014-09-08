@@ -48,13 +48,10 @@ module Rglossa
               result.gsub!(/((?:<\/\S+?>\s*)+)}}/, '}}\1')        # find end tags
 
               result.scan(/<#{starttime_attr}\s+([\d\.]+)><#{endtime_attr}\s+([\d\.]+)>(.*?)<\/#{endtime_attr}><\/#{starttime_attr}>/) do |m|
-                endtime, starttime, line = m
+                starttime, endtime, line = m
 
                 overall_starttime ||= starttime
                 overall_endtime     = endtime
-
-                starttimes << starttime
-                endtimes   << endtime
 
                 line.scan(/<#{speaker_attr}\s+(.+?)>(.*?)<\/#{speaker_attr}>/) do |m2|
                   speakers << m2[0]
@@ -67,6 +64,9 @@ module Rglossa
                     line_key = $1
                   end
                   lines << l
+                  # Repeat the start and end time for each speaker within the same segment
+                  starttimes << starttime
+                  endtimes   << endtime
                 end
                 # Add the line key found for this result to the set of line keys for this result page
                 line_keys << line_key if line_key
@@ -85,8 +85,7 @@ module Rglossa
                 # Only add a media object to the data returned to the client if the corpus contains
                 # line keys that we can use to determine which media file to show for each result
                 media_obj = create_media_obj(overall_starttime, overall_endtime,
-                                             starttimes, endtimes, lines, speakers,
-                                             corpus.display_attrs)
+                                             starttimes, endtimes, lines, speakers, corpus)
                 {
                     text: displayed_lines_str,
                     media_obj: media_obj,
@@ -108,7 +107,7 @@ module Rglossa
                 m
               end
               new_pages[page_no].map! do |result|
-                result[:media_obj][:mov][:movie_loc] = basenames[result[:line_key].to_i]
+                result[:media_obj][:mov][:movie_loc] = "#{basenames[result[:line_key].to_i]}_800.mp4"
                 result
               end
             end
@@ -119,7 +118,7 @@ module Rglossa
 
         # Creates the data structure that is needed by jPlayer for a single search result
         def create_media_obj(overall_starttime, overall_endtime,
-            starttimes, endtimes, lines, speakers, display_attrs)
+            starttimes, endtimes, lines, speakers, corpus)
           word_attr = 'word' # TODO: make configurable?
           obj = {
               title: '',
@@ -127,8 +126,7 @@ module Rglossa
               display_attribute: word_attr,
               mov: {
                   supplied: 'm4v',
-                  path: '',
-                  movie_loc: 'The_Story_of_Four_Oxen-Siyoum Abraha.mp3',
+                  path: corpus.media_path || "media/#{corpus.short_name}/",
                   start: overall_starttime,
                   stop: overall_endtime
               },
@@ -155,7 +153,7 @@ module Rglossa
                     token.sub!(/}}$/, '')
                   end
                   attr_values = token.split('/')
-                  acc[token_no] = Hash[[word_attr].concat(display_attrs).zip(attr_values)]
+                  acc[token_no] = Hash[[word_attr].concat(corpus.display_attrs).zip(attr_values)]
                   acc
                 end,
                 from: starttimes.shift,
