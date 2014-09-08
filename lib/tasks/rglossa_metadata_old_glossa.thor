@@ -23,7 +23,7 @@ module Rglossa
         say "Dumping column names from #{table}:"
         run_sql_command(category_file, sql)
 
-        sql = "SELECT * FROM #{uppercase_corpusname}text INTO OUTFILE '#{data_file}'"
+        sql = "SELECT * FROM #{table} INTO OUTFILE '#{data_file}'"
         say "Dumping data from #{table}:"
         run_sql_command(data_file, sql)
 
@@ -66,13 +66,6 @@ module Rglossa
       def setup
         # Pull in the Rails app
         require File.expand_path('../../../config/environment', __FILE__)
-      end
-
-      def run_sql_command(outfile, sql)
-        remove_file(outfile)
-        command = %Q{mysql -u #{options[:user]} -p #{options[:database]} -e "#{sql}"}
-        puts command
-        system(command)
       end
 
     end
