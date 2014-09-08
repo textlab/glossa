@@ -9,5 +9,6 @@
  *= require select2
  *= require bootstrap-tags
  *= require opentip
+ *= require_tree ./speech
  *= require ./home
 */
