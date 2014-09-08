@@ -5,22 +5,55 @@ module Rglossa
 
     include ::Rglossa::ThorUtils
 
-    desc "dump", "Dump line keys from the segments table in old Glossa"
+    desc "dump", "Dump line keys for media files from the segments table in old Glossa"
     method_option :database, default: "glossa",
                   desc: "The database used by old Glossa"
     method_option :user, default: "root",
                   desc: "A database user with permissions to read the old Glossa database"
     method_option :corpus, required: true,
                   desc: "The CWB ID of the corpus (i.e., the name of its registry file)"
-
     def dump
       setup
+      return unless corpus
 
       sql = "SELECT #{corpus_id}, id, audio_file FROM #{line_keys_table} " +
           "INTO OUTFILE '#{line_keys_file}'"
       say "Dumping line keys from #{line_keys_table}:"
       run_sql_command(line_keys_file, sql)
     end
+
+
+    desc "import", "Import line keys for media files"
+    method_option :corpus, required: true,
+                  desc: "The CWB ID of the corpus (i.e., the name of its registry file)"
+    method_option :remove_existing, type: :boolean,
+                  desc: "Remove existing values for this corpus before import?"
+    def import
+      setup
+      return unless corpus
+
+      if options[:remove_existing]
+        print "Removing existing line keys for this corpus..."
+        ActiveRecord::Base.connection.execute(
+            "DELETE FROM rglossa_media_files WHERE corpus_id = #{corpus_id}")
+        puts " done"
+      end
+
+      # Since there may be a huge amount of lines (one for each segment), using normal
+      # ActiveRecord techniques may be way too slow here, so load the file directly instead.
+      if ActiveRecord::Base.configurations[Rails.env]['adapter'] == 'sqlite3'
+        # TODO: Support import in SQLite? It seems to require all fields to be present in the
+        # file, including id and timestamp columns.
+        puts "Media files is currently not supported with SQLite due to import limitations."
+      else
+        print "Importing line keys..."
+        ActiveRecord::Base.connection.execute(
+            "LOAD DATA INFILE '#{line_keys_file}' INTO TABLE rglossa_media_files " +
+                "(corpus_id, line_key, basename)")
+        puts " done"
+      end
+    end
+
 
     ########
     private
