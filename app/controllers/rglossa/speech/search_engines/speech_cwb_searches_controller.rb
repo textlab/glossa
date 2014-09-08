@@ -18,7 +18,8 @@ module Rglossa
           if corpus.extra_cwb_attrs
             starttime_attr = corpus.extra_cwb_attrs.detect { |a| a.match(/_(?:start)?time$/) }.sub(/^\+/, '')
             endtime_attr   = corpus.extra_cwb_attrs.detect { |a| a.match(/_end(?:time)?$/)   }.sub(/^\+/, '')
-            speaker_attr   = corpus.extra_cwb_attrs.detect { |a| a.ends_with?('_name')   }.sub(/^\+/, '')
+            speaker_attr   = corpus.extra_cwb_attrs.detect { |a| a.ends_with?('_name')       }.sub(/^\+/, '')
+            line_key_attr  = corpus.extra_cwb_attrs.detect { |a| a.ends_with?('_line_key')   }.sub(/^\+/, '')
           end
           starttime_attr = 'turn_starttime' unless starttime_attr
           endtime_attr   = 'turn_endtime'   unless endtime_attr
@@ -26,8 +27,9 @@ module Rglossa
 
           new_pages = {}
           pages.each do |page_no, page|
+            line_keys = line_key_attr ? Set.new : nil
+
             new_pages[page_no] = page.map do |result|
-              puts result
               lines = []
               starttimes = []
               endtimes = []
@@ -35,6 +37,7 @@ module Rglossa
               speakers = []
               overall_starttime = nil
               overall_endtime = nil
+              line_key = nil
 
               # If the matching word/phrase is at the beginning of the segment, CQP puts the braces
               # marking the start of the match before the starting segment tag
@@ -55,28 +58,62 @@ module Rglossa
 
                 line.scan(/<#{speaker_attr}\s+(.+?)>(.*?)<\/#{speaker_attr}>/) do |m2|
                   speakers << m2[0]
-                  lines << m2[1]
+
+                  l = m2[1]
+                  if line_key_attr
+                    l.sub!(/^<#{line_key_attr}\s+(\d+)>(.*)<\/#{line_key_attr}>/, '\2')
+                    # All line keys within the same result should point to the same media file,
+                    # so it doesn't matter if we assign this several times for the same result
+                    line_key = $1
+                  end
+                  lines << l
                 end
+                # Add the line key found for this result to the set of line keys for this result page
+                line_keys << line_key if line_key
 
                 # We asked for a context of several units to the left and right of the unit containing
                 # the matching word or phrase, but only the unit with the match (marked by angle
                 # brackets) should be included in the search result shown in the result table.
                 if line =~ /{{.+}}/
-                  displayed_lines << line
+                  # Remove line key attribute tags, since they would only confuse the client code
+                  displayed_lines << line.gsub(/<\/?#{line_key_attr}.*?>/, '')
                 end
               end
 
-              media_obj = create_media_obj(overall_starttime, overall_endtime,
-                                           starttimes, endtimes, lines, speakers,
-                                           corpus.display_attrs)
+              displayed_lines_str = displayed_lines.join
+              if line_key
+                # Only add a media object to the data returned to the client if the corpus contains
+                # line keys that we can use to determine which media file to show for each result
+                media_obj = create_media_obj(overall_starttime, overall_endtime,
+                                             starttimes, endtimes, lines, speakers,
+                                             corpus.display_attrs)
+                {
+                    text: displayed_lines_str,
+                    media_obj: media_obj,
+                    line_key: line_key
+                }
+              else
+                {
+                    text: displayed_lines_str
+                }
+              end
+            end
 
-              # The client code expects a colon at the beginning of each result line, so put it in
-              {
-                  text: displayed_lines.join,
-                  media_obj: media_obj
-              }
+            # Now that all results in this page have been processed, we have a set of line keys
+            # (one for each result). Find out how they map to media file names and put the name
+            # as a property on the media object that is returned to the clien.
+            if line_key_attr
+              basenames = corpus.media_files.find_all_by_line_key(line_keys.to_a).reduce({}) do |m, f|
+                m[f.line_key] = f.basename
+                m
+              end
+              new_pages[page_no].map! do |result|
+                result[:media_obj][:mov][:movie_loc] = basenames[result[:line_key].to_i]
+                result
+              end
             end
           end
+
           new_pages
         end
 
