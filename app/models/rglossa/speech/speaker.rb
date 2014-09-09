@@ -19,9 +19,14 @@ module Rglossa
         end
 
         # Overrides the one in CorpusText
-        def write_positions(filename, rows)
-          # in Speaker, each row contains a string with a set of start and end
-          # position that can be written directly to file
+        def write_positions(filename, conditions, sql)
+          sql << " WHERE #{conditions.join(" AND ")}"
+          rows = run_query(sql)
+
+          # in Speaker, each row contains a string with a set of dash-separated start and end
+          # positions that need to be split and spaces replaced by newlines. Unlike with CorpusText
+          # we cannot ask MySQL to write directly to outfile since we need to do this processing
+          # first.
           rows.map! { |row| row.gsub(/\s+/, "\n").gsub(/-/, "\t") }
           File.write(filename, rows.join("\n"))
         end

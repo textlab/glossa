@@ -43,17 +43,7 @@ module Rglossa
         end
 
         sql = cat_sqls.join(' INNER JOIN ')
-
-        if ActiveRecord::Base.configurations[Rails.env]['adapter'] == 'sqlite3'
-          # for SQLite
-          sql << " WHERE #{conditions.join(" AND ")}"
-          rows = run_query(sql)
-          write_positions(positions_filename, rows)
-        else
-          # for MySQL
-          sql << " WHERE #{conditions.join(" AND ")} INTO OUTFILE '#{positions_filename}'"
-        end
-        connection.execute(sql)
+        write_positions(positions_filename, conditions, sql)
       end
 
       ########
@@ -71,10 +61,20 @@ module Rglossa
       end
 
       # Overridden by Speaker
-      def write_positions(filename, rows)
-        # in CorpusText, each row cotains a pair of start and end positions that
-        # need to be joined by tab before being written to file
-        File.write(filename, rows.map {|r| r.join("\t")}.join("\n"))
+      def write_positions(filename, conditions, sql)
+        if ActiveRecord::Base.configurations[Rails.env]['adapter'] == 'sqlite3'
+          # for SQLite
+          sql << " WHERE #{conditions.join(" AND ")}"
+          rows = run_query(sql)
+
+          # in CorpusText, each row contains a pair of start and end positions that
+          # need to be joined by tab before being written to file
+          File.write(filename, rows.map {|r| r.join("\t")}.join("\n"))
+        else
+          # for MySQL
+          sql << " WHERE #{conditions.join(" AND ")} INTO OUTFILE '#{filename}'"
+          connection.execute(sql)
+        end
       end
 
     end
