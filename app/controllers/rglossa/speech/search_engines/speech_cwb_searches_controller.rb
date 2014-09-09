@@ -103,15 +103,19 @@ module Rglossa
             # as a property on the media object that is returned to the client.
             if line_key_attr
               conn = ActiveRecord::Base.connection
-              conn.execute("CREATE TEMPORARY TABLE line_keys (line_key INTEGER)")
-              conn.execute("INSERT INTO line_keys " + line_keys.map{|i| "SELECT %d" % i}.join(" UNION "))
-              basenames = conn.execute("SELECT line_key, basename FROM line_keys LEFT JOIN rglossa_media_files
-                                        ON line_key_begin <= line_key AND line_key <= line_key_end
-                                        WHERE corpus_id = %d" % corpus.id).reduce({}) do |m, f|
-                m[f['line_key']] = f['basename']
-                m
+
+              begin
+                conn.execute("CREATE TEMPORARY TABLE line_keys (line_key INTEGER)")
+                conn.execute("INSERT INTO line_keys " + line_keys.map{|i| "SELECT %d" % i}.join(" UNION "))
+                basenames = conn.execute("SELECT line_key, basename FROM line_keys LEFT JOIN rglossa_media_files
+                                          ON line_key_begin <= line_key AND line_key <= line_key_end
+                                          WHERE corpus_id = %d" % corpus.id).reduce({}) do |m, f|
+                  m[f[0]] = f[1]
+                  m
+                end
+              ensure
+                conn.execute("DROP TABLE line_keys")
               end
-              conn.execute("DROP TABLE line_keys")
 
               new_pages[page_no].map! do |result|
                 result[:media_obj][:mov][:movie_loc] = "#{basenames[result[:line_key].to_i]}_800.mp4"
