@@ -13,7 +13,7 @@ module Rglossa
       end
 
       # Converts a text value to a value of the type handled by this class
-      def self.convert_text_value(value)
+      def self.convert_text_value(val)
         val.in?('no', 'false') ? false : true
       end
 

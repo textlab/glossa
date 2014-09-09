@@ -14,6 +14,8 @@ module Rglossa
                     desc: "A database user with permissions to read the old Glossa database"
       method_option :corpus, required: true,
                     desc: "The CWB ID of the corpus (i.e., the name of its registry file)"
+      method_option :table_suffix, default: "text",
+                    desc: "The part after the corpus name in the name of the table to dump from"
 
       def dump
         setup
@@ -42,6 +44,8 @@ module Rglossa
       method_option :charset, default: 'utf-8',
                     desc: "The character set of the old Glossa data. If different from UTF-8, " +
                         "it will be converted."
+      method_option :table_suffix, default: "text",
+                    desc: "The part after the corpus name in the name of the table we dumped from"
 
       def convert
         setup

@@ -1,6 +1,10 @@
 module Rglossa
   class MetadataValue < ActiveRecord::Base
     belongs_to :metadata_category
+    has_and_belongs_to_many :corpus_texts, join_table: 'rglossa_corpus_texts_metadata_values',
+                            foreign_key: 'rglossa_metadata_value_id',
+                            association_foreign_key: 'rglossa_corpus_text_id'
+
     validates_presence_of :metadata_category_id
 
     def as_json(options={})

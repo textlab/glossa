@@ -12,6 +12,8 @@ module Rglossa
       method_option :speech, type: :boolean,
                     desc: "Indicates that this is a speech corpus with a 'bounds' column " +
                         "instead of 'startpos' and 'endpos' columns"
+      method_option :table_suffix, default: "text",
+                    desc: "The part after the corpus name in the name of the table we dumped from"
 
       def categories
         setup
@@ -29,6 +31,8 @@ module Rglossa
       method_option :speech, type: :boolean,
                     desc: "Indicates that this is a speech corpus with a 'bounds' column " +
                         "instead of 'startpos' and 'endpos' columns"
+      method_option :table_suffix, default: "text",
+                    desc: "The part after the corpus name in the name of the table we dumped from"
 
       def values
         setup
@@ -110,18 +114,17 @@ module Rglossa
 
         total_lines = %x(wc -l #{data_file}).split(' ').first
 
-        # Go through the metadata value lines and create a corpus text for each one. For each
-        # column that has a corresponding metadata category, see if a MetadataValue object with
+        # Go through the metadata value lines and find or create a corpus text for each one. For
+        # each column that has a corresponding metadata category, see if a MetadataValue object with
         # this value already exists for the category. If so, fetch it; otherwise create a new one.
         # Finally, associate the value with the corpus text.
         puts "Importing metadata..."
+        tid_category = corpus.metadata_categories.find_by_short_name('tid')
         File.readlines(data_file).each_with_index do |line, lineno|
 
           if lineno > 0 && lineno % 1000 == 0
             puts "Finished processing #{lineno} of #{total_lines} lines"
           end
-
-          text = corpus.corpus_texts.create!
 
           if positions_col
             begin
@@ -143,6 +146,15 @@ module Rglossa
             report_charset_problem(line)
             raise
           end
+
+          # If a text with the text ID ("tid") found in this line already exists for this corpus,
+          # use that...
+          if tid_category
+            val = tid_category.metadata_values.find_by_text_value(columns[tid_col])
+            text = val.corpus_texts.first if val
+          end
+          # ...otherwise create a new one.
+          text = corpus.corpus_texts.create! unless text
 
           text.startpos  = columns[startpos_col].to_i if startpos_col   # for written corpora
           text.endpos    = columns[endpos_col].to_i   if endpos_col     # for written corpora

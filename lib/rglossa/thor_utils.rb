@@ -32,7 +32,7 @@ module Rglossa
     end
 
     def table
-      @table ||= "#{uppercase_corpusname}text"
+      @table ||= "#{uppercase_corpusname}#{options[:table_suffix] || 'text'}"
     end
 
     def uppercase_corpusname
