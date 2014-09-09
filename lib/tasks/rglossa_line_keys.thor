@@ -16,8 +16,7 @@ module Rglossa
       setup
       return unless corpus
 
-      sql = "SELECT #{corpus_id}, id, audio_file FROM #{line_keys_table} " +
-          "INTO OUTFILE '#{line_keys_file}'"
+      sql = "SELECT id, audio_file FROM #{line_keys_table} INTO OUTFILE '#{line_keys_file}'"
       say "Dumping line keys from #{line_keys_table}:"
       run_sql_command(line_keys_file, sql)
     end
@@ -39,19 +38,26 @@ module Rglossa
         puts " done"
       end
 
-      # Since there may be a huge amount of lines (one for each segment), using normal
-      # ActiveRecord techniques may be way too slow here, so load the file directly instead.
-      if ActiveRecord::Base.configurations[Rails.env]['adapter'] == 'sqlite3'
-        # TODO: Support import in SQLite? It seems to require all fields to be present in the
-        # file, including id and timestamp columns.
-        puts "Media files is currently not supported with SQLite due to import limitations."
-      else
-        print "Importing line keys..."
-        ActiveRecord::Base.connection.execute(
-            "LOAD DATA INFILE '#{line_keys_file}' INTO TABLE rglossa_media_files " +
-                "(corpus_id, line_key, basename)")
-        puts " done"
+      print "Importing line keys..."
+      lines = []
+      current_line_key = nil
+      current_basename = nil
+
+      File.foreach(line_keys_file) do |line|
+        current_line_key, basename = line.split("\t")
+        current_line_key = current_line_key.to_i
+        if basename != current_basename
+          if current_basename
+            lines.last[:line_key_end] = current_line_key - 1
+          end
+          current_basename = basename
+          lines << {line_key_begin: current_line_key, basename: current_basename}
+        end
       end
+
+      lines.last[:line_key_end] = current_line_key
+      corpus.media_files.create!(lines)
+      puts " done"
     end
 
 
