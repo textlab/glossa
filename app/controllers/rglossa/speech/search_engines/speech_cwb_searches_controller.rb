@@ -106,8 +106,8 @@ module Rglossa
               conn.execute("CREATE TEMPORARY TABLE line_keys (line_key INTEGER)")
               conn.execute("INSERT INTO line_keys " + line_keys.map{|i| "SELECT %d" % i}.join(" UNION "))
               basenames = conn.execute("SELECT line_key, basename FROM line_keys LEFT JOIN rglossa_media_files
-                                        ON line_key_begin <= line_key AND line_key <= line_key_end").
-                          reduce({}) do |m, f|
+                                        ON line_key_begin <= line_key AND line_key <= line_key_end
+                                        WHERE corpus_id = %d" % corpus.id).reduce({}) do |m, f|
                 m[f['line_key']] = f['basename']
                 m
               end
