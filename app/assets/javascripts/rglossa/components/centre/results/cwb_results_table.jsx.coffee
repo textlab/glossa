@@ -47,6 +47,11 @@ window.CwbResultsTable = React.createClass
         fields = [text]
 
       fields = fields.map (field) ->
+        # Extract any speaker IDs and put them in front of their segments
+        field = field.replace(/<who_name\s*(.+?)>/g,
+          '<span class="speaker-id">&lt;$1&gt;</span> ')
+        field = field.replace(/<\/who_name>/g, '')
+
         tokens = field.replace(/span class=/g, 'span_class=').split(/\s+/).map (token) ->
           return token if token.indexOf('span_class=') isnt -1 # don't touch HTML spans
 
