@@ -64,7 +64,7 @@ module Rglossa
       def write_positions(filename, conditions, sql)
         if ActiveRecord::Base.configurations[Rails.env]['adapter'] == 'sqlite3'
           # for SQLite
-          sql << " WHERE #{conditions.join(" AND ")}"
+          sql << " WHERE #{conditions.join(" AND ")} AND positions IS NOT NULL"
           rows = run_query(sql)
 
           # in CorpusText, each row contains a pair of start and end positions that

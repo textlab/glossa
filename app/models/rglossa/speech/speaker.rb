@@ -20,7 +20,7 @@ module Rglossa
 
         # Overrides the one in CorpusText
         def write_positions(filename, conditions, sql)
-          sql << " WHERE #{conditions.join(" AND ")}"
+          sql << " WHERE #{conditions.join(" AND ")} AND positions IS NOT NULL"
           rows = run_query(sql)
 
           # in Speaker, each row contains a string with a set of dash-separated start and end
