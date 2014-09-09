@@ -100,7 +100,7 @@ module Rglossa
 
             # Now that all results in this page have been processed, we have a set of line keys
             # (one for each result). Find out how they map to media file names and put the name
-            # as a property on the media object that is returned to the clien.
+            # as a property on the media object that is returned to the client.
             if line_key_attr
               conn = ActiveRecord::Base.connection
               conn.execute("CREATE TEMPORARY TABLE line_keys (line_key INTEGER)")
