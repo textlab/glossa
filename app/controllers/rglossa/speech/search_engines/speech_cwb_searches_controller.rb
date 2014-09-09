@@ -101,7 +101,7 @@ module Rglossa
             # Now that all results in this page have been processed, we have a set of line keys
             # (one for each result). Find out how they map to media file names and put the name
             # as a property on the media object that is returned to the client.
-            if line_key_attr
+            if line_key_attr && line_keys.present?
               conn = ActiveRecord::Base.connection
 
               begin
