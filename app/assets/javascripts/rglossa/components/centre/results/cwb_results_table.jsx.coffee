@@ -11,6 +11,10 @@ window.CwbResultsTable = React.createClass
     rowNoShowingPlayer: null
     mediaTypePlaying: null
 
+  componentWillReceiveProps: ->
+    # Make sure jPlayer is closed when we receive a new page of results
+    @setState(rowNoShowingPlayer: null, mediaTypePlaying: null)
+
   componentDidUpdate: (prevProps) ->
     # Create tooltips after a new result page is displayed
     if @props.resultPage and @props.resultPage[0] isnt prevProps.resultPage?[0]
