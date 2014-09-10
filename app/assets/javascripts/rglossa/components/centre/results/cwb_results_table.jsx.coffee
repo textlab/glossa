@@ -9,11 +9,12 @@ window.CwbResultsTable = React.createClass
 
   getInitialState: ->
     rowNoShowingPlayer: null
+    playerType: null
     mediaTypePlaying: null
 
   componentWillReceiveProps: ->
     # Make sure jPlayer is closed when we receive a new page of results
-    @setState(rowNoShowingPlayer: null, mediaTypePlaying: null)
+    @setState(rowNoShowingPlayer: null, playerType: null, mediaTypePlaying: null)
 
   componentDidUpdate: (prevProps) ->
     # Create tooltips after a new result page is displayed
@@ -86,10 +87,11 @@ window.CwbResultsTable = React.createClass
       mediaObj:  result.media_obj
 
 
-  toggleJPlayer: (index, mediaType) ->
-    rowNo = if @state.rowNoShowingPlayer is index and mediaType is @state.mediaTypePlaying then null else index
+  togglePlayer: (index, playerType, mediaType) ->
+    rowNo = if (@state.rowNoShowingPlayer is index and playerType is @state.playerType and
+                mediaType is @state.mediaTypePlaying) then null else index
     mediaTypePlaying = if rowNo? then mediaType else null
-    @setState(rowNoShowingPlayer: rowNo, mediaTypePlaying: mediaTypePlaying)
+    @setState(rowNoShowingPlayer: rowNo, playerType: playerType, mediaTypePlaying: mediaTypePlaying)
 
 
   mainRow: (result, index) ->
@@ -98,8 +100,9 @@ window.CwbResultsTable = React.createClass
     `<tr>
       {corpusHasVideo || corpusHasSound
         ? <td className="span1">
-            {corpusHasVideo && <button title="Show video" className="btn btn-mini" onClick={this.toggleJPlayer.bind(null, index, 'video')} style={{marginBottom: 3}}><i className="icon-film" /></button>}
-            {corpusHasSound && <button title="Play audio" className="btn btn-mini" onClick={this.toggleJPlayer.bind(null, index, 'audio')}><i className="icon-volume-up" /></button>}
+            {corpusHasVideo && <button title="Show video" className="btn btn-mini" style={{width: '100%'}} onClick={this.togglePlayer.bind(null, index, 'jplayer', 'video')} style={{marginBottom: 3}}><i className="icon-film" /></button>}
+            {corpusHasSound && <button title="Play audio" className="btn btn-mini" style={{width: '100%'}}  onClick={this.togglePlayer.bind(null, index, 'jplayer', 'audio')}><i className="icon-volume-up" /></button>}
+            {corpusHasSound && <button title="Show waveform" className="btn btn-mini" style={{width: '100%'}}  onClick={this.togglePlayer.bind(null, index, 'wfplayer', 'audio')}><img src="assets/rglossa/speech/waveform.png" /></button>}
           </td>
         : null}
       {this.idColumn(result)}
@@ -160,13 +163,23 @@ window.CwbResultsTable = React.createClass
               extraRows = extraRowAttrs.map(this.extraRow.bind(null, result));
               rows = [mainRow, extraRows];
           if(this.state.rowNoShowingPlayer === index) {
-            rows.push(
-              <tr>
-                <td colSpan="10">
-                  <Jplayer mediaObj={result.mediaObj} mediaType={this.state.mediaTypePlaying} />
-                </td>
-              </tr>
-            );
+            if(this.state.playerType === "jplayer") {
+              rows.push(
+                <tr>
+                  <td colSpan="10">
+                    <Jplayer mediaObj={result.mediaObj} mediaType={this.state.mediaTypePlaying} ctx_lines={1} />
+                  </td>
+                </tr>
+              );
+            } else if(this.state.playerType === "wfplayer") {
+              rows.push(
+                <tr>
+                  <td colSpan="10">
+                    <WFplayer mediaObj={result.mediaObj} />
+                  </td>
+                </tr>
+              );
+            }
           }
           return rows;
         }, this)}

@@ -5,6 +5,26 @@ window.Jplayer = React.createClass
     mediaObj: React.PropTypes.object.isRequired
     mediaType: React.PropTypes.string.isRequired
 
+  getStartTime: (mediaObj) ->
+    start_at = parseInt(mediaObj.start_at)
+    min_start = parseInt(mediaObj.min_start)
+    if !@props.ctx_lines
+      start_at
+    else if start_at - @props.ctx_lines >= min_start
+      start_at - @props.ctx_lines
+    else
+      min_start
+
+  getEndTime: (mediaObj) ->
+    end_at = parseInt(mediaObj.end_at)
+    max_end = parseInt(mediaObj.max_end)
+    if !@props.ctx_lines
+      end_at
+    else if end_at + @props.ctx_lines <= max_end
+      end_at + @props.ctx_lines
+    else
+      max_end
+
   componentDidMount: ->
     @createPlayer()
 
@@ -29,12 +49,12 @@ window.Jplayer = React.createClass
     $("#movietitle").text(mediaObj.title)
     last_line = parseInt(mediaObj.last_line)
 
-    @textBox.init($node, mediaObj)
+    @textBox.init($node, mediaObj, @getStartTime(mediaObj), @getEndTime(mediaObj))
 
-    @textBox.currentID = parseInt(mediaObj.start_at)
+    @textBox.currentID = @getStartTime(mediaObj)
 
-    start = parseInt(mediaObj.start_at)
-    stop  = parseInt(mediaObj.end_at)
+    start = @getStartTime(mediaObj)
+    stop  = @getEndTime(mediaObj)
     @textBox.redraw(start,stop, last_line)
     start = parseFloat($("#jp-"+start).data("start_timecode"))
     stop  = parseFloat($("#jp-"+stop).data("end_timecode"))
@@ -102,11 +122,11 @@ window.Jplayer = React.createClass
     currentEndTime:0
     currentStartTime:0
 
-    init: ($view, mediaObj) ->
+    init: ($view, mediaObj, start_at_line, end_at_line) ->
       display_attribute = mediaObj.display_attribute
       annotation = mediaObj.divs.annotation
-      @start_at_line = parseInt(mediaObj.start_at)
-      @end_at_line = parseInt(mediaObj.end_at)
+      @start_at_line = start_at_line
+      @end_at_line = end_at_line
       @currentID = @start_at_line
       @nextID = @start_at_line + 1
 

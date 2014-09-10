@@ -83,7 +83,7 @@ module Rglossa
                 # Only add a media object to the data returned to the client if the corpus contains
                 # line keys that we can use to determine which media file to show for each result
                 media_obj = create_media_obj(overall_starttime, overall_endtime,
-                                             starttimes, endtimes, lines, speakers, corpus)
+                                             starttimes, endtimes, lines, speakers, corpus, line_key)
                 {
                     text: displayed_lines_str,
                     media_obj: media_obj,
@@ -126,15 +126,17 @@ module Rglossa
 
         # Creates the data structure that is needed by jPlayer for a single search result
         def create_media_obj(overall_starttime, overall_endtime,
-            starttimes, endtimes, lines, speakers, corpus)
+            starttimes, endtimes, lines, speakers, corpus, line_key)
           word_attr = 'word' # TODO: make configurable?
           obj = {
               title: '',
               last_line: lines.size - 1,
               display_attribute: word_attr,
+              corpus_id: corpus.id,
               mov: {
                   supplied: 'm4v',
                   path: corpus.media_path || "media/#{corpus.short_name}",
+                  line_key: line_key,
                   start: overall_starttime,
                   stop: overall_endtime
               },
@@ -169,12 +171,11 @@ module Rglossa
             }
             obj[:divs][:annotation][index][:is_match] = is_match
           end
-          start_at = matching_line_index - 1
-          start_at = 0 if start_at < 0
-          end_at   = matching_line_index + 1
-          end_at   = lines.size - 1 if end_at >= lines.size
+          start_at = end_at = matching_line_index
           obj[:start_at] = start_at
           obj[:end_at]   = end_at
+          obj[:min_start] = 0
+          obj[:max_end] = lines.size - 1
           obj
         end
 
