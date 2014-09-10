@@ -68,7 +68,7 @@ window.CwbResultsTable = React.createClass
             # If there are any CWB attributes to show for each token, create data-ot HTML
             # attributes that will be used by the Opentip jQuery plugin to display them in a tooltip
             for i in [1..maxIndex]
-              if parts[i] != '__UNDEF__'
+              if parts[i] != '__UNDEF__' and parts[i] != '_'
                 ot.push "#{labels[i-1]}: #{parts[i]}"
             "<span data-ot=\"#{ot.join('<br>')}\">#{parts[0]}</span>"
           else
