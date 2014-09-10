@@ -104,7 +104,7 @@ module Rglossa
             if line_key_attr && line_keys.present?
               conn = ActiveRecord::Base.connection
 
-              begin
+              ActiveRecord::Base.transaction do
                 conn.execute("CREATE TEMPORARY TABLE line_keys (line_key INTEGER)")
                 conn.execute("INSERT INTO line_keys " + line_keys.map{|i| "SELECT %d" % i}.join(" UNION "))
                 basenames = conn.execute("SELECT line_key, basename FROM line_keys LEFT JOIN rglossa_media_files
@@ -113,13 +113,12 @@ module Rglossa
                   m[f[0]] = f[1]
                   m
                 end
-              ensure
                 conn.execute("DROP TABLE line_keys")
-              end
 
-              new_pages[page_no].map! do |result|
-                result[:media_obj][:mov][:movie_loc] = "#{basenames[result[:line_key].to_i]}_800.mp4"
-                result
+                new_pages[page_no].map! do |result|
+                  result[:media_obj][:mov][:movie_loc] = "#{basenames[result[:line_key].to_i]}_800.mp4"
+                  result
+                end
               end
             end
           end
