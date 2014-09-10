@@ -13,7 +13,7 @@ window.ResultsMain = React.createClass
     results: React.PropTypes.object
     currentResultPageNo: React.PropTypes.number.isRequired
     corpus: React.PropTypes.object.isRequired
-    searchQueries: React.PropTypes.string.isRequired
+    searchQueries: React.PropTypes.array.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
     sortBy: React.PropTypes.string.isRequired
     handleSortByChanged: React.PropTypes.func.isRequired
