@@ -14,6 +14,7 @@ window.ResultsToolbar = React.createClass
     sortBy: React.PropTypes.string.isRequired
     handleSortByChanged: React.PropTypes.func.isRequired
     showFrequencies: React.PropTypes.func.isRequired
+    showMap: React.PropTypes.func.isRequired
 
   hasMultipleResultPages: ->
     @props.results and (Object.keys(@props.results.pages).length > 1)
@@ -55,6 +56,7 @@ window.ResultsToolbar = React.createClass
           </li>
         </ul>
       </div>
+      <button className="btn" style={{marginBottom: 15, marginLeft: 10}} onClick={this.props.showMap}>Map</button>
       {this.hasMultipleResultPages()
         ? <ResultsPaginator
             store={store}

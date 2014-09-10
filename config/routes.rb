@@ -34,6 +34,7 @@ Rglossa::Engine.routes.draw do
         member do
           get 'results'
           get 'count'
+          get 'geo_distr'
         end
       end
     end

@@ -3,6 +3,7 @@
 #= require ./results_toolbar
 #= require ./cwb_results_table
 #= require dialog
+#= require ./geo_distribution_map
 
 ###* @jsx React.DOM ###
 
@@ -24,6 +25,7 @@ window.ResultsMain = React.createClass
 
   getInitialState: ->
     frequencies: null
+    geoDistribution: null
 
   showFrequencies: (attribute, e) ->
     e.preventDefault()
@@ -54,6 +56,19 @@ window.ResultsMain = React.createClass
         `<tr><td>{pair.form}</td><td>{pair.freq}</td></tr>`
     else
       `<td colSpan="2">Loading...</td>`
+
+
+  showMap: (e) ->
+    e.preventDefault()
+
+    # Prevents the dialog box from showing stale results and instead
+    # makes it show a 'loading' message while we fetch the new geo-distribution results
+    @setState(geoDistribution: null)
+
+    $.getJSON("search_engines/speech_cwb_searches/#{@props.results.id}/geo_distr").then (res) =>
+      @setState(geoDistribution: res)
+
+    @refs.distrMap.show()
 
 
   render: ->
@@ -88,7 +103,8 @@ window.ResultsMain = React.createClass
         currentResultPageNo={currentResultPageNo}
         sortBy={sortBy}
         handleSortByChanged={handleSortByChanged}
-        showFrequencies={this.showFrequencies} />
+        showFrequencies={this.showFrequencies}
+        showMap={this.showMap} />
       <resultTable
         resultPage={resultPage}
         corpus={corpus} />
@@ -101,5 +117,8 @@ window.ResultsMain = React.createClass
             {this.frequencyList()}
           </tbody>
         </table>
+      </Dialog>
+      <Dialog ref="distrMap" title="Geographical distribution of results">
+        <GeoDistributionMap data={this.state.geoDistribution} />
       </Dialog>
     </span>`

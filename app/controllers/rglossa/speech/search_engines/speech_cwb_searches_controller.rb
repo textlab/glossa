@@ -8,6 +8,10 @@ module Rglossa
           SpeechCwbSearch
         end
 
+        def geo_distr
+          render json: {geo: 'some data'}
+        end
+
         ########
         private
         ########
