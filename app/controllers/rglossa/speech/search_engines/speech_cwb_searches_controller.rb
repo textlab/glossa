@@ -16,13 +16,11 @@ module Rglossa
           corpus = get_corpus_from_query
 
           if corpus.extra_cwb_attrs
-            starttime_attr = corpus.extra_cwb_attrs.detect { |a| a.match(/_(?:start)?time$/) }.sub(/^\+/, '')
-            endtime_attr   = corpus.extra_cwb_attrs.detect { |a| a.match(/_end(?:time)?$/)   }.sub(/^\+/, '')
             speaker_attr   = corpus.extra_cwb_attrs.detect { |a| a.ends_with?('_name')       }.sub(/^\+/, '')
             line_key_attr  = corpus.extra_cwb_attrs.detect { |a| a.ends_with?('_line_key')   }.sub(/^\+/, '')
           end
-          starttime_attr = 'turn_starttime' unless starttime_attr
-          endtime_attr   = 'turn_endtime'   unless endtime_attr
+          starttime_attr = 'sync_time'
+          endtime_attr   = 'sync_end'
           speaker_attr   = 'who_name'       unless speaker_attr
 
           new_pages = {}
