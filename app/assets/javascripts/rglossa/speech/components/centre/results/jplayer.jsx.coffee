@@ -89,7 +89,9 @@ window.Jplayer = React.createClass
 
 
   destroyPlayer: ->
-    $(@getDOMNode()).find(".jp-jplayer").jPlayer('destroy')
+    $node = $(@getDOMNode())
+    @textBox.empty($node)
+    $node.find(".jp-jplayer").jPlayer('destroy')
 
 
   createTextBox: =>
@@ -207,6 +209,10 @@ window.Jplayer = React.createClass
 
       @nextID++
       @currentEndTime
+
+
+    empty: ($view) ->
+      $view.find('.jplayer-text').empty()
 
 
   render: ->
