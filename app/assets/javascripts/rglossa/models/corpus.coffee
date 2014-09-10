@@ -18,7 +18,7 @@ class Corpus
 
   getLabels: (corpus, languageCode = 'single') ->
     language = @getLanguage(corpus, languageCode)
-    language?.displayAttrs or corpus.displayAttrs or []
+    language?.displayAttrs or corpus.display_attrs or []
 
   getPOSAttribute: (corpus, languageCode = 'single') ->
     language = @getLanguage(corpus, languageCode)
