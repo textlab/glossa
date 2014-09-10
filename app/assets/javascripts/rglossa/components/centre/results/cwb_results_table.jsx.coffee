@@ -9,6 +9,7 @@ window.CwbResultsTable = React.createClass
 
   getInitialState: ->
     rowNoShowingPlayer: null
+    mediaTypePlaying: null
 
   componentDidUpdate: (prevProps) ->
     # Create tooltips after a new result page is displayed
@@ -79,17 +80,20 @@ window.CwbResultsTable = React.createClass
       mediaObj:  result.media_obj
 
 
-  toggleJPlayer: (index) ->
-    rowNo = if @state.rowNoShowingPlayer is index then null else index
-    @setState(rowNoShowingPlayer: rowNo)
+  toggleJPlayer: (index, mediaType) ->
+    rowNo = if @state.rowNoShowingPlayer is index and mediaType is @state.mediaTypePlaying then null else index
+    mediaTypePlaying = if rowNo? then mediaType else null
+    @setState(rowNoShowingPlayer: rowNo, mediaTypePlaying: mediaTypePlaying)
 
 
   mainRow: (result, index) ->
+    corpusHasVideo = @props.corpus.has_video
     corpusHasSound = @props.corpus.has_sound
     `<tr>
-      {corpusHasSound
+      {corpusHasVideo || corpusHasSound
         ? <td className="span1">
-            <button className="btn" onClick={this.toggleJPlayer.bind(null, index)}><i className="icon-volume-up" /></button>
+            {corpusHasVideo && <button title="Show video" className="btn btn-mini" onClick={this.toggleJPlayer.bind(null, index, 'video')} style={{marginBottom: 3}}><i className="icon-film" /></button>}
+            {corpusHasSound && <button title="Play audio" className="btn btn-mini" onClick={this.toggleJPlayer.bind(null, index, 'audio')}><i className="icon-volume-up" /></button>}
           </td>
         : null}
       {this.idColumn(result)}
@@ -123,12 +127,13 @@ window.CwbResultsTable = React.createClass
 
 
   extraRow: (result, attr) ->
+    corpusHasVideo = @props.corpus.has_video
     corpusHasSound = @props.corpus.has_sound
     match = (value for key, value of result.mediaObj.divs.annotation when value.is_match)[0]
     rowContents = (value[attr] for key, value of match.line).join(' ')
     `<tr>
       {result.sId ? <td /> : null}
-      {corpusHasSound ? <td className="span1" /> : null}
+      {corpusHasVideo || corpusHasSound ? <td className="span1" /> : null}
       <td colSpan="3">{rowContents}</td>
     </tr>`
 
@@ -152,7 +157,7 @@ window.CwbResultsTable = React.createClass
             rows.push(
               <tr>
                 <td colSpan="10">
-                  <Jplayer mediaObj={result.mediaObj} />
+                  <Jplayer mediaObj={result.mediaObj} mediaType={this.state.mediaTypePlaying} />
                 </td>
               </tr>
             );

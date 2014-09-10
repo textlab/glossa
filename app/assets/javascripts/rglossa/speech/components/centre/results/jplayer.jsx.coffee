@@ -1,7 +1,21 @@
 ###* @jsx React.DOM ###
 
 window.Jplayer = React.createClass
+  propTypes:
+    mediaObj: React.PropTypes.object.isRequired
+    mediaType: React.PropTypes.string.isRequired
+
   componentDidMount: ->
+    @createPlayer()
+
+  componentDidUpdate: ->
+    @destroyPlayer()
+    @createPlayer()
+
+  componentWillUnmount: ->
+    @destroyPlayer()
+
+  createPlayer: ->
     $node = $(@getDOMNode())
     mediaObj = @props.mediaObj
     @textBox = @createTextBox()
@@ -10,7 +24,7 @@ window.Jplayer = React.createClass
       content: -> $node.prop('title')
 
     mov = mediaObj.mov.movie_loc
-    path = mediaObj.mov.path
+    path = "#{mediaObj.mov.path}/#{@props.mediaType}/"
     supplied = mediaObj.mov.supplied
     $("#movietitle").text(mediaObj.title)
     last_line = parseInt(mediaObj.last_line)
@@ -74,7 +88,7 @@ window.Jplayer = React.createClass
           $node.find(".js-jplayer").jPlayer("play", start)
 
 
-  componentWillUnmount: ->
+  destroyPlayer: ->
     $(@getDOMNode()).find(".jp-jplayer").jPlayer('destroy')
 
 

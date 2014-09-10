@@ -136,7 +136,7 @@ module Rglossa
               display_attribute: word_attr,
               mov: {
                   supplied: 'm4v',
-                  path: corpus.media_path || "media/#{corpus.short_name}/",
+                  path: corpus.media_path || "media/#{corpus.short_name}",
                   start: overall_starttime,
                   stop: overall_endtime
               },
