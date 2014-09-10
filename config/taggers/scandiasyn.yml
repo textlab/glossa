@@ -1,0 +1,161 @@
+description:  Tags for the Nordic Dialect Corpus
+displayAttrs: [lemma, phonetic form, part-of-speech, gender, number, type, definiteness,
+                tense, person, case, degree, description, nlex, mood, voice]
+tags:
+  attr: pos
+  name: part-of-speech
+  options:
+    - name: Number
+      features:
+        - attr: num
+          options:
+            - value: pl
+            - value: sg
+            - value: 'sg:pl'
+    - name: Case
+      features:
+        - attr: case
+          options:
+            - value: acc
+            - value: dat
+            - value: gen
+            - value: nom
+    - name: Degree
+      features:
+        - attr: degr
+          options:
+            - value: comp
+            - value: pos
+            - value: sup
+    - name: Non-lexical
+      features:
+        - attr: nlex
+          options:
+            - value: back-click
+            - value: breathing
+            - value: coughing
+            - value: draws-breath
+            - value: front-click
+            - value: groaning
+            - value: hawking
+            - value: interruption
+            - value: labial-fricative
+            - value: labial-vibrant
+            - value: laughing
+            - value: laughter
+            - value: onomatopoetic
+            - value: sibilant
+            - value: sighing
+            - value: sniffing
+            - value: spelled
+            - value: sucking-sound
+            - value: unclear
+            - value: whistling
+            - value: yawning
+    - name: Voice
+      features:
+        - attr: voice
+          options:
+            - value: act
+            - value: mid
+    - name: Person
+      features:
+        - attr: pers
+          options:
+            - value: 1
+            - value: 2
+            - value: 3
+    - name: Tense
+      features:
+        - attr: temp
+          options:
+            - value: 'inf:imp'
+            - value: past
+            - value: perf-part
+            - value: pres
+            - value: 'pres:inf'
+            - value: pret
+            - value: 'pret:perf-part'
+    - name: Description
+      features:
+        - attr: descr
+          options:
+            - value: x
+            - value: o
+    - name: Definiteness
+      features:
+        - attr: defn
+          options:
+            - value: defn
+            - value: indefn
+            - value: 'indef:def'
+    - name: Mood
+      features:
+        - attr: mood
+          options:
+            - value: imp
+            - value: ind
+            - value: inf
+            - value: past-part
+            - value: pres-part
+            - value: subjunctive
+            - value: supine
+    - name: Part-of-speech
+      features:
+        - attr: pos
+          options:
+            - value: adj
+            - value: adv
+            - value: 'adv:subjunc'
+            - value: conj
+            - value: 'conj:prep:adv'
+            - value: 'conj:subjunc:adv'
+            - value: det
+            - value: inf-marker
+            - value: interj
+            - value: noun
+            - value: 'noun:adj'
+            - value: pause
+            - value: prep
+            - value: 'prep:subjunc'
+            - value: pron
+            - value: 'pron:det'
+            - value: subjunc
+            - value: sånn-word
+            - value: unknown
+            - value: verb
+            - value: 'verb:noun'
+    - name: Type
+      features:
+        - attr: type
+          options:
+            - value: abbrev
+            - value: cm-noun
+            - value: dem
+            - value: gov-acc
+            - value: gov-dat
+            - value: hesit
+            - value: intensifier
+            - value: no-case
+            - value: pers
+            - value: poss
+            - value: prop
+            - value: q
+            - value: quant
+            - value: refl
+            - value: rel
+            - value: strong
+            - value: uninflected
+            - value: weak
+    - name: Gender
+      features:
+        - attr: gender
+          options:
+            - value: fem
+            - value: 'm:f'
+            - value: masc
+            - value: 'masc:fem'
+            - value: 'masc:fem:neut'
+            - value: 'masc:neut'
+            - value: neut
+            - value: unspec
