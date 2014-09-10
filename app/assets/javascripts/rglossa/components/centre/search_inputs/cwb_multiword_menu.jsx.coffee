@@ -27,7 +27,7 @@ window.CwbMultiwordMenu = React.createClass
     heading = if feature.name then `<li className="pos-feature-heading">{feature.name}</li>` else null
     options = feature.options.map ((option) ->
       `<li>
-        <a onClick={this.props.handleAddFeature.bind(null, option, feature)}>{option.name}</a>
+        <a onClick={this.props.handleAddFeature.bind(null, option, feature)}>{option.name || option.value}</a>
       </li>`), this
     [heading, options]
 

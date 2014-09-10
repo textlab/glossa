@@ -88,9 +88,13 @@ module Rglossa
           if corpus.langs.present?
             pos_attr = corpus.langs.first[:tags]['attr']
             commands << "show " + extra_attributes.map { |a| "+#{a == 'pos' ? pos_attr : a}" }.join(' ')
-          elsif corpus.extra_cwb_attrs
-            commands << "show " + corpus.extra_cwb_attrs.join(' ')
+          else
+            commands << "show " + extra_attributes.join(' ')
           end
+        end
+
+        if corpus.extra_cwb_attrs.present?
+          commands << "show " + corpus.extra_cwb_attrs.join(' ')
         end
 
         if options[:sort_by] && options[:sort_by] != 'position'

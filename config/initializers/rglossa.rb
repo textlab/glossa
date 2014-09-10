@@ -8,9 +8,13 @@ module Rglossa
   @taggers = {}
 
   [Rglossa::Engine.root, Rails.root].each do |root|
-    Dir.glob(root.join('config', 'taggers', '*')) do |filename|
+    Dir.glob(root.join('config', 'taggers', '*.json')) do |filename|
       tagger = File.basename(filename, '.json')
       @taggers[tagger] = JSON.parse(File.read(filename))
+    end
+    Dir.glob(root.join('config', 'taggers', '*.yml')) do |filename|
+      tagger = File.basename(filename, '.yml')
+      @taggers[tagger] = YAML.load_file(filename)
     end
   end
 
