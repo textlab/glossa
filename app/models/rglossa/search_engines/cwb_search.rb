@@ -145,10 +145,11 @@ module Rglossa
           command_file.puts commands
           command_file.rewind
 
-          output_file = open("| cqp -c -f#{command_file.path}", external_encoding: encoding)
-          output_file.readline  # throw away the first line with the CQP version
+          cqp_pipe = open("| cqp -c -f#{command_file.path}", external_encoding: encoding)
+          cqp_pipe.readline  # throw away the first line with the CQP version
 
-          result = output_file.read
+          result = cqp_pipe.read
+          cqp_pipe.close
           if result.include?('PARSE ERROR') || result.include?('CQP Error')
             raise Rglossa::QueryError, result
           end
