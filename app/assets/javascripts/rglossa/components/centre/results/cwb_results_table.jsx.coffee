@@ -70,6 +70,8 @@ window.CwbResultsTable = React.createClass
             for i in [1..maxIndex]
               if parts[i] != '__UNDEF__' and parts[i] != '_'
                 ot.push "#{labels[i-1]}: #{parts[i]}"
+
+          if ot.length
             "<span data-ot=\"#{ot.join('<br>')}\">#{parts[0]}</span>"
           else
             # No CWB attributes, so no data-ot attribute needed
