@@ -144,6 +144,7 @@ module Rglossa
           commands.map! { |cmd| cmd.end_with?(';') ? cmd : cmd + ';' }
           command_file.puts commands
           command_file.rewind
+          puts commands
 
           cqp_pipe = open("| cqp -c -f#{command_file.path}", external_encoding: encoding)
           cqp_pipe.readline  # throw away the first line with the CQP version
