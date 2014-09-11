@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/textlab/rglossa",
   "dependencies": {
-    "react-map": "0.0.2",
     "webpack": "~1.4.0-beta5",
     "jsx-loader": "~0.11.0",
     "react": "~0.11.1"
