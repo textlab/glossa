@@ -14,14 +14,14 @@ module Rglossa
 
         def transform_result_pages(pages)
           corpus = get_corpus_from_query
-
-          if corpus.extra_cwb_attrs
-            speaker_attr   = corpus.extra_cwb_attrs.detect { |a| a.ends_with?('_name')       }.sub(/^\+/, '')
-            line_key_attr  = corpus.extra_cwb_attrs.detect { |a| a.ends_with?('_line_key')   }.sub(/^\+/, '')
-          end
           starttime_attr = 'sync_time'
           endtime_attr   = 'sync_end'
-          speaker_attr   = 'who_name'       unless speaker_attr
+          speaker_attr   = 'who_name'
+          if corpus.extra_cwb_attrs.include? '+who_line_key'
+            line_key_attr = 'who_line_key'
+          else
+            line_key_attr = nil
+          end
 
           new_pages = {}
           pages.each do |page_no, page|
