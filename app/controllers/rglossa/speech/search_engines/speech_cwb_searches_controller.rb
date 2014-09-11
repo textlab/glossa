@@ -9,7 +9,9 @@ module Rglossa
         end
 
         def geo_distr
-          render json: {geo: 'some data'}
+          search = model_class.find(params[:id])
+          distribution = search.geo_distr
+          render json: distribution
         end
 
         ########
