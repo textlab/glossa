@@ -89,7 +89,7 @@ module Rglossa
             pos_attr = corpus.langs.first[:tags]['attr']
             commands << "show " + extra_attributes.map { |a| "+#{a == 'pos' ? pos_attr : a}" }.join(' ')
           else
-            commands << "show " + extra_attributes.join(' ')
+            commands << "show " + extra_attributes.map { |a| "+#{a}" }.join(' ')
           end
         end
 
