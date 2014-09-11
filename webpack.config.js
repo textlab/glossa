@@ -3,5 +3,10 @@ module.exports = {
     output: {
         path: "./app/assets/javascripts/rglossa",
         filename: "bundle.js"
+    },
+    module: {
+        loaders: [
+            { test: /\.jsx?$/, loader: 'jsx' }
+        ]
     }
 };

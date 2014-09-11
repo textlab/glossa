@@ -1,1 +1,2 @@
-window.React = require('../../../../bower_components/react/react-with-addons')
+window.React = require('../../../../node_modules/react/addons')
+window.Map = require('../../../../node_modules/react-map/src/map')
