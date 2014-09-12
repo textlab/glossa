@@ -118,7 +118,7 @@ window.ResultsMain = React.createClass
           </tbody>
         </table>
       </Dialog>
-      <Dialog ref="distrMap" title="Geographical distribution of results">
+      <Dialog ref="distrMap" extraClassName="distr-map" title="Geographical distribution of results">
         <GeoDistributionMap data={this.state.geoDistribution} />
       </Dialog>
     </span>`

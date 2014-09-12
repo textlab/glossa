@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 // React class for Bootstrap dialog
-// From https://gist.github.com/Daniel15/8321579
+// Modified version of the one from https://gist.github.com/Daniel15/8321579
 
 var Dialog = React.createClass({
   getInitialState: function() {
@@ -24,8 +24,9 @@ var Dialog = React.createClass({
     }.bind(this), 400);
   },
   render: function() {
+    var extraClassName = this.props.extraClassName ? ' ' + this.props.extraClassName : ''
     return (
-      <div className={this.state.className}>
+      <div className={this.state.className + extraClassName}>
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
