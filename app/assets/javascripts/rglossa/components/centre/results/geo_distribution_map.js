@@ -1,12 +1,6 @@
-"use strict";
+// Modified version of https://github.com/iamdanfox/react-maps
 
-var __in_node = (typeof exports !== 'undefined' && this.exports !== exports);
-
-if( __in_node ) {
-  var React = require('react');
-}
-
-var Map = React.createClass({
+var GeoDistributionMap = React.createClass({
 
   // initialize local variables
   getInitialState: function() {
@@ -74,7 +68,8 @@ var Map = React.createClass({
       var marker = new google.maps.Marker({
         position: location,
         map: map,
-        title: point.label
+        title: point.label,
+        icon: point.icon || 'assets/rglossa/speech/red_dot.png'
       });
 
       markers.push( marker );
@@ -148,7 +143,3 @@ var Map = React.createClass({
   }
 
 });
-
-if( __in_node ) {
-  module.exports = Map;
-}

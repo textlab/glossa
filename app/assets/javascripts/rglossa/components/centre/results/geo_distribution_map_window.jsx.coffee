@@ -1,3 +1,6 @@
+#= require ./geo_distribution_map
+#= require ./marker_picker
+
 ###* @jsx React.DOM ###
 
 # MarkerSets - an array for all MarkerSet objects
@@ -128,7 +131,7 @@ class MarkerSet
 MarkerSet.infoWindow = null
 
 
-window.GeoDistributionMap = React.createClass
+window.GeoDistributionMapWindow = React.createClass
   propTypes:
     data: React.PropTypes.object
 
@@ -138,7 +141,7 @@ window.GeoDistributionMap = React.createClass
 
   addMarker: (loca) ->
     dot = new google.maps.MarkerImage(
-      "../html/img/red_dot.png",
+      "assets/red_dot.png",
       new google.maps.Size(4, 4),   # size
       new google.maps.Point(0, 0),  # origin
       new google.maps.Point(2, 2),  # anchor
@@ -250,6 +253,11 @@ window.GeoDistributionMap = React.createClass
         label: key)
     else []
 
+    console.log(@props.data)
+
     `<div>
-      <Map initLat={62} initLon={6} initZoom={4} width={650} height={540} points={points} />
+      <div style={{float: 'left'}}>
+        <GeoDistributionMap initLat={62} initLon={6} initZoom={4} width={650} height={540} points={points} />
+      </div>
+      <MarkerPicker data={this.props.data} />
     </div>`

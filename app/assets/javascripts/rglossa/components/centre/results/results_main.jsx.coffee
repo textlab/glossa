@@ -3,7 +3,7 @@
 #= require ./results_toolbar
 #= require ./cwb_results_table
 #= require dialog
-#= require ./geo_distribution_map
+#= require ./geo_distribution_map_window
 
 ###* @jsx React.DOM ###
 
@@ -119,6 +119,6 @@ window.ResultsMain = React.createClass
         </table>
       </Dialog>
       <Dialog ref="distrMap" extraClassName="distr-map" title="Geographical distribution of results">
-        <GeoDistributionMap data={this.state.geoDistribution} />
+        <GeoDistributionMapWindow data={this.state.geoDistribution} />
       </Dialog>
     </span>`

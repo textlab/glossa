@@ -1,0 +1,134 @@
+
+.mapbuttonb {
+    direction: ltr;
+    overflow: hidden;
+    text-align: center;
+    position: relative;
+    font-family: Arial, sans-serif;
+    -webkit-user-select: none;
+    font-size: 12px;
+    line-height: 160%;
+    padding: 0px 6px;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.347656) 2px 2px 3px;
+    box-shadow: rgba(0, 0, 0, 0.347656) 2px 2px 3px;
+    min-width: 26px;
+    color: white;
+    border: 1px solid #678AC7;
+    padding-left: 6px;
+    font-weight: bold;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#6D8ACC), to(#7B98D9));
+    background-position: initial initial;
+    background-repeat: initial initial;
+}
+
+.mapbuttonw {
+    direction: ltr;
+    overflow: hidden;
+    text-align: center;
+    position: relative;
+    font-family: Arial, sans-serif;
+    -webkit-user-select: none;
+    font-size: 12px;
+    line-height: 160%;
+    padding: 0px 6px;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.347656) 2px 2px 3px;
+    box-shadow: rgba(0, 0, 0, 0.347656) 2px 2px 3px;
+    min-width: 47px;
+    color: black;
+    border: 1px solid #A9BBDF;
+    padding-left: 6px;
+    font-weight: normal;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FEFEFE), to(#F3F3F3));
+    background-position: initial initial;
+    background-repeat: initial initial;
+}
+
+.colorpicker-picker-span{
+    display: block;
+    width: 20px;
+    height: 20px;
+    float: left;
+    border: 1px solid #000;
+    margin-right: 2px;
+    cursor: pointer;
+}
+
+.colorpicker-picker-info{
+    padding: 0 0 2px;
+    color: #fff;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.colorpicker-picker-span:hover {
+    border: 1px solid #fff;
+}
+
+.colorpicker-picker-span.active {
+    border: 1px solid #fff;
+}
+
+.colorpicker-picker {
+    background-color: #353534;
+    padding: 5px;
+    display: none;
+    position: absolute;
+    top: 0;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px #111;
+    -moz-box-shadow: 2px 2px 5px #111;
+    -webkit-box-shadow: 2px 2px 5px #111;
+    width: 200px;
+}
+
+.colorpicker-wrap {
+    font-size: 11px;
+    font-family: Verdana, Arial, Geneva, sans-serif
+}
+
+.colorpicker-label {
+    float: left;
+    margin-right: 0px;
+    margin-left: 4px;
+    margin-top: 2px;
+    margin-bottom: 12px;
+    width: 84%;
+}
+
+.colorpicker-trigger2 {
+    display: block;
+    width: 15px;
+    height: 15px;
+    float: left;
+    border: 1px solid #000;
+    cursor: pointer;
+    background-color: #808080;;
+}
+
+
+.colorpicker-trigger {
+    border-width: 1px;
+    border-style: solid;
+    border-color:rgb(0, 0, 0);
+    border-radius:3px;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;
+    color:#FEFEFE;
+    padding:2px 4px;
+    font:12px verdana,arial,sans-serif; 
+    margin:2 -1px;
+    white-space: nowrap;
+    vertical-align:middle;
+    background-color: #ddd;
+    cursor: pointer;
+    width: 4px;
+    height: 10px;
+    float: left;
+    /*
+      for some reason, ie doesn't allow empty divs under 12px in height.
+      i've added an &nbsp; to the div, and need this next bit of style
+     */
+    font-size:1px;
+    line-height:0;
+}
