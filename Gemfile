@@ -6,6 +6,7 @@ gem 'rails', '3.2.19'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'sqlite3'
+gem 'mysql2'
 gem 'react-rails'
 gem 'therubyracer'
 
@@ -39,8 +40,9 @@ gem 'jquery-rails'
 # To use debugger
 # gem 'debugger'
 
-gem 'rglossa', :github => 'textlab/rglossa', :branch => 'react-mergespeech'
-gem 'rglossa-r', :github => 'textlab/rglossa-r'
+gem "rglossa", :github => 'textlab/rglossa', :branch => 'react-mergespeech'
+gem "rglossa-fcs", :github => 'textlab/rglossa-fcs', :branch => 'react'
+gem "rglossa-r", :github => 'textlab/rglossa-r'
 gem 'devise', '~> 2.2.3'
 
 group :development do

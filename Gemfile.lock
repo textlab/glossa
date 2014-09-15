@@ -1,6 +1,16 @@
 GIT
+  remote: git://github.com/textlab/rglossa-fcs.git
+  revision: 4704a322716addd5c4628b843ae267d184f2900e
+  branch: react
+  specs:
+    rglossa-fcs (0.0.1)
+      nokogiri
+      rails (~> 3.2.19)
+      rest-client
+
+GIT
   remote: git://github.com/textlab/rglossa-r.git
-  revision: 4b52653dc707be3a0ad03f48cf114b0722a70873
+  revision: 834c56e478f64720f72cfe17bc926d7810bb0ddb
   specs:
     rglossa-r (0.0.1)
       rails (~> 3.2.19)
@@ -8,7 +18,7 @@ GIT
 
 GIT
   remote: git://github.com/textlab/rglossa.git
-  revision: 67b16d6bc9c4542ad971eabe678ae45f0d2abd2e
+  revision: a9fa5f524066799ae2a984b4c86fde6efb013f8f
   branch: react-mergespeech
   specs:
     rglossa (0.0.1)
@@ -96,7 +106,12 @@ GEM
       treetop (~> 1.4.8)
     method_source (0.8.1)
     mime-types (1.25.1)
+    mini_portile (0.6.0)
     multi_json (1.10.1)
+    mysql2 (0.3.15)
+    netrc (0.7.7)
+    nokogiri (1.6.3.1)
+      mini_portile (= 0.6.0)
     oj (2.10.2)
     orm_adapter (0.5.0)
     paper_trail (2.7.2)
@@ -138,8 +153,11 @@ GEM
       react-source (= 0.11.1)
     react-source (0.11.1)
     ref (1.0.5)
+    rest-client (1.7.2)
+      mime-types (>= 1.16, < 3.0)
+      netrc (~> 0.7)
     rserve-client (0.3.1)
-    sass (3.4.3)
+    sass (3.4.4)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
@@ -182,10 +200,12 @@ DEPENDENCIES
   coffee-rails (~> 3.2.1)
   devise (~> 2.2.3)
   jquery-rails
+  mysql2
   pry
   rails (= 3.2.19)
   react-rails
   rglossa!
+  rglossa-fcs!
   rglossa-r!
   sass-rails (~> 3.2.3)
   sqlite3
