@@ -2,7 +2,7 @@ require 'globalize3'
 
 module Rglossa
   class Corpus < ActiveRecord::Base
-    attr_accessible :locale, :name, :short_name, :encoding
+    attr_accessible :locale, :name, :short_name, :encoding, :search_engine, :config
 
     translates :name, fallbacks_for_empty_translations: true
 
