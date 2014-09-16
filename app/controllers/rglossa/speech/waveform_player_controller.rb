@@ -2,41 +2,56 @@ module Rglossa
   module Speech
     class WaveformPlayerController < ActionController::Base
       TMP_DIR = Rails.root.join(Rails.public_path, "tmp_waveforms")
+
+      def old_glossa_filename(file, corp)
+        file.gsub!(/^[A-Z]*_/, "")
+        file.gsub!(/\.wav/i, "")
+        file = "BB_" + file.gsub(/_[A-Z]+$/, "") if corp == 'bigbrother'
+        file
+      end
+
       def show
         Dir.mkdir TMP_DIR unless Dir.exists? TMP_DIR
-        #$path = escapeshellcmd($_GET['path']);
-        #$movie_loc = escapeshellcmd(preg_replace('/\.mov$/', '.mp4', preg_replace('/^.*\/mp4:/', "mp4:", $_GET['path'] . $_GET['movie_loc'])));
-        #$local_path = escapeshellcmd($_GET['local_path']);
         corpus_id = params[:corpus_id]
-        corpus = Corpus.find_by_id(corpus_id)
         line_key = params[:line_key]
         start = params[:start]
         stop = params[:stop]
-        movie_loc = "%s_800.mp4" % corpus.media_files.where("line_key_begin <= ? AND ? <= line_key_end",
-                                                            line_key, line_key).limit(1).first.basename.rstrip
-        @file = Digest::SHA256.hexdigest("#{corpus_id}@#{movie_loc}@#{start}@#{stop}");
-        local_path = Rails.root.join(Rails.public_path, corpus.media_path || "media/#{corpus.short_name}", "audio")
+        @file = Digest::SHA256.hexdigest("#{corpus_id}@#{line_key}@#{start}@#{stop}");
         fname = Rails.root.join(TMP_DIR, @file)
+        if corpus_id.match(/^\d+$/) #new Glossa
+          corpus = Corpus.find_by_id(corpus_id)
+          movie_loc = "%s_800.mp4" % corpus.media_files.where("line_key_begin <= ? AND ? <= line_key_end",
+                                                              line_key, line_key).limit(1).first.basename.rstrip
+          local_path = Rails.root.join(Rails.public_path, corpus.media_path || "media/#{corpus.short_name}", "audio")
 
-        start_time = sprintf("%d.%02d.%d", start.to_i / 60, start.to_i % 60, start.gsub(/^[^.]*(\.|$)/, "").to_i)
-        stop_time = sprintf("%d.%02d.%d", stop.to_i / 60, stop.to_i % 60, stop.gsub(/^[^.]*(\.|$)/, "").to_i)
-        Process.wait spawn("mp3splt", Rails.root.join(local_path, movie_loc).to_s, start_time, stop_time,
-                           "-d", TMP_DIR.to_s, "-o", @file, {:in => :close})
+          start_time = sprintf("%d.%02d.%d", start.to_i / 60, start.to_i % 60, start.gsub(/^[^.]*(\.|$)/, "").to_i)
+          stop_time = sprintf("%d.%02d.%d", stop.to_i / 60, stop.to_i % 60, stop.gsub(/^[^.]*(\.|$)/, "").to_i)
+          Process.wait spawn("mp3splt", Rails.root.join(local_path, movie_loc).to_s, start_time, stop_time,
+                             "-d", TMP_DIR.to_s, "-o", @file, {:in => :close})
+        elsif corpus_id.match(/^[a-z]+$/) #old Glossa
+          conn = ActiveRecord::Base.establish_connection("oldglossa").connection
+          puts("SELECT audio_file FROM %ssegments WHERE id=%d LIMIT 1" %
+                             [corpus_id.upcase, line_key.to_i])
+          res = conn.execute("SELECT audio_file FROM %ssegments WHERE id=%d LIMIT 1" %
+                             [corpus_id.upcase, line_key.to_i])
+          basename = res.first.first
+          ActiveRecord::Base.establish_connection(ENV["RAILS_ENV"])
+
+          path = "rtmp://stream-prod01.uio.no/vod/mp4:uio/hf/ilf/#{corpus_id}/"
+          glossa_fn = old_glossa_filename(basename, corpus_id)
+          movie_loc = "mp4:uio/hf/ilf/#{corpus_id}/audio/#{glossa_fn}.mp4"
+          if (!File.exists?("#{fname}.flv") || File.size("#{fname}.flv") == 0)
+            Process.wait spawn("rtmpdump", "-r", path, "-y", movie_loc, "-A", start,
+                               "-B", stop, "-o", "#{fname}.flv")
+          end
+          if (!File.exists?("#{fname}.mp3"))
+            Process.wait spawn("ffmpeg", "-i", "#{fname}.flv", "-ac", "1", "#{fname}.wav")
+            Process.wait spawn("lame", "--quiet", "#{fname}.wav", "#{fname}.mp3")
+          else
+            FileUtils.touch("#{fname}.mp3")
+          end
+        end
         Process.wait spawn("ffmpeg", "-i", "#{fname}.mp3", "-ac", "1", "#{fname}.wav", {:in => :close})
-
-#        if (substr($movie_loc, -4) == ".mp3")
-#        end
-##        } else {
-##          if (!file_exists("$fname.flv") || filesize("$fname.flv") == 0) {
-##            print(`rtmpdump -r $path -y $movie_loc -A $start -B $stop -o $fname.flv`);
-##          }
-##          if (!file_exists("$fname.mp3")) {
-##            print(`ffmpeg -i $fname.flv -ac 1 $fname.wav`);
-##            print(`lame --quiet $fname.wav $fname.mp3`);
-##          } else {
-##            touch("$fname.mp3");
-##          }
-##        }
 
         if (!File.exists?("#{fname}-0-wave.jpg"))
           if (!File.exists?("#{fname}.wav"))
@@ -71,7 +86,7 @@ module Rglossa
         end
 
         FileUtils.rm_f "#{fname}.wav"
-#        FileUtils.rm_f("#{fname}.flv");
+        FileUtils.rm_f("#{fname}.flv");
 
         max_i = 0
         @total_imgwidth = 0
