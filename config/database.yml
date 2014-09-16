@@ -9,9 +9,12 @@ development:
   #pool: 5
   #timeout: 5000
   adapter: mysql2
+  host: mysql
+  port: <%= ENV['MYSQL_PORT_3306_TCP_PORT'] %>
   encoding: utf8
-  database: glossa_development
+  database: glossa
   username: root
+  password: <%= ENV['MYSQL_ENV_MYSQL_ROOT_PASSWORD'] %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
