@@ -9,18 +9,30 @@ module Rglossa
       desc "categories", "Import metadata categories from _categories file "
       method_option :corpus, required: true,
                     desc: "The CWB ID of the corpus (i.e., the name of its registry file)"
+      method_option :speech, type: :boolean,
+                    desc: "Indicates that this is a speech corpus with a 'bounds' column " +
+                        "instead of 'startpos' and 'endpos' columns"
+      method_option :table_suffix, default: "text",
+                    desc: "The part after the corpus name in the name of the table we dumped from"
 
       def categories
         setup
         return unless corpus
-        create_categories
+        position_columns = options[:speech] ? ['bounds'] : ['startpos', 'endpos']
+        create_categories(position_columns)
       end
 
 
       desc "values", "Import metadata values from _data file "
       method_option :corpus, required: true,
                     desc: "The CWB ID of the corpus (i.e., the name of its registry file)"
-      method_option :remove_existing, default: false
+      method_option :remove_existing, type: :boolean,
+                    desc: "Remove existing values for this corpus before import?"
+      method_option :speech, type: :boolean,
+                    desc: "Indicates that this is a speech corpus with a 'bounds' column " +
+                        "instead of 'startpos' and 'endpos' columns"
+      method_option :table_suffix, default: "text",
+                    desc: "The part after the corpus name in the name of the table we dumped from"
 
       def values
         setup
@@ -38,39 +50,17 @@ module Rglossa
         require File.expand_path('../../../config/environment', __FILE__)
       end
 
-      def corpus
-        @corpus ||= begin
-          corpus = ::Rglossa::Corpus.find_by_short_name(lowercase_corpusname)
-
-          unless corpus
-            if yes?("No corpus with short name #{lowercase_corpusname} was found. Create one?")
-              full_name = ask("Full name of the corpus:")
-              encoding = ask("Corpus encoding (default = utf-8):")
-              encoding = 'utf-8' if encoding.blank?
-              corpus = ::Rglossa::Corpus.create(short_name: lowercase_corpusname,
-                                                name: full_name,
-                                                encoding: encoding)
-              unless corpus
-                say "Unable to create corpus #{lowercase_corpusname}!", :red
-                say $!
-              end
-            else
-              say "No corpus found - aborting!", :red
-            end
-          end
-          corpus
-        end
-      end
-
-      def create_categories
+      def create_categories(position_columns)
         category_lines = File.readlines(category_file)
         category_lines.each do |line|
           columns = line.split("\t").map { |col| col.strip }
           short_name = columns[0]
-          next if short_name.in?(%w(startpos endpos)) # these are not metadata categories
+          next if short_name == 'id'               # don't include the database id column
+          next if short_name.in?(position_columns) # these are not metadata categories
 
-          # The "human-readable" name of the category can be set in column 2. Defaults to empty string.
-          name = columns.size > 1 ? columns[1] : ''
+          # The "human-readable" name of the category can be set in column 2.
+          # Defaults to capitalized version of the short name.
+          name = columns.size > 1 ? columns[1] : short_name.capitalize
 
           # The category type ('list', 'short_list' etc.) can be set in column 3. Defaults to 'list'.
           category_type = columns.size > 2 ? columns[2] : 'list'
@@ -103,11 +93,15 @@ module Rglossa
         end
 
         # Find which columns contain start and end positions for corpus texts (if any)
-        startpos_col = categories.index('startpos')
-        endpos_col = categories.index('endpos')
+        if options[:speech]
+          positions_col = categories.index('bounds')
+        else
+          startpos_col = categories.index('startpos')
+          endpos_col = categories.index('endpos')
+        end
 
         # Map the category names to category objects. Names that have not been imported as
-        # categories in RGlossa (such as startpos and endpos) will leave nils in the array,
+        # categories in RGlossa (such as id, startpos and endpos) will leave nils in the array,
         # which we can use to skip the corresponding columns in the metadata value lines.
         categories.map! { |cat| corpus.metadata_categories.find_by_short_name(cat) }
 
@@ -120,27 +114,51 @@ module Rglossa
 
         total_lines = %x(wc -l #{data_file}).split(' ').first
 
-        # Go through the metadata value lines and create a corpus text for each one. For each
-        # column that has a corresponding metadata category, see if a MetadataValue object with
+        # Go through the metadata value lines and find or create a corpus text for each one. For
+        # each column that has a corresponding metadata category, see if a MetadataValue object with
         # this value already exists for the category. If so, fetch it; otherwise create a new one.
         # Finally, associate the value with the corpus text.
         puts "Importing metadata..."
+        tid_category = corpus.metadata_categories.find_by_short_name('tid')
         File.readlines(data_file).each_with_index do |line, lineno|
 
           if lineno > 0 && lineno % 1000 == 0
             puts "Finished processing #{lineno} of #{total_lines} lines"
           end
 
-          text = corpus.corpus_texts.create!
-
-          # Note: '\N' represents a NULL in MySQL database exports
-          columns = line.split("\t").map do |col|
-            col.strip!
-            col.empty? || col == '\N' ? nil : col
+          if positions_col
+            begin
+              # get rid of escaped tabs inside the 'bounds' column
+              line.gsub!(/\\\t/, ' ')
+            rescue ArgumentError
+              report_charset_problem(line)
+              raise
+            end
           end
 
-          text.startpos = columns[startpos_col].to_i if startpos_col
-          text.endpos   = columns[endpos_col].to_i   if endpos_col
+          # Note: '\N' represents a NULL in MySQL database exports
+          begin
+            columns = line.split("\t").map do |col|
+              col.strip!
+              col.empty? || col == '\N' ? nil : col
+            end
+          rescue ArgumentError
+            report_charset_problem(line)
+            raise
+          end
+
+          # If a text with the text ID ("tid") found in this line already exists for this corpus,
+          # use that...
+          if tid_category
+            val = tid_category.metadata_values.find_by_text_value(columns[tid_col])
+            text = val.corpus_texts.first if val
+          end
+          # ...otherwise create a new one.
+          text = corpus.corpus_texts.create! unless text
+
+          text.startpos  = columns[startpos_col].to_i if startpos_col   # for written corpora
+          text.endpos    = columns[endpos_col].to_i   if endpos_col     # for written corpora
+          text.positions = columns[positions_col]     if positions_col  # for speech corpora
 
           columns.zip(categories) do |column, category|
             # Skip columns for which no category has been created (e.g. startpos and endpos)
@@ -156,6 +174,12 @@ module Rglossa
         puts "Done"
       end
 
+      def report_charset_problem(line)
+        puts line
+        puts "NOTE: Problem importing metadata values. You probably need to convert the \n" +
+                 "data to UTF-8 using thor (see \"thor help rglossa:metadata:old_glossa:convert\")."
+      end
     end
-  end
+
+    end
 end

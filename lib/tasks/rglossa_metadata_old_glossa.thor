@@ -14,6 +14,8 @@ module Rglossa
                     desc: "A database user with permissions to read the old Glossa database"
       method_option :corpus, required: true,
                     desc: "The CWB ID of the corpus (i.e., the name of its registry file)"
+      method_option :table_suffix, default: "text",
+                    desc: "The part after the corpus name in the name of the table to dump from"
 
       def dump
         setup
@@ -23,7 +25,7 @@ module Rglossa
         say "Dumping column names from #{table}:"
         run_sql_command(category_file, sql)
 
-        sql = "SELECT * FROM #{uppercase_corpusname}text INTO OUTFILE '#{data_file}'"
+        sql = "SELECT * FROM #{table} INTO OUTFILE '#{data_file}'"
         say "Dumping data from #{table}:"
         run_sql_command(data_file, sql)
 
@@ -42,6 +44,8 @@ module Rglossa
       method_option :charset, default: 'utf-8',
                     desc: "The character set of the old Glossa data. If different from UTF-8, " +
                         "it will be converted."
+      method_option :table_suffix, default: "text",
+                    desc: "The part after the corpus name in the name of the table we dumped from"
 
       def convert
         setup
@@ -66,13 +70,9 @@ module Rglossa
       def setup
         # Pull in the Rails app
         require File.expand_path('../../../config/environment', __FILE__)
-      end
 
-      def run_sql_command(outfile, sql)
-        remove_file(outfile)
-        command = %Q{mysql -u #{options[:user]} -p #{options[:database]} -e "#{sql}"}
-        puts command
-        system(command)
+        # Create the dump directory if necessary
+        empty_directory("#{Rails.root}/tmp/dumps")
       end
 
     end
