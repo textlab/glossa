@@ -18,12 +18,13 @@ GIT
 
 GIT
   remote: git://github.com/textlab/rglossa.git
-  revision: a9fa5f524066799ae2a984b4c86fde6efb013f8f
+  revision: 21f383cb7bb128f76c116b1f27e20b0e54ad087d
   branch: react-mergespeech
   specs:
     rglossa (0.0.1)
       coffee-rails (~> 3.2.2)
       devise (~> 2.2.3)
+      fastimage
       globalize3
       i18n-js
       jquery-rails
@@ -64,6 +65,7 @@ GEM
     activesupport (3.2.19)
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
+    addressable (2.3.6)
     arel (3.0.3)
     awesome_print (1.2.0)
     bcrypt (3.1.7)
@@ -87,6 +89,8 @@ GEM
     erubis (2.7.0)
     eventmachine (1.0.3)
     execjs (2.2.1)
+    fastimage (1.6.3)
+      addressable (~> 2.3, >= 2.3.5)
     globalize3 (0.3.1)
       activemodel (>= 3.0.0)
       activerecord (>= 3.0.0)
