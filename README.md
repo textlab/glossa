@@ -113,14 +113,14 @@ RGlossa uses [R](http://www.r-project.org/) for various statistics. The R suppor
 
 For the waveform visualisation to work, you need to install a few more packages:
 
-* [FFmpeg](https://www.ffmpeg.org/). Available as a standard package in most
+* **[FFmpeg](https://www.ffmpeg.org/)**. Available as a standard package in most
   Linux distributions.
 
-* [Mp3Splt](http://mp3splt.sourceforge.net). [Packages for various
+* **[Mp3Splt](http://mp3splt.sourceforge.net)**. [Packages for various
   distributions](http://mp3splt.sourceforge.net/mp3splt_page/downloads.php) are
   available.
 
-* [The Snack Sound Toolkit](http://www.speech.kth.se/snack/). Available as a
+* **[The Snack Sound Toolkit](http://www.speech.kth.se/snack/)**. Available as a
   [source package](http://www.speech.kth.se/snack/dist/snack2.2.10.tar.gz).
 
 * **Xvfb** (X virtual framebuffer). A standard package in most Linux
