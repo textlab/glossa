@@ -64,7 +64,7 @@ module Rglossa
           AND tid.text_value IN (#{tid_list})
           SQL
 
-          pairs.to_h
+          pairs.reduce({}) { |h, pair| h[pair[0]] = pair[1]; h }
         end
 
       end
