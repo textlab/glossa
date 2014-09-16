@@ -109,6 +109,24 @@ RGlossa uses [R](http://www.r-project.org/) for various statistics. The R suppor
 
   Note: If you get an error message saying that the glib-2.0 library was not found by pkg-config, you need to install the header files for Glib 2. Depending on your distribution, these header files can be found in a package called libglib2.0-dev, glib2-devel, or something similar.
 
+### Other optional packages
+
+For the waveform visualisation to work, you need to install a few more packages:
+
+* [FFmpeg](https://www.ffmpeg.org/). Available as a standard package in most
+  Linux distributions.
+
+* [Mp3Splt](http://mp3splt.sourceforge.net). [Packages for various
+  distributions](http://mp3splt.sourceforge.net/mp3splt_page/downloads.php) are
+  available.
+
+* [The Snack Sound Toolkit](http://www.speech.kth.se/snack/). Available as a
+  [source package](http://www.speech.kth.se/snack/dist/snack2.2.10.tar.gz).
+
+* **Xvfb** (X virtual framebuffer). A standard package in most Linux
+  distributions. In Debian-based distributions run `apt-get install xvfb'. In
+  Fedora-based distributions run `xorg-x11-server-Xvfb'.
+
 ## More information
 
 For more information, see the [RGlossa wiki](http://github.com/textlab/rglossa/wiki).
