@@ -111,21 +111,45 @@ RGlossa uses [R](http://www.r-project.org/) for various statistics. The R suppor
 
 ### Other optional packages
 
-For the waveform visualisation to work, you need to install a few more packages:
+For the waveform visualisation to work, you need to install a few more packages.
+Try to use your package manager to install as much as possible. In Debian-based
+distributions run:
+    
+    apt-get install libav-tools mp3splt tcl8.4-dev tk8.4-dev python-tk imagemagick xvfb
 
-* **[FFmpeg](https://www.ffmpeg.org/)**. Available as a standard package in most
-  Linux distributions.
+In Fedora-based distributions run:
 
-* **[Mp3Splt](http://mp3splt.sourceforge.net)**. [Packages for various
-  distributions](http://mp3splt.sourceforge.net/mp3splt_page/downloads.php) are
-  available.
+    yum install ffmpeg tcl-devel tk-devel tkinter ImageMagick xorg-x1-server-Xvfb
 
-* **[The Snack Sound Toolkit](http://www.speech.kth.se/snack/)**. Available as a
-  [source package](http://www.speech.kth.se/snack/dist/snack2.2.10.tar.gz).
+Some of the packages are not available in Linux distributions and must be
+installed manually. This is the full list of required packages:
 
-* **Xvfb** (X virtual framebuffer). A standard package in most Linux
-  distributions. In Debian-based distributions run `apt-get install xvfb`. In
-  Fedora-based distributions run `yum install xorg-x11-server-Xvfb`.
+* **[FFmpeg](https://www.ffmpeg.org/)**. In recent versions of Debian and
+  Ubuntu, install `libav-tools` instead of `ffmpeg`, and let *avconv* be called
+  as *ffmpeg*, e.g.:
+
+    cd /usr/local/bin && ln -s ../../bin/avconv ffmpeg
+
+* **[Mp3Splt](http://mp3splt.sourceforge.net)**. If your package manager cannot
+  install it automatically, check the site with [packages for various
+  distributions](http://mp3splt.sourceforge.net/mp3splt_page/downloads.php).
+
+* **TCL/TK**. Note that TCL/TK 8.4 and 8.5 work without problems, version 8.6
+  probably requires fixing the source code of Snack, due to incompatibilities.
+
+* **[Python 2.x](http://www.python.org)**. Note that it must be a 2.x version,
+  not a 3.x version.
+
+* **TkInter**.
+
+* **[ImageMagick](http://www.imagemagick.org)**.
+
+* **Xvfb** (X virtual framebuffer).
+
+* **[The Snack Sound Toolkit](http://www.speech.kth.se/snack/)**. Unlike the
+  previous packages, Snack is probably unavailable in binary form for you
+  distribution, and the only option is to compile it from the
+  [source](http://www.speech.kth.se/snack/dist/snack2.2.10.tar.gz).
 
 ## More information
 
