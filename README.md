@@ -20,9 +20,9 @@ Set this version to be your default Ruby version:
 
     rvm use 2.1 --default
 
-(or see [the RVM documentation](https://rvm.io/workflow/rvmrc/) about how to create an *.rvmrc* file in your application directory that will automatically switch to this version when you enter the directory). Then install the latest version of Ruby on Rails:
-
-    gem install rails -N
+(or see [the RVM documentation](https://rvm.io/workflow/rvmrc/) about how to
+create an *.rvmrc* file in your application directory that will automatically
+switch to this version when you enter the directory).
 
 ### Create your RGlossa application
 
