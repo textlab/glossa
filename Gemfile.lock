@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/textlab/rglossa-fcs.git
-  revision: 4704a322716addd5c4628b843ae267d184f2900e
+  revision: 3db1b010a61b59cefa38d8b637e9c63ade58aeaf
   branch: react
   specs:
     rglossa-fcs (0.0.1)
@@ -18,7 +18,7 @@ GIT
 
 GIT
   remote: git://github.com/textlab/rglossa.git
-  revision: 21f383cb7bb128f76c116b1f27e20b0e54ad087d
+  revision: df169484d7530ea615c56f29d2eaa84800d9ef00
   branch: react-mergespeech
   specs:
     rglossa (0.0.1)
