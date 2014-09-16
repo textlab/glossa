@@ -68,10 +68,13 @@ module Rglossa
     def setup
       # Pull in the Rails app
       require File.expand_path('../../../config/environment', __FILE__)
+
+      # Create the dump directory if necessary
+      empty_directory("#{Rails.root}/tmp/dumps")
     end
 
     def line_keys_file
-      @line_keys_file ||= "#{Rails.root}/tmp/#{line_keys_table}_line_keys.tsv"
+      @line_keys_file ||= "#{Rails.root}/tmp/dumps/#{line_keys_table}_line_keys.tsv"
     end
 
     def line_keys_table

@@ -48,11 +48,11 @@ module Rglossa
     end
 
     def category_file
-      @category_file ||= "#{Rails.root}/tmp/#{table}_categories.txt"
+      @category_file ||= "#{Rails.root}/tmp/dumps/#{table}_categories.txt"
     end
 
     def data_file
-      @data_file ||= "#{Rails.root}/tmp/#{table}_data.tsv"
+      @data_file ||= "#{Rails.root}/tmp/dumps/#{table}_data.tsv"
     end
 
     def run_sql_command(outfile, sql)

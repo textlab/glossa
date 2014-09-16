@@ -70,6 +70,9 @@ module Rglossa
       def setup
         # Pull in the Rails app
         require File.expand_path('../../../config/environment', __FILE__)
+
+        # Create the dump directory if necessary
+        empty_directory("#{Rails.root}/tmp/dumps")
       end
 
     end
