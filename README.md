@@ -124,8 +124,8 @@ For the waveform visualisation to work, you need to install a few more packages:
   [source package](http://www.speech.kth.se/snack/dist/snack2.2.10.tar.gz).
 
 * **Xvfb** (X virtual framebuffer). A standard package in most Linux
-  distributions. In Debian-based distributions run `apt-get install xvfb'. In
-  Fedora-based distributions run `xorg-x11-server-Xvfb'.
+  distributions. In Debian-based distributions run `apt-get install xvfb`. In
+  Fedora-based distributions run `xorg-x11-server-Xvfb`.
 
 ## More information
 
