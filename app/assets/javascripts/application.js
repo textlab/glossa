@@ -11,4 +11,6 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require rglossa/speech/application
+//= require rglossa/fcs/application
 //= require rglossa/application
+//= require_tree .
