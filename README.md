@@ -26,9 +26,32 @@ Set this version to be your default Ruby version:
 
 ### Create your RGlossa application
 
-With Ruby and Rails installed, it is time to create a new Rails application using the application template that we provide for RGlossa. You can name the application anything you want, but *glossa* is probably a good name:
+The easiest way to make an application is to clone our application template:
 
-    rails new glossa -m https://raw.github.com/textlab/rglossa/master/app_template.rb
+    git clone https://github.com/textlab/glossa
+
+The following commands install the required gems and initialise the database:
+
+    cd glossa
+    bundle
+    rake db:migrate
+
+If you want to develop rglossa, the *rglossa* gem should be checked out in a
+separate directory, and you need to set up an override in the application
+directory, so that your checked-out version is used instead of the version from
+the Gemfile:
+
+    cd ..
+    git clone -b react-mergespeech https://github.com/textlab/rglossa
+    cd glossa
+    bundle config --local local.rglossa ../rglossa
+
+If you want to work on a branch other than the default one, you may need to
+disable branch checking:
+
+    bundle config --local disable_local_branch_check true
+
+#### Troubleshooting
 
 If you are getting the following message:
 
