@@ -8,7 +8,8 @@ MAINTAINER Anders Nøklestad <anders.noklestad@iln.uio.no>
 
 # Install required packages
 RUN apt-get update
-RUN apt-get install -y g++ make git ruby2.0 ruby2.0-dev sqlite3 libsqlite3-dev
+RUN apt-get install -y g++ make git ruby2.0 ruby2.0-dev sqlite3 libsqlite3-dev \
+  libmysqlclient-dev
 
 # Set Ruby 2.0 to be the default version
 # From http://blog.costan.us/2014/04/restoring-ruby-20-on-ubuntu-1404.html
