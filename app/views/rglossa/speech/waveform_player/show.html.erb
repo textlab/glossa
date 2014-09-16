@@ -7,18 +7,17 @@
 <meta name="robots" content="noindex" />
 
 <!-- Page player core CSS -->
-<link rel="stylesheet" type="text/css" href="<%= ActionController::Base.helpers.asset_path("rglossa/speech/wfplayer.css") %>" />
+<%= stylesheet_link_tag ActionController::Base.helpers.asset_path("rglossa/speech/wfplayer.css") %>
 
 <!-- soundManager.useFlashBlock: related CSS -->
-<link rel="stylesheet" type="text/css" href="<%= ActionController::Base.helpers.asset_path("rglossa/speech/wfplayer-flashblock.css") %>" />
-
+<%= stylesheet_link_tag ActionController::Base.helpers.asset_path("rglossa/speech/wfplayer-flashblock.css") %>
 
 <style type="text/css">
 ul.playlist li .comment {font-size:0.65em;opacity:0.5}
 </style>
 
 <!-- soundManager API -->
-<script src="<%= ActionController::Base.helpers.asset_path("rglossa/speech/soundmanager2-nodebug-jsmin.js") %>"></script>
+<%= javascript_include_tag ActionController::Base.helpers.asset_path("rglossa/speech/soundmanager2-nodebug-jsmin.js") %>
 
 <script>
   var total_width = <%= @total_imgwidth %>;
@@ -54,8 +53,8 @@ var PP_CONFIG = {
 </script>
 
 <!-- Page player main script -->
-<script src="<%= ActionController::Base.helpers.asset_path("rglossa/speech/wfplayer.js") %>"></script>
-<script type="text/javascript" src="http://tekstlab.uio.no/glossa/js/jquery/jquery-1.4.3.min.js"></script>
+<%= javascript_include_tag ActionController::Base.helpers.asset_path("rglossa/speech/wfplayer.js") %>
+<%= javascript_include_tag ActionController::Base.helpers.asset_path("jquery.min") %>
 
 </head>
 
@@ -89,24 +88,38 @@ doc.write('<img src="tmp_waveforms/<%= basename %>-pitch.png" style="position: a
 <% end %>
 doc.write('</body></html>');
 doc.close();
-getPos = function(oSound, event) { return Math.floor(oSound.duration*event.pageX/<%= @total_imgwidth %>) };
+
+getPos = function(oSound, event) {
+  return Math.floor(oSound.duration*event.pageX/<%= @total_imgwidth %>)
+};
+
 doc.body.onmousedown = function(event) {
   scrollMode = true;
-  jQuery('#iframe').contents().find('#sel').css('visibility', 'hidden');
+  $('#iframe').contents().find('#sel').css('visibility', 'hidden');
   oSound = pagePlayer.lastSound;
   oSound.startX = event.pageX;
   oSound.startPos = getPos(oSound, event);
   oSound.setPosition(oSound.startPos);
   oSound.stop();
-  jQuery('#iframe').contents().find('#sel-start').css({'width': '2px', 'height': '216px', 'backgroundColor': 'blue', 'left': event.pageX, 'position': 'absolute'});
+  var selStartCss = {'width': '2px', 'height': '216px', 'backgroundColor': 'blue',
+                     'left': event.pageX, 'position': 'absolute'};
+  $('#iframe').contents().find('#sel-start').css(selStartCss);
   return false;
 };
+
 doc.body.onmousemove = function(event) {
   if (scrollMode) {
-    jQuery('#iframe').contents().find('#sel-stop').css({'width': '2px', 'height': '216px', 'backgroundColor': 'blue', 'left': event.pageX, 'position': 'absolute'});
-    jQuery('#iframe').contents().find('#sel').css({'width': Math.abs(event.pageX-oSound.startX)+'px', 'height': '216px', 'backgroundColor': 'rgba(0, 0, 0, 0.1)', 'left': Math.min(event.pageX, oSound.startX), 'position': 'absolute', 'visibility': 'visible'});
+    var selStopCss = {'width': '2px', 'height': '216px', 'backgroundColor': 'blue',
+                      'left': event.pageX, 'position': 'absolute'};
+    var selCss = {'width': Math.abs(event.pageX-oSound.startX)+'px', 'height': '216px',
+                  'backgroundColor': 'rgba(0, 0, 0, 0.1)',
+                  'left': Math.min(event.pageX, oSound.startX), 'position': 'absolute',
+                  'visibility': 'visible'}
+    $('#iframe').contents().find('#sel-stop').css(selStopCss);
+    $('#iframe').contents().find('#sel').css(selCss);
   }
 }
+
 doc.body.onmouseup = function(event) {
   if (!scrollMode) return true;
   scrollMode = false;
@@ -121,16 +134,38 @@ doc.body.onmouseup = function(event) {
   } else {
     oSound.stopPos = curPos;
   }
-  jQuery('#iframe').contents().find('#sel-stop').css({'width': '2px', 'height': '216px', 'backgroundColor': 'blue', 'left': event.pageX, 'position': 'absolute'});
+  var selStopCss = {'width': '2px', 'height': '216px', 'backgroundColor': 'blue',
+                    'left': event.pageX, 'position': 'absolute'}
+  $('#iframe').contents().find('#sel-stop').css(selStopCss);
   oSound.stop();
   oSound.setPosition(oSound.startPos);
   oSound.play();
 };
+
+toggleWaveform = function(id, cls) {
+  if($(id).is(':checked')) {
+    $('#iframe').contents().find(cls).css('visibility', 'visible');
+  } else {
+    $('#iframe').contents().find(cls).css('visibility', 'hidden')
+  }
+}
+
+$( document ).ready(function() {
+  $( "#wfcb" ).click(function() {
+    toggleWaveform('#wfcb', '.wave');
+  });
+  $( "#fmcb" ).click(function() {
+    toggleWaveform('#fmcb', '.fmt');
+  });
+  $( "#ptcb" ).click(function() {
+    toggleWaveform('#ptcb', '.pitch');
+  });
+});
 </script>
 <form>
-<label><input type="checkbox" id="wfcb" checked onclick="if(jQuery('#wfcb').is(':checked')) { jQuery('#iframe').contents().find('.wave').css('visibility', 'visible'); } else { jQuery('#iframe').contents().find('.wave').css('visibility', 'hidden') }">waveform &amp; spectrogram</label> |
-<label><input type="checkbox" id="fmcb" checked onclick="if(jQuery('#fmcb').is(':checked')) { jQuery('#iframe').contents().find('.fmt').css('visibility', 'visible'); } else { jQuery('#iframe').contents().find('.fmt').css('visibility', 'hidden') }">formants: <span style="color: red">1</span> <span style="color: lightgreen">2</span> <span style="color: blue">3</span> <span style="color: orange">4</span></label> |
-<label><input type="checkbox" id="ptcb" checked onclick="if(jQuery('#ptcb').is(':checked')) { jQuery('#iframe').contents().find('.pitch').css('visibility', 'visible'); } else { jQuery('#iframe').contents().find('.pitch').css('visibility', 'hidden') }">pitch</label> |
+<label><input type="checkbox" id="wfcb" checked>waveform &amp; spectrogram</label> |
+<label><input type="checkbox" id="fmcb" checked>formants: <span style="color: red">1</span> <span style="color: lightgreen">2</span> <span style="color: blue">3</span> <span style="color: orange">4</span></label> |
+<label><input type="checkbox" id="ptcb" checked>pitch</label> |
 Problems? Switch to
 <script>
 
