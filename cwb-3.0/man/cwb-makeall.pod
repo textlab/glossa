@@ -1,0 +1,60 @@
+=head1 NAME
+
+cwb-makeall - Build indexes for encoded CWB corpus
+
+=head1 SYNOPSIS
+
+B<cwb-makeall> [-D] [-V] [-r I<registry_dir>]
+    [-M <megabytes>] [-P I<attribute>] [-c I<component>]
+    I<corpus> [ I<attribute> ... ]
+
+=head1 DESCRIPTION
+
+B<TODO>
+
+B<NB:> The recommended front-end for indexing and compression is the B<cwb-make> program supplied as part of the CWB/Perl interface.
+
+
+=head1 OPTIONS
+
+  -D        debug mode
+  -r <dir>  use registry directory <dir>
+  -c <comp> create component <comp> only
+  -P <att>  work on attribute <att> [default: word]
+  -M <size> limit memory usage to approx. <size> MBytes
+  -V        validate index after creating it
+
+=over 4
+
+=item B<TODO>
+
+=back
+
+
+=head1 COPYRIGHT
+
+=over 4
+
+=item
+B<IMS Open Corpus Workbench (CWB)> L<http://cwb.sourceforge.net/>
+
+=item
+Copyright (C) 1993-2006 by IMS, University of Stuttgart
+
+=item
+Copyright (C) 2007- by the respective contributers (see file F<AUTHORS>)
+
+=back
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details
+(in the file F<COPYING>, or available via WWW at
+L<http://www.gnu.org/copyleft/gpl.html>).
+
+=cut
+

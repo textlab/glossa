@@ -1,0 +1,103 @@
+=head1 NAME
+
+cwb-scan-corpus - Extract n-gram frequency information from CWB corpus
+
+=head1 SYNOPSIS
+
+B<cwb-scan-corpus> [-Cqh] [-r I<registry_dir>] [-b I<n>]
+    [-o I<file>] [-f I<n>] [-F I<attribute>]
+    [-s I<start>] [-e I<end>] [-R I<file>]
+    I<corpus>  I<key1> I<key2> ...
+
+=head1 DESCRIPTION
+
+B<TODO>
+
+Computes the joint frequency distribution over I<key1>, I<key2>, ... .
+The format of the key specifications is detailed in the following section.
+
+=head1 KEY SPECIFIERS
+
+B<TODO>
+
+Each key specifier takes the form:
+
+    [?]<att>[+<n>][=/<regex>/[cd]]
+
+where I<att> is a positional or structural attribute, I<n> an optional non-negative offset (number of tokens to the right), and I<regex> an optional regular expression against which the key is matched (instances where the value of I<att> does not match I<regex> are discarded before counting). The regex may be followed by C<c> (ignore case) and/or C<d> (ignore diacritics). The optional C<?> sign marks a "constraint" key which will not be included in the resulting frequency distribution.
+
+
+=head1 OPTIONS
+
+  -r <dir>  use registry directory <dir>
+  -b <n>    use <n> hash buckets [default: 1,000,000]
+  -o <file> write frequency table to <file> [default: standard output]
+            (compressed with gzip if <file> ends in '.gz')
+  -f <n>    include only items with frequency >= <n> in result table
+  -F <att>  add up frequency values from p-attribute <att>
+  -C        clean up data, i.e. accept only 'regular' words
+  -s <n>    start scanning at corpus position <n>
+  -e <n>    stop scanning at corpus position <n>
+  -R <file> read list of corpus ranges to scan from <file>
+  -q        quiet mode (no progress information on stderr)
+  -h        this help page
+
+=over 4
+
+=item B<TODO>
+
+=back
+
+
+=head1 OUTPUT FORMAT
+
+B<TODO>
+
+A TAB-delimited table with the following fields:
+
+=over 4
+
+=item frequency
+
+frequency count for this key combination
+
+=item value of key 1
+
+value of first key (usually specified by I<key1>, unless it is a "constraint" key)
+
+=item value of key 2
+
+value of second key (usually specified by I<key2>, unless there are "constraint" keys)
+
+=item ...
+
+=back
+
+
+=head1 COPYRIGHT
+
+=over 4
+
+=item
+B<IMS Open Corpus Workbench (CWB)> L<http://cwb.sourceforge.net/>
+
+=item
+Copyright (C) 1993-2006 by IMS, University of Stuttgart
+
+=item
+Copyright (C) 2007- by the respective contributers (see file F<AUTHORS>)
+
+=back
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details
+(in the file F<COPYING>, or available via WWW at
+L<http://www.gnu.org/copyleft/gpl.html>).
+
+=cut
+

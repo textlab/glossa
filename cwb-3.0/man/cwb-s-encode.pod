@@ -1,0 +1,92 @@
+=head1 NAME
+
+cwb-s-encode - Add structural annotation to existing CWB corpus
+
+=head1 SYNOPSIS
+
+B<cwb-s-encode> [-BMamsqDh] [-d I<output_dir>] [-f I<file>]
+    [[-r I<registry_dir>] -C I<corpus>] (-S I<attribute>|-V I<attribute>)
+
+=head1 DESCRIPTION
+
+B<TODO>
+
+B<NB:> Command-line B<options> always have to precede the B<attribute declaration> (made with a C<-S> or C<-V> flag).
+
+B<NB:> It is not necessary to run B<cwb-makeall> after adding or modifying a structural attribute with the B<cwb-s-encode> program.
+
+=head1 OPTIONS
+
+  -B        strip leading/trailing blanks from annotations
+  -d <dir>  directory for output files
+  -f <file> read input from <file> [default: stdin]
+  -M        create list of regions in memory (resolving overlaps)
+  -r <dir>  set registry directory <dir>
+  -C <id>   work on corpus <id> (with -a option)
+  -a        add to existing annotation (resolving overlaps, implies -M)
+  -m        treat annotations as set (or 'multi-value') attribute
+  -s        (with -m) check that form of set annotations is consistent
+  -q        silent mode ('be quiet')
+  -D        debug mode
+  -S <att>  generate s-attribute <att>
+  -V <att>  generate s-attribute <att> with annotations
+
+=over 4
+
+=item B<TODO>
+
+=back
+
+
+=head1 INPUT FORMAT
+
+One line for each region of the new attribute, with the following TAB-delimited fields:
+
+=over 4
+
+=item region start
+
+corpus position of first token in region
+
+=item region end
+
+corpus position of last token in region
+
+=item [ annotation ]
+
+annotated string value (only if attribute has been declared with C<-V>)
+
+=back
+
+B<NB:> Regions must be provided in corpus order (i.e. by increasing start position) and may not overlap.
+
+B<TODO>
+
+
+=head1 COPYRIGHT
+
+=over 4
+
+=item
+B<IMS Open Corpus Workbench (CWB)> L<http://cwb.sourceforge.net/>
+
+=item
+Copyright (C) 1993-2006 by IMS, University of Stuttgart
+
+=item
+Copyright (C) 2007- by the respective contributers (see file F<AUTHORS>)
+
+=back
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details
+(in the file F<COPYING>, or available via WWW at
+L<http://www.gnu.org/copyleft/gpl.html>).
+
+=cut
+

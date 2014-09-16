@@ -1,0 +1,63 @@
+=head1 NAME
+
+cwb-compress-rdx - Compress (token-level) indexes of CWB corpus
+
+=head1 SYNOPSIS
+
+B<cwb-compress-rdx> [-d] [-D I<file>] [-T] [-r I<registry_dir>] [-f <prefix>]
+    ( -P I<attribute> | -A ) I<corpus>
+
+=head1 DESCRIPTION
+
+B<TODO>
+
+Compress the index of a positional attribute. Creates C<.crc> and C<.crx> files which replace the corresponding C<.corpus.rev> and C<.corpus.rdx> files. After running this tool successfully, the latter files can be deleted.
+
+B<NB:> The recommended front-end for indexing and compression is the B<cwb-make> program supplied as part of the CWB/Perl interface.
+
+
+=head1 OPTIONS
+
+  -P <att>  compress attribute <att> [default: word]
+  -A        compress all positional attributes
+  -r <dir>  set registry directory
+  -f <file> set output file prefix (creates <file>.crc and <file>.crx)
+  -d        debug mode (print messages on stderr)
+  -D <file> debug mode (write messages to <file>)
+  -T        skip validation pass ('I trust you')
+  -h        this help page
+
+=over 4
+
+=item B<TODO>
+
+=back
+
+
+=head1 COPYRIGHT
+
+=over 4
+
+=item
+B<IMS Open Corpus Workbench (CWB)> L<http://cwb.sourceforge.net/>
+
+=item
+Copyright (C) 1993-2006 by IMS, University of Stuttgart
+
+=item
+Copyright (C) 2007- by the respective contributers (see file F<AUTHORS>)
+
+=back
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details
+(in the file F<COPYING>, or available via WWW at
+L<http://www.gnu.org/copyleft/gpl.html>).
+
+=cut
+

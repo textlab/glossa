@@ -1,0 +1,50 @@
+#!/bin/bash
+
+config_file=$(cat config.mk)
+target="include \$(TOP)/config/platform/darwin-universal"
+rep="include \$(TOP)/config/platform/"
+
+uname_output=$(uname -a)
+
+if [[ "$uname_output" == Linux* ]]
+then
+  rep="${rep}linux"
+# don't know how to detect opteron?
+  if [[ "$uname_output" == *x86_64* ]]
+  then
+    rep="${rep}-64"
+  fi
+
+elif [[ "$uname_output" == Darwin* ]]
+then
+  if [[ "$uname_output" == *ppc ]]
+  then
+    rep="${rep}darwin-g4" # don't make assumptions about more recent processor or ability to produce Universal binaries
+  else
+    rep="${rep}darwin-universal" # build Universal binaries by default (best for linking libcl.a into other programs such as Perl and Python)
+  fi
+
+elif [[ "$uname_output" == SunOS* ]]
+then
+  rep="${rep}solaris"
+
+elif [[ "$uname_output" == CYGWIN* ]]
+then
+  rep="${rep}cygwin"
+  # and add switch to cygwin in site as well
+  config_file = ${config_file/"include \$(TOP)/config/site/standard"/"include \$(TOP)/config/site/cygwin"}
+
+else
+        # go for generic unix
+        rep="${rep}unix"
+fi
+
+echo "$target => $rep"
+
+config_file=${config_file/"$target"/"$rep"}
+
+mv config.mk config.mk.bak
+echo "$config_file" > config.mk
+
+
+

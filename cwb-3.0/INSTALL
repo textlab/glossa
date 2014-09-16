@@ -1,0 +1,251 @@
+
+        IMS Open Corpus Workbench (CWB)
+        Release 3
+
+        Installation Guide
+
+
+This file describes how to build and install the CWB from source code.  Binary
+packages for popular platforms are available from the CWB homepage
+
+    http://cwb.sourceforge.net/
+
+together with detailed installation instructions.
+
+The CWB development wiki 
+
+    http://cwb.sslmit.unibo.it/
+
+offers hints for building the CWB on specific platforms and addresses some
+common problems.  If you encounter a problem that you cannot solve with the
+information provided on the wiki, you should join the CWBdev mailing list
+
+    http://devel.sslmit.unibo.it/mailman/listinfo/cwb
+
+and ask your question there.
+
+        PREREQUISITES
+
+ - any modern Unix flavour (must be POSIX compatible)
+ - GCC 3.3 or newer recommended (other ANSI C compilers might also work)
+ - the ar and ranlib code archive utilities
+ - GNU make or a compatible program
+ - the ncurses library (or a similar terminal control library)
+
+        RECOMMENDED SOFTWARE (not essential)
+
+ - GNU install or a compatible program
+ - GNU bison & flex for updating automatically generated parsers
+ - Perl with pod2man script for rebuilding manual pages
+ - GNU less pager for interactive display of query results in CQP
+
+
+        QUICK INSTALLATION
+
+[There are one-step setup scripts for some operating systems: see 
+"AUTO-INSTALL SCRIPTS", below. You will also find specific instructions
+for Mac OS X in section "INSTALLATION GUIDE FOR MAC OS X". Otherwise, 
+follow the instructions here.]
+
+Edit "config.mk", selecting suitable platform and site configuration files
+for your system (available options are documented in "config.mk").  You
+can also override individual settings manually there.  If you cannot find an
+appropriate configuration, see WRITING YOUR OWN CONFIGURATION FILES below.
+
+Now, to compile the Corpus Library, CQP, CQPcl, CQPserver, and the
+command-line utilities, type
+
+        make clean
+        make depend
+        make all
+
+If your default make program is not GNU make, you may have to type "gmake"
+instead of "make" (the current Makefile system only works with GNU make and
+fully compatible programs).  To install the corpus library, all programs, and
+the man pages, type
+
+        make install
+
+Note that you must have write permission in the installation directories in
+order to do so (usually the "/usr/local" tree, but site configuration files may
+specify a different location with the PREFIX configuration variable).
+
+You are now set to go.  If you are new to the CWB, you should read the 
+"Corpus Encoding Tutorial" and "CQP Query Language Tutorial" available from
+the CWB homepage.  You may also want to install pre-encoded sample corpora
+for your first experiments.
+
+If you want to make sure that all automatically generated files are up to
+date, you should type
+
+        make realclean
+
+before starting the build process.  This will update makefile dependencies,
+the generated bison/flex parsers and all man pages.  Note that this will only
+work if the recommended software is installed (bison, flex and pod2man).
+
+
+        AUTO-INSTALL SCRIPTS
+
+There are now configuration/installation scripts for common Linux
+systems - note that these are single-step ALTERNATIVES to following the
+instructions above.
+
+The Linux variants with specific scripts are currently Ubuntu and Fedora.
+
+The Ubuntu script will probably work on other Debian variants, and the
+Fedora script will probably work on other RPM-based Linux distros.  
+
+From the main CWB directory (the one containing this INSTALL file), run
+
+        sudo ./install-scripts/cwb-install-fedora
+or
+        sudo ./install-scripts/cwb-install-ubuntu
+
+These must be run as root (e.g. with sudo as shown above). Here's what these 
+scripts do for you:
+
+ - downloads and installs all prerequisite software packages
+ - sets up the configuration file ("config.mk")
+ - compiles CWB from the source code
+ - installs the CWB programs to the "usual" place on your system. 
+ 
+After running these scripts, you are ready to start using CWB.
+
+If you are on another common system (e.g. SunOS, Cygwin) for which there
+isn't yet an auto-install script, you can still take a shortcut by using the 
+autoconfigure script:
+
+        ./install-scripts/cwb-config-basic
+
+This removes the need to manually edit "config.mk": you can go straight to
+compiling.
+
+Note that the autoconfigure/auto-install scripts may not work if you are
+using Linux on an opteron system. The autoconfigure script is also unable
+to distinguish most variants of Darwin and will mostly use the 
+Darwin-universal configuration even if a more specific configuration file
+exists. In this case, manually editing "config.mk" may be better.
+
+
+        WRITING YOUR OWN CONFIGURATION FILES
+
+If you cannot find a suitable platform and site configuration files, or if 
+you need to override some settings and expect to install future CWB releases
+on the same system, you can write your own configuration files.
+
+All configuration files can be found in the "config/platform/" and
+"config/site/" subdirectories.  A listing of configuration variables with
+short usage explanations can be found in the template files (aptly named
+"template") in these directories, which provide good starting points for
+your own configuration files.  In many cases, the easiest solution is to 
+make a copy of a sufficiently similar configuration file and add your own
+settings, or to inherit from this configuration with an appropriate 
+"include" statement.  The "linux-*" and "darwin-*" configuration files in
+the standard distribution are good examples of this strategy.
+
+It is recommended that you store your personal configuration files in a
+separate directory outside the CWB tree, so you can easily re-use them with
+future versions of the software.  You just have to modify the "include"
+statements in "config.mk" to use absolute paths to your configuration files.
+If your configuration files inherit from standard configurations, use include
+paths of the form "$(TOP)/config/...".
+
+
+        BUILDING BINARY RELEASES
+        
+If you want to create a binary package for your platform, type
+
+        make release
+
+This will install the CWB locally in a subdirectory of "build/" and wrap it
+in a ".tar.gz" archive for distribution.  The filename of this archive (which
+is the same as the installation directory) indicates the CPU architecture and
+operating system which the binary package has been compiled for.
+
+It is recommended to select a site configuration named "*-release", which will
+build statically linked programs if possible (some operating systems do not
+support static linking). Note that individual settings for installation
+directories (except for the general PREFIX) and access permissions will be
+ignored when building a binary release.
+
+
+        BUILDING SOURCE RELEASES
+
+In order to "clean up" the source code tree for a standard source distribution,
+the recommended command sequence is
+
+        make realclean
+        make depend
+        make clean
+
+This will remove all automatically generated files, and then recreate the 
+makefile dependencies and bison/flex parsers, so that the CWB can be compiled
+from source with a minimal set of prerequisites.
+
+
+        BUILDING RPM PACKAGES FOR LINUX
+
+In order to create a binary Linux distribution in RPM format, edit the file
+"rpm-linux.spec" as necessary, then copy the sourcecode archive (whose precise
+name must be listed in the "Source:" field of the RPM specification) into
+"/usr/src/packages/SOURCES", and run
+
+        rpmbuild -bb --clean --rmsource rpm-linux.spec
+
+The ready-made binary RPM package will then be available in the appropriate
+subdirectory of "/usr/src/packages/RPMS/".  It may be necessary to select the
+appropriate Linux configuration (e.g. to build a 64-bit version of the CWB) in
+"config.mk" and rewrap the source archive before building the RPM package.
+Otherwise, the build process will automatically select the generic Linux 
+configuration for standard i386-compatible processors.
+
+
+	INSTALLATION GUIDE FOR MAC OS X
+
+On recent versions of Mac OS X (10.5 "Leopard" and newer), it is very
+easy to compile and install CWB release 3.0.
+
+ - install XCode from the Mac App store (Lion) or from https://developer.apple.com/xcode/
+
+Now edit the file "config.mk", setting the platform entry to
+
+    	include $(TOP)/config/platform/darwin-universal
+
+and the site configuration as desired.  If you only plan to run CWB on recent
+Mac hardware (with Intel Core 2 and newer processors), choose "darwin-core2" for
+better code optimization.  Then enter the shell commands
+
+        make depend
+	make all
+	make install
+
+as shown in the section "QUICK INSTALLATION" above.
+
+
+        PACKAGE CONTENTS
+
+Makefile                top-level makefile
+config.mk               makefile configuration
+definitions.mk          standard settings and definitions for make system
+rpm-linux.spec          configuration file for building binary RPM packages
+install.sh              a GNU-compatible install program (shell script)
+README, INSTALL, ...    the usual open source "boilerplate"
+
+doc/                    some technical documentation
+
+config/                 platform and site configuration files 
+  config/platform/        compiler flags and settings for various platforms
+  config/site/            site-specific settings (installation paths etc.)
+
+instutils/              utilities for installing and binary packages
+
+cl/                     corpus library (CL) source code
+cqp/                    CQP query processor source code
+CQi/                    CQPserver (implements client-server interface CQi)
+utils/                  source code of command-line utilities
+
+man/                    manpages for CQP and the command-line utilities
+
+editline/               local copy of the CSTR Editline library used by CQP
+

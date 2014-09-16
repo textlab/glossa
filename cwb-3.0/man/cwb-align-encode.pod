@@ -1,0 +1,69 @@
+=head1 NAME
+
+cwb-align-encode - Add alignment attribute to existing CWB corpus
+
+=head1 SYNOPSIS
+
+B<cwb-align-encode> [-DCvh] [-d I<data_dir>] [-r I<registry_dir>]
+    I<alignment_file>
+
+=head1 DESCRIPTION
+
+B<TODO>
+
+B<NB:> The F<.align> file format read by B<cwb-align-encode> uses CWB-internal
+corpus positions to identify aligned regions of the corpus.  It is therefore
+recommended not to generate such input files manually, but rather use the
+B<cwb-align> program to compute automatic sentence alignment.  The CWB/Perl
+interface includes a B<cwb-align-import> utility, which can import external
+alignment files referencing regions by annotated ID codes.
+
+
+=head1 OPTIONS
+
+  -d <dir> write data file(s) to directory <dir>
+  -D       write files to corpus data directory
+  -C       compatibility mode (creates .alg file)
+  -r <reg> use registry directory <reg>
+  -v       verbose mode
+  -h       this help page
+
+=over 4
+
+=item B<TODO>
+
+=back
+
+
+=head1 INPUT FORMAT
+
+B<TODO>
+
+
+=head1 COPYRIGHT
+
+=over 4
+
+=item
+B<IMS Open Corpus Workbench (CWB)> L<http://cwb.sourceforge.net/>
+
+=item
+Copyright (C) 1993-2006 by IMS, University of Stuttgart
+
+=item
+Copyright (C) 2007- by the respective contributers (see file F<AUTHORS>)
+
+=back
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details
+(in the file F<COPYING>, or available via WWW at
+L<http://www.gnu.org/copyleft/gpl.html>).
+
+=cut
+

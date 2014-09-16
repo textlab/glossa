@@ -1,0 +1,62 @@
+=head1 NAME
+
+cwb-config - Display CWB configuration and installation paths
+
+=head1 SYNOPSIS
+
+B<cwb-config> [--version | --prefix | --bindir | --libdir | --incdir | --mandir | --cflags | --ldflags | --registry | --default-registry | --help]
+
+=head1 DESCRIPTION
+
+B<TODO>
+
+
+
+=head1 OPTIONS
+
+  --version, -v    installed CWB version
+  --prefix         CWB installation prefix (may have been overridden)
+  --bindir         install location of binaries
+  --libdir         install location of CL library
+  --incdir         install location of C header files
+  --mandir         install location of manual pages
+  --cflags, -I     compiler flags for linking against CL library
+  --ldflags, -L    linker flags for linking against CL library
+  --registry, -r   effective registry directory or directories
+  --default-registry, -d  default registry directory compiled into CWB
+  --help, -h       display help page with usage information
+
+=over 4
+
+=item B<TODO>
+
+=back
+
+
+=head1 COPYRIGHT
+
+=over 4
+
+=item
+B<IMS Open Corpus Workbench (CWB)> L<http://cwb.sourceforge.net/>
+
+=item
+Copyright (C) 1993-2006 by IMS, University of Stuttgart
+
+=item
+Copyright (C) 2007- by the respective contributers (see file F<AUTHORS>)
+
+=back
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details
+(in the file F<COPYING>, or available via WWW at
+L<http://www.gnu.org/copyleft/gpl.html>).
+
+=cut
+

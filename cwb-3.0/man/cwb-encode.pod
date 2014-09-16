@@ -1,0 +1,95 @@
+=head1 NAME
+
+cwb-encode - Encode text corpora for the IMS Corpus Workbench
+
+=head1 SYNOPSIS
+
+B<cwb-encode> [-xsBvqDh] [-d I<data_directory>] [-R I<registry_file>]
+    [-U I<string>] [-b I<n>] -f I<input_file> [...] [-p -]
+    (-P I<attribute>|-S I<attribute_spec>|-V I<attribute_spec>|-0 I<attribute>)*
+
+... | B<cwb-encode> S<[I<options>] [I<declarations>]>
+
+
+=head1 DESCRIPTION
+
+B<TODO>
+
+Reads verticalised text from standard input (or one or more input files specified C<-f>) and converts it to the CWB binary index format. Each TAB-separated column is encoded as a separate p-attribute. The first p-attribute is named C<word> (unless changed with C<-p>), additional columns must be declared with C<-P> flags. S-attributes can be declared with C<-S> (without annotations) or C<-V> (with annotations) flags. In the input data, they must appear as opening and closing XML tags on separate lines. For each encoded attribute, one or more data files are created in the current directory (or a directory specified with C<-d>). After encoding, use B<cwb-makeall> to create the required index files and frequency lists, then compress them with B<cwb-huffcode> and B<cwb-compress-rdx> (or preferably use the B<cwb-make> program from the CWB/Perl interface).
+
+B<NB:> command-line B<options> (including input files specified with C<-f>) always have to precede the B<attribute declaration> flags!
+
+B<NB:> If you re-encode an existing corpus, be sure to delete all old data files, in particular the index and any compressed data files, before running B<cwb-encode>!
+
+
+=head1 OPTIONS
+
+  -f <file> read input from <file> [default: stdin]
+  -t <file> [same as -f <file> for backward compatibility]
+  -d <dir>  directory for data files created by cwb-encode
+  -R <rf>   create registry entry (named <rf>) listing all encoded attributes
+  -B        strip leading/trailing blanks from (input lines & token annotations)
+  -x        XML-aware (replace XML entities and ignore <!.. and <?..)
+  -s        skip empty lines in input data (recommended)
+  -U <str>  insert <str> for missing columns [default: "__UNDEF__"]
+  -b <n>    number of buckets in lexicon hash tables
+  -v        verbose mode (show progress messages while encoding)
+  -q        quiet mode (suppresses most warnings)
+  -D        debug mode (quiet, sorry, quite the opposite :-)
+  -h        this help page
+
+=over 4
+
+=item B<TODO>
+
+=back
+
+
+=head1 ATTRIBUTE DECLARATIONS
+
+  -p <att>  change name of default p-attribute from "word" to <att>
+  -p -      no default p-attribute (all must be declared with -P)
+  -P <att>  declare additional p-attribute <att>
+  -S <att>  declare s-attribute <att> without annotations
+  -V <att>  declare s-attribute <att> with annotations
+  -0 <att>  declare null s-attribute <att> (discards tags)
+
+=over 4
+
+=item B<TODO>
+
+=back
+
+
+=head1 INPUT FILE FORMAT
+
+B<TODO>
+
+
+=head1 COPYRIGHT
+
+=over 4
+
+=item
+B<IMS Open Corpus Workbench (CWB)> L<http://cwb.sourceforge.net/>
+
+=item
+Copyright (C) 1993-2006 by IMS, University of Stuttgart
+
+=item
+Copyright (C) 2007- by the respective contributers (see file F<AUTHORS>)
+
+=back
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details
+(in the file F<COPYING>, or available via WWW at
+L<http://www.gnu.org/copyleft/gpl.html>).
+
+=cut
+

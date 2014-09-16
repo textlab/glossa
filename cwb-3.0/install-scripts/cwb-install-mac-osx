@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# check that Xcode is installed
+
+if [[ !( -x /usr/bin/gcc && -x /usr/bin/flex && -x /usr/bin/bison ) ]]
+then
+  echo "You must install the Xcode suite (available from Apple) in order to compile the CWB from source."
+  exit
+fi
+
+# run as root! su or sudo.
+
+who=$(whoami)
+
+if [[ "$who" != root ]]
+then
+  echo "This script must be run as root."
+  echo "Please try again: sudo cwb-install-mac-osx"
+  echo "Thanks!"
+  exit
+fi
+
+# set appropriate configuration flags in config.mk (Perl is always available on Mac OS X)
+
+perl -i~ -pe 'if (/^include \$\(TOP\)\/config\/platform\//) { $_ = "include \$(TOP)/config/platform/darwin-universal\n" } elsif (/^include \$\(TOP\)\/config\/site\//) { $_ = "include \$(TOP)/config/site/standard\n" }' config.mk
+
+make clean
+make depend
+make cl
+make editline
+make utils
+make cqp
+
+make install

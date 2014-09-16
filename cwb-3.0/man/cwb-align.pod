@@ -1,0 +1,98 @@
+=head1 NAME
+
+cwb-align - A simple sentence alignment program for CWB-encoded corpora
+
+=head1 SYNOPSIS
+
+B<cwb-align> [-vh] [-r I<registry_dir>] [-s I<x>] [-w I<n>]
+    [-P I<attribute>] [-S I<attribute> | -V I<attribute>]
+    -o I<filename> I<source_corpus> I<target_corpus> I<grid_attribute>
+    [-C:I<weight>] [-S:I<weight>:I<ratio>] [-W:I<weight>:I<file>]
+    [-1:I<weight>] [-2:I<weight>] [-3:I<weight>] [-4:I<weight>]
+
+=head1 DESCRIPTION
+
+B<TODO>
+
+I<source_corpus> is the name of the source corpus, I<target_corpus> the name of the target corpus, 
+and I<grid_attribute> the s-attribute used as alignment grid (an attribute of this name 
+must exist both in source AND target corpus).
+
+
+=head1 OPTIONS
+
+  -P <p-att> use positional attribute <p-att> for alignment [word]
+  -S <s-att> pre-alignment (corresponding regions of the s-attribute are
+             pre-aligned; regions must appear in identical order!)
+  -V <s-att> pre-alignment with ID matching (identical annotation strings)
+  -o <file>  write alignment output to file <file>      [out.align]
+  -s <x>     set 2:2 alignment split factor to <x>      [1.2]
+  -w <n>     use best path search beam of width <n>     [50]
+  -r <reg>   use registry directory <reg>
+  -v         verbose
+  -h         this help page
+
+=over 4
+
+=item B<TODO>
+
+=back
+
+
+=head1 CONFIGURATION FLAGS
+
+  -C:<w>     size of alignment region (in characters)
+  -S:<w>:<t> shared words, i.e. identical tokens in source/target corpus
+             [to avoid false friends, frequency ratios f1/(f1+f2) and
+              f2/(f1+f2) must be greater than threshold <t>]
+  -1:<w>     charcters shared by source and target region
+  -2:<w>     bigrams     ~    ~    ~     ~    ~      ~   
+  -3:<w>     trigrams    ~    ~    ~     ~    ~      ~   
+  -4:<w>     4-grams     ~    ~    ~     ~    ~      ~   
+             [N-gram features are similar to orthographic cognates]
+  -W:<w>:<f> list of translation equivalents (read from file <f>)
+             [format: <source word> SPC <target word>]
+  [each flag defines a set of features with weight <w> per feature]
+
+=over 4
+
+=item B<TODO>
+
+=back
+
+The default configuration (if no flags are specified) is
+C<< S<-C:1 -S:50:0.4 -3:3 -4:4> >>.
+
+
+=head1 OUTPUT FORMAT
+
+B<TODO>
+
+
+=head1 COPYRIGHT
+
+=over 4
+
+=item
+B<IMS Open Corpus Workbench (CWB)> L<http://cwb.sourceforge.net/>
+
+=item
+Copyright (C) 1993-2006 by IMS, University of Stuttgart
+
+=item
+Copyright (C) 2007- by the respective contributers (see file F<AUTHORS>)
+
+=back
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details
+(in the file F<COPYING>, or available via WWW at
+L<http://www.gnu.org/copyleft/gpl.html>).
+
+=cut
+

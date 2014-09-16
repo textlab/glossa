@@ -1,0 +1,74 @@
+=head1 NAME
+
+cqpserver - A network server implementing the CQi interface (based on CQP)
+
+=head1 SYNOPSIS
+
+B<cqpserver> [-hvmxS1Lq] [-D I<corpus>] [-r I<registry_dir>]
+    [-l I<data_dir>] [-I I<init_file>] [-M I<macro_file>]
+    [-b I<n>] [-d I<mode>] [-P I<port>]
+
+=head1 DESCRIPTION
+
+B<TODO>
+
+
+=head1 OPTIONS
+
+    -h           help
+    -v           version and copyright information
+    -r dir       use <dir> as default registry
+    -l dir       store/load subcorpora in <dir>
+    -I file      read <file> as init file
+    -M file      read macro definitions from <file>
+    -m           disable macro expansion
+    -D corpus    set default corpus to <corpus>
+    -b num       set hard boundary for kleene star to <num> tokens
+    -S           SIG_PIPE handler toggle
+    -x           insecure mode (when run SETUID)
+    -1           single client server (exits after 1 connection)
+    -P  port     listen on port #<port> [default=CQI_PORT]
+    -L           accept connections from localhost only (loopback)
+    -q           fork() and quit before accepting connections
+    -d mode      activate/deactivate debug mode, where <mode> is one of: 
+       [ ShowSymtab, ShowPatList, ShowEvaltree, ShowDFA, ShowCompDFA,   ]
+       [ ShowGConstraints, SymtabDebug, TreeDebug, CLDebug,             ]
+       [ EvalDebug, InitialMatchlistDebug, DebugSimulation,             ]
+       [ VerboseParser, ParserDebug, ParseOnly, SearchDebug, MacroDebug ]
+       [ ServerLog [on], ServerDebug, Snoop (log all network traffic)   ]
+       [ ALL (activate all modes except ParseOnly)                      ]
+
+=over 4
+
+=item B<TODO>
+
+=back
+
+
+=head1 COPYRIGHT
+
+=over 4
+
+=item
+B<IMS Open Corpus Workbench (CWB)> L<http://cwb.sourceforge.net/>
+
+=item
+Copyright (C) 1993-2006 by IMS, University of Stuttgart
+
+=item
+Copyright (C) 2007- by the respective contributers (see file F<AUTHORS>)
+
+=back
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details
+(in the file F<COPYING>, or available via WWW at
+L<http://www.gnu.org/copyleft/gpl.html>).
+
+=cut
+

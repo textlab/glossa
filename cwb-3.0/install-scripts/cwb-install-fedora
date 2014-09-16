@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Note : this script will probably work on other flavours of Linux using RPM.
+
+# run as root! su or sudo.
+
+who=$(whoami)
+
+if [[ "$who" != root ]]
+then
+  echo "This script must be run as root."
+  echo "Please try again: sudo cwb-install-fedora"
+  echo "Thanks!"
+  exit
+fi
+
+yum install autoconf bison flex gcc glibc glibc-common glibc-devel glibc-headers make ncurses ncurses-lib
+
+./install-scripts/cwb-config-basic
+
+make clean
+make depend
+make cl
+make editline
+make utils
+make cqp
+
+make install

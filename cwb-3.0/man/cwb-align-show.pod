@@ -1,0 +1,71 @@
+=head1 NAME
+
+cwb-align-show - Browse alignment files created by cwb-align
+
+=head1 SYNOPSIS
+
+B<cwb-align-show> [-Wh] [-w I<n>] [-s I<n>] [-r I<registry_dir>]
+    [-P I<attribute>] I<alignment_file>
+
+=head1 DESCRIPTION
+
+B<TODO>
+
+Display alignment results in terminal. Aligned regions are displayed side-by-side, one region at a time. The following interactive commands are available:
+
+
+=head1 INTERACTIVE COMMANDS
+
+  RET    show next aligned region
+  p <n>  print next <n> regions
+  s <n>  skip next <n> regions
+  h      this list (help)
+  q, x   exit cwb-align-show
+
+B<TODO>
+
+
+=head1 OPTIONS
+
+  -P <p-att> display positional attribute <p-att> [word]
+  -r <reg>   use registry directory <reg>
+  -w <n>     set display column width to <n>   [38]
+  -s <n>     set column separator width to <n> [2]
+  -W         display width settings for wide xterm window
+  -h         this help page
+
+=over 4
+
+=item B<TODO>
+
+=back
+
+
+
+=head1 COPYRIGHT
+
+=over 4
+
+=item
+B<IMS Open Corpus Workbench (CWB)> L<http://cwb.sourceforge.net/>
+
+=item
+Copyright (C) 1993-2006 by IMS, University of Stuttgart
+
+=item
+Copyright (C) 2007- by the respective contributers (see file F<AUTHORS>)
+
+=back
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details
+(in the file F<COPYING>, or available via WWW at
+L<http://www.gnu.org/copyleft/gpl.html>).
+
+=cut
+

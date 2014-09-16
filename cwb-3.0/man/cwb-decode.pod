@@ -1,0 +1,90 @@
+=head1 NAME
+
+cwb-decode - Decode CWB corpus into various text formats
+
+=head1 SYNOPSIS
+
+B<cwb-decode> (-L|-H|-C|-Cx|-X) [-n] [-r I<registry_dir>]
+    [-s I<start>] [-e I<end>] [-p | -f I<file>]
+    I<corpus>  [-c I<attribute>] [-ALL]
+    (-P I<attribute>|-S I<attribute>|-V I<attribute>|-A I<attribute>)+
+
+=head1 DESCRIPTION
+
+B<TODO>
+
+Decode CWB corpus I<corpus> as plain text (or in various other text formats). In normal mode, the entire corpus (or a segment specified with the C<-s> and C<-e> options) is printed on standard output. In matchlist mode (C<-p> or C<-f>), (pairs of) corpus positions are read from standard input or a file specified with C<-f>, and the corresponding tokens or ranges are displayed. The attribute declaration flags C<-P>, C<-S>, C<-V> and C<-A> determine which attributes will be printed; use C<-ALL> for all attributes. See L<"OUTPUT FORMATS"> below for available output modes.
+
+B<NB:> command-line B<options> (which control the output format, range of corpus positions, etc.) must be specified before the I<corpus> name, while B<attribute declarations> (which select attributes to be displayed) must follow the I<corpus> name.
+
+
+=head1 OPTIONS
+
+  -L        Lisp output mode
+  -H        concordance line ('horizontal') output mode
+  -C        compact output mode (suitable for encode)
+  -Cx       XML-compatible compact output (for "encode -x ...")
+  -X        XML output mode
+  -n        show corpus position ('numbers')
+  -s <n>    first token to print (at corpus position <n>)
+  -e <n>    last token to print (at corpus position <n>)
+  -r <dir>  set registry directory
+  -p        matchlist mode (input from stdin)
+  -f <file> matchlist mode (input from <file>)
+  -h        this help page
+
+=over 4
+
+=item B<TODO>
+
+=back
+
+
+=head1 ATTRIBUTE DECLARATIONS
+
+  -P <att>  print p-attribute <att>
+  -S <att>  print s-attribute <att> (possibly including annotations)
+  -V <att>  show s-attribute annotation for each range in matchlist mode
+  -A <att>  print alignment attribute <att>
+  -ALL      print all p-attributes and s-attributes
+  -c <att>  expand ranges to full <att> region (matchlist mode)
+
+=over 4
+
+=item B<TODO>
+
+=back
+
+
+=head1 OUTPUT FORMATS
+
+B<TODO>
+
+
+=head1 COPYRIGHT
+
+=over 4
+
+=item
+B<IMS Open Corpus Workbench (CWB)> L<http://cwb.sourceforge.net/>
+
+=item
+Copyright (C) 1993-2006 by IMS, University of Stuttgart
+
+=item
+Copyright (C) 2007- by the respective contributers (see file F<AUTHORS>)
+
+=back
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details
+(in the file F<COPYING>, or available via WWW at
+L<http://www.gnu.org/copyleft/gpl.html>).
+
+=cut
+

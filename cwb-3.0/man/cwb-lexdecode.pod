@@ -1,0 +1,95 @@
+=head1 NAME
+
+cwb-lexdecode - Access lexicon of token-level annotations in a CWB corpus
+
+=head1 SYNOPSIS
+
+B<cwb-lexdecode> [-fnlsh] [-r I<registry_dir>] [-P I<attribute>]
+    [-p I<regexp> [-cd]] [-F I<file> [-0N]]  I<corpus>
+
+B<cwb-lexdecode> [-r I<registry_dir>] [-P I<attribute>] -S I<corpus>
+
+=head1 DESCRIPTION
+
+B<TODO>
+
+Print the lexicon (or part of it) of a positional attribute on standard output, optionally with frequency information.
+
+
+=head1 OPTIONS
+
+  -P <att>  use p-attribute <att> [default: word]
+  -S        only show lexicon and corpus size
+  -r <dir>  set registry directory
+  -f        show frequency (number of occurrences)
+  -n        show internal lexicon ID
+  -l        show length of annotation string
+  -s        print in (lexically) sorted order
+  -p <rx>   show lexicon entries matching regexp <rx> only
+  -c        [with -p <rx>] ignore case
+  -d        [with -p <rx>] ignore diacritics
+  -F <file> lookup strings read from <file> ('-' for stdin)
+  -0        [with -F <file>] show non-existing strings with freq. 0
+  -N        [with -F <file>] read lexicon IDs from <file>
+  -h        this help page
+
+=over 4
+
+=item B<TODO>
+
+=back
+
+
+=head1 OUTPUT FORMAT
+
+B<TODO>
+
+One line for each (selected) lexicon entry with the following TAB-delimited fields:
+
+=over 4
+
+=item [ lexicon id ]
+
+internal lexicon ID (only with C<-n> option)
+
+=item [ frequency ] 
+
+frequency of lexicon entry in corpus (only with C<-f> option)
+
+=item [ length ] 
+
+length of annotation string (only with C<-l> option)
+
+=item string
+
+annotation string
+
+=back
+
+=head1 COPYRIGHT
+
+=over 4
+
+=item
+B<IMS Open Corpus Workbench (CWB)> L<http://cwb.sourceforge.net/>
+
+=item
+Copyright (C) 1993-2006 by IMS, University of Stuttgart
+
+=item
+Copyright (C) 2007- by the respective contributers (see file F<AUTHORS>)
+
+=back
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details
+(in the file F<COPYING>, or available via WWW at
+L<http://www.gnu.org/copyleft/gpl.html>).
+
+=cut
+
