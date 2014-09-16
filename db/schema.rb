@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(:version => 20140715154830) do
     t.datetime "updated_at",              :null => false
     t.integer  "corpus_id"
     t.string   "type"
+    t.text     "positions"
   end
 
   create_table "rglossa_corpus_texts_metadata_values", :force => true do |t|
@@ -39,11 +40,11 @@ ActiveRecord::Schema.define(:version => 20140715154830) do
   end
 
   create_table "rglossa_corpus_translations", :force => true do |t|
-    t.integer  "rglossa_corpus_id"
-    t.string   "locale"
-    t.string   "name"
+    t.integer  "rglossa_corpus_id", :null => false
+    t.string   "locale",            :null => false
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+    t.string   "name"
   end
 
   add_index "rglossa_corpus_translations", ["locale"], :name => "index_rglossa_corpus_translations_on_locale"
@@ -53,6 +54,13 @@ ActiveRecord::Schema.define(:version => 20140715154830) do
     t.integer  "search_id",  :null => false
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "rglossa_media_files", :force => true do |t|
+    t.integer "corpus_id",      :null => false
+    t.integer "line_key_begin", :null => false
+    t.integer "line_key_end",   :null => false
+    t.string  "basename",       :null => false
   end
 
   create_table "rglossa_metadata_categories", :force => true do |t|
@@ -65,11 +73,11 @@ ActiveRecord::Schema.define(:version => 20140715154830) do
   end
 
   create_table "rglossa_metadata_category_translations", :force => true do |t|
-    t.integer  "rglossa_metadata_category_id"
-    t.string   "locale"
-    t.string   "name"
+    t.integer  "rglossa_metadata_category_id", :null => false
+    t.string   "locale",                       :null => false
     t.datetime "created_at",                   :null => false
     t.datetime "updated_at",                   :null => false
+    t.string   "name"
   end
 
   add_index "rglossa_metadata_category_translations", ["locale"], :name => "index_rglossa_metadata_category_translations_on_locale"
