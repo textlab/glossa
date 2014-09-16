@@ -32,9 +32,11 @@ ul.playlist li .comment {font-size:0.65em;opacity:0.5}
 soundManager.setup({
   flashVersion: 9,
   preferFlash: !window.location.toString().match(/experimental/i), // for visualization effects
+  debugMode: false,
+  debugFlash: false,
   useHighPerformance: true, // keep flash on screen, boost performance
   wmode: 'transparent', // transparent SWF, if possible
-  url: './swf/'
+  url: '<%= ActionController::Base.helpers.asset_path("rglossa/speech/") %>'
 });
 
 // custom page player configuration
