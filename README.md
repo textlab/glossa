@@ -128,7 +128,7 @@ installed manually. This is the full list of required packages:
   Ubuntu, install `libav-tools` instead of `ffmpeg`, and let *avconv* be called
   as *ffmpeg*, e.g.:
 
-    cd /usr/local/bin && ln -s ../../bin/avconv ffmpeg
+        cd /usr/local/bin && ln -s ../../bin/avconv ffmpeg
 
 * **[Mp3Splt](http://mp3splt.sourceforge.net)**. If your package manager cannot
   install it automatically, check the site with [packages for various
@@ -147,7 +147,7 @@ installed manually. This is the full list of required packages:
 * **Xvfb** (X virtual framebuffer).
 
 * **[The Snack Sound Toolkit](http://www.speech.kth.se/snack/)**. Unlike the
-  previous packages, Snack is probably unavailable in binary form for you
+  above packages, Snack is probably unavailable in binary form for your
   distribution, and the only option is to compile it from the
   [source](http://www.speech.kth.se/snack/dist/snack2.2.10.tar.gz).
 
