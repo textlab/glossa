@@ -93,6 +93,9 @@ getPos = function(oSound, event) {
   return Math.floor(oSound.duration*event.pageX/<%= @total_imgwidth %>)
 };
 
+selEdgeCss = {'width': '2px', 'height': '216px', 'backgroundColor': 'blue',
+              'position': 'absolute'};
+
 doc.body.onmousedown = function(event) {
   scrollMode = true;
   $('#iframe').contents().find('#sel').css('visibility', 'hidden');
@@ -101,16 +104,14 @@ doc.body.onmousedown = function(event) {
   oSound.startPos = getPos(oSound, event);
   oSound.setPosition(oSound.startPos);
   oSound.stop();
-  var selStartCss = {'width': '2px', 'height': '216px', 'backgroundColor': 'blue',
-                     'left': event.pageX, 'position': 'absolute'};
+  var selStartCss = $.extend({}, selEdgeCss, {'left': event.pageX});
   $('#iframe').contents().find('#sel-start').css(selStartCss);
   return false;
 };
 
 doc.body.onmousemove = function(event) {
   if (scrollMode) {
-    var selStopCss = {'width': '2px', 'height': '216px', 'backgroundColor': 'blue',
-                      'left': event.pageX, 'position': 'absolute'};
+    var selStopCss = $.extend({}, selEdgeCss, {'left': event.pageX});
     var selCss = {'width': Math.abs(event.pageX-oSound.startX)+'px', 'height': '216px',
                   'backgroundColor': 'rgba(0, 0, 0, 0.1)',
                   'left': Math.min(event.pageX, oSound.startX), 'position': 'absolute',
@@ -134,8 +135,7 @@ doc.body.onmouseup = function(event) {
   } else {
     oSound.stopPos = curPos;
   }
-  var selStopCss = {'width': '2px', 'height': '216px', 'backgroundColor': 'blue',
-                    'left': event.pageX, 'position': 'absolute'}
+  var selStopCss = $.extend({}, selEdgeCss, {'left': event.pageX});
   $('#iframe').contents().find('#sel-stop').css(selStopCss);
   oSound.stop();
   oSound.setPosition(oSound.startPos);
@@ -150,21 +150,23 @@ toggleWaveform = function(id, cls) {
   }
 }
 
-$( document ).ready(function() {
-  $( "#wfcb" ).click(function() {
+$(document).ready(function() {
+  $('#wfcb').click(function() {
     toggleWaveform('#wfcb', '.wave');
   });
-  $( "#fmcb" ).click(function() {
+  $('#fmcb').click(function() {
     toggleWaveform('#fmcb', '.fmt');
   });
-  $( "#ptcb" ).click(function() {
+  $('#ptcb').click(function() {
     toggleWaveform('#ptcb', '.pitch');
   });
 });
 </script>
 <form>
 <label><input type="checkbox" id="wfcb" checked>waveform &amp; spectrogram</label> |
-<label><input type="checkbox" id="fmcb" checked>formants: <span style="color: red">1</span> <span style="color: lightgreen">2</span> <span style="color: blue">3</span> <span style="color: orange">4</span></label> |
+<label><input type="checkbox" id="fmcb" checked>formants:
+  <span style="color: red">1</span> <span style="color: lightgreen">2</span>
+  <span style="color: blue">3</span> <span style="color: orange">4</span></label> |
 <label><input type="checkbox" id="ptcb" checked>pitch</label> |
 Problems? Switch to
 <script>
