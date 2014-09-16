@@ -27,6 +27,8 @@ Rglossa::Engine.routes.draw do
   end
 
   scope module: 'speech' do
+    get '/wfplayer-:corpus_id-:line_key-:start-:stop', to: 'waveform_player#show',
+        :constraints => {:start => /\d+(\.\d+)?/, :stop => /\d+(\.\d+)?/}
     namespace :search_engines do
       # Add more search types to the resource list as they are implemented, e.g.
       # resources :cwb_searches, :corpuscle_searches, :annis2_searches do

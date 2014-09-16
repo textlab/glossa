@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'devise', '~> 2.2.3'
   s.add_dependency 'globalize3'
   s.add_dependency 'i18n-js'
+  s.add_dependency 'fastimage'
 
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'rb-fsevent', '~> 0.9.1'
