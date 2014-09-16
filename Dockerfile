@@ -27,10 +27,6 @@ WORKDIR /glossa
 # Make thin reachable to other containers
 EXPOSE 3000
 
-# Container should behave like a standalone executable
-CMD ["s"]
-ENTRYPOINT ["rails"]
-
 # Install the necessary gems
 ADD Gemfile /glossa/Gemfile
 ADD Gemfile.lock /glossa/Gemfile.lock
