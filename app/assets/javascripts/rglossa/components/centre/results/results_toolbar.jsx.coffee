@@ -24,39 +24,41 @@ window.ResultsToolbar = React.createClass
       handleSortByChanged, showFrequencies} = @props
 
     `<div className="row-fluid search-result-toolbar" style={{marginTop: 15}}>
-      <div className="dropdown pull-left" style={{marginRight: 10, marginBottom: 15}}>
-        <a className="btn dropdown-toggle" data-toggle="dropdown" href="#">
-          Sort
-          &nbsp;<span className="caret"></span>
-        </a>
-        <ul className="dropdown-menu">
-          <li><a onClick={handleSortByChanged.bind(null, 'position')} href="#">
-            {sortBy === 'position' && <i className="icon-ok">&nbsp;</i>}By corpus position</a></li>
-          <li><a onClick={handleSortByChanged.bind(null, 'match')} href="#">
-            {sortBy === 'match' && <i className="icon-ok">&nbsp;</i>}By match</a></li>
-          <li><a onClick={handleSortByChanged.bind(null, 'left')} href="#">
-            {sortBy === 'left' && <i className="icon-ok">&nbsp;</i>}By left context</a></li>
-          <li><a onClick={handleSortByChanged.bind(null, 'right')} href="#">
-            {sortBy === 'right' && <i className="icon-ok">&nbsp;</i>}By right context</a></li>
-        </ul>
+      <div className="pull-left">
+        <div className="dropdown pull-left" style={{marginRight: 10, marginBottom: 15}}>
+          <a className="btn dropdown-toggle" data-toggle="dropdown" href="#">
+            Sort
+            &nbsp;<span className="caret"></span>
+          </a>
+          <ul className="dropdown-menu">
+            <li><a onClick={handleSortByChanged.bind(null, 'position')} href="#">
+              {sortBy === 'position' && <i className="icon-ok">&nbsp;</i>}By corpus position</a></li>
+            <li><a onClick={handleSortByChanged.bind(null, 'match')} href="#">
+              {sortBy === 'match' && <i className="icon-ok">&nbsp;</i>}By match</a></li>
+            <li><a onClick={handleSortByChanged.bind(null, 'left')} href="#">
+              {sortBy === 'left' && <i className="icon-ok">&nbsp;</i>}By left context</a></li>
+            <li><a onClick={handleSortByChanged.bind(null, 'right')} href="#">
+              {sortBy === 'right' && <i className="icon-ok">&nbsp;</i>}By right context</a></li>
+          </ul>
+        </div>
+        <div className="dropdown pull-left" style={{marginBottom: 15}}>
+          <a className="btn dropdown-toggle" data-toggle="dropdown" href="#">
+            Statistics
+            &nbsp;<span className="caret"></span>
+          </a>
+          <ul className="dropdown-menu">
+            <li className="dropdown-submenu">
+              <a onClick={showFrequencies.bind(null, 'word')} href="#">Frequencies</a>
+                <ul className="dropdown-menu">
+                    <li><a onClick={showFrequencies.bind(null, 'word')}>Word forms</a></li>
+                    <li><a onClick={showFrequencies.bind(null, 'lemma')}>Lemmas</a></li>
+                    <li><a onClick={showFrequencies.bind(null, corpusNs.getPOSAttribute(corpus))}>Parts-of-speech</a></li>
+                </ul>
+            </li>
+          </ul>
+        </div>
+        <button className="btn" style={{marginBottom: 15, marginLeft: 10}} onClick={this.props.showMap}>Map</button>
       </div>
-      <div className="dropdown pull-left" style={{marginBottom: 15}}>
-        <a className="btn dropdown-toggle" data-toggle="dropdown" href="#">
-          Statistics
-          &nbsp;<span className="caret"></span>
-        </a>
-        <ul className="dropdown-menu">
-          <li className="dropdown-submenu">
-            <a onClick={showFrequencies.bind(null, 'word')} href="#">Frequencies</a>
-              <ul className="dropdown-menu">
-                  <li><a onClick={showFrequencies.bind(null, 'word')}>Word forms</a></li>
-                  <li><a onClick={showFrequencies.bind(null, 'lemma')}>Lemmas</a></li>
-                  <li><a onClick={showFrequencies.bind(null, corpusNs.getPOSAttribute(corpus))}>Parts-of-speech</a></li>
-              </ul>
-          </li>
-        </ul>
-      </div>
-      <button className="btn" style={{marginBottom: 15, marginLeft: 10}} onClick={this.props.showMap}>Map</button>
       {this.hasMultipleResultPages()
         ? <ResultsPaginator
             store={store}
