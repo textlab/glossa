@@ -1,0 +1,91 @@
+description:  Amharic tags developed by the Ethiopian Languages Research Center at Addis Ababa University
+displayAttrs: [part-of-speech]
+
+tags:
+  attr: pos
+  name: part-of-speech
+  options:
+    - name: Nouns
+      features:
+        - attr: pos
+          options:
+            - name: Any basic or derived noun not matching other classes
+              value: N
+            - name: Verbal/infinitival noun, formed from any verb form
+              value: VN
+            - name: Noun attached with a preposition
+              value: NP
+            - name:  Noun attached with a conjunction
+              value: NC
+            - name: Noun with a preposition and a conjunction
+              value: NPC
+    - name: Pronouns
+      features:
+        - attr: pos
+          options:
+            - name: Any pronoun not matching other classes
+              value: PRON
+            - name: Pronoun attached with a preposition
+              value: PRONP
+            - name: Pronoun attached with a conjunction
+              value: PRONC
+            - name:  Pronoun with a preposition and a conjunction
+              value: PRONPC
+    - name: Verbs
+      features:
+        - attr: pos
+          options:
+            - name:  Any verb not matching other classes
+              value: V
+            - name: Auxiliary verb
+              value: AUX
+            - name: Relative verb
+              value: VREL
+            - name:  Verb attached with a preposition
+              value: VP
+            - name:  Verb attached with a conjunction
+              value: VC
+            - name:  Verb with a preposition and a conjunction
+              value: VPC
+    - name: Adjectives
+      features:
+        - attr: pos
+          options:
+            - name:  Any adjective not matching other classes
+              value: ADJ
+            - name:  Adjective attached with a preposition
+              value: ADJP
+            - name:  Adjective attached with a conjunction
+              value: ADJC
+            - name:   Adjective with a preposition and a conjunction
+              value: ADJPC
+    - name: Numerals
+      features:
+        - attr: pos
+          options:
+            - name:  Cardinal numeral not matching other classes
+              value: NUMCR
+            - name:  Ordinal numeral not matching other classes
+              value: NUMOR
+            - name:  Numeral attached with a preposition
+              value: NUMP
+            - name:  Numeral attached with a conjunction
+              value: NUMC
+            - name:  Numeral with a preposition and a conjunction
+              value: NUMPC
+    - name: Others
+      features:
+        - attr: pos
+          options:
+            - name:  Preposition
+              value: PREP
+            - name:  Conjunction
+              value: CONJ
+            - name:  Adverb
+              value: ADV
+            - name:  Interjection
+              value: INT
+            - name:  Punctuation
+              value: PUNC
+            - name:  Unclassified
+              value: UNC
