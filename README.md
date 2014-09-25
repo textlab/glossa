@@ -138,7 +138,7 @@ server, along with an R package called rcqp.
   Depending on your distribution, these header files can be found in a package
   called libglib2.0-dev, glib2-devel, or something similar.
 
-### Other optional packages
+### Installing packages required by the waveform server
 
 For the waveform visualisation to work, you need to install a few more packages.
 Try to use your package manager to install as much as possible. In Debian-based
@@ -197,6 +197,17 @@ installed manually. This is the full list of required packages:
   errors, make sure that `tcl_dir` and `tk_dir` contain directories of your
   Tcl/Tk installation (although the defaults should work fine for most
   distributions).
+
+## Control over the waveform server
+
+The waveform server starts automatically when needed, but in case you want to
+control it, you can use the following commands in the `rails console`:
+
+    Rglossa::Speech::WaveformPlayerController.server_controller.stop
+    Rglossa::Speech::WaveformPlayerController.server_controller.start
+
+It is recommended to stop and start the server after making changes in
+`config/waveforms.json`.
 
 ## More information
 
