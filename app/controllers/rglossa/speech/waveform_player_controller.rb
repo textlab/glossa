@@ -24,7 +24,7 @@ class WaveformPlayerController < ActionController::Base
     end
 
     def update_conf
-      @conf = WaveformController.conf
+      @conf = WaveformPlayer.conf
     end
 
     def conf
