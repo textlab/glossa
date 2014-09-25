@@ -19,16 +19,26 @@ class WaveformPlayerController < ActionController::Base
       headless.start
     end
 
+    def stop
+      server_controller.stop
+    end
+
+    def connect
+      server_controller.connect
+    end
+
+    def conf
+      !update_conf? && @conf ? @conf : update_conf
+    end
+
+    private
+
     def update_conf?
       !@server_controller || !@server_controller.running?
     end
 
     def update_conf
       @conf = WaveformPlayer.conf
-    end
-
-    def conf
-      !update_conf? && @conf ? @conf : update_conf
     end
 
     def server_controller

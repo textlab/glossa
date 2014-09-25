@@ -200,14 +200,13 @@ installed manually. This is the full list of required packages:
 
 ## Control over the waveform server
 
-The waveform server starts automatically when needed, but in case you want to
-control it, you can use the following commands in the `rails console`:
+You can use the following command in the `rails console` in order to stop the
+waveform server:
 
-    Rglossa::Speech::WaveformPlayerController.server_controller.stop
-    Rglossa::Speech::WaveformPlayerController.server_controller.start
+    Rglossa::Speech::WaveformPlayerController.stop
 
-It is recommended to stop and start the server after making changes in
-`config/waveforms.json`.
+There is no start command, as it starts automatically when needed. Changes in
+`config/waveforms.json` require restarting the server.
 
 ## More information
 
