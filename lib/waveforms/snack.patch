@@ -1,0 +1,19 @@
+--- a/generic/jkFormatMP3.c	2005-12-14 12:29:38.000000000 +0100
++++ b/generic/jkFormatMP3.c	2013-10-17 17:25:56.000000000 +0200
+@@ -29,6 +29,7 @@
+ #include "snack.h"
+ #include "jkFormatMP3.h"
+ #include <string.h>
++#include <math.h>
+ #define FRAS2(is,a) ((is) > 0 ? t_43[(is)]*(a):-t_43[-(is)]*(a))
+ #define MAXFRAMESIZE 2106  /* frame size starting at header */
+ #define roundf(x) (floor((x)+(float )0.5f))
+@@ -1309,8 +1310,6 @@
+   return len;
+ }
+ 
+-#include <math.h>
+-
+ #define PI12      0.261799387f
+ #define PI36      0.087266462f
+ #define COSPI3    0.500000000f
