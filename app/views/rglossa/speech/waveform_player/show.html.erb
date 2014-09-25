@@ -63,13 +63,13 @@ var PP_CONFIG = {
 <body>
  <div id="debug"></div>
  <div id="bar"></div>
- <ul class="playlist">
-  <li><span data-href="<%= @file %>"><div class="btn"><img src="<%= ActionController::Base.helpers.asset_path('rglossa/speech/play-pause.png') %>"></div>&nbsp;<div class="btn">Play / Pause</div></span></li>
+ <ul class="playlist" data-value="<%= @conf['output_dir'] %>">
+  <li><span data-value="<%= @file %>"><div class="btn"><img src="<%= ActionController::Base.helpers.asset_path('rglossa/speech/play-pause.png') %>"></div>&nbsp;<div class="btn">Play / Pause</div></span></li>
  </ul>
  <%
    @basenames.zip(@imgwidths, (0..Float::INFINITY)).each do |basename, imgwidth, i|
      width = 100 * imgwidth / @total_imgwidth
-   %><img id='small<%= i %>' src='tmp_waveforms/<%= basename %>-wave.jpg' width='<%= width %>%' height='70' style='display:none'><%
+   %><img id='small<%= i %>' src='<%= @conf['output_dir'] %>/<%= basename %>-wave.jpg' width='<%= width %>%' height='70' style='display:none'><%
    end
  %>
  <iframe id='iframe' height="237" width="100%" style="border: 0"></iframe>
@@ -78,15 +78,15 @@ var scrollMode = false;
 var doc = document.getElementById('iframe').contentWindow.document;
 doc.open();
 doc.write('<html><head><title></title></head><body style="margin: 0 0 0 0; overflow-y: hidden; width: <%= @total_imgwidth %>px">');
-doc.write('<div id="bar" style="position: relative; z-index: 3"></div>');
+doc.write('<div id="bar" style="width: 2px; background-color: red; height: <%= @conf['total_height'] %>px; position: absolute; z-index: 3"></div>');
 doc.write('<div id="sel-start" style="position: relative; z-index: 4; cursor: ew-resize"></div>');
 doc.write('<div id="sel-stop" style="position: relative; z-index: 4; cursor: ew-resize"></div>');
 doc.write('<div id="sel" style="position: relative; z-index: 3"></div>');
 <% @basenames.zip(0..Float::INFINITY).each do |basename, i| %>
 doc.write('<div style="position: relative; z-index: 0; float: left" id="waveform<%= i %>">');
-doc.write('<img src="tmp_waveforms/<%= basename %>-wave.jpg" class="wave">');
-doc.write('<img src="tmp_waveforms/<%= basename %>-fmt.png" style="position: absolute; z-index: 2; left: 0; top: 0" class="fmt">');
-doc.write('<img src="tmp_waveforms/<%= basename %>-pitch.png" style="position: absolute; z-index: 1; left: 0; top: 0" class="pitch"></div>');
+doc.write('<img src="<%= @conf['output_dir'] %>/<%= basename %>-wave.jpg" class="wave">');
+doc.write('<img src="<%= @conf['output_dir'] %>/<%= basename %>-fmt.png" style="position: absolute; z-index: 2; left: 0; top: 0" class="fmt">');
+doc.write('<img src="<%= @conf['output_dir'] %>/<%= basename %>-pitch.png" style="position: absolute; z-index: 1; left: 0; top: 0" class="pitch"></div>');
 <% end %>
 doc.write('</body></html>');
 doc.close();
@@ -95,7 +95,7 @@ getPos = function(oSound, event) {
   return Math.floor(oSound.duration*event.pageX/<%= @total_imgwidth %>)
 };
 
-selEdgeCss = {'width': '2px', 'height': '216px', 'backgroundColor': 'blue',
+selEdgeCss = {'width': '2px', 'height': '<%= @conf['total_height'] %>px', 'backgroundColor': 'blue',
               'position': 'absolute'};
 
 doc.body.onmousedown = function(event) {
@@ -114,7 +114,8 @@ doc.body.onmousedown = function(event) {
 doc.body.onmousemove = function(event) {
   if (scrollMode) {
     var selStopCss = $.extend({}, selEdgeCss, {'left': event.pageX});
-    var selCss = {'width': Math.abs(event.pageX-oSound.startX)+'px', 'height': '216px',
+    var selCss = {'width': Math.abs(event.pageX-oSound.startX)+'px',
+                  'height': '<%= @conf['total_height'] %>px',
                   'backgroundColor': 'rgba(0, 0, 0, 0.1)',
                   'left': Math.min(event.pageX, oSound.startX), 'position': 'absolute',
                   'visibility': 'visible'}

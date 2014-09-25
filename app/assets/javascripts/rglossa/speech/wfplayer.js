@@ -479,11 +479,7 @@ function PagePlayer() {
         document.getElementById('iframe').contentWindow.scrollTo(frameX - frameWidth / 5, 0);
       }
       div = document.getElementById('iframe').contentWindow.document.getElementById("bar")
-      div.style.width = "2px";
-      div.style.backgroundColor = "red";
-      div.style.height = "216px";
       div.style.left = frameX;
-      div.style.position = "absolute";
     }
 
   }; // events{}
@@ -601,13 +597,17 @@ function PagePlayer() {
     if (o.nodeName.toLowerCase() !== 'span') {
       o = self.getParentByNodeName(o,'span');
     }
-    if (!o || !o.getAttribute('data-href')) {
+    if (!o || !o.getAttribute('data-value')) {
       return true;
     }
+    ul = self.getParentByNodeName(o, 'ul');
+    if (ul) {
+      dir = ul.getAttribute('data-value') + '/';
+    } else {
+      dir = ''
+    }
 
-    // OK, we're dealing with a link
-
-    soundURL = 'tmp_waveforms/' + o.getAttribute('data-href') + '.mp3';
+    soundURL = dir + o.getAttribute('data-value') + '.mp3';
 
     //if (!o.href || (!sm.canPlayLink(o) && !self.hasClass(o,'playable')) || self.hasClass(o,'exclude')) {
     if ((!sm.canPlayURL(soundURL) && !self.hasClass(o,'playable')) || self.hasClass(o,'exclude')) {
