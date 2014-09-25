@@ -1,14 +1,30 @@
 #!/bin/bash
 
 if [ "$#" -ne 4 ]; then
-  >&2 echo "Usage: ./install_snack.sh snack_dir tcl_dir tk_dir tmp_dir"
+  >&2 echo "Usage: ./install_snack.sh snack_dir tcl_dir_list tk_dir_list tmp_dir"
   exit 1
 fi
 
 snack_dir="$1"
-tcl_dir="$2"
-tk_dir="$3"
+tcl_dir_list="$2"
+tk_dir_list="$3"
 tmp_dir="$4"
+
+IFS=:
+for dir in $tcl_dir_list; do
+  tcl_dir="$dir"
+  if [ -f "$dir/tclConfig.sh" ]; then
+    break
+  fi
+done
+
+for dir in $tk_dir_list; do
+  tk_dir="$dir"
+  if [ -f "$dir/tkConfig.sh" ]; then
+    break
+  fi
+done
+IFS=
 
 if [ -d "$tmp_dir/snack2.2.10" ]; then
   >&2 echo "Delete '$tmp_dir/snack2.2.10' to continue"
