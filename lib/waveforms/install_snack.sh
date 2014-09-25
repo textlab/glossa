@@ -42,8 +42,11 @@ set +v
 
 cat <<EOF
 
-Switch, if needed, to the user with write permissions in '$snack_dir'.
-Then run the following commands:
+=======================================================================
+Compilation complete
+
+Now sudo, if needed, to the user with write permission in '$snack_dir'.
+To complete the installation, run the following commands:
 
 cd '$tmp_dir/snack2.2.10/unix' && make install exec_prefix='$snack_dir' prefix='$snack_dir'
 cd '$tmp_dir/snack2.2.10/python' && python2 setup.py install --prefix='$snack_dir'

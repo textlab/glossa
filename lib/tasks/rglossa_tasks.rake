@@ -36,8 +36,9 @@ namespace "rglossa" do
       puts "done."
     end
 
-    task :snack do
-      conf = Rglossa::Speech::WaveformPlayerController.conf
+    desc "Download, compile and install the Snack Sound Toolkit"
+    task :snack => :environment do
+      conf = Rglossa::Speech::WaveformPlayer.conf
       Dir.chdir Rglossa::Engine.root.join('lib/waveforms')
       Process.wait spawn("./install_snack.sh", conf['snack_dir'], conf['tcl_dir'],
                          conf['tk_dir'], Dir.mktmpdir)
