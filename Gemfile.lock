@@ -3,9 +3,11 @@ PATH
   specs:
     rglossa (0.0.1)
       coffee-rails (~> 3.2.2)
+      daemon_controller
       devise (~> 2.2.3)
       fastimage
       globalize3
+      headless
       i18n-js
       jquery-rails
       oj
@@ -67,6 +69,7 @@ GEM
       execjs
     coffee-script-source (1.8.0)
     colorize (0.5.8)
+    daemon_controller (1.2.0)
     daemons (1.1.9)
     devise (2.2.4)
       bcrypt-ruby (~> 3.0)
@@ -101,6 +104,7 @@ GEM
     guard-rspec (3.0.2)
       guard (>= 1.8)
       rspec (~> 2.13)
+    headless (1.0.2)
     hike (1.2.3)
     hirb (0.7.1)
     http_parser.rb (0.5.3)
