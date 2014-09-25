@@ -1,0 +1,12 @@
+{
+  "snack_dir": "/usr/local",
+  "tcl_dir": "/usr/lib64:/usr/lib:/usr/lib/tcl8.5:/usr/lib/tcl8.4",
+  "tk_dir": "/usr/lib64:/usr/lib:/usr/lib/tk8.5:/usr/lib/tk8.4",
+  "output_dir": "tmp_waveforms",
+  "pid_file": "tmp/pids/genwaveform.pid",
+  "log_file": "log/genwaveform.log",
+  "pixels_per_second": 216,
+  "waveform_height": 72,
+  "total_height": 216,
+  "listen_port": 32146
+}
