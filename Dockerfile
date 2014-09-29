@@ -48,11 +48,15 @@ RUN make clean && make depend && make all && make install \
   && mkdir -p /usr/local/share/cwb/data
 
 # Install the Snack Sound Toolkit
-RUN cd "`cd /glossa && ruby -rbundler/setup -e 'puts Gem::Specification.find_by_name(%q{rglossa}).gem_dir'`/lib/waveforms" && \
-  SNACK_DIR="`ruby -rjson -e 'puts JSON.parse(File.read(%q{config/waveforms.json}))[%q{snack_dir}]'`" && \
-  mkdir /snack && ./install_snack.sh "$SNACK_DIR" /usr/lib/tcl8.4 /usr/lib/tk8.4 /snack && \
-  cd /snack/snack2.2.10/unix && make install exec_prefix="$SNACK_DIR" prefix="$SNACK_DIR" && \
-  cd /snack/snack2.2.10/python && python2 setup.py install --prefix="$SNACK_DIR"
+ADD config/waveforms.json /glossa/config/waveforms.json
+WORKDIR /glossa
+RUN SNACK_DIR="`ruby -rjson -e 'puts JSON.parse(File.read(%q{config/waveforms.json}))[%q{snack_dir}]'`" && \
+  cd "`ruby -rbundler/setup -e 'puts Gem::Specification.find_by_name(%q{rglossa}).gem_dir'`/lib/waveforms" && \
+  mkdir /snack && ./install_snack.sh "$SNACK_DIR" /usr/lib/tcl8.4 /usr/lib/tk8.4 /snack
+WORKDIR /snack/snack2.2.10/unix
+RUN make install exec_prefix="$SNACK_DIR" prefix="$SNACK_DIR"
+WORKDIR /snack/snack2.2.10/python
+RUN python2 setup.py install --prefix="$SNACK_DIR"
 
 # Copy application code to container
 ADD . /glossa/
