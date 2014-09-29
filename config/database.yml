@@ -4,17 +4,16 @@
 #   Ensure the SQLite 3 gem is defined in your Gemfile
 #   gem 'sqlite3'
 development:
-  #adapter: sqlite3
-  #database: db/development.sqlite3
-  #pool: 5
-  #timeout: 5000
-  adapter: mysql2
-  host: mysql
-  port: <%= ENV['MYSQL_PORT_3306_TCP_PORT'] %>
+  <% db = URI.parse(ENV['DATABASE_URL'] || 'sqlite3:///db/development.sqlite3') %>
+  adapter: <%= db.scheme %>
+  host: <%= db.host %>
+  port: <%= db.port %>
+  database: <%= db.path[1..-1] %>
+  username: <%= db.user %>
+  password: <%= db.password %>
   encoding: utf8
-  database: glossa
-  username: root
-  password: <%= ENV['MYSQL_ENV_MYSQL_ROOT_PASSWORD'] %>
+  pool: 5
+  timeout: 5000
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
