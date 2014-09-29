@@ -11,7 +11,7 @@ RUN apt-get update
 RUN apt-get install -y autoconf bison flex gcc libc6-dev libglib2.0-dev \
   libncurses5-dev make g++ git ruby2.0 ruby2.0-dev sqlite3 libsqlite3-dev \
   libmysqlclient-dev libav-tools mp3splt tcl8.4-dev tk8.4-dev python-tk \
-  imagemagick xvfb
+  imagemagick xvfb curl
 
 # Set Ruby 2.0 to be the default version
 # From http://blog.costan.us/2014/04/restoring-ruby-20-on-ubuntu-1404.html
@@ -48,7 +48,7 @@ RUN make clean && make depend && make all && make install \
   && mkdir -p /usr/local/share/cwb/data
 
 # Install the Snack Sound Toolkit
-RUN cd "`ruby -rbundler/setup -e 'puts Gem::Specification.find_by_name(%q{rglossa}).gem_dir'`/lib/waveforms" && \
+RUN cd "`cd /glossa && ruby -rbundler/setup -e 'puts Gem::Specification.find_by_name(%q{rglossa}).gem_dir'`/lib/waveforms" && \
   mkdir /snack && ./install_snack.sh /usr/local /usr/lib/tcl8.4 /usr/lib/tk8.4 /snack && \
   cd /snack/snack2.2.10/unix && make install exec_prefix=/usr/local prefix=/usr/local && \
   cd /snack/snack2.2.10/python && python2 setup.py install --prefix=/usr/local
