@@ -110,7 +110,7 @@ class WaveformPlayerController < ActionController::Base
   end
 
   def request_waveform(file)
-    fp = self.class.server_controller.connect do
+    fp = self.class.connect do
       TCPSocket.new '127.0.0.1', @conf['listen_port']
     end
     fp.write("#{file}\n")
