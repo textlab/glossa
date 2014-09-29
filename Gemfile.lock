@@ -18,14 +18,16 @@ GIT
 
 GIT
   remote: git://github.com/textlab/rglossa.git
-  revision: df169484d7530ea615c56f29d2eaa84800d9ef00
+  revision: 4399f8f11ba7061b84e271aa012a46f8122176d1
   branch: react-mergespeech
   specs:
     rglossa (0.0.1)
       coffee-rails (~> 3.2.2)
+      daemon_controller
       devise (~> 2.2.3)
       fastimage
       globalize3
+      headless
       i18n-js
       jquery-rails
       oj
@@ -80,6 +82,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.8.0)
+    daemon_controller (1.2.0)
     daemons (1.1.9)
     devise (2.2.8)
       bcrypt-ruby (~> 3.0)
@@ -95,6 +98,7 @@ GEM
       activemodel (>= 3.0.0)
       activerecord (>= 3.0.0)
       paper_trail (~> 2)
+    headless (1.0.2)
     hike (1.2.3)
     i18n (0.6.11)
     i18n-js (2.1.2)
@@ -161,7 +165,7 @@ GEM
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
     rserve-client (0.3.1)
-    sass (3.4.4)
+    sass (3.4.5)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
