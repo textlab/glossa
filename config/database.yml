@@ -5,8 +5,8 @@
 #   gem 'sqlite3'
 development:
   <% db = URI.parse(ENV['DATABASE_URL'] ||
-                    'mysql2://root:%s@mysql:%d/glossa' % [URI.encode ENV['MYSQL_ENV_MYSQL_ROOT_PASSWORD'],
-                                                          ENV['MYSQL_PORT_3306_TCP_PORT']]) %>
+                    'mysql2://root:%s@mysql:%d/glossa' % [URI.encode(ENV['MYSQL_ENV_MYSQL_ROOT_PASSWORD'] || ''),
+                                                          ENV['MYSQL_PORT_3306_TCP_PORT'] || 3306]) %>
   adapter: <%= db.scheme %>
   host: <%= db.host %>
   port: <%= db.port %>
