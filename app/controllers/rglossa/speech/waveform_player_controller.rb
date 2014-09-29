@@ -24,7 +24,7 @@ class WaveformPlayerController < ActionController::Base
     end
 
     def connect
-      server_controller.connect
+      server_controller.connect &Proc.new
     end
 
     def conf
