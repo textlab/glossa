@@ -7,7 +7,8 @@ class WaveformPlayerController < ActionController::Base
       width = @conf['pixels_per_second'] * 60
       height = @conf['total_height']
       # The display number is the same as the port number
-      opts = {:display => @conf['listen_port'], :dimensions => "#{width}x#{height}x16"}
+      opts = {:display => @conf['listen_port'], :dimensions => "#{width}x#{height}x16",
+              :destroy_at_exit => false}
 
       # Start Xvfb again if it already exists, as the dimensions may have changed
       headless = begin
