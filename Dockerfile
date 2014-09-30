@@ -11,7 +11,7 @@ RUN apt-get update
 RUN apt-get install -y autoconf bison flex gcc libc6-dev libglib2.0-dev \
   libncurses5-dev make g++ git ruby2.0 ruby2.0-dev sqlite3 libsqlite3-dev \
   libmysqlclient-dev libav-tools mp3splt tcl8.4-dev tk8.4-dev python-tk \
-  imagemagick xvfb curl
+  imagemagick xvfb curl subversion
 
 # Set Ruby 2.0 to be the default version
 # From http://blog.costan.us/2014/04/restoring-ruby-20-on-ubuntu-1404.html
@@ -38,14 +38,16 @@ ADD Gemfile /glossa/Gemfile
 ADD Gemfile.lock /glossa/Gemfile.lock
 RUN bundle install
 
-# Install the IMS Open Corpus Workbench (http://cwb.sourceforge.net/)
-# checked out from svn and with config.mk changed to select linux-64 as
-# the platform to build for.
-ADD cwb-3.0 /cwb-3.0
-WORKDIR /cwb-3.0
-RUN make clean && make depend && make all && make install \
-  && mkdir -p /usr/local/share/cwb/registry \
-  && mkdir -p /usr/local/share/cwb/data
+# Install the IMS Open Corpus Workbench (http://cwb.sourceforge.net/) by
+# checking it out from svn and modifying config.mk to select linux-64 as the
+# platform to build for. The -r option has the same function as Gemfile.lock
+# for gems - it locks the code to a specific revision. When an update is
+# needed, change it to the current date.
+RUN svn export -r{2014-09-30} http://svn.code.sf.net/p/cwb/code/cwb/branches/3.0 /tmp/cwb && cd /tmp/cwb && \
+  ruby -i -pe '$_.sub!(%r{ / [^/\r\n]+ \s* $ }x, "/linux-64") if $_.start_with? "include $(TOP)/config/platform/"' /tmp/cwb/config.mk && \
+  make clean && make depend && make all && make install && \
+  mkdir -p /usr/local/share/cwb/registry && \
+  mkdir -p /usr/local/share/cwb/data
 
 # Install the Snack Sound Toolkit
 ADD config/waveforms.json /glossa/config/waveforms.json
