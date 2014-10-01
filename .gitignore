@@ -13,3 +13,6 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+
+# Ignore an optional file that can be used to set local Ubuntu and gem mirrors.
+/script/set_build_mirrors.sh
