@@ -10,9 +10,9 @@ development:
   adapter: <%= db.scheme %>
   host: <%= db.host %>
   port: <%= db.port %>
-  database: <%= URI.decode db.path[1..-1] %>
-  username: <%= URI.decode db.user %>
-  password: <%= URI.decode db.password %>
+  database: <%= URI.decode db.path[1..-1] || "" %>
+  username: <%= URI.decode db.user || "" %>
+  password: <%= URI.decode db.password || "" %>
   encoding: utf8
   pool: 5
   timeout: 5000
