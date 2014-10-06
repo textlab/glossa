@@ -31,3 +31,15 @@ production:
   database: db/production.sqlite3
   pool: 5
   timeout: 5000
+
+oldglossa:
+  <% old_db = URI.parse ENV['OLD_GLOSSA_DB_URL'] || "" %>
+  adapter: <%= old_db.scheme %>
+  host: <%= old_db.host %>
+  port: <%= old_db.port %>
+  database: <%= URI.decode old_db.path[1..-1] || "" %>
+  username: <%= URI.decode old_db.user || "" %>
+  password: <%= URI.decode old_db.password || "" %>
+  encoding: utf8
+  pool: 5
+  timeout: 5000
