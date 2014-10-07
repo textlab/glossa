@@ -50,7 +50,7 @@ directory, so that your checked-out version is used instead of the version from
 the Gemfile:
 
     cd ..
-    git clone -b react-mergespeech https://github.com/textlab/rglossa
+    git clone https://github.com/textlab/rglossa
     cd glossa
     bundle config --local local.rglossa ../rglossa
 
