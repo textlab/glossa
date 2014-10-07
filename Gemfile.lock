@@ -18,8 +18,7 @@ GIT
 
 GIT
   remote: git://github.com/textlab/rglossa.git
-  revision: 4399f8f11ba7061b84e271aa012a46f8122176d1
-  branch: react-mergespeech
+  revision: 8592d05d42ae114ca96d63ab143be2e334d06449
   specs:
     rglossa (0.0.1)
       coffee-rails (~> 3.2.2)
@@ -120,7 +119,7 @@ GEM
     netrc (0.7.7)
     nokogiri (1.6.3.1)
       mini_portile (= 0.6.0)
-    oj (2.10.2)
+    oj (2.10.3)
     orm_adapter (0.5.0)
     paper_trail (2.7.2)
       activerecord (~> 3.0)
