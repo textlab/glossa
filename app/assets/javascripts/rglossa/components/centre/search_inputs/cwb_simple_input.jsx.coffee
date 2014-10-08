@@ -25,9 +25,12 @@ window.CwbSimpleInput = React.createClass
       query = ''
     else
       attr = if @isPhonetic() then 'phon' else 'word'
-      terms = for term in e.target.value.split(/\s/)
+      # Surround every Chinese character by space when constructing a cqp query,
+      # to treat it as if it was an individual word:
+      chineseCharsRange = '[\u4E00-\u9FFF\u3400-\u4DFF\uF900-\uFAFF]'
+      terms = for term in e.target.value.replace(///(#{chineseCharsRange})///g, ' $1 ').split(/\s/)
         if term is '' then '' else "[#{attr}=\"#{term}\" %c]"
-      query = terms.join(' ')
+      query = terms.join(' ').replace(///\s(\[\w+="#{chineseCharsRange}"(?:\s+%c)?\])\s///g, "$1")
 
     @props.handleQueryChanged
       lang: @props.searchQuery.lang
