@@ -1,7 +1,6 @@
 GIT
   remote: git://github.com/textlab/rglossa-fcs.git
-  revision: 3db1b010a61b59cefa38d8b637e9c63ade58aeaf
-  branch: react
+  revision: 7ff0c6805d1e24ed5e13eef8f6cbede5190496e3
   specs:
     rglossa-fcs (0.0.1)
       nokogiri

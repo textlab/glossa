@@ -41,7 +41,7 @@ gem 'jquery-rails'
 # gem 'debugger'
 
 gem "rglossa", :github => 'textlab/rglossa'
-gem "rglossa-fcs", :github => 'textlab/rglossa-fcs', :branch => 'react'
+gem "rglossa-fcs", :github => 'textlab/rglossa-fcs'
 gem "rglossa-r", :github => 'textlab/rglossa-r'
 gem 'devise', '~> 2.2.3'
 
