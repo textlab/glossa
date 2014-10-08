@@ -25,8 +25,8 @@ window.CwbSimpleInput = React.createClass
       query = ''
     else
       attr = if @isPhonetic() then 'phon' else 'word'
-      terms = for term in e.target.value.split(/\s+/)
-        if term is '' then ' ' else "[#{attr}=\"#{term}\" %c]"
+      terms = for term in e.target.value.split(/\s/)
+        if term is '' then '' else "[#{attr}=\"#{term}\" %c]"
       query = terms.join(' ')
 
     @props.handleQueryChanged
