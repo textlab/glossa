@@ -2,7 +2,10 @@
   (:require [reagent.core :as reagent :refer [atom]]
             [plumbing.core :as plumbing :refer [map-vals]]))
 
-(defonce app-state (atom {:text "Hello Chestnut!"}))
+(def data {:categories ["ku" "hest"]
+           :users      ["per" "kari"]})
+
+(defonce app-state (into {} (map-vals atom data)))
 
 (defn navbar []
   [:div.navbar.navbar-fixed-top [:div.navbar-inner [:div.container [:span.brand "Glossa"]]]])
@@ -13,21 +16,19 @@
     [:button#new-search-button.btn.btn-mini.btn-primary {:title "Reset form" :value "Reset form"}]
     [:div.span9]]])
 
-(defn middle []
-  [:div "middle"])
+(defn bottom [{:keys [categories]}]
+  [:div (for [cat @categories]
+     [:div cat])])
 
-(defn bottom []
-  [:div "bottom"])
-
-(defn app []
+(defn app [s]
+  (.log js/console s)
   [:div [navbar]
    [:div.container-fluid
-    [top]
-    [middle]]
-   [bottom]])
+    [top]]
+   [bottom s]])
 
 (defn ^:export main []
   (reagent/render-component
     (fn []
-      [app])
+      [app app-state])
     (. js/document (getElementById "app"))))
