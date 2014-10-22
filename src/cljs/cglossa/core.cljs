@@ -1,5 +1,6 @@
 (ns cglossa.core
-  (:require [reagent.core :as reagent :refer [atom]]))
+  (:require [reagent.core :as reagent :refer [atom]]
+            [plumbing.core :as plumbing :refer [map-vals]]))
 
 (defonce app-state (atom {:text "Hello Chestnut!"}))
 

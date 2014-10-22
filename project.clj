@@ -18,7 +18,8 @@
                  [com.cemerick/piggieback "0.1.3"]
                  [weasel "0.4.0-SNAPSHOT"]
                  [leiningen "2.5.0"]
-                 [http-kit "2.1.19"]]
+                 [http-kit "2.1.19"]
+                 [prismatic/plumbing "0.3.4"]]
 
   :plugins [[lein-cljsbuild "1.0.3"]
             [lein-environ "1.0.0"]]
