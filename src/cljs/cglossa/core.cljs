@@ -4,6 +4,8 @@
             [cglossa.centre :as centre]))
 
 (def state {:showing-results false})
+; avoid "not resolved" messages in Cursive
+(declare getElementById)
 
 (def data {:categories ["ku" "hest"]
            :users      ["per" "kari"]})
