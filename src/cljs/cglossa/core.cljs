@@ -14,17 +14,14 @@
 (defn header []
   [:div.navbar.navbar-fixed-top [:div.navbar-inner [:div.container [:span.brand "Glossa"]]]])
 
-(defn footer [_ {:keys [categories]}]
-  [:div (for [cat @categories]
-     [:div cat])])
-
 (defn app [s d]
   [:div
    [header]
    [:div.container-fluid
     [centre/top s d]
     [centre/bottom s d]]
-   [footer s d]])
+   [:div.app-footer
+    [:img.textlab-logo {:src "img/tekstlab.gif"}]]])
 
 (defn ^:export main []
   (reagent/render-component
