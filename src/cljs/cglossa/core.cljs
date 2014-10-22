@@ -3,12 +3,14 @@
             [plumbing.core :as plumbing :refer [map-vals]]
             [cglossa.centre :as centre]))
 
-(def state {:showing-results false})
 ; avoid "not resolved" messages in Cursive
 (declare getElementById)
 
-(def data {:categories ["ku" "hest"]
-           :users      ["per" "kari"]})
+(def state {:showing-results? false
+            :showing-sidebar? false})
+
+(def data {:corpus {:name "LBK"
+                    :search-engine :cwb-speech}})
 
 (defonce app-state (into {} (map-vals atom state)))
 (defonce app-data (into {} (map-vals atom data)))
