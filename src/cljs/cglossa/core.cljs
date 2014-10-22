@@ -5,7 +5,7 @@
 (defonce app-state (atom {:text "Hello Chestnut!"}))
 
 (defn navbar []
-  [:div.navbar.navbar-fixed-top [:div.navbar-inner [:div.container [:span.brand Glossa]]]])
+  [:div.navbar.navbar-fixed-top [:div.navbar-inner [:div.container [:span.brand "Glossa"]]]])
 
 (defn top []
   [:div.row-fluid
