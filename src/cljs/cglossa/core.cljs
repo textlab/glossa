@@ -7,7 +7,8 @@
 (declare getElementById)
 
 (def state {:showing-results? false
-            :showing-sidebar? false})
+            :showing-sidebar? false
+            :search-query {:query "[word=\"han\" %c] [word=\"er\" %c]"}})
 
 (def data {:corpus {:name "Leksikografisk bokmålskorpus"
                     :code "bokmal"

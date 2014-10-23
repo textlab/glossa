@@ -15,4 +15,4 @@
         component (get search-inputs/components search-engine)]
     [:div
      [corpus-info s d]
-     [:div [component]]]))
+     [:div [component s d]]]))
