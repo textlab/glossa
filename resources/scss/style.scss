@@ -1,0 +1,278 @@
+$mellow-icon-color: #666;
+
+body {
+  padding-top: 70px;
+}
+
+.app-footer {
+  height: 20px;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  background-color: #525252;
+}
+
+.app-footer .textlab-logo {
+  float: right;
+}
+
+h5.category-header {
+  color: #1010C2;
+  font-weight: normal;
+  cursor: pointer;
+
+  &.active-category {
+    font-weight: bold;
+  }
+}
+
+.corpus-logo {
+  width: 100px;
+  margin-left: 30px;
+}
+
+.corpus-info {
+  margin-bottom: 50px;
+}
+
+.corpus-part-name {
+  margin-left: 20px;
+}
+
+.counting-matches {
+  margin-top: 6px;
+}
+
+.multiword-container ~ .add-phrase-btn {
+  margin-top: -15px;
+}
+
+.spinner-searching-large {
+  background-image: url(spinner-large.gif);
+  width: 66px;
+  height: 66px;
+  margin-left: 250px;
+  margin-top: 70px;
+}
+
+.spinner-searching-small {
+  background-image: url(spinner-small.gif);
+  width: 16px;
+  height: 16px;
+  margin: 2px 8px 0px 0;
+  float: left;
+}
+
+.spinner-counting-matches {
+  @extend .spinner-searching-small;
+  margin-top: 14px;
+}
+
+.minmax-field {
+  width: 20px;
+}
+
+.multiword-search-form {
+  .multiword-term {
+    display: table-cell;
+
+    &> .control-group {
+      display: table;
+
+      div.interval {
+        display: table-cell;
+        vertical-align: bottom;
+        padding-left: 15px;
+        padding-right: 15px;
+
+        input.interval {
+          height: 10px;
+          width: 12px;
+          font-size: 12px;
+        }
+
+        h6 {
+          margin-top: 0;
+          margin-bottom: 2px;
+        }
+      }
+
+      div.word {
+        display: table-cell;
+        vertical-align: bottom;
+      }
+
+      div.add-search-word {
+        display: table-cell;
+        vertical-align: bottom;
+        padding-left: 10px;
+        padding-bottom: 2px;
+      }
+    }
+
+    div.word-checkboxes {
+      margin-top: 7px;
+    }
+  }
+
+  button.search {
+    margin-left: 20px;
+    margin-bottom: 22px;
+  }
+}
+
+.pos-feature-heading {
+  padding: 2px 20px 7px 20px;
+  margin-top: 5px;
+  font-variant: small-caps;
+  font-size: 130%;
+  font-weight: bold;
+  color: #555;
+  background-color: #eee;
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+}
+
+.row-fluid {
+  /* Remove the left margin when we collapse the sidebar */
+  .no-sidebar {
+    margin-left: 0;
+  }
+
+  input.max-hits[class*="span"] {
+    margin-top: 7px;
+    margin-left: 2px;
+    vertical-align: baseline;
+  }
+}
+
+.search-input-links {
+  margin-bottom: 10px;
+}
+
+.search-result-table-container {
+  height: 500px;
+  overflow: auto;
+
+  table {
+    td.left-context {
+      width: 50%;
+      text-align: right;
+    }
+
+    td.right-context {
+      width: 50%;
+    }
+
+    td.aligned-text {
+      font-style: italic;
+
+      span.aligned-id {
+        color: #999;
+      }
+    }
+
+    span.speaker-id {
+      color: #777;
+    }
+
+    td.match {
+      font-weight: bold;
+    }
+  }
+}
+
+.sidebar {
+  transition: width .1s;
+
+  &.sidebar-enter {
+    width: 0 !important;
+  }
+
+  &.sidebar-leave-active {
+    width: 0 !important;
+  }
+}
+
+.table-cell {
+  display: table-cell;
+}
+
+.top-toolbar button {
+  margin-bottom: 20px;
+  margin-right: 5px;
+  width: 75px;
+}
+
+// Override bootstrap-tags.css
+
+.multiword-term .tag-list {
+  left: 0;
+  top: 5px;
+  width: 170px;
+}
+
+.tag a {
+  color: white;
+  opacity: 0.8;
+}
+
+.tag.label {
+  line-height: 17px;
+}
+
+// Override bootstrap.css
+
+.row-fluid script:first-child + [class*="span"] {
+  margin-left: 0;
+}
+
+.form-inline input.multiword-field {
+  width: 131px;
+
+  &.removable {
+    width: 108px;
+  }
+}
+
+.pagination {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.pagination ul > li > a, .pagination ul > li > span {
+  line-height: 26px;
+}
+
+.pagination ul > li > span.paginator-counter {
+  padding: 0;
+
+  input {
+    margin: 0;
+    height: 24px;
+    vertical-align: top;
+    text-align: right;
+  }
+}
+
+// Override font-awesome.css
+
+.icon-cog:before {
+  color: $mellow-icon-color;
+}
+
+.icon-minus:before {
+  color: $mellow-icon-color;
+}
+
+.icon-plus:before {
+  color: $mellow-icon-color;
+}
+
+// Override select2.css
+
+.select2-container-multi .select2-choices .select2-search-choice {
+  margin-top: 6px;
+}

@@ -1,15 +1,189 @@
 body {
-    padding-top: 70px;
-}
+  padding-top: 70px; }
 
 .app-footer {
   height: 20px;
   position: absolute;
   bottom: 0px;
   width: 100%;
-  background-color: #525252;
-}
+  background-color: #525252; }
 
 .app-footer .textlab-logo {
-  float: right;
-}
+  float: right; }
+
+h5.category-header {
+  color: #1010C2;
+  font-weight: normal;
+  cursor: pointer; }
+  h5.category-header.active-category {
+    font-weight: bold; }
+
+.corpus-logo {
+  width: 100px;
+  margin-left: 30px; }
+
+.corpus-info {
+  margin-bottom: 50px; }
+
+.corpus-part-name {
+  margin-left: 20px; }
+
+.counting-matches {
+  margin-top: 6px; }
+
+.multiword-container ~ .add-phrase-btn {
+  margin-top: -15px; }
+
+.spinner-searching-large {
+  background-image: url(spinner-large.gif);
+  width: 66px;
+  height: 66px;
+  margin-left: 250px;
+  margin-top: 70px; }
+
+.spinner-searching-small, .spinner-counting-matches {
+  background-image: url(spinner-small.gif);
+  width: 16px;
+  height: 16px;
+  margin: 2px 8px 0px 0;
+  float: left; }
+
+.spinner-counting-matches {
+  margin-top: 14px; }
+
+.minmax-field {
+  width: 20px; }
+
+.multiword-search-form .multiword-term {
+  display: table-cell; }
+  .multiword-search-form .multiword-term > .control-group {
+    display: table; }
+    .multiword-search-form .multiword-term > .control-group div.interval {
+      display: table-cell;
+      vertical-align: bottom;
+      padding-left: 15px;
+      padding-right: 15px; }
+      .multiword-search-form .multiword-term > .control-group div.interval input.interval {
+        height: 10px;
+        width: 12px;
+        font-size: 12px; }
+      .multiword-search-form .multiword-term > .control-group div.interval h6 {
+        margin-top: 0;
+        margin-bottom: 2px; }
+    .multiword-search-form .multiword-term > .control-group div.word {
+      display: table-cell;
+      vertical-align: bottom; }
+    .multiword-search-form .multiword-term > .control-group div.add-search-word {
+      display: table-cell;
+      vertical-align: bottom;
+      padding-left: 10px;
+      padding-bottom: 2px; }
+  .multiword-search-form .multiword-term div.word-checkboxes {
+    margin-top: 7px; }
+.multiword-search-form button.search {
+  margin-left: 20px;
+  margin-bottom: 22px; }
+
+.pos-feature-heading {
+  padding: 2px 20px 7px 20px;
+  margin-top: 5px;
+  font-variant: small-caps;
+  font-size: 130%;
+  font-weight: bold;
+  color: #555;
+  background-color: #eee; }
+  .pos-feature-heading:first-of-type {
+    margin-top: 0; }
+
+.row-fluid {
+  /* Remove the left margin when we collapse the sidebar */ }
+  .row-fluid .no-sidebar {
+    margin-left: 0; }
+  .row-fluid input.max-hits[class*="span"] {
+    margin-top: 7px;
+    margin-left: 2px;
+    vertical-align: baseline; }
+
+.search-input-links {
+  margin-bottom: 10px; }
+
+.search-result-table-container {
+  height: 500px;
+  overflow: auto; }
+  .search-result-table-container table td.left-context {
+    width: 50%;
+    text-align: right; }
+  .search-result-table-container table td.right-context {
+    width: 50%; }
+  .search-result-table-container table td.aligned-text {
+    font-style: italic; }
+    .search-result-table-container table td.aligned-text span.aligned-id {
+      color: #999; }
+  .search-result-table-container table span.speaker-id {
+    color: #777; }
+  .search-result-table-container table td.match {
+    font-weight: bold; }
+
+.sidebar {
+  transition: width .1s; }
+  .sidebar.sidebar-enter {
+    width: 0 !important; }
+  .sidebar.sidebar-leave-active {
+    width: 0 !important; }
+
+.table-cell {
+  display: table-cell; }
+
+.top-toolbar button {
+  margin-bottom: 20px;
+  margin-right: 5px;
+  width: 75px; }
+
+.multiword-term .tag-list {
+  left: 0;
+  top: 5px;
+  width: 170px; }
+
+.tag a {
+  color: white;
+  opacity: 0.8; }
+
+.tag.label {
+  line-height: 17px; }
+
+.row-fluid script:first-child + [class*="span"] {
+  margin-left: 0; }
+
+.form-inline input.multiword-field {
+  width: 131px; }
+  .form-inline input.multiword-field.removable {
+    width: 108px; }
+
+.pagination {
+  margin-top: 0;
+  margin-bottom: 10px; }
+
+.pagination ul > li > a, .pagination ul > li > span {
+  line-height: 26px; }
+
+.pagination ul > li > span.paginator-counter {
+  padding: 0; }
+  .pagination ul > li > span.paginator-counter input {
+    margin: 0;
+    height: 24px;
+    vertical-align: top;
+    text-align: right; }
+
+.icon-cog:before {
+  color: #666; }
+
+.icon-minus:before {
+  color: #666; }
+
+.icon-plus:before {
+  color: #666; }
+
+.select2-container-multi .select2-choices .select2-search-choice {
+  margin-top: 6px; }
+
+/*# sourceMappingURL=style.css.map */
