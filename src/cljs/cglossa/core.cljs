@@ -9,8 +9,12 @@
 (def state {:showing-results? false
             :showing-sidebar? false})
 
-(def data {:corpus {:name "LBK"
-                    :search-engine :cwb-speech}})
+(def data {:corpus {:name "Leksikografisk bokmålskorpus"
+                    :code "bokmal"
+                    :encoding "iso-8859-1"
+                    :logo "book-clip-art-3.png"
+                    :languages {:lang   :no
+                                :tagger :obt_bm_lbk}}})
 
 (defonce app-state (into {} (map-vals atom state)))
 (defonce app-data (into {} (map-vals atom data)))

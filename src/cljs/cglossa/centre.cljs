@@ -1,5 +1,6 @@
 (ns cglossa.centre
-  (:require [cglossa.results :as results]))
+  (:require [cglossa.start :as start]
+            [cglossa.results :as results]))
 
 (defn top [{:keys [showing-results? showing-sidebar?]}
            {:keys [corpus]}]
@@ -14,4 +15,6 @@
   (let [cls (if (empty? (:metadata-categories @corpus)) "span12" "span9")]
     [:div.row-fluid
      [:div#main-content {:class-name cls}
-      [results/main s d]]]))
+      (if @showing-results?
+        [results/main s d]
+        [start/main s d])]]))
