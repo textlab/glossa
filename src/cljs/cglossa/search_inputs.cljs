@@ -4,6 +4,8 @@
 (defn- convert-to-cqp [value phonetic?]
   (let [attr (if phonetic? "phon" "word")
         chinese-chars-range "[\u4E00-\u9FFF\u3400-\u4DFF\uF900-\uFAFF]"
+        ; Surround every Chinese character by space when constructing a cqp query,
+        ; to treat it as if it was an individual word:
         value (str/replace value (re-pattern (str "(" chinese-chars-range ")")) " $1 ")]
     (->> (str/split value #"\s")
          (map #(if (= % "")
