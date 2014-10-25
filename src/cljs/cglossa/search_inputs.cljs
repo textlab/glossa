@@ -20,6 +20,14 @@
                 (convert-to-cqp value phonetic?))]
     (swap! search-query assoc-in [:query] query)))
 
+(defn- handle-phonetic-changed [event search-query]
+  (let [query (:query @search-query)
+        checked? (aget event "target" "checked")
+        query (if checked?
+                (str/replace query "word=" "phon=")
+                (str/replace query "phon=" "word="))]
+    (swap! search-query assoc-in [:query] query)))
+
 (defn cwb-search-inputs [{:keys [search-query]}]
   (let [query (:query @search-query)
         displayed-query (str/replace query #"\[\(?\w+=\"(.+?)\"(?:\s+%c)?\)?\]" "$1")
@@ -31,7 +39,8 @@
                        :on-change #(handle-text-changed % search-query phonetic?)}]
        [:label {:style {:marginTop 5}}]
        [:input {:name "phonetic" :type "checkbox"
-                :style {:marginTop -3} :checked phonetic?} " Phonetic form"]]]]))
+                :style {:marginTop -3} :checked phonetic?
+                :on-change #(handle-phonetic-changed % search-query)} " Phonetic form"]]]]))
 
 (def components {:cwb        cwb-search-inputs
                  :cwb-speech (fn [] [:div "CWB-SPEECHE"])})
