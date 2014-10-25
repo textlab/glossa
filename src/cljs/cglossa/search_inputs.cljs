@@ -37,10 +37,11 @@
       [:div.span10
        [:input.span12 {:type "text" :value displayed-query
                        :on-change #(on-text-changed % search-query phonetic?)
-       [:label {:style {:marginTop 5}}]
-       [:input {:name "phonetic" :type "checkbox"
-                :style {:marginTop -3} :checked phonetic?
-                :on-change #(on-phonetic-changed % search-query)} " Phonetic form"]]]]))
+                       :on-key-down #(on-key-down % search-query)}]
+       [:label {:style {:marginTop 5}}
+        [:input {:name      "phonetic" :type "checkbox"
+                 :style     {:marginTop -3} :checked phonetic?
+                 :on-change #(on-phonetic-changed % search-query)} " Phonetic form"]]]]]))
 
 (def components {:cwb        cwb-search-inputs
                  :cwb-speech (fn [] [:div "CWB-SPEECHE"])})
