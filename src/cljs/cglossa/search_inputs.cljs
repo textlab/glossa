@@ -1,26 +1,26 @@
 (ns cglossa.search-inputs
   (:require [clojure.string :as str]))
 
-(defn- convert-to-cqp [value phonetic?]
+(defn- phrase->cqp [phrase phonetic?]
   (let [attr (if phonetic? "phon" "word")
         chinese-chars-range "[\u4E00-\u9FFF\u3400-\u4DFF\uF900-\uFAFF]"
         ; Surround every Chinese character by space when constructing a cqp query,
         ; to treat it as if it was an individual word:
-        value (str/replace value (re-pattern (str "(" chinese-chars-range ")")) " $1 ")]
-    (->> (str/split value #"\s")
+        phrase (str/replace phrase (re-pattern (str "(" chinese-chars-range ")")) " $1 ")]
+    (->> (str/split phrase #"\s")
          (map #(if (= % "")
                 ""
                 (str "[" attr "=\"" % "\" %c]")))
          (str/join " "))))
 
-(defn- handle-text-changed [event search-query phonetic?]
+(defn- on-text-changed [event search-query phonetic?]
   (let [value (aget event "target" "value")
         query (if (= value "")
                 ""
-                (convert-to-cqp value phonetic?))]
+                (phrase->cqp value phonetic?))]
     (swap! search-query assoc-in [:query] query)))
 
-(defn- handle-phonetic-changed [event search-query]
+(defn- on-phonetic-changed [event search-query]
   (let [query (:query @search-query)
         checked? (aget event "target" "checked")
         query (if checked?
@@ -36,11 +36,11 @@
      [:form.form-inline.span12
       [:div.span10
        [:input.span12 {:type "text" :value displayed-query
-                       :on-change #(handle-text-changed % search-query phonetic?)}]
+                       :on-change #(on-text-changed % search-query phonetic?)
        [:label {:style {:marginTop 5}}]
        [:input {:name "phonetic" :type "checkbox"
                 :style {:marginTop -3} :checked phonetic?
-                :on-change #(handle-phonetic-changed % search-query)} " Phonetic form"]]]]))
+                :on-change #(on-phonetic-changed % search-query)} " Phonetic form"]]]]))
 
 (def components {:cwb        cwb-search-inputs
                  :cwb-speech (fn [] [:div "CWB-SPEECHE"])})
