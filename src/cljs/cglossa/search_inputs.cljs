@@ -75,7 +75,7 @@
   [:span "heidu"]
   (let [view @search-view
         languages (:langs @corpus)
-        multilingual? (> (count langs) 1)]
+        multilingual? (> (count languages) 1)]
     [:span
      [:div.row-fluid.search-input-links
       (if (= view :simple)
