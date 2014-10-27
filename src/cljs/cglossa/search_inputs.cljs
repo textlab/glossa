@@ -51,7 +51,7 @@
   [:button.btn.add-phrase-btn {:on-click #()} "Or..."])
 
 (defn- language-select [languages selected-language]
-  [select {:value selected-language}
+  [:select {:value selected-language}
    (for [language languages]
      [:option {:key (:value language) :value (:value language)} (:text language)])])
 
