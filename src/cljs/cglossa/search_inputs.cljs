@@ -38,9 +38,8 @@
     (search!)))
 
 (defn- search-button [multilingual?]
-  [:button.btn.btn-success {:type "button"
-                            :style {:marginLeft (if multilingual? 80 40)}
-                            :on-click #()}
+  [:button.btn.btn-success {:style {:marginLeft (if multilingual? 80 40)}
+                            :on-click search!}
    "Search"])
 
 (defn- language-add-button []
