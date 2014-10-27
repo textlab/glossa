@@ -8,14 +8,16 @@
 
 (def state {:showing-results? false
             :showing-sidebar? false
-            :search-query {:query "[word=\"han\" %c] [word=\"er\" %c]"}})
+            :search-view :simple
+            :search-queries [{:query "[word=\"han\" %c] [word=\"er\" %c]"}
+                             {:query "[word=\"de\" %c] [word=\"sa\" %c]"}]})
 
 (def data {:corpus {:name "Leksikografisk bokmålskorpus"
                     :code "bokmal"
                     :encoding "iso-8859-1"
                     :logo "book-clip-art-3.png"
-                    :languages {:lang   :no
-                                :tagger :obt_bm_lbk}}})
+                    :langs {:lang   :no
+                            :tagger :obt_bm_lbk}}})
 
 (defonce app-state (into {} (map-vals atom state)))
 (defonce app-data (into {} (map-vals atom data)))
