@@ -43,7 +43,9 @@
    "Search"])
 
 (defn- language-add-button []
-  [:span "ADD LANGUAGE"])
+  [:button.btn {:style {:marginLeft 20}
+                :on-click #()}
+   "Add language"])
 
 (defn- add-phrase-button []
   [:button.btn.add-phrase-btn {:on-click #()} "Or..."])
