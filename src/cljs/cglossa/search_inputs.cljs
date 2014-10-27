@@ -92,11 +92,14 @@
       [search-button multilingual?]
       (when multilingual? [language-add-button])]
 
-     (for [index (range (count @search-queries))]
-       (let [query-cursor (cursor [index] search-queries)
-             selected-language (-> @query-cursor :query :lang)]
-         (when multilingual? [language-select languages selected-language])
-         [simple query-cursor multilingual?]))]))
+     ; Now create a cursor into the search-queries ratom for each search expression
+     ; and display a row of search inputs for each of them. The doall call is needed
+     ; because ratoms cannot be derefed inside lazy seqs.
+     (doall (for [index (range (count @search-queries))]
+              (let [query-cursor (cursor [index] search-queries)
+                    selected-language (-> @query-cursor :query :lang)]
+                (when multilingual? [language-select languages selected-language])
+                [simple query-cursor multilingual?])))]))
 
 (def components {:cwb        cwb-search-inputs
-                 :cwb-speech (fn [] [:div "CWB-SPEECHE"])})
+                 :cwb-speech (fn [] [:div "CWB-SPEECH"])})
