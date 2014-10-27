@@ -80,15 +80,15 @@
      [:div.row-fluid.search-input-links
       (if (= view :simple)
         [:b "Simple"]
-        [:a {:href "" :title "Simple search box" :on-click #{}} "Simple"])
+        [:a {:href "" :title "Simple search box" :on-click #()} "Simple"])
       " | "
       (if (= view :extended)
         [:b "Extended"]
-        [:a {:href "" :title "Search for grammatical categories etc." :on-click #{}} "Extended"])
+        [:a {:href "" :title "Search for grammatical categories etc." :on-click #()} "Extended"])
       " | "
       (if (= view :cqp)
         [:b "CQP"]
-        [:a {:href "" :title "CQP expressions" :on-click #{}} "CQP"])
+        [:a {:href "" :title "CQP expressions" :on-click #()} "CQP"])
       [search-button multilingual?]
       (when multilingual? [language-add-button])]
 
