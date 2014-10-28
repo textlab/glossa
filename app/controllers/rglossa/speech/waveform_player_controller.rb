@@ -74,11 +74,12 @@ class WaveformPlayerController < ActionController::Base
   end
 
   def old_glossa_generate_audio(corpus_id, line_key, start, stop, output_path, file, fname)
-    conn = ActiveRecord::Base.establish_connection("oldglossa").connection
+    conn = ActiveRecord::Base.establish_connection(Rails.configuration.
+                                                         database_configuration["oldglossa"]).connection
     res = conn.execute("SELECT audio_file FROM %ssegments WHERE id=%d LIMIT 1" %
                        [corpus_id.upcase, line_key.to_i])
     basename = res.first.first
-    ActiveRecord::Base.establish_connection(ENV["RAILS_ENV"])
+    ActiveRecord::Base.establish_connection(Rails.configuration.database_configuration[ENV["RAILS_ENV"]])
 
     path = "rtmp://stream-prod01.uio.no/vod/mp4:uio/hf/ilf/#{corpus_id}/"
     glossa_fn = old_glossa_filename(basename, corpus_id)
