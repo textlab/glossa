@@ -79,8 +79,8 @@ class WaveformPlayerController < ActionController::Base
     res = conn.execute("SELECT audio_file FROM %ssegments WHERE id=%d LIMIT 1" %
                        [corpus_id.upcase, line_key.to_i])
     basename = res.first.first
-    ActiveRecord::Base.establish_connection(Rails.configuration.database_configuration[ENV["RAILS_ENV"]])
-
+    ActiveRecord::Base.establish_connection(Rails.configuration.database_configuration[ENV["RAILS_ENV"] ||
+                                                                                       "development"])
     path = "rtmp://stream-prod01.uio.no/vod/mp4:uio/hf/ilf/#{corpus_id}/"
     glossa_fn = old_glossa_filename(basename, corpus_id)
     movie_loc = "mp4:uio/hf/ilf/#{corpus_id}/audio/#{glossa_fn}.mp4"
