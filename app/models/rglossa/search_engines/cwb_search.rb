@@ -114,6 +114,12 @@ module Rglossa
         # case of a monolingual result or the first language of a multilingual result, or
         # an arrow in the case of subsequent languages in a multilingual result.
         res.map! { |r| r.sub(/^\s*\d+:\s*/, '').sub(/^-->.+?:\s*/, '') }
+
+        # When the match includes the first or last token of the s unit, the XML tag surrounding
+        # the s unit is included inside the match braces (this should probably be considered a bug
+        # in CQP). We need to fix that.
+        res.map! { |r| r.sub(/\{\{(<#{s_tag_id}\s+.+?>)/, '\1{{').sub(/(<\/#{s_tag_id}>)\}\}/, '}}\1')}
+
         res
       end
 
