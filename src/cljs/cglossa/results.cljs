@@ -1,7 +1,6 @@
 (ns cglossa.results
-  (:require [cglossa.search-inputs.core :refer [search-interfaces]]))
+  (:require [cglossa.search-inputs.core :refer [search-interface-for-corpus]]))
 
 (defn main [s {:keys [corpus] :as d}]
-  (let [search-engine (get @corpus :search-engine :cwb)
-        search-interface (get search-interfaces search-engine)]
+  (let [search-interface (search-interface-for-corpus corpus)]
     [:div [search-interface s d]]))
