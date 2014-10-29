@@ -1,4 +1,4 @@
-(ns cglossa.search-inputs
+(ns cglossa.search-inputs.cwb
   (:require [clojure.string :as str]
             [reagent.core :as reagent :refer [cursor]]))
 
@@ -14,8 +14,12 @@
                 (str "[" attr "=\"" % "\" %c]")))
          (str/join " "))))
 
-(defn- search! []
+(defn- search! [query-cursor]
   (.log js/console "soker"))
+
+;;;;;;;;;;;;;;;;;
+; Event handlers
+;;;;;;;;;;;;;;;;;
 
 (defn- on-text-changed [event query-cursor phonetic?]
   (let [value (aget event "target" "value")
@@ -32,20 +36,21 @@
                 (str/replace query "phon=" "word="))]
     (swap! query-cursor assoc-in [:query] query)))
 
-(defn- on-key-down [event search-query]
+(defn- on-key-down [event query-cursor]
   (when (= "Enter" (aget event "key"))
     (.preventDefault event)
-    (search!)))
+    (search! query-cursor)))
+
+;;;;;;;;;;;;;
+; Components
+;;;;;;;;;;;;;
 
 (defn- search-button [multilingual?]
   [:button.btn.btn-success {:style {:marginLeft (if multilingual? 80 40)}
-                            :on-click search!}
-   "Search"])
+                            :on-click search!} "Search"])
 
-(defn- language-add-button []
-  [:button.btn {:style {:marginLeft 20}
-                :on-click #()}
-   "Add language"])
+(defn- add-language-button []
+  [:button.btn {:style {:marginLeft 20} :on-click #()} "Add language"])
 
 (defn- add-phrase-button []
   [:button.btn.add-phrase-btn {:on-click #()} "Or..."])
@@ -55,23 +60,23 @@
    (for [language languages]
      [:option {:key (:value language) :value (:value language)} (:text language)])])
 
-(defn- simple [query-cursor multilingual?]
+(defn- simple [query-cursor]
   [:span "hallo"]
   (let [query (:query @query-cursor)
         displayed-query (str/replace query #"\[\(?\w+=\"(.+?)\"(?:\s+%c)?\)?\]" "$1")
         phonetic? (not= -1 (.indexOf query "phon="))]
     [:div.row-fluid
-    [:form.form-inline.span12
-     [:div.span10
-      [:input.span12 {:type        "text" :value displayed-query
-                      :on-change   #(on-text-changed % query-cursor phonetic?)
-                      :on-key-down #(on-key-down % query-cursor)}]
-      [:label {:style {:marginTop 5}}
-       [:input {:name      "phonetic" :type "checkbox"
-                :style     {:marginTop -3} :checked phonetic?
-                :on-change #(on-phonetic-changed % query-cursor)} " Phonetic form"]]]]]))
+     [:form.form-inline.span12
+      [:div.span10
+       [:input.span12 {:type        "text" :value displayed-query
+                       :on-change   #(on-text-changed % query-cursor phonetic?)
+                       :on-key-down #(on-key-down % query-cursor)}]
+       [:label {:style {:marginTop 5}}
+        [:input {:name      "phonetic" :type "checkbox"
+                 :style     {:marginTop -3} :checked phonetic?
+                 :on-change #(on-phonetic-changed % query-cursor)} " Phonetic form"]]]]]))
 
-(defn cwb-search-inputs [{:keys [search-view search-queries]} {:keys [corpus]}]
+(defn search-inputs [{:keys [search-view search-queries]} {:keys [corpus]}]
   [:span "heidu"]
   (let [view @search-view
         languages (:langs @corpus)
@@ -90,7 +95,7 @@
         [:b "CQP"]
         [:a {:href "" :title "CQP expressions" :on-click #()} "CQP"])
       [search-button multilingual?]
-      (when multilingual? [language-add-button])]
+      (when multilingual? [add-language-button])]
 
      ; Now create a cursor into the search-queries ratom for each search expression
      ; and display a row of search inputs for each of them. The doall call is needed
@@ -99,7 +104,6 @@
               (let [query-cursor (cursor [index] search-queries)
                     selected-language (-> @query-cursor :query :lang)]
                 (when multilingual? [language-select languages selected-language])
-                [simple query-cursor multilingual?])))]))
+                [simple query-cursor multilingual?])))
+     (when-not multilingual? [add-phrase-button])]))
 
-(def components {:cwb        cwb-search-inputs
-                 :cwb-speech (fn [] [:div "CWB-SPEECH"])})

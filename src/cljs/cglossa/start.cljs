@@ -1,5 +1,5 @@
 (ns cglossa.start
-  (:require [cglossa.search-inputs :as search-inputs]))
+  (:require [cglossa.search-inputs.core :as search-inputs]))
 
 (defn- corpus-info [s {:keys [corpus]}]
   [:div.row-fluid.corpus-info
