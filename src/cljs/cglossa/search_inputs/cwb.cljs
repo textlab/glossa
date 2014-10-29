@@ -91,15 +91,15 @@
         multilingual? (> (count languages) 1)]
     [:span
      [:div.row-fluid.search-input-links
-      (if (= view 'simple)
+      (if (= view simple)
         [:b "Simple"]
         [:a {:href "" :title "Simple search box" :on-click #()} "Simple"])
       " | "
-      (if (= view 'extended)
+      (if (= view extended)
         [:b "Extended"]
         [:a {:href "" :title "Search for grammatical categories etc." :on-click #()} "Extended"])
       " | "
-      (if (= view 'cqp)
+      (if (= view cqp)
         [:b "CQP"]
         [:a {:href "" :title "CQP expressions" :on-click #()} "CQP"])
       [search-button multilingual?]
