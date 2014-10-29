@@ -17,8 +17,8 @@
                     :code "bokmal"
                     :encoding "iso-8859-1"
                     :logo "book-clip-art-3.png"
-                    :langs {:lang   :no
-                            :tagger :obt_bm_lbk}}})
+                    :langs [{:lang   :no
+                             :tagger :obt_bm_lbk}]}})
 
 (defonce app-state (into {} (map-vals atom state)))
 (defonce app-data (into {} (map-vals atom data)))
