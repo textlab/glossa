@@ -23,7 +23,7 @@
 (defonce app-state (into {} (map-vals atom state)))
 (defonce app-data (into {} (map-vals atom data)))
 
-(defn header []
+(defn- header []
   [:div.navbar.navbar-fixed-top [:div.navbar-inner [:div.container [:span.brand "Glossa"]]]])
 
 (defn app [{:keys [showing-results?] :as s} {:keys [corpus] :as d}]
