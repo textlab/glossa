@@ -83,7 +83,6 @@
   [:span])
 
 (defn search-inputs [{:keys [search-view search-queries]} {:keys [corpus]}]
-  [:span "heidu"]
   (let [view (case @search-view
                :extended extended
                :cqp cqp

@@ -1,7 +1,8 @@
 (ns cglossa.core
   (:require [reagent.core :as reagent :refer [atom]]
             [plumbing.core :as plumbing :refer [map-vals]]
-            [cglossa.centre :as centre]))
+            [cglossa.start :as start]
+            [cglossa.results :as results]))
 
 ; avoid "not resolved" messages in Cursive
 (declare getElementById)
@@ -25,14 +26,18 @@
 (defn header []
   [:div.navbar.navbar-fixed-top [:div.navbar-inner [:div.container [:span.brand "Glossa"]]]])
 
-(defn app [s d]
-  [:div
-   [header]
-   [:div.container-fluid
-    [centre/top s d]
-    [centre/bottom s d]]
-   [:div.app-footer
-    [:img.textlab-logo {:src "img/tekstlab.gif"}]]])
+(defn app [{:keys [showing-results?] :as s} {:keys [corpus] :as d}]
+  (let [cls (if (empty? (:metadata-categories @corpus)) "span12" "span9")]
+    [:div
+     [header]
+     [:div.container-fluid
+      [:div.row-fluid
+       [:div#main-content {:class-name cls}
+        (if showing-results?
+          [start/main s d]
+          [results/main s d])]]]
+     [:div.app-footer
+      [:img.textlab-logo {:src "img/tekstlab.gif"}]]]))
 
 (defn ^:export main []
   (reagent/render-component

@@ -1,7 +1,12 @@
 (ns cglossa.start
   (:require [cglossa.search-inputs.core :refer [search-interface-for-corpus]]))
 
-(defn- corpus-info [s {:keys [corpus]}]
+(defn- top []
+  [:div.row-fluid
+   [:div.span3.top-toolbar
+    [:button#new-search-button.btn.btn-mini.btn-primary {:title "Reset form"} "Reset form"]]])
+
+(defn- corpus-info [_ {:keys [corpus]}]
   [:div.row-fluid.corpus-info
    [:div.span12
     [:div.well
@@ -13,5 +18,6 @@
 (defn main [s {:keys [corpus] :as d}]
   (let [search-interface (search-interface-for-corpus corpus)]
     [:div
+     [top]
      [corpus-info s d]
-     [:div [search-interface s d]]]))
+     [search-interface s d]]))
