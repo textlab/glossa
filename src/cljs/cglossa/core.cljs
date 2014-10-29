@@ -33,9 +33,9 @@
      [:div.container-fluid
       [:div.row-fluid
        [:div#main-content {:class-name cls}
-        (if showing-results?
-          [start/main s d]
-          [results/main s d])]]]
+        (if @showing-results?
+          [results/main s d]
+          [start/main s d])]]]
      [:div.app-footer
       [:img.textlab-logo {:src "img/tekstlab.gif"}]]]))
 
