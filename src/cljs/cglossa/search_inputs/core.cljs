@@ -1,5 +1,6 @@
 (ns cglossa.search-inputs.core
   (:require [cglossa.search-inputs.cwb :as cwb]))
 
-(def components {:cwb        cwb/search-inputs
-                 :cwb-speech (fn [] [:div "CWB-SPEECH"])})
+; Maps search engine to search interface component. Looks like we need this
+; since CLJS doesn't support ns-resolve.
+(def search-interfaces {:cwb cwb/search-inputs})

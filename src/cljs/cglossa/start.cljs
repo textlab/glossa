@@ -1,5 +1,5 @@
 (ns cglossa.start
-  (:require [cglossa.search-inputs.core :as search-inputs]))
+  (:require [cglossa.search-inputs.core :refer [search-interfaces]]))
 
 (defn- corpus-info [s {:keys [corpus]}]
   [:div.row-fluid.corpus-info
@@ -12,7 +12,7 @@
 
 (defn main [s {:keys [corpus] :as d}]
   (let [search-engine (get @corpus :search-engine :cwb)
-        component (get search-inputs/components search-engine)]
+        search-interface (get search-interfaces search-engine)]
     [:div
      [corpus-info s d]
-     [:div [component s d]]]))
+     [:div [search-interface s d]]]))
