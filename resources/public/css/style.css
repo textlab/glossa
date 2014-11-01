@@ -1,9 +1,10 @@
 body {
-  padding-top: 70px; }
+  padding-top: 70px;
+  padding-bottom: 40px; }
 
 .app-footer {
   height: 20px;
-  position: absolute;
+  position: fixed;
   bottom: 0px;
   width: 100%;
   background-color: #525252; }
