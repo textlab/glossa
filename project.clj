@@ -6,8 +6,10 @@
 
   :source-paths ["src/clj" "src/cljs"]
 
-  :dependencies [[org.clojure/clojure "1.7.0-alpha2"]
+  :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/clojurescript "0.0-2371" :scope "provided"]
+                 [com.datomic/datomic-free "0.9.5052"]
+                 [datomic-schema "1.1.0"]
                  [ring "1.3.1"]
                  [compojure "1.2.0"]
                  [enlive "1.1.5"]
@@ -27,6 +29,8 @@
   :min-lein-version "2.5.0"
 
   :uberjar-name "cglossa.jar"
+
+  :jvm-opts ^:replace ["-Xmx1g" "-server"]
 
   :cljsbuild {:builds {:app {:source-paths ["src/cljs"]
                              :compiler {:output-to     "resources/public/js/app.js"
