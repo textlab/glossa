@@ -36,7 +36,7 @@ soundManager.setup({
   debugFlash: false,
   useHighPerformance: true, // keep flash on screen, boost performance
   wmode: 'transparent', // transparent SWF, if possible
-  url: '<%= File.join ENV['RAILS_RELATIVE_URL_ROOT'], ActionController::Base.helpers.asset_path("rglossa/speech/") %>'
+  url: '<%= File.join ENV["RAILS_RELATIVE_URL_ROOT"] || "", ActionController::Base.helpers.asset_path("rglossa/speech/") %>'
 });
 
 // custom page player configuration
@@ -64,7 +64,7 @@ var PP_CONFIG = {
  <div id="debug"></div>
  <div id="bar"></div>
  <ul class="playlist" data-value="<%= @conf['output_dir'] %>">
-  <li><span data-value="<%= @file %>"><div class="btn"><img src="<%= File.join ENV['RAILS_RELATIVE_URL_ROOT'], ActionController::Base.helpers.asset_path('rglossa/speech/play-pause.png') %>"></div>&nbsp;<div class="btn">Play / Pause</div></span></li>
+  <li><span data-value="<%= @file %>"><div class="btn"><img src="<%= File.join ENV['RAILS_RELATIVE_URL_ROOT'] || '', ActionController::Base.helpers.asset_path('rglossa/speech/play-pause.png') %>"></div>&nbsp;<div class="btn">Play / Pause</div></span></li>
  </ul>
  <%
    @basenames.zip(@imgwidths, (0..Float::INFINITY)).each do |basename, imgwidth, i|
