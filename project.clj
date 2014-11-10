@@ -11,6 +11,7 @@
                  [com.datomic/datomic-free "0.9.5067"]
                  [datomic-schema "1.1.0"]
                  [ring "1.3.1"]
+                 [ring-middleware-format "0.4.0"]
                  [compojure "1.2.0"]
                  [enlive "1.1.5"]
                  [com.facebook/react "0.11.2"]
@@ -22,6 +23,7 @@
                  [leiningen "2.5.0"]
                  [http-kit "2.1.19"]
                  [prismatic/plumbing "0.3.4"]]
+                 [prone "0.6.0"]]
 
   :plugins [[lein-cljsbuild "1.0.3"]
             [lein-environ "1.0.0"]]
