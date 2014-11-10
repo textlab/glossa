@@ -1,4 +1,4 @@
-(ns cglossa.data-import.shared
+(ns cglossa.data-import.core
   (require [clojure.string :as str]
            [datomic.api :refer [tempid]]))
 
