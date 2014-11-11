@@ -57,7 +57,7 @@ var PP_CONFIG = {
 <!-- Page player main script -->
 <%= javascript_include_tag ActionController::Base.helpers.asset_path("rglossa/speech/wfplayer.js") %>
 <%= javascript_include_tag ActionController::Base.helpers.asset_path("jquery.min") %>
-
+<script src="<%= '%s/%s.js' % [@conf['output_dir'], @file] %>" type="text/javascript"></script>
 </head>
 
 <body>
@@ -99,6 +99,7 @@ selEdgeCss = {'width': '2px', 'height': '<%= @conf['total_height'] %>px', 'backg
               'position': 'absolute'};
 
 doc.body.onmousedown = function(event) {
+  if (event.button != 0) return false;
   scrollMode = true;
   $('#iframe').contents().find('#sel').css('visibility', 'hidden');
   oSound = pagePlayer.lastSound;
@@ -122,9 +123,42 @@ doc.body.onmousemove = function(event) {
     $('#iframe').contents().find('#sel-stop').css(selStopCss);
     $('#iframe').contents().find('#sel').css(selCss);
   }
+  pos_data = '';
+  if (pitch[event.pageX] && $('#ptcb').prop('checked')) {
+    pos_data += 'Pitch (Hz): <span style="width: auto; color: black">' + pitch[event.pageX] + '</span> ';
+  }
+  if (formants[event.pageX] && $('#fmcb').prop('checked')) {
+    pos_data += 'Formants (Hz): '
+    pos_data += '<span style="width: auto; color: red">' + formants[event.pageX][0] + '</span>&nbsp;';
+    pos_data += '<span style="width: auto; color: lightgreen">' + formants[event.pageX][1] + '</span>&nbsp;';
+    pos_data += '<span style="width: auto; color: blue">' + formants[event.pageX][2] + '</span>&nbsp;';
+    pos_data += '<span style="width: auto; color: orange">' + formants[event.pageX][3] + '</span>&nbsp;';
+  }
+  pos_data += 'Mouse pos.: <span style="width: auto; color: black">' + getPos(pagePlayer.lastSound, event) + ' ms';
+  if ($('#wfcb').prop('checked')) {
+    pos_data += ', ' + Math.round((total_height-event.pageY)*spec_top_freq/spec_height) + ' Hz';
+  }
+  pos_data += '</span>';
+  $('#mouse-pos').html(pos_data);
+  $('#mouse-pos').css('background-color', '');
+}
+
+doc.body.onmouseout = function(event) {
+  $('#mouse-pos').html('');
+  $('#mouse-pos').css('background-color', '');
+}
+
+doc.body.oncontextmenu = function(event) {
+  return false;
 }
 
 doc.body.onmouseup = function(event) {
+  if (event.button != 0) {
+    exportedValues = window.open('', 'exportedValues');
+    exportedValues.document.write($('#mouse-pos').html() + '<br>');
+    $('#mouse-pos').css('background-color', '#404040');
+    return false;
+  }
   if (!scrollMode) return true;
   scrollMode = false;
   oSound = pagePlayer.lastSound;

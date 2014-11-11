@@ -561,6 +561,8 @@ function PagePlayer() {
   this.updateTime = function() {
     var str = self.strings.timing.replace('%s1',self.getTime(this.position,true));
     str = str.replace('%s2',self.getTime(self.getDurationEstimate(this),true));
+    str = str.replace('%s3',Math.floor(this.position));
+    str = str.replace('%s4',Math.floor(self.getDurationEstimate(this)));
     this._data.oTiming.innerHTML = str;
   };
 
@@ -710,6 +712,8 @@ function PagePlayer() {
         // set initial timer stuff (before loading)
         str = self.strings.timing.replace('%s1',self.config.emptyTime);
         str = str.replace('%s2',self.config.emptyTime);
+        str = str.replace('%s3',self.config.emptyTime);
+        str = str.replace('%s4',self.config.emptyTime);
         thisSound._data.oTiming.innerHTML = str;
         self.sounds.push(thisSound);
         if (self.lastSound) {
@@ -1015,7 +1019,8 @@ function PagePlayer() {
 
       '  <div class="timing">',
       '   <div id="sm2_timing" class="timing-data">',
-      '    <span class="sm2_position">%s1</span> / <span class="sm2_total">%s2</span>',
+      '    <span class="sm2_position" id="mouse-pos"></span>',
+      '    Playing pos.: <span style="width: auto; color: black"><span class="sm2_position" style="width: auto; color: black">%s3</span> / <span class="sm2_total" style="width: auto; color: black">%s4 ms</span></span>',
       '   </div>',
       '  </div>',
 
