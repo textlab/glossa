@@ -151,7 +151,7 @@ window.CwbResultsTable = React.createClass
     `<div className="spinner-searching-large"></div>`
 
 
-  resultTable: ->
+  ResultTable: ->
     results = @parseResults(@props.resultPage)
     extraRowAttrs = @props.corpus.extra_row_attrs or []
 
@@ -189,4 +189,4 @@ window.CwbResultsTable = React.createClass
 
 
   render: ->
-    if @props.resultPage then @resultTable() else @loadingIndicator()
+    if @props.resultPage then @ResultTable() else @loadingIndicator()

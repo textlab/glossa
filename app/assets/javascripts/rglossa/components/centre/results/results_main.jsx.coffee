@@ -81,11 +81,11 @@ window.ResultsMain = React.createClass
     # e.g. CwbSearchInputs and CwbResultsTable
     searchEngine = corpus.search_engine or 'cwb'
     capSearchEngine = rglossaUtils.capitalize(searchEngine)
-    searchInputs = window["#{capSearchEngine}SearchInputs"]
-    resultTable = window["#{capSearchEngine}ResultsTable"]
+    SearchInputs = window["#{capSearchEngine}SearchInputs"]
+    ResultTable = window["#{capSearchEngine}ResultsTable"]
 
     `<span>
-      <searchInputs
+      <SearchInputs
         store={store}
         corpus={corpus}
         statechart={statechart}
@@ -105,7 +105,7 @@ window.ResultsMain = React.createClass
         handleSortByChanged={handleSortByChanged}
         showFrequencies={this.showFrequencies}
         showMap={this.showMap} />
-      <resultTable
+      <ResultTable
         resultPage={resultPage}
         corpus={corpus} />
       <Dialog ref="frequencies" title="Frequencies">
