@@ -200,11 +200,11 @@ $(document).ready(function() {
 });
 </script>
 <form>
-<label><input type="checkbox" id="wfcb" checked>waveform &amp; spectrogram</label> |
+Show: <label><input type="checkbox" id="wfcb" checked>waveform &amp; spectrogram</label> |
 <label><input type="checkbox" id="fmcb" checked>formants:
   <span style="color: red">1</span> <span style="color: lightgreen">2</span>
   <span style="color: blue">3</span> <span style="color: orange">4</span></label> |
-<label><input type="checkbox" id="ptcb" checked>pitch</label> | <a href="#" id="zoom-in" >zoom in</a> | <a href="#" onclick="window.location.href='wfplayer-<%= params[:corpus_id] %>-<%= params[:line_key] %>-<%= params[:oldstart] %>-<%= params[:oldstop] %>'">zoom out</a> |
+<label><input type="checkbox" id="ptcb" checked>pitch</label> | <a href="#" id="zoom-in" ><img src="<%= File.join ENV['RAILS_RELATIVE_URL_ROOT'] || '', ActionController::Base.helpers.asset_path('rglossa/speech/zoom-in.png') %>" title="Zoom in"></a> | <a href="#" onclick="window.location.href='wfplayer-<%= params[:corpus_id] %>-<%= params[:line_key] %>-<%= params[:oldstart] %>-<%= params[:oldstop] %>'"><img src="<%= File.join ENV['RAILS_RELATIVE_URL_ROOT'] || '', ActionController::Base.helpers.asset_path('rglossa/speech/zoom-out.png') %>" title="Zoom out to whole utterance"></a> |
 Problems? Switch to
 <script>
 
