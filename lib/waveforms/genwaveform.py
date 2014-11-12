@@ -49,7 +49,15 @@ class GenWaveForm(Tkinter.Tk):
     self.log('Connected')
     self.filesocket = conn.makefile()
     conn.close()
-    sndfile = self.filesocket.readline().rstrip()
+    line = self.filesocket.readline().rstrip()
+    if line.isdigit():
+      width = int(line)
+      sndfile = self.filesocket.readline().rstrip()
+      self.framelength = 0.0002
+    else:
+      width = None
+      sndfile = line
+      self.framelength = 0.005
     if '/' in sndfile:
       raise Exception('%s: slashes not allowed' % sndfile)
     outfile = '.'.join(sndfile.split('.')[:-1])
@@ -61,9 +69,13 @@ class GenWaveForm(Tkinter.Tk):
     sampling_rate = self.snd.info()[1]
     self.log('num_samples=%d' % num_samples)
     self.log('sampling_rate=%d' % sampling_rate)
-    width = self.conf['pixels_per_second'] * num_samples / sampling_rate
-    self.pitch_tab = [None] * width
-    self.formant_tab = [None] * width
+    if width is None:
+      self.pixels_per_second = self.conf['pixels_per_second']
+      width = self.pixels_per_second * num_samples / sampling_rate
+    else:
+      self.pixels_per_second = width * sampling_rate / num_samples
+    self.pitch_tab = [None] * width * 2
+    self.formant_tab = [None] * width * 2
 
     self.split_points = range(0, num_samples, SPLIT_INTERVAL_SEC*sampling_rate) + [num_samples]
     self.tmpfiles = []
@@ -82,7 +94,7 @@ class GenWaveForm(Tkinter.Tk):
 
       num_samples = self.fragment.info()[0]
       sampling_rate = self.fragment.info()[1]
-      self.width = self.conf['pixels_per_second'] * num_samples / sampling_rate
+      self.width = self.pixels_per_second * num_samples / sampling_rate
 
       self.log('create waveform & spectrogram, width = %d' % self.width)
       if self.canvas:
@@ -90,10 +102,10 @@ class GenWaveForm(Tkinter.Tk):
       self.canvas = tkSnack.SnackCanvas(height=self.conf['total_height'], width=self.width,
                                         bg='white', highlightthickness=0)
       self.canvas.create_waveform(1, 1, sound=self.fragment, height=self.conf['waveform_height'],
-                                  pixelspersec=self.conf['pixels_per_second'])
+                                  pixelspersec=self.pixels_per_second)
       self.canvas.create_spectrogram(1, self.conf['waveform_height'], sound=self.fragment,
                                      height=self.conf['total_height']-self.conf['waveform_height'],
-                                     pixelspersec=self.conf['pixels_per_second'],
+                                     pixelspersec=self.pixels_per_second,
                                      topfrequency=WAVEFORM_TOP_FREQ)
 
       self.log('generating %s' % self.fname)
@@ -112,18 +124,18 @@ class GenWaveForm(Tkinter.Tk):
   def generate_stuff2(self):
       self.fname = '%s-%d-fmt.png' % (self.outfile, self.i)
       self.log('create formants')
-      spec = self.fragment.formant(start=0)
+      spec = self.fragment.formant(start=0, framelength=self.framelength)
       self.log('create formant points')
       if self.canvas:
         self.canvas.destroy()
       self.canvas = tkSnack.SnackCanvas(height=self.conf['total_height'], width=self.width,
                                         bg='white', highlightthickness=0)
       for x, y in enumerate(spec):
-        xx = x*0.01*self.conf['pixels_per_second']
+        xx = x*self.framelength*self.pixels_per_second
         for j, colour in [(0, 'red'), (1, 'green'), (2, 'blue'), (3, 'orange')]:
           yy = self.conf['waveform_height'] + (self.conf['total_height']-self.conf['waveform_height']) * (4000-y[j])/4000.0
-          self.canvas.create_rectangle(xx, yy, xx+1, yy+1, outline=colour)
-        img_x = self.i*SPLIT_INTERVAL_SEC*self.conf['pixels_per_second'] + int(round(xx))
+          self.canvas.create_rectangle(xx, yy, xx, yy, outline=colour)
+        img_x = self.i*SPLIT_INTERVAL_SEC*self.pixels_per_second + int(round(xx))
         self.formant_tab[img_x] = (y[0], y[1], y[2], y[3])
 
       self.log('generating %s' % self.fname)
@@ -142,17 +154,17 @@ class GenWaveForm(Tkinter.Tk):
   def generate_stuff3(self):
       self.fname = '%s-%d-pitch.png' % (self.outfile, self.i)
       self.log('create pitch')
-      spec = self.fragment.pitch(start=0, method='esps')
+      spec = self.fragment.pitch(start=0, method='esps', framelength=self.framelength)
       self.log('create pitch points')
       if self.canvas:
         self.canvas.destroy()
       self.canvas = tkSnack.SnackCanvas(height=self.conf['total_height'], width=self.width, bg='white',
                                         highlightthickness=0)
       for x, y in enumerate(spec):
-        xx = x*0.01*self.conf['pixels_per_second']
+        xx = x*self.framelength*self.pixels_per_second
         yy = self.conf['waveform_height'] + (self.conf['total_height']-self.conf['waveform_height']) * (MAX_PITCH-y[0])/MAX_PITCH
-        self.canvas.create_rectangle(xx, yy, xx+1, yy+1, outline='black')
-        img_x = self.i*SPLIT_INTERVAL_SEC*self.conf['pixels_per_second'] + int(round(xx))
+        self.canvas.create_rectangle(xx, yy, xx, yy, outline='black')
+        img_x = self.i*SPLIT_INTERVAL_SEC*self.pixels_per_second + int(round(xx))
         self.pitch_tab[img_x] = y[0]
 
       self.log('generating %s' % self.fname)

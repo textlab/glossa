@@ -236,6 +236,17 @@ function setShiny(bShiny, e) {
     }
   }
 }
+</script> | <a href="#" id="zoom-in" >zoom in</a> | <a href="#" onclick="window.location.href='wfplayer-<%= params[:corpus_id] %>-<%= params[:line_key] %>-<%= params[:oldstart] %>-<%= params[:oldstop] %>'">zoom out</a>
+<script language="JavaScript">
+$('#zoom-in').click(function() {
+  if (pagePlayer.lastSound.startPos && pagePlayer.lastSound.stopPos && pagePlayer.lastSound.stopPos-pagePlayer.lastSound.startPos > 150) {
+    window.location.href = 'wfplayer-<%= params[:corpus_id] %>-<%= params[:line_key] %>-' +
+                           (pagePlayer.lastSound.startPos/1000+<%= params[:start] %>).toFixed(2) +
+                           '-' + (pagePlayer.lastSound.stopPos/1000+<%= params[:start] %>).toFixed(2) +
+                           '-' + $('#iframe').width() + '-' + <%= params[:oldstart] %> + '-' + <%= params[:oldstop] %>;
+  } else alert('Make a selection longer than 150ms to zoom in');
+  return false;
+});
 </script>
 </form>
 </body>

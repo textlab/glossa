@@ -115,6 +115,7 @@ class WaveformPlayerController < ActionController::Base
     fp = self.class.connect do
       TCPSocket.new '127.0.0.1', @conf['listen_port']
     end
+    fp.write("#{params[:width]}\n") if params[:width] =~ /\A\d+\z/
     fp.write("#{file}\n")
     until fp.eof
       fp.read
@@ -130,6 +131,8 @@ class WaveformPlayerController < ActionController::Base
     line_key = params[:line_key]
     start = params[:start]
     stop = params[:stop]
+    params[:oldstart] ||= params[:start]
+    params[:oldstop] ||= params[:stop]
     @file = Digest::SHA256.hexdigest("#{corpus_id}@#{line_key}@#{start}@#{stop}");
     fname = Rails.root.join(output_path, @file)
     if (!File.exists?("#{fname}-0-wave.jpg"))
