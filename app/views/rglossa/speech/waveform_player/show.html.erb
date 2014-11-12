@@ -77,7 +77,7 @@ var PP_CONFIG = {
 var scrollMode = false;
 var doc = document.getElementById('iframe').contentWindow.document;
 doc.open();
-doc.write('<html><head><title></title></head><body style="margin: 0 0 0 0; overflow-y: hidden; width: <%= @total_imgwidth %>px">');
+doc.write('<html><head><title></title></head><body title="Right-click to export the numerical values to a separate window" style="margin: 0 0 0 0; overflow-y: hidden; width: <%= @total_imgwidth %>px">');
 doc.write('<div id="bar" style="width: 2px; background-color: red; height: <%= @conf['total_height'] %>px; position: absolute; z-index: 3"></div>');
 doc.write('<div id="sel-start" style="position: relative; z-index: 4; cursor: ew-resize"></div>');
 doc.write('<div id="sel-stop" style="position: relative; z-index: 4; cursor: ew-resize"></div>');
@@ -204,7 +204,7 @@ $(document).ready(function() {
 <label><input type="checkbox" id="fmcb" checked>formants:
   <span style="color: red">1</span> <span style="color: lightgreen">2</span>
   <span style="color: blue">3</span> <span style="color: orange">4</span></label> |
-<label><input type="checkbox" id="ptcb" checked>pitch</label> |
+<label><input type="checkbox" id="ptcb" checked>pitch</label> | <a href="#" id="zoom-in" >zoom in</a> | <a href="#" onclick="window.location.href='wfplayer-<%= params[:corpus_id] %>-<%= params[:line_key] %>-<%= params[:oldstart] %>-<%= params[:oldstop] %>'">zoom out</a> |
 Problems? Switch to
 <script>
 
@@ -236,7 +236,7 @@ function setShiny(bShiny, e) {
     }
   }
 }
-</script> | <a href="#" id="zoom-in" >zoom in</a> | <a href="#" onclick="window.location.href='wfplayer-<%= params[:corpus_id] %>-<%= params[:line_key] %>-<%= params[:oldstart] %>-<%= params[:oldstop] %>'">zoom out</a>
+</script>
 <script language="JavaScript">
 $('#zoom-in').click(function() {
   if (pagePlayer.lastSound.startPos && pagePlayer.lastSound.stopPos && pagePlayer.lastSound.stopPos-pagePlayer.lastSound.startPos > 150) {
