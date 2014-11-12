@@ -1017,14 +1017,14 @@ function PagePlayer() {
       '   </div>',
       '  </div>',
 
-      '  <div class="timing">',
+      '  <div class="timing" style="position: absolute; right: 15px; z-index: 10">',
       '   <div id="sm2_timing" class="timing-data">',
       '    <span class="sm2_position" id="mouse-pos"></span>',
       '    Playing pos.: <span style="width: auto; color: black"><span class="sm2_position" style="width: auto; color: black">%s3</span> / <span class="sm2_total" style="width: auto; color: black">%s4 ms</span></span>',
       '   </div>',
       '  </div>',
 
-      '  <div class="peak">',
+      '  <div class="peak" style="visibility: hidden">',
       '   <div class="peak-box"><span class="l"></span><span class="r"></span></div>',
       '  </div>',
 
