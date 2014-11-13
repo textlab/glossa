@@ -25,10 +25,21 @@
   (GET "/request" [] handle-dump)
   (GET "/" req (page)))
 
+(defn wrap-db [handler]
+  (fn [req]
+    (if (:db req)
+      ; TODO: handle selection of alternative db version
+      (handler req)
+      (handler (assoc req :db (models/current-db))))))
+
 (def http-handler
-  (if is-dev?
-    (-> #'app-routes wrap-keyword-params wrap-params wrap-exceptions reload/wrap-reload)
-    (-> app-routes wrap-params)))
+  (let [r (routes (wrap-restful-format #'api-routes :format [:transit-json :json])
+                  #'app-routes)
+        r (if is-dev? (-> r reload/wrap-reload wrap-exceptions) r)]
+    (-> r
+        wrap-db
+        wrap-keyword-params
+        wrap-params)))
 
 (defn run [& [port]]
   (defonce ^:private server
