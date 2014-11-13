@@ -12,7 +12,7 @@
            (fields
              [name :string]
              [short-name :string :unique-identity]
-             [metadata-categories :ref :many]))
+             [metadata-categories :ref :many :component]))
 
    (schema metadata-category
            (fields
