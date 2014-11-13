@@ -19,5 +19,6 @@
         data (rest rows)]
     (with-meta
       (for [row data]
-        (into {:db/id (tempid :db.part/user)} (zipmap attr-names row)))
+        (into {:db/id (tempid :db.part/user)}
+              (filter #(seq (val %)) (zipmap attr-names row))))  ;ignore empty strings
       {:from-path path})))
