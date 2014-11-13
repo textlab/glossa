@@ -17,5 +17,7 @@
   (let [rows (tsv->rows path)
         attr-names (->> (first rows) (map #(keyword (name namespace) %)))
         data (rest rows)]
-    (for [row data]
-      (into {:db/id (tempid :db.part/user)} (zipmap attr-names row)))))
+    (with-meta
+      (for [row data]
+        (into {:db/id (tempid :db.part/user)} (zipmap attr-names row)))
+      {:from-path path})))

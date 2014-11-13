@@ -1,5 +1,5 @@
 (ns cglossa.models.seeds
-  (:require [datomic.api :refer [transact connect tempid]]
+  (:require [datomic.api :as d]
             [datomic-schema.schema :refer [generate-parts generate-schema]]
             [clojure.java.io :as io]
             [cglossa.data-import.core :refer [tsv->tx-data]]
@@ -16,12 +16,19 @@
 
 (defn import-metadata []
   (->> (find-tsv-files "resources/data/metadata_categories")
-       (map #(tsv->tx-data % :metadata-category))))
+       (map #(tsv->tx-data % :metadata-category))
+       (map (fn [file-metadata]
+              (let [path (-> file-metadata meta :from-path)
+                    short-name (last (re-find #".+/(.+).tsv$" path))
+                    corpus-attr {:corpus/_metadata-categories [:corpus/short-name short-name]}]
+                ; associate the metadata with the appropriate corpus by adding
+                ; an attribute with a corpus lookup ref to each metadata value
+                (map #(into % corpus-attr) file-metadata))))))
 
 (defn seed []
   (let [url models/db-uri
-        conn (connect url)]
-    (transact conn (concat
-                     (generate-parts tempid (models/dbschema))
-                     (generate-schema tempid (models/dbschema))))
-    (transact conn (import-corpora))))
+        conn (d/connect url)]
+    (d/transact conn (concat
+                     (generate-parts d/tempid (models/dbschema))
+                     (generate-schema d/tempid (models/dbschema))))
+    (d/transact conn (import-corpora))))

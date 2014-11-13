@@ -11,7 +11,8 @@
   [(schema corpus
            (fields
              [name :string]
-             [short-name :string :unique-identity]))
+             [short-name :string :unique-identity]
+             [metadata-categories :ref :many]))
 
    (schema metadata-category
            (fields
