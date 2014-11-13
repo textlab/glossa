@@ -13,15 +13,20 @@
             [prone.middleware :refer [wrap-exceptions]]
             [environ.core :refer [env]]
             [org.httpkit.server :refer [run-server]]
+            [datomic.api :as d]
+            [cglossa.models.core :as models]
             [cglossa.models.corpora :as corpora]))
 
 (deftemplate page
   (io/resource "index.html") [] [:body] (if is-dev? inject-devmode-html identity))
 
+(defroutes api-routes
+  (context "/corpora" {db :db}
+           (GET "/by-short-name" [short-name] (corpora/by-short-name db short-name))))
+
 (defroutes app-routes
   (resources "/")
   (resources "/react" {:root "react"})
-  (GET "/corpora/by-short-name" [] corpora/by-short-name)
   (GET "/request" [] handle-dump)
   (GET "/" req (page)))
 
