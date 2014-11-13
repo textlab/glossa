@@ -16,7 +16,7 @@
 
    (schema metadata-category
            (fields
-             [short-nane :string]
+             [short-name :string]
              [name :string]
              [widget-type :enum [:list :range]]
              [values :ref :many "One or more text-values, bool-values or numeric-values"]
