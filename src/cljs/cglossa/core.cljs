@@ -1,6 +1,7 @@
 (ns cglossa.core
   (:require [reagent.core :as reagent :refer [atom]]
             [plumbing.core :as plumbing :refer [map-vals]]
+            [ajax.core :refer [GET]]
             [cglossa.start :as start]
             [cglossa.results :as results]))
 
@@ -22,6 +23,8 @@
 
 (defonce app-state (into {} (map-vals atom state)))
 (defonce app-data (into {} (map-vals atom data)))
+
+(GET "/corpora/by-short-name?short-name=bokmal")
 
 (defn- header []
   [:div.navbar.navbar-fixed-top [:div.navbar-inner [:div.container [:span.brand "Glossa"]]]])

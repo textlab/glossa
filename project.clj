@@ -22,7 +22,8 @@
                  [weasel "0.4.0-SNAPSHOT"]
                  [leiningen "2.5.0"]
                  [http-kit "2.1.19"]
-                 [prismatic/plumbing "0.3.4"]]
+                 [prismatic/plumbing "0.3.4"]
+                 [cljs-ajax "0.3.3"]
                  [prone "0.6.0"]]
 
   :plugins [[lein-cljsbuild "1.0.3"]
