@@ -22,7 +22,7 @@
                     short-name (last (re-find #".+/(.+).tsv$" path))
                     corpus-attr {:corpus/_metadata-categories [:corpus/short-name short-name]}]
                 ; associate the metadata with the appropriate corpus by adding
-                ; an attribute with a corpus lookup ref to each metadata value
+                ; an attribute with a corpus lookup ref to each metadata category
                 (map #(into % corpus-attr) file-metadata))))))
 
 (defn seed []
