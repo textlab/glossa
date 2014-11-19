@@ -50,6 +50,11 @@ class GenWaveForm(Tkinter.Tk):
     self.filesocket = conn.makefile()
     conn.close()
     line = self.filesocket.readline().rstrip()
+    if line == '':
+      self.log('Received an empty line, trying again')
+      self.filesocket.close()
+      self.after(100, self.secondary_init)
+      return
     if line.isdigit():
       width = int(line)
       sndfile = self.filesocket.readline().rstrip()
@@ -60,6 +65,8 @@ class GenWaveForm(Tkinter.Tk):
       self.framelength = 0.005
     if '/' in sndfile:
       raise Exception('%s: slashes not allowed' % sndfile)
+    if sndfile == '':
+      raise Exception('Filename is empty')
     outfile = '.'.join(sndfile.split('.')[:-1])
     self.sndfile = '%s/%s' % (self.conf['output_dir'], sndfile)
     self.outfile = '%s/%s' % (self.conf['output_dir'], outfile)
