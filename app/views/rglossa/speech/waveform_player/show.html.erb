@@ -122,6 +122,7 @@ $('#zoom-in').click(function() {
    %><img id='small<%= i %>' src='<%= @conf['output_dir'] %>/<%= basename %>-wave.jpg' width='<%= width %>%' height='70' style='display:none'><%
    end
  %>
+ <div style="background-color: #999; color: #fff; font-size: 80%; font-family: monaco,'VT-100','lucida console',courier,system;" id="mouse-avg"></div>
  <iframe id='iframe' height="237" width="100%" style="border: 0"></iframe>
 <script type="text/javascript">
 var scrollMode = false;
@@ -228,9 +229,14 @@ doc.body.onmouseup = function(event) {
     startX = parseInt($('#iframe').contents().find('#sel-start').css('left'));
     stopX = parseInt($('#iframe').contents().find('#sel-stop').css('left'));
     pitch_sel = pitch.filter(function(el, idx) { return idx >= startX && idx <= stopX; });
-    avg_data = '';
+    avg_data = 'Selection (ms): <span style="width: auto; color: blue">' + oSound.startPos + '</span>&ndash;<span style="width: auto; color: blue">' + oSound.stopPos + '</span>&nbsp;';
+    var sum = function(a, b) { return a + b; };
+    var min = function(a, b) { return Math.min(a, b); };
+    var max = function(a, b) { return Math.max(a, b); };
+    var avg = function(ary) { return (ary.reduce(sum) / ary.length).toFixed(2); };
+    var stats = function(ary) { return [ ary.reduce(min), avg(ary), ary.reduce(max) ].join('<span style="width: auto; color: white">/</span>'); };
     if (pitch_sel.length > 0) {
-      avg_data += 'Avg. pitch: <span style="width: auto; color: black">' + (pitch_sel.reduce(function(a, b) { return a + b; }) / pitch_sel.length).toFixed(2) + '</span>';
+      avg_data += 'Pitch (min/avg/max): <span style="width: auto; color: black">' + stats(pitch_sel) + '</span>';
     }
     formants_sel = formants.filter(function(el, idx) { return idx >= startX && idx <= stopX; });
     if (formants_sel.length > 0) {
@@ -238,11 +244,11 @@ doc.body.onmouseup = function(event) {
       f1_sel = formants_sel.map(function(el) { return el[1] });
       f2_sel = formants_sel.map(function(el) { return el[2] });
       f3_sel = formants_sel.map(function(el) { return el[3] });
-      avg_data += ' Avg. formants: ';
-      avg_data += '<span style="width: auto; color: red">' + (f0_sel.reduce(function(a, b) { return a + b; }) / f0_sel.length).toFixed(2) + '</span>&nbsp;';
-      avg_data += '<span style="width: auto; color: lightgreen">' + (f1_sel.reduce(function(a, b) { return a + b; }) / f1_sel.length).toFixed(2) + '</span>&nbsp;';
-      avg_data += '<span style="width: auto; color: blue">' + (f2_sel.reduce(function(a, b) { return a + b; }) / f2_sel.length).toFixed(2) + '</span>&nbsp;';
-      avg_data += '<span style="width: auto; color: orange">' + (f3_sel.reduce(function(a, b) { return a + b; }) / f3_sel.length).toFixed(2) + '</span>&nbsp;';
+      avg_data += ' Formants (min/avg/max): ';
+      avg_data += '<span style="width: auto; color: red">' + stats(f0_sel) + '</span>&nbsp;';
+      avg_data += '<span style="width: auto; color: lightgreen">' + stats(f1_sel) + '</span>&nbsp;';
+      avg_data += '<span style="width: auto; color: blue">' + stats(f2_sel) + '</span>&nbsp;';
+      avg_data += '<span style="width: auto; color: orange">' + stats(f3_sel) + '</span>&nbsp;';
     }
     $('#mouse-avg', document).html(avg_data);
   }
@@ -273,6 +279,5 @@ $(document).ready(function() {
   });
 });
 </script>
-<div id="mouse-avg"></div>
 </body>
 </html>
