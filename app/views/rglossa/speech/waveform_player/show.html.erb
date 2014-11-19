@@ -61,6 +61,56 @@ var PP_CONFIG = {
 </head>
 
 <body>
+<form>
+Show: <label><input type="checkbox" id="wfcb" checked>waveform &amp; spectrogram</label> |
+<label><input type="checkbox" id="fmcb" checked>formants:
+  <span style="color: red">1</span> <span style="color: lightgreen">2</span>
+  <span style="color: blue">3</span> <span style="color: orange">4</span></label> |
+<label><input type="checkbox" id="ptcb" checked>pitch</label> | <a href="#" id="zoom-in" ><img src="<%= File.join ENV['RAILS_RELATIVE_URL_ROOT'] || '', ActionController::Base.helpers.asset_path('rglossa/speech/zoom-in.png') %>" title="Zoom in"></a> | <a href="#" onclick="window.location.href='wfplayer-<%= params[:corpus_id] %>-<%= params[:line_key] %>-<%= params[:oldstart] %>-<%= params[:oldstop] %>'"><img src="<%= File.join ENV['RAILS_RELATIVE_URL_ROOT'] || '', ActionController::Base.helpers.asset_path('rglossa/speech/zoom-out.png') %>" title="Zoom out to whole utterance"></a> |
+Problems? Switch to
+<script>
+
+// enable experimental features, if #experimental is in the URL
+if (window.location.toString().match(/experimental/i)) {
+  document.write('<a href="#" onclick="window.location.href = this; window.location.reload()">Flash player</a>');
+} else {
+  document.write('<a href="#experimental" onclick="window.location.href = this; window.location.reload()">JavaScript player</a>');
+}
+
+var is_shiny = false;
+function setTheme(sTheme) {
+  var o = pagePlayer.getByClassName('playlist','ul');
+  for (var i=o.length; i--;) {
+    o[i].className = 'playlist'+(pagePlayer.cssBase?' '+pagePlayer.cssBase:'')+(sTheme?' '+sTheme:'')+(is_shiny?' shiny':'');
+  }
+  return false;
+}
+
+function setShiny(bShiny, e) {
+  is_shiny = bShiny;
+  var o = pagePlayer.getByClassName('playlist','ul');
+  var sClass = 'shiny';
+  for (var i=o.length; i--;) {
+    if (!bShiny) {
+      pagePlayer.removeClass(o[i],sClass);
+    } else {
+      pagePlayer.addClass(o[i],sClass);
+    }
+  }
+}
+</script>
+<script language="JavaScript">
+$('#zoom-in').click(function() {
+  if (pagePlayer.lastSound.startPos && pagePlayer.lastSound.stopPos && pagePlayer.lastSound.stopPos-pagePlayer.lastSound.startPos > 150) {
+    window.location.href = 'wfplayer-<%= params[:corpus_id] %>-<%= params[:line_key] %>-' +
+                           (pagePlayer.lastSound.startPos/1000+<%= params[:start] %>).toFixed(2) +
+                           '-' + (pagePlayer.lastSound.stopPos/1000+<%= params[:start] %>).toFixed(2) +
+                           '-' + $('#iframe').width() + '-' + <%= params[:oldstart] %> + '-' + <%= params[:oldstop] %>;
+  } else alert('Make a selection longer than 150ms to zoom in');
+  return false;
+});
+</script>
+</form>
  <div id="debug"></div>
  <div id="bar"></div>
  <ul class="playlist" data-value="<%= @conf['output_dir'] %>">
@@ -223,56 +273,6 @@ $(document).ready(function() {
   });
 });
 </script>
-<form>
-Show: <label><input type="checkbox" id="wfcb" checked>waveform &amp; spectrogram</label> |
-<label><input type="checkbox" id="fmcb" checked>formants:
-  <span style="color: red">1</span> <span style="color: lightgreen">2</span>
-  <span style="color: blue">3</span> <span style="color: orange">4</span></label> |
-<label><input type="checkbox" id="ptcb" checked>pitch</label> | <a href="#" id="zoom-in" ><img src="<%= File.join ENV['RAILS_RELATIVE_URL_ROOT'] || '', ActionController::Base.helpers.asset_path('rglossa/speech/zoom-in.png') %>" title="Zoom in"></a> | <a href="#" onclick="window.location.href='wfplayer-<%= params[:corpus_id] %>-<%= params[:line_key] %>-<%= params[:oldstart] %>-<%= params[:oldstop] %>'"><img src="<%= File.join ENV['RAILS_RELATIVE_URL_ROOT'] || '', ActionController::Base.helpers.asset_path('rglossa/speech/zoom-out.png') %>" title="Zoom out to whole utterance"></a> |
-Problems? Switch to
-<script>
-
-// enable experimental features, if #experimental is in the URL
-if (window.location.toString().match(/experimental/i)) {
-  document.write('<a href="#" onclick="window.location.href = this; window.location.reload()">Flash player</a>');
-} else {
-  document.write('<a href="#experimental" onclick="window.location.href = this; window.location.reload()">JavaScript player</a>');
-}
-
-var is_shiny = false;
-function setTheme(sTheme) {
-  var o = pagePlayer.getByClassName('playlist','ul');
-  for (var i=o.length; i--;) {
-    o[i].className = 'playlist'+(pagePlayer.cssBase?' '+pagePlayer.cssBase:'')+(sTheme?' '+sTheme:'')+(is_shiny?' shiny':'');
-  }
-  return false;
-}
-
-function setShiny(bShiny, e) {
-  is_shiny = bShiny;
-  var o = pagePlayer.getByClassName('playlist','ul');
-  var sClass = 'shiny';
-  for (var i=o.length; i--;) {
-    if (!bShiny) {
-      pagePlayer.removeClass(o[i],sClass);
-    } else {
-      pagePlayer.addClass(o[i],sClass);
-    }
-  }
-}
-</script>
-<script language="JavaScript">
-$('#zoom-in').click(function() {
-  if (pagePlayer.lastSound.startPos && pagePlayer.lastSound.stopPos && pagePlayer.lastSound.stopPos-pagePlayer.lastSound.startPos > 150) {
-    window.location.href = 'wfplayer-<%= params[:corpus_id] %>-<%= params[:line_key] %>-' +
-                           (pagePlayer.lastSound.startPos/1000+<%= params[:start] %>).toFixed(2) +
-                           '-' + (pagePlayer.lastSound.stopPos/1000+<%= params[:start] %>).toFixed(2) +
-                           '-' + $('#iframe').width() + '-' + <%= params[:oldstart] %> + '-' + <%= params[:oldstop] %>;
-  } else alert('Make a selection longer than 150ms to zoom in');
-  return false;
-});
-</script>
-</form>
 <div id="mouse-avg"></div>
 </body>
 </html>
