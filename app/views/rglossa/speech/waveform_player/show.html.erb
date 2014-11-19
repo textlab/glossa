@@ -166,11 +166,35 @@ doc.body.onmouseup = function(event) {
   if (Math.abs(curPos - oSound.startPos) < 10) {
     oSound.startPos = Math.min(curPos, oSound.startPos);
     oSound.stopPos = Math.floor(oSound.duration);
-  } else if (curPos < oSound.startPos) {
-    oSound.stopPos = oSound.startPos;
-    oSound.startPos = curPos;
+    $('#mouse-avg', document).html('');
   } else {
-    oSound.stopPos = curPos;
+    if (curPos < oSound.startPos) {
+      oSound.stopPos = oSound.startPos;
+      oSound.startPos = curPos;
+    } else {
+      oSound.stopPos = curPos;
+    }
+
+    startX = parseInt($('#iframe').contents().find('#sel-start').css('left'));
+    stopX = parseInt($('#iframe').contents().find('#sel-stop').css('left'));
+    pitch_sel = pitch.filter(function(el, idx) { return idx >= startX && idx <= stopX; });
+    avg_data = '';
+    if (pitch_sel.length > 0) {
+      avg_data += 'Avg. pitch: <span style="width: auto; color: black">' + (pitch_sel.reduce(function(a, b) { return a + b; }) / pitch_sel.length).toFixed(2) + '</span>';
+    }
+    formants_sel = formants.filter(function(el, idx) { return idx >= startX && idx <= stopX; });
+    if (formants_sel.length > 0) {
+      f0_sel = formants_sel.map(function(el) { return el[0] });
+      f1_sel = formants_sel.map(function(el) { return el[1] });
+      f2_sel = formants_sel.map(function(el) { return el[2] });
+      f3_sel = formants_sel.map(function(el) { return el[3] });
+      avg_data += ' Avg. formants: ';
+      avg_data += '<span style="width: auto; color: red">' + (f0_sel.reduce(function(a, b) { return a + b; }) / f0_sel.length).toFixed(2) + '</span>&nbsp;';
+      avg_data += '<span style="width: auto; color: lightgreen">' + (f1_sel.reduce(function(a, b) { return a + b; }) / f1_sel.length).toFixed(2) + '</span>&nbsp;';
+      avg_data += '<span style="width: auto; color: blue">' + (f2_sel.reduce(function(a, b) { return a + b; }) / f2_sel.length).toFixed(2) + '</span>&nbsp;';
+      avg_data += '<span style="width: auto; color: orange">' + (f3_sel.reduce(function(a, b) { return a + b; }) / f3_sel.length).toFixed(2) + '</span>&nbsp;';
+    }
+    $('#mouse-avg', document).html(avg_data);
   }
   var selStopCss = $.extend({}, selEdgeCss, {'left': event.pageX});
   $('#iframe').contents().find('#sel-stop').css(selStopCss);
@@ -249,5 +273,6 @@ $('#zoom-in').click(function() {
 });
 </script>
 </form>
+<div id="mouse-avg"></div>
 </body>
 </html>
