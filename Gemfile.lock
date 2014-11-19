@@ -17,7 +17,7 @@ GIT
 
 GIT
   remote: git://github.com/textlab/rglossa.git
-  revision: ca4fef407699e75b883694347ea3a29642933099
+  revision: 2a87ed1b4fd6be3e0f26cda95f63ff4fa68db439
   specs:
     rglossa (0.0.1)
       coffee-rails (~> 3.2.2)
