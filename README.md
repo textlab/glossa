@@ -9,8 +9,7 @@ some way to go before it reaches feature parity with the old Glossa version.
 ## Prerequisites
 
 * Ruby >= 1.9.2 (>= 1.9.3 is recommended)
-* [The IMS Open Corpus Workbench (CWB)](http://cwb.sourceforge.net/). Check out
-  the latest version from SVN to get support for UTF-8-encoded corpora.
+* [The IMS Open Corpus Workbench (CWB)](http://cwb.sourceforge.net/)
 
 ## Installation instructions
 
@@ -31,6 +30,17 @@ Set this version to be your default Ruby version:
 (or see [the RVM documentation](https://rvm.io/workflow/rvmrc/) about how to
 create an *.rvmrc* file in your application directory that will automatically
 switch to this version when you enter the directory).
+
+### Install the IMS Open Corpus Workbench (CWB)
+Some packages are required to compile CWB. In Debian-based distributions you
+may need to run:
+
+    apt-get install flex libglib2.0-dev
+
+Follow the installation instructions of [The IMS Open Corpus Workbench
+(CWB)](http://cwb.sourceforge.net/download.php#svn). Check out the latest
+version from SVN, as described at the bottom of the page, to get support for
+UTF-8-encoded corpora.
 
 ### Create your RGlossa application
 
@@ -80,6 +90,17 @@ In that case, please install the version of the *rails* gem that is mentioned
 in the error message, e.g.:
 
     gem install rails -v3.2.19 -N
+
+You may get an error message about building a native extension, such as:
+
+    Gem::Ext::BuildError: ERROR: Failed to build gem native extension.
+    [...]
+    Gem files will remain installed in ~/.rvm/gems/ruby-2.1.5/gems/mysql2-0.3.17 for inspection.
+    Results logged to ~/.rvm/gems/ruby-2.1.5/extensions/x86-linux/2.1.0/mysql2-0.3.17/gem_make.out
+
+In such case you need to install development files of the MySQL client. In a Debian-based distribution run:
+
+    apt-get install libmysqlclient-dev
 
 As an alternative to creating a new application, you may already have a Rails
 application and want to make RGlossa part of that. Since RGlossa is implemented
