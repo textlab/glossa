@@ -67,38 +67,10 @@ Show: <label><input type="checkbox" id="wfcb" checked>waveform &amp; spectrogram
   <span style="color: red">1</span> <span style="color: lightgreen">2</span>
   <span style="color: blue">3</span> <span style="color: orange">4</span></label> |
 <label><input type="checkbox" id="ptcb" checked>pitch</label> | <a href="#" id="zoom-in" ><img src="<%= File.join ENV['RAILS_RELATIVE_URL_ROOT'] || '', ActionController::Base.helpers.asset_path('rglossa/speech/zoom-in.png') %>" title="Zoom in"></a> | <a href="#" onclick="window.location.href='wfplayer-<%= params[:corpus_id] %>-<%= params[:line_key] %>-<%= params[:oldstart] %>-<%= params[:oldstop] %>'"><img src="<%= File.join ENV['RAILS_RELATIVE_URL_ROOT'] || '', ActionController::Base.helpers.asset_path('rglossa/speech/zoom-out.png') %>" title="Zoom out to whole utterance"></a> |
-Problems? Switch to
-<script>
-
-// enable experimental features, if #experimental is in the URL
-if (window.location.toString().match(/experimental/i)) {
-  document.write('<a href="#" onclick="window.location.href = this; window.location.reload()">Flash player</a>');
-} else {
-  document.write('<a href="#experimental" onclick="window.location.href = this; window.location.reload()">JavaScript player</a>');
-}
-
-var is_shiny = false;
-function setTheme(sTheme) {
-  var o = pagePlayer.getByClassName('playlist','ul');
-  for (var i=o.length; i--;) {
-    o[i].className = 'playlist'+(pagePlayer.cssBase?' '+pagePlayer.cssBase:'')+(sTheme?' '+sTheme:'')+(is_shiny?' shiny':'');
-  }
-  return false;
-}
-
-function setShiny(bShiny, e) {
-  is_shiny = bShiny;
-  var o = pagePlayer.getByClassName('playlist','ul');
-  var sClass = 'shiny';
-  for (var i=o.length; i--;) {
-    if (!bShiny) {
-      pagePlayer.removeClass(o[i],sClass);
-    } else {
-      pagePlayer.addClass(o[i],sClass);
-    }
-  }
-}
-</script>
+Show selection stats:
+<label><input type="checkbox" id="show-min" checked onclick="update_sel_data()">min</label>
+<label><input type="checkbox" id="show-avg" checked onclick="update_sel_data()">avg</label>
+<label><input type="checkbox" id="show-max" checked onclick="update_sel_data()">max</label>
 <script language="JavaScript">
 $('#zoom-in').click(function() {
   if (pagePlayer.lastSound.startPos && pagePlayer.lastSound.stopPos && pagePlayer.lastSound.stopPos-pagePlayer.lastSound.startPos > 150) {
@@ -203,6 +175,47 @@ doc.body.oncontextmenu = function(event) {
   return false;
 }
 
+function update_sel_data() {
+    startX = parseInt($('#iframe').contents().find('#sel-start').css('left'));
+    stopX = parseInt($('#iframe').contents().find('#sel-stop').css('left'));
+    pitch_sel = pitch.filter(function(el, idx) { return idx >= startX && idx <= stopX; });
+    avg_data = 'Selection (ms): <span style="width: auto; color: blue">' + oSound.startPos + '</span>&ndash;<span style="width: auto; color: blue">' + oSound.stopPos + '</span>&nbsp;';
+    show_min = $('#show-min').prop('checked');
+    show_avg = $('#show-avg').prop('checked');
+    show_max = $('#show-max').prop('checked');
+    var sum = function(a, b) { return a + b; };
+    var min = function(a, b) { return Math.min(a, b); };
+    var max = function(a, b) { return Math.max(a, b); };
+    var avg = function(ary) { return (ary.reduce(sum) / ary.length).toFixed(2); };
+    var stats = function(ary) {
+      vals = [];
+      if (show_min) vals.push(ary.reduce(min));
+      if (show_avg) vals.push(avg(ary));
+      if (show_max) vals.push(ary.reduce(max));
+      return vals.join('<span style="width: auto; color: white">/</span>');
+    };
+    stats_str = [];
+    if (show_min) stats_str.push('min');
+    if (show_avg) stats_str.push('avg');
+    if (show_max) stats_str.push('max');
+    if (pitch_sel.length > 0 && stats_str.length > 0) {
+      avg_data += 'Pitch (' + stats_str.join('/') + '): <span style="width: auto; color: black">' + stats(pitch_sel) + '</span>';
+    }
+    formants_sel = formants.filter(function(el, idx) { return idx >= startX && idx <= stopX; });
+    if (formants_sel.length > 0 && stats_str.length > 0) {
+      f0_sel = formants_sel.map(function(el) { return el[0] });
+      f1_sel = formants_sel.map(function(el) { return el[1] });
+      f2_sel = formants_sel.map(function(el) { return el[2] });
+      f3_sel = formants_sel.map(function(el) { return el[3] });
+      avg_data += ' Formants (' + stats_str.join('/') + '): ';
+      avg_data += '<span style="width: auto; color: red">' + stats(f0_sel) + '</span>&nbsp;';
+      avg_data += '<span style="width: auto; color: lightgreen">' + stats(f1_sel) + '</span>&nbsp;';
+      avg_data += '<span style="width: auto; color: blue">' + stats(f2_sel) + '</span>&nbsp;';
+      avg_data += '<span style="width: auto; color: orange">' + stats(f3_sel) + '</span>&nbsp;';
+    }
+    $('#mouse-avg', document).html(avg_data);
+}
+
 doc.body.onmouseup = function(event) {
   if (event.button != 0) {
     exportedValues = window.open('', 'exportedValues');
@@ -226,31 +239,7 @@ doc.body.onmouseup = function(event) {
       oSound.stopPos = curPos;
     }
 
-    startX = parseInt($('#iframe').contents().find('#sel-start').css('left'));
-    stopX = parseInt($('#iframe').contents().find('#sel-stop').css('left'));
-    pitch_sel = pitch.filter(function(el, idx) { return idx >= startX && idx <= stopX; });
-    avg_data = 'Selection (ms): <span style="width: auto; color: blue">' + oSound.startPos + '</span>&ndash;<span style="width: auto; color: blue">' + oSound.stopPos + '</span>&nbsp;';
-    var sum = function(a, b) { return a + b; };
-    var min = function(a, b) { return Math.min(a, b); };
-    var max = function(a, b) { return Math.max(a, b); };
-    var avg = function(ary) { return (ary.reduce(sum) / ary.length).toFixed(2); };
-    var stats = function(ary) { return [ ary.reduce(min), avg(ary), ary.reduce(max) ].join('<span style="width: auto; color: white">/</span>'); };
-    if (pitch_sel.length > 0) {
-      avg_data += 'Pitch (min/avg/max): <span style="width: auto; color: black">' + stats(pitch_sel) + '</span>';
-    }
-    formants_sel = formants.filter(function(el, idx) { return idx >= startX && idx <= stopX; });
-    if (formants_sel.length > 0) {
-      f0_sel = formants_sel.map(function(el) { return el[0] });
-      f1_sel = formants_sel.map(function(el) { return el[1] });
-      f2_sel = formants_sel.map(function(el) { return el[2] });
-      f3_sel = formants_sel.map(function(el) { return el[3] });
-      avg_data += ' Formants (min/avg/max): ';
-      avg_data += '<span style="width: auto; color: red">' + stats(f0_sel) + '</span>&nbsp;';
-      avg_data += '<span style="width: auto; color: lightgreen">' + stats(f1_sel) + '</span>&nbsp;';
-      avg_data += '<span style="width: auto; color: blue">' + stats(f2_sel) + '</span>&nbsp;';
-      avg_data += '<span style="width: auto; color: orange">' + stats(f3_sel) + '</span>&nbsp;';
-    }
-    $('#mouse-avg', document).html(avg_data);
+    update_sel_data();
   }
   var selStopCss = $.extend({}, selEdgeCss, {'left': event.pageX});
   $('#iframe').contents().find('#sel-stop').css(selStopCss);
@@ -278,6 +267,38 @@ $(document).ready(function() {
     toggleWaveform('#ptcb', '.pitch');
   });
 });
+</script>
+Problems? Switch to
+<script>
+
+// enable experimental features, if #experimental is in the URL
+if (window.location.toString().match(/experimental/i)) {
+  document.write('<a href="#" onclick="window.location.href = this; window.location.reload()">Flash player</a>');
+} else {
+  document.write('<a href="#experimental" onclick="window.location.href = this; window.location.reload()">JavaScript player</a>');
+}
+
+var is_shiny = false;
+function setTheme(sTheme) {
+  var o = pagePlayer.getByClassName('playlist','ul');
+  for (var i=o.length; i--;) {
+    o[i].className = 'playlist'+(pagePlayer.cssBase?' '+pagePlayer.cssBase:'')+(sTheme?' '+sTheme:'')+(is_shiny?' shiny':'');
+  }
+  return false;
+}
+
+function setShiny(bShiny, e) {
+  is_shiny = bShiny;
+  var o = pagePlayer.getByClassName('playlist','ul');
+  var sClass = 'shiny';
+  for (var i=o.length; i--;) {
+    if (!bShiny) {
+      pagePlayer.removeClass(o[i],sClass);
+    } else {
+      pagePlayer.addClass(o[i],sClass);
+    }
+  }
+}
 </script>
 </body>
 </html>
