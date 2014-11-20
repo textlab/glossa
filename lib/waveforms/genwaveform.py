@@ -16,6 +16,7 @@ import atexit
 
 SPLIT_INTERVAL_SEC = 60
 MAX_PITCH = 500.0
+MAX_FMT = 4000.0
 WAVEFORM_TOP_FREQ = 10000
 
 global_config = json.load(open(sys.argv[1]))
@@ -140,7 +141,7 @@ class GenWaveForm(Tkinter.Tk):
       for x, y in enumerate(spec):
         xx = x*self.framelength*self.pixels_per_second
         for j, colour in [(0, 'red'), (1, 'green'), (2, 'blue'), (3, 'orange')]:
-          yy = self.conf['waveform_height'] + (self.conf['total_height']-self.conf['waveform_height']) * (4000-y[j])/4000.0
+          yy = self.conf['waveform_height'] + (self.conf['total_height']-self.conf['waveform_height']) * (MAX_FMT-y[j])/MAX_FMT
           self.canvas.create_rectangle(xx, yy, xx, yy, outline=colour)
         img_x = self.i*SPLIT_INTERVAL_SEC*self.pixels_per_second + int(round(xx))
         self.formant_tab[img_x] = (y[0], y[1], y[2], y[3])
@@ -193,8 +194,8 @@ class GenWaveForm(Tkinter.Tk):
 
       with open('%s.js' % self.outfile, 'w') as js_file:
         js_file.write('pitch=Array();formants=Array();');
-        js_file.write('spec_top_freq=%d;total_height=%d;spec_height=%d;' %
-          (WAVEFORM_TOP_FREQ, self.conf['total_height'], self.conf['total_height']-self.conf['waveform_height']));
+        js_file.write('spec_top_freq=%d;total_height=%d;spec_height=%d;max_fmt=%d;max_pitch=%d;' %
+          (WAVEFORM_TOP_FREQ, self.conf['total_height'], self.conf['total_height']-self.conf['waveform_height'], MAX_FMT, MAX_PITCH));
         for x, y in enumerate(self.pitch_tab):
           if not y is None and y > 0:
             js_file.write('pitch[%d]=%d;' % (x, y))
