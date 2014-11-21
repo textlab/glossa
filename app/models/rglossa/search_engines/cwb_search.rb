@@ -85,7 +85,7 @@ module Rglossa
 
         if extra_attributes.present?
           # TODO: Handle multilingual corpora - here we just take the first language
-          if corpus.langs.present?
+          if corpus.multilingual?
             pos_attr = corpus.langs.first[:tags]['attr']
             commands << "show " + extra_attributes.map { |a| "+#{a == 'pos' ? pos_attr : a}" }.join(' ')
           else
