@@ -182,7 +182,7 @@ var _callbacks_ = {
         self.currentSelection = 1; // current selection on the current page (normally 1-5)
         self.lastPage = false; // are we at the last page of options?
         //self.options = [];
-        self.html = '<span class="typing"></span><ul class="options"></ul>';
+        self.html = '<span class="typing"></span><ul class="options"></ul><div style="clear: both; font-size: 80%">dot (.) = show next 5 words<br />comma (,) = show previous 5 words</div>';
         self.url = 'http://www.google.com/inputtools/request?ime=pinyin&ie=utf-8&oe=utf-8&app=translate&uv'
         self.paramNames = {'text': 'text',
                            'num': 'num',
@@ -192,6 +192,15 @@ var _callbacks_ = {
         // Add a reverse reference to the DOM object
         self.$el.data("chineseInput", self);
         
+                $('#ime_check').click(function(){
+                    self.options.active = $(this).is(':checked');
+                    if (self.options.active === false){
+                        self.currentText = '';
+                        self.currentPage = 0;
+                        self.updateDialog();
+                    }
+                    self.$el.focus();
+                });
         self.init = function(){
             
             self.options = $.extend({},$.chineseInput.defaultOptions, options);
@@ -213,7 +222,7 @@ var _callbacks_ = {
                 
                 var $hide = self.$active;
                 $hide.appendTo(self.$toolbar);
-                $hide.find('input').click(function(){
+                $('#ime_check').click(function(){
                     self.options.active = $(this).is(':checked');
                     if (self.options.active === false){
                         self.currentText = '';
@@ -248,7 +257,7 @@ var _callbacks_ = {
         };
         
         self.keyDown = function(event){
-            if (self.options.active) {
+            if (self.options.active && !event.ctrlKey && !event.metaKey && !event.altKey) {
                 if (self.currentText.length > 0){
                     switch(event.which){
                         case 37: // left 
@@ -263,6 +272,9 @@ var _callbacks_ = {
                     case 8: // backspace
                         if (self.currentText.length > 0){
                             self.currentText = self.currentText.substring(0,self.currentText.length-1);
+                            self.currentPage = 0;
+                            self.currentSelection = 1;
+                            self.lastPage = false;
                             self.updateDialog();
                             break;
                         }
@@ -275,7 +287,7 @@ var _callbacks_ = {
         };
 
         self.keyPress = function(event){
-            if (self.options.active) {
+            if (self.options.active && !event.ctrlKey && !event.metaKey && !event.altKey) {
                 var key = String.fromCharCode(event.which);
                 var pat = /[a-zA-Z]/;
                 if (pat.test(key)){ 
@@ -283,29 +295,36 @@ var _callbacks_ = {
                     if (self.currentText.length <= 20){ 
                         // set maximum num characters to arbitrary 20 limit
                         self.currentText += key;
-                    }
-                } else if (self.currentText.length > 0) {
-                    if (key == ' '){ 
-                        // pressed space
-                        self.makeSelection(self.currentSelection - 1);
-                    } else if (event.which >= 49 && event.which <= 53) { 
-                        // pressed number between 1 and 5
-                        self.makeSelection(event.which - 49);
-                    } else if (key == ',') { // go to previous page
-                        self.previousPage();
-                    } else if (key == '.') { // go to next page
-                        self.nextPage();
-                    } else if (event.which == 13) {
-                        // enter key pressed -- accept phonetic input
-                        self.addText(self.currentText);
-                        self.currentText = '';
                         self.currentPage = 0;
                         self.currentSelection = 1;
                         self.lastPage = false;
                     }
+                } else if (self.currentText.length > 0) {
+                    if (key == ' ' || event.which == 13){
+                        event.which = 13;
+                        self.makeSelection(self.currentSelection - 1);
+                        self.currentText = '';
+                        self.currentPage = 0;
+                        self.currentSelection = 1;
+                        self.lastPage = false;
+                    } else if (event.which >= 49 && event.which <= 53) { 
+                        // pressed number between 1 and 5
+                        self.makeSelection(event.which - 49);
+                        self.currentText = '';
+                        self.currentPage = 0;
+                        self.currentSelection = 1;
+                        self.lastPage = false;
+                    } else if (key == ',') { // go to previous page
+                        self.previousPage();
+                    } else if (key == '.') { // go to next page
+                        self.nextPage();
+                    }
                 } else {
                     if (key == '.') { // pressed period
                         self.addText('\u3002');
+                        return false;
+                    } else if (key == ',') { // pressed comma
+                        self.addText('\uFF0C');
                         return false;
                     }
                     return true;

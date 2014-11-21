@@ -4,6 +4,7 @@
     color: #666;
     font-size: 14px;
     padding: 5px;
+    display: none !important;
 }
 
 #chinese-ime {
@@ -13,7 +14,6 @@
     background: #fff;
     border: 1px solid #aaa;
     width: 230px;
-    height: 60px;
     padding: 4px;
     
     .typing {
