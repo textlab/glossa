@@ -20,6 +20,21 @@ root =
     showMultiword: -> @transitionTo('multiword')
     showRegex: -> @transitionTo('regex')
 
+window.ChineseIme = React.createClass
+  propTypes:
+    corpus: React.PropTypes.object.isRequired
+
+  containsLanguage: (lng) ->
+    lngList = corpusNs.getLanguageList(@props.corpus).filter (cur_lng) ->
+      cur_lng.value == lng
+    lngList.length > 0
+
+  render: ->
+    if this.containsLanguage('zh')
+      `<label><input type="checkbox" value="1" style={{verticalAlign: '1px'}} id="ime_check" name="ime_check" /> Enable Chinese Input Method</label>`
+    else
+      null
+
 window.CwbSearchInputs = React.createClass
   propTypes:
     store: React.PropTypes.object.isRequired
@@ -63,6 +78,15 @@ window.CwbSearchInputs = React.createClass
   addPhraseButton: ->
     `<button className="btn add-phrase-btn" onClick={this.props.handleAddPhrase}>Or...</button>`
 
+  componentDidMount: ->
+    $("input[type='text']").chineseInput
+      debug: false, # print debug messages
+      input:
+        initial: 'simplified', # or 'simplified'
+        allowChange: false, # allow transition between traditional and simplified
+      allowHide: true, # allow the chinese input to be switched off
+      active: false # whether or not the plugin should be active by default
+
 
   render: ->
     {corpus, searchQueries, handleQueryChanged, handleSearch} = @props
@@ -70,6 +94,7 @@ window.CwbSearchInputs = React.createClass
 
     if @state.statechart.pathContains('simple')
       `<span>
+        <ChineseIme corpus={this.props.corpus} />
         <div className="row-fluid search-input-links">
           <b>Simple</b>&nbsp;|&nbsp;
           <a href="" title="Search for grammatical categories etc." onClick={this.showMultiword}>Extended</a>&nbsp;|&nbsp;

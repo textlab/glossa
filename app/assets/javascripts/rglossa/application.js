@@ -15,6 +15,10 @@
 //= require opentip-jquery-excanvas.min
 //= require spin.min
 //= require jquery.spin
+//= require jquery-migrate-1.2.1.js
+//= require trad_chars.js
+//= require caret.js
+//= require jQuery.chineseIME.js
 //
 //= require i18n
 //= require i18n/translations

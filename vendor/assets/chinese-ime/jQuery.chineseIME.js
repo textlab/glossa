@@ -150,6 +150,7 @@ var _callbacks_ = {
               this.value += myValue;
               this.focus();
             }
+            this.click();
           })
         }
     });

@@ -12,4 +12,5 @@
  *= require_tree ./speech
  *= require ./geo-distribution
  *= require ./home
+ *= require ime
 */
