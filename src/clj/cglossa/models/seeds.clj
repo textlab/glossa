@@ -3,7 +3,8 @@
             [datomic-schema.schema :refer [generate-parts generate-schema]]
             [clojure.java.io :as io]
             [cglossa.data-import.core :refer [tsv->tx-data]]
-            [cglossa.models.core :as models]))
+            [cglossa.models.core :as models]
+            [cglossa.models.schema :as schema]))
 
 (defn- find-tsv-files [dir]
   (->> (io/file dir)

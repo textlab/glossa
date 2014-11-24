@@ -1,33 +1,6 @@
 (ns cglossa.models.core
-  (:require [datomic.api :as d]
-            [datomic-schema.schema :refer [part schema fields]]))
+  (:require [datomic.api :as d]))
 
-(def db-uri "datomic:free://localhost:4334/glossa")
-
-(defn dbparts []
-  [(part "glossa")])
-
-(defn dbschema []
-  [(schema corpus
-           (fields
-             [name :string]
-             [short-name :string :unique-identity]
-             [metadata-categories :ref :many :component]))
-
-   (schema metadata-category
-           (fields
-             [short-name :string]
-             [name :string]
-             [widget-type :enum [:list :range]]
-             [values :ref :many "One or more text-values, bool-values or numeric-values"]
-             [text-value :string]
-             [bool-value :boolean]
-             [numeric-value :long]))
-
-   (schema search
-           (fields
-             [corpus :ref :one]
-             [queries :string :many]))])
 
 (defn current-db []
   (d/db (d/connect db-uri)))
