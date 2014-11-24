@@ -78,14 +78,21 @@ window.CwbSearchInputs = React.createClass
   addPhraseButton: ->
     `<button className="btn add-phrase-btn" onClick={this.props.handleAddPhrase}>Or...</button>`
 
-  componentDidMount: ->
+  updateChineseIME: ->
     $("input[type='text']").chineseInput
-      debug: false, # print debug messages
+      debug: false,
       input:
-        initial: 'simplified', # or 'simplified'
-        allowChange: false, # allow transition between traditional and simplified
-      allowHide: true, # allow the chinese input to be switched off
-      active: false # whether or not the plugin should be active by default
+        initial: 'simplified',
+        allowChange: false,
+      allowHide: true,
+      active: $('#ime_check').prop('checked')
+
+  componentDidMount: ->
+    @updateChineseIME()
+
+  componentDidUpdate: ->
+    $("input[type='text']").unbind()
+    @updateChineseIME()
 
 
   render: ->
@@ -117,6 +124,7 @@ window.CwbSearchInputs = React.createClass
 
     else if @state.statechart.pathContains('multiword')
       `<span>
+        <ChineseIme corpus={this.props.corpus} />
         <div className="row-fluid search-input-links">
           <a href="" title="Simple search box" onClick={this.showSimple}>Simple</a>&nbsp;|&nbsp;
           <b>Extended</b>&nbsp;|&nbsp;
@@ -139,6 +147,7 @@ window.CwbSearchInputs = React.createClass
 
     else
       `<span>
+        <ChineseIme corpus={this.props.corpus} />
         <div className="row-fluid search-input-links">
           <a href="" title="Simple search box" onClick={this.showSimple}>Simple</a>&nbsp;|&nbsp;
           <a href="" title="Search for grammatical categories etc." onClick={this.showMultiword}>Extended</a>&nbsp;|&nbsp;
