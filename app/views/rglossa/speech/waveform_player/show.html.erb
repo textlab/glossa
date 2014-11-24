@@ -213,6 +213,8 @@ function update_sel_data() {
     show_min = $('#show-min').prop('checked');
     show_avg = $('#show-avg').prop('checked');
     show_max = $('#show-max').prop('checked');
+    show_fmt = $('#fmcb').prop('checked');
+    show_pitch = $('#ptcb').prop('checked');
     var sum = function(a, b) { return a + b; };
     var min = function(a, b) { return Math.min(a, b); };
     var max = function(a, b) { return Math.max(a, b); };
@@ -228,11 +230,11 @@ function update_sel_data() {
     if (show_min) stats_str.push('min');
     if (show_avg) stats_str.push('avg');
     if (show_max) stats_str.push('max');
-    if (pitch_sel.length > 0 && stats_str.length > 0) {
+    if (show_pitch && pitch_sel.length > 0 && stats_str.length > 0) {
       avg_data += 'Pitch (' + stats_str.join('/') + '): <span style="width: auto; color: black">' + stats(pitch_sel) + '</span>';
     }
     formants_sel = formants.filter(function(el, idx) { return idx >= startX && idx <= stopX; });
-    if (formants_sel.length > 0 && stats_str.length > 0) {
+    if (show_fmt && formants_sel.length > 0 && stats_str.length > 0) {
       f0_sel = formants_sel.map(function(el) { return el[0] });
       f1_sel = formants_sel.map(function(el) { return el[1] });
       f2_sel = formants_sel.map(function(el) { return el[2] });
@@ -291,12 +293,15 @@ toggleWaveform = function(id, cls) {
 $(document).ready(function() {
   $('#wfcb').click(function() {
     toggleWaveform('#wfcb', '.wave');
+    update_sel_data();
   });
   $('#fmcb').click(function() {
     toggleWaveform('#fmcb', '.fmt');
+    update_sel_data();
   });
   $('#ptcb').click(function() {
     toggleWaveform('#ptcb', '.pitch');
+    update_sel_data();
   });
 });
 </script>
