@@ -69,11 +69,21 @@ Show: <label><input type="checkbox" id="wfcb" checked>waveform &amp; spectrogram
 <label><input type="checkbox" id="ptcb" checked>pitch</label> |
 <a href="#" id="zoom-in" ><img src="<%= File.join ENV['RAILS_RELATIVE_URL_ROOT'] || '', ActionController::Base.helpers.asset_path('rglossa/speech/zoom-in.png') %>" title="Zoom in"></a> |
 <a href="#" id="zoom-out"><img src="<%= File.join ENV['RAILS_RELATIVE_URL_ROOT'] || '', ActionController::Base.helpers.asset_path('rglossa/speech/zoom-out.png') %>" title="Zoom out to whole utterance"></a> |
+<a href="#" id="extend-left" style="text-decoration: none">[&lt; 1s</a> |
+<a href="#" id="extend-right" style="text-decoration: none">1s &gt;]</a> |
 Show selection stats:
 <label><input type="checkbox" id="show-min" checked>min</label>
 <label><input type="checkbox" id="show-avg" checked>avg</label>
 <label><input type="checkbox" id="show-max" checked>max</label>
 <script language="JavaScript">
+$('#extend-left').click(function() {
+  window.location.href='wfplayer-<%= params[:corpus_id] %>-<%= params[:line_key] %>-<%= "%1.2f" % (params[:start].to_f-1) %>-<%= params[:stop] %>-<%= params[:oldstart] %>-<%= params[:oldstop] %>';
+});
+
+$('#extend-right').click(function() {
+  window.location.href='wfplayer-<%= params[:corpus_id] %>-<%= params[:line_key] %>-<%= params[:start] %>-<%= "%1.2f" % (params[:stop].to_f+1) %>-<%= params[:oldstart] %>-<%= params[:oldstop] %>';
+});
+
 $('#zoom-out').click(function() {
   window.location.href='wfplayer-<%= params[:corpus_id] %>-<%= params[:line_key] %>-<%= params[:oldstart] %>-<%= params[:oldstop] %>';
 });
@@ -83,7 +93,7 @@ $('#zoom-in').click(function() {
     window.location.href = 'wfplayer-<%= params[:corpus_id] %>-<%= params[:line_key] %>-' +
                            (pagePlayer.lastSound.startPos/1000+<%= params[:start] %>).toFixed(2) +
                            '-' + (pagePlayer.lastSound.stopPos/1000+<%= params[:start] %>).toFixed(2) +
-                           '-' + $('#iframe').width() + '-' + <%= params[:oldstart] %> + '-' + <%= params[:oldstop] %>;
+                           '-' + <%= params[:oldstart] %> + '-' + <%= params[:oldstop] %> + '-' + $('#iframe').width();
   } else alert('Make a selection longer than 150ms to zoom in');
   return false;
 });

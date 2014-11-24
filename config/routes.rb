@@ -27,7 +27,7 @@ Rglossa::Engine.routes.draw do
   end
 
   scope module: 'speech' do
-    get '/wfplayer-:corpus_id-:line_key-:start-:stop(-:width-:oldstart-:oldstop)', to: 'waveform_player#show',
+    get '/wfplayer-:corpus_id-:line_key-:start-:stop(-:oldstart-:oldstop(-:width))', to: 'waveform_player#show',
         :constraints => {:start => /\d+(\.\d+)?/, :stop => /\d+(\.\d+)?/, :width => /\d+/,
                          :oldstart => /\d+(\.\d+)?/, :oldstop => /\d+(\.\d+)?/}
     namespace :search_engines do
