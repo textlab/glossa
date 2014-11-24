@@ -19,4 +19,4 @@ window.WFplayer = React.createClass
     $node.find("#waveframe").attr('src', "wfplayer-#{corpus_id}-#{line_key}-#{start}-#{stop}")
 
   render: ->
-    `<div><iframe height="370" width="100%" id="waveframe" target="_blank" className="wfplayer"></iframe></div>`
+    `<div><iframe height="385" width="100%" id="waveframe" target="_blank" className="wfplayer"></iframe></div>`
