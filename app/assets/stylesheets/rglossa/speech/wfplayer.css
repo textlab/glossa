@@ -118,7 +118,7 @@ ul.playlist li.sm2_playing:hover {
 }
 
 ul.playlist li.sm2_paused {
- background-color:#999;
+ background-color:#888;
 }
 
 ul.playlist li.sm2_playing:hover span,

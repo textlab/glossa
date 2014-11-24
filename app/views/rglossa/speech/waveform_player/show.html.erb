@@ -103,7 +103,7 @@ $('#show-max').click(function() { update_sel_data(); });
    %><img id='small<%= i %>' src='<%= @conf['output_dir'] %>/<%= basename %>-wave.jpg' width='<%= width %>%' height='70' style='display:none'><%
    end
  %>
- <div style="background-color: #999; color: #fff; font-size: 80%; font-family: monaco,'VT-100','lucida console',courier,system; width: 90%" id="mouse-avg"></div>
+ <div style="background-color: #888; color: #fff; font-size: 80%; font-family: monaco,'VT-100','lucida console',courier,system; width: 90%" id="mouse-avg"></div>
  <iframe id='iframe' height="237" width="90%" style="border: 0; float: left"></iframe>
  <div id="scale" style="width: 10%; height: 237px; float: left">
    <div id="spec" class="wave" style="float: left; position: relative">Spect.&nbsp;<br>(Hz)</div>
@@ -179,7 +179,7 @@ doc.body.onmousemove = function(event) {
   }
   if (formants[event.pageX] && $('#fmcb').prop('checked')) {
     pos_data += 'Formants (Hz): '
-    pos_data += '<span style="width: auto; color: red">' + formants[event.pageX][0] + '</span>&nbsp;';
+    pos_data += '<span style="width: auto; color: #ff8080">' + formants[event.pageX][0] + '</span>&nbsp;';
     pos_data += '<span style="width: auto; color: lightgreen">' + formants[event.pageX][1] + '</span>&nbsp;';
     pos_data += '<span style="width: auto; color: blue">' + formants[event.pageX][2] + '</span>&nbsp;';
     pos_data += '<span style="width: auto; color: orange">' + formants[event.pageX][3] + '</span>&nbsp;';
@@ -241,7 +241,7 @@ function update_sel_data() {
       f2_sel = formants_sel.map(function(el) { return el[2] });
       f3_sel = formants_sel.map(function(el) { return el[3] });
       avg_data += ' Formants (' + stats_str.join('/') + '): ';
-      avg_data += '<span style="width: auto; color: red">' + stats(f0_sel) + '</span>&nbsp;';
+      avg_data += '<span style="width: auto; color: #ff8080">' + stats(f0_sel) + '</span>&nbsp;';
       avg_data += '<span style="width: auto; color: lightgreen">' + stats(f1_sel) + '</span>&nbsp;';
       avg_data += '<span style="width: auto; color: blue">' + stats(f2_sel) + '</span>&nbsp;';
       avg_data += '<span style="width: auto; color: orange">' + stats(f3_sel) + '</span>&nbsp;';
