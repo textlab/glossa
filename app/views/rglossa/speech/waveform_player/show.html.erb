@@ -69,8 +69,8 @@ Show: <label><input type="checkbox" id="wfcb" checked>waveform &amp; spectrogram
 <label><input type="checkbox" id="ptcb" checked>pitch</label> |
 <a href="#" id="zoom-in" ><img src="<%= File.join ENV['RAILS_RELATIVE_URL_ROOT'] || '', ActionController::Base.helpers.asset_path('rglossa/speech/zoom-in.png') %>" title="Zoom in"></a> |
 <a href="#" id="zoom-out"><img src="<%= File.join ENV['RAILS_RELATIVE_URL_ROOT'] || '', ActionController::Base.helpers.asset_path('rglossa/speech/zoom-out.png') %>" title="Zoom out to whole utterance"></a> |
-<a href="#" id="extend-left" style="text-decoration: none">[&lt; 1s</a> |
-<a href="#" id="extend-right" style="text-decoration: none">1s &gt;]</a> |
+<a href="#" id="extend-left" style="text-decoration: none" title="Extend the audio to the left by 1 second">[&lt; 1s</a> |
+<a href="#" id="extend-right" style="text-decoration: none" title="Extend the audio to the right by 1 second">1s &gt;]</a> |
 Show selection stats:
 <label><input type="checkbox" id="show-min" checked>min</label>
 <label><input type="checkbox" id="show-avg" checked>avg</label>
