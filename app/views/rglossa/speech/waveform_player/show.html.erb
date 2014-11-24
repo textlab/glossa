@@ -205,6 +205,9 @@ doc.body.oncontextmenu = function(event) {
 function update_sel_data() {
     startX = parseInt($('#iframe').contents().find('#sel-start').css('left'));
     stopX = parseInt($('#iframe').contents().find('#sel-stop').css('left'));
+    if (startX > stopX) {
+      var tmp = startX; startX = stopX; stopX = tmp;
+    }
     pitch_sel = pitch.filter(function(el, idx) { return idx >= startX && idx <= stopX; });
     avg_data = 'Selection (ms): <span style="width: auto; color: blue">' + oSound.startPos + '</span>&ndash;<span style="width: auto; color: blue">' + oSound.stopPos + '</span>&nbsp;';
     show_min = $('#show-min').prop('checked');
