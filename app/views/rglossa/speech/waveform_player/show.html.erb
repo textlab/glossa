@@ -127,7 +127,7 @@ $('#show-max').click(function() { update_sel_data(); });
 var scrollMode = false;
 var doc = document.getElementById('iframe').contentWindow.document;
 doc.open();
-doc.write('<html><head><title></title></head><body title="Right-click to export the numerical values to a separate window" style="margin: 0 0 0 0; overflow-y: hidden; width: <%= @total_imgwidth %>px">');
+doc.write('<html><head><title></title></head><body title="Right-click to export the numerical values at the mouse position to a separate window" style="margin: 0 0 0 0; overflow-y: hidden; width: <%= @total_imgwidth %>px">');
 doc.write('<div id="bar" style="width: 2px; background-color: red; height: <%= @conf['total_height'] %>px; position: absolute; z-index: 3"></div>');
 doc.write('<div id="sel-start" style="position: relative; z-index: 4; cursor: ew-resize"></div>');
 doc.write('<div id="sel-stop" style="position: relative; z-index: 4; cursor: ew-resize"></div>');
@@ -209,7 +209,8 @@ function update_sel_data() {
       var tmp = startX; startX = stopX; stopX = tmp;
     }
     pitch_sel = pitch.filter(function(el, idx) { return idx >= startX && idx <= stopX; });
-    avg_data = 'Selection (ms): <span style="width: auto; color: blue">' + oSound.startPos + '</span>&ndash;<span style="width: auto; color: blue">' + oSound.stopPos + '</span>&nbsp;';
+    avg_data = '<span style="float: right; position: relative"><a href="#" id="export-mouse-avg" style="text-decoration: none; color: white; border: 1px solid white">Export selection stats</a></span>';
+    avg_data += 'Selection (ms): <span style="width: auto; color: blue">' + oSound.startPos + '</span>&ndash;<span style="width: auto; color: blue">' + oSound.stopPos + '</span>&nbsp;';
     show_min = $('#show-min').prop('checked');
     show_avg = $('#show-avg').prop('checked');
     show_max = $('#show-max').prop('checked');
@@ -246,6 +247,11 @@ function update_sel_data() {
       avg_data += '<span style="width: auto; color: orange">' + stats(f3_sel) + '</span>&nbsp;';
     }
     $('#mouse-avg', document).html(avg_data);
+    $('#export-mouse-avg').click(function(){
+      exportedValues = window.open('', 'exportedValues');
+      exportedValues.document.write($('#mouse-avg').html() + '<br>');
+      $('#export-mouse-avg').css('background-color', '#404040');
+    });
 }
 
 doc.body.onmouseup = function(event) {
