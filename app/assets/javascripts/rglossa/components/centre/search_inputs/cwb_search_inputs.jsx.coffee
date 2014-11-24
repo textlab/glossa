@@ -31,7 +31,7 @@ window.ChineseIme = React.createClass
 
   render: ->
     if this.containsLanguage('zh')
-      `<label><input type="checkbox" value="1" style={{verticalAlign: '1px'}} id="ime_check" name="ime_check" /> Enable Chinese Input Method</label>`
+      `<label style={{lineHeight: '13px'}}><input type="checkbox" value="1" id="ime_check" name="ime_check" style={{margin: '0px'}} /> Enable Chinese Input Method</label>`
     else
       null
 
