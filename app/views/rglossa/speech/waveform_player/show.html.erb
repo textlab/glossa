@@ -319,6 +319,9 @@ $(document).ready(function() {
     toggleWaveform('#ptcb', '.pitch');
     update_sel_data();
   });
+  var iframeBodyWidth = $("#iframe").contents().find("body").width();
+  if ($("#iframe").width() > iframeBodyWidth)
+    $("#iframe").css('width', '' + iframeBodyWidth + 'px');
 });
 </script>
 Problems? Switch to
