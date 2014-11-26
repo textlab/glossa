@@ -25,11 +25,15 @@
               (filter #(seq (val %)) (zipmap attr-names row))))  ;ignore empty strings
       {:from-path path})))
 
-(defn- create-metadata-value-maps [val-id-map categories]
-  (for [category-vals val-id-map
-        [val id] category-vals]
-    {:db/id (d/tempid :db.part/glossa (- -1 id))
-     :metadata-value/text-value val}))
+(defn- create-metadata-value-maps [val-id-maps headers categories]
+  (mapcat (fn [category-vals header]
+            (let [category (first (filter #(= (:metadata-category/short-name %) header)
+                                          categories))]
+              (for [[val id] category-vals]
+                {:db/id                     (d/tempid :db.part/glossa (- -1 id))
+                 :metadata-value/text-value val
+                 :metadata-category/_values (:db/id category)})))
+          val-id-maps headers))
 
 (defn import-corpora []
   (tsv->tx-data (str data-path "/corpora.tsv") :corpus))
@@ -43,9 +47,11 @@
 
 (defn import-metadata-values [corpus-short-name db]
   (let [path (str data-path "/metadata_values/" corpus-short-name ".tsv")]
-    (let [categories (d/pull db
-                             '[{:metadata-categories [:db/id :metadata-category/short-name]}]
-                             [:corpus/short-name corpus-short-name])
+    (let [categories (:corpus/metadata-categories
+                      (d/pull db
+                              '[{:corpus/metadata-categories
+                                 [:db/id :metadata-category/short-name]}]
+                              [:corpus/short-name corpus-short-name]))
           rows (tsv->rows path)
           headers (first rows)
           data (rest rows)
@@ -53,13 +59,13 @@
           unique-vals (map set cols)
           tids (first unique-vals)
           nrows (count tids)
-          val-id-map (map-indexed (fn [index cat-vals]
-                                    (let [first-id (* index nrows)]
-                                      (into {}
-                                            (map (fn [tid id] [tid id])
-                                                 cat-vals
-                                                 (map #(+ % first-id) (range nrows))))))
-                                  unique-vals)]
+          val-id-maps (map-indexed (fn [index cat-vals]
+                                     (let [first-id (* index nrows)]
+                                       (into {}
+                                             (map (fn [val id] [val id])
+                                                  cat-vals
+                                                  (map #(+ % first-id) (range nrows))))))
+                                   unique-vals)]
       (when-not (= (first headers) "tid")
         (throw (Exception. (str "The first column should be tid, not " (first headers) "!"))))
       (for [row data
@@ -68,4 +74,4 @@
                {:db/id (d/tempid :db.part/glossa)
                 :metadata_value value})
              headers fields))
-      (create-metadata-value-maps val-id-map categories))))
+      (create-metadata-value-maps val-id-maps headers categories))))
