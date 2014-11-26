@@ -2,7 +2,9 @@
   (:require [datomic.api :as d]
             [datomic-schema.schema :refer [generate-parts generate-schema]]
             [clojure.java.io :as io]
-            [cglossa.data-import.core :refer [tsv->tx-data]]
+            [cglossa.data-import.core :refer [import-corpora
+                                              import-metadata-categories
+                                              import-metadata-values]]
             [cglossa.models.core :as models]
             [cglossa.models.schema :as schema]))
 
@@ -12,25 +14,29 @@
        (map #(.getPath %))
        (filter #(.endsWith % ".tsv"))))
 
-(defn import-corpora []
-  (tsv->tx-data "resources/data/corpora.tsv" :corpus))
+(defn- path->corpus-short-name [path]
+  "Extracts the corpus short name as the base name of a tsv file
+  (e.g. 'mycorpus' from '/path/to/mycorpus.tsv'"
+  (last (re-find #".+/(.+).tsv$" path)))
 
-(defn import-metadata-categories []
-  (->> (find-tsv-files "resources/data/metadata_categories")
-       (map #(tsv->tx-data % :metadata-category))
-       (mapcat (fn [file-metadata]
-                 (let [path (-> file-metadata meta :from-path)
-                       short-name (last (re-find #".+/(.+).tsv$" path))
-                       corpus-attr {:corpus/_metadata-categories [:corpus/short-name short-name]}]
-                   ; associate the metadata with the appropriate corpus by adding
-                   ; an attribute with a corpus lookup ref to each metadata category
-                   (map #(into % corpus-attr) file-metadata))))))
+(defn- seed-corpora []
+  (import-corpora))
 
+(defn- seed-metadata-categories []
+  (first (concat (->> (find-tsv-files "resources/data/metadata_categories")
+                      (map path->corpus-short-name)
+                      (map import-metadata-categories)))))
+
+(defn- seed-metadata-values [db]
+  (first (concat (->> (find-tsv-files "resources/data/metadata_values")
+                      (map path->corpus-short-name)
+                      (map #(import-metadata-values % db))))))
 (defn seed []
   (let [url models/db-uri
         conn (d/connect url)]
     (d/transact conn (concat
-                       (generate-parts d/tempid (models/dbparts))
-                       (generate-schema d/tempid (models/dbschema))))
-    (d/transact conn (import-corpora))
-    (d/transact conn (import-metadata-categories))))
+                       (generate-parts d/tempid (schema/dbparts))
+                       (generate-schema d/tempid (schema/dbschema))))
+    (d/transact conn (seed-corpora))
+    (d/transact conn (seed-metadata-categories))
+    (d/transact conn (seed-metadata-values (d/db conn)))))
