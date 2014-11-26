@@ -93,7 +93,7 @@ $('#zoom-in').click(function() {
     window.location.href = 'wfplayer-<%= params[:corpus_id] %>-<%= params[:line_key] %>-' +
                            (pagePlayer.lastSound.startPos/1000+<%= params[:start] %>).toFixed(2) +
                            '-' + (pagePlayer.lastSound.stopPos/1000+<%= params[:start] %>).toFixed(2) +
-                           '-' + <%= params[:oldstart] %> + '-' + <%= params[:oldstop] %> + '-' + $('#iframe').width();
+                           '-' + <%= params[:oldstart] %> + '-' + <%= params[:oldstop] %> + '-' + $('ul.playlist').width();
   } else alert('Make a selection longer than 150ms to zoom in');
   return false;
 });
