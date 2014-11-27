@@ -10,7 +10,7 @@ window.CorpusInfo = React.createClass
       <div className="span12">
         <div className="well">
           <h2>
-            {this.props.corpusName}
+            <span dangerouslySetInnerHTML={{__html: this.props.corpusName}} />
             {this.props.corpusLogoUrl ? <img className="corpus-logo" src={this.props.corpusLogoUrl} /> : ''}
           </h2>
         </div>
