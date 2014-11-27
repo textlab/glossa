@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8'?><cmd:CMD xmlns:cmd="http://www.clarin.eu/cmd/" xmlns:olac="http://www.clarin.eu/cmd/" xmlns:ms="http://www.clarin.eu/cmd/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.clarin.eu/cmd/ http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1349361150622/xsd" CMDVersion="1.1">
+    <cmd:Header>
+        <cmd:MdCreationDate><%= Time.zone.today %></cmd:MdCreationDate>
+        <cmd:MdSelfLink><%= @corpus.cimdi["dc.identifier.uri"] %>@format=cmdi</cmd:MdSelfLink>
+        <cmd:MdProfile>clarin.eu:cr1:p_1349361150622</cmd:MdProfile>
+        <cmd:MdCollectionDisplayName>LRT + Open Submissions Data &amp; Tools</cmd:MdCollectionDisplayName>
+    </cmd:Header>
+    <cmd:Resources>
+        <cmd:ResourceProxyList>
+            <cmd:ResourceProxy id="lp_2053">
+                <cmd:ResourceType>LandingPage</cmd:ResourceType>
+                <cmd:ResourceRef><%= @corpus.cimdi["dc.identifier.uri"] %></cmd:ResourceRef>
+            </cmd:ResourceProxy>
+            <cmd:ResourceProxy id="uri_1">
+                <cmd:ResourceType mimetype="text/html">Resource</cmd:ResourceType>
+                <cmd:ResourceRef><%= @corpus.cimdi["dc.source.uri"] %></cmd:ResourceRef>
+            </cmd:ResourceProxy>
+        </cmd:ResourceProxyList>
+        <cmd:JournalFileProxyList />
+        <cmd:ResourceRelationList />
+    </cmd:Resources>
+    <cmd:Components>
+        <cmd:data>
+            <olac:OLAC-DcmiTerms>
+                <olac:available><%= Time.zone.now %></olac:available>
+                <olac:contributor><%= @corpus.cimdi["dc.contributor.other"] %></olac:contributor>
+                <olac:date><%= Time.zone.today %></olac:date>
+                <olac:description><%= @corpus.cimdi["dc.description"] %></olac:description>
+                <olac:identifier><%= @corpus.cimdi["dc.identifier.uri"] %></olac:identifier>
+                <olac:issued><%= Time.zone.today %></olac:issued>
+                <olac:publisher><%= @corpus.cimdi["dc.publisher"] %></olac:publisher>
+                <olac:source><%= @corpus.cimdi["dc.source.uri"] %></olac:source>
+                <olac:title><%= @corpus.cimdi["dc.title"] %></olac:title>
+                <olac:type><%= @corpus.cimdi["dc.type"] %></olac:type>
+            </olac:OLAC-DcmiTerms>
+            <ms:resourceInfo>
+                <ms:identificationInfo>
+                    <ms:resourceName><%= @corpus.cimdi["dc.title"] %></ms:resourceName>
+                    <ms:description><%= @corpus.cimdi["dc.description"] %></ms:description>
+                    <ms:metaShareId>NOT_DEFINED_FOR_V2</ms:metaShareId>
+                    <ms:identifier><%= @corpus.cimdi["dc.identifier.uri"] %></ms:identifier>
+                </ms:identificationInfo>
+                <ms:distributionInfo>
+                    <ms:availability>available-restrictedUse</ms:availability>
+                    <ms:licenceInfo>
+                        <ms:licence>other</ms:licence>
+                        <ms:restrictionsOfUse>other</ms:restrictionsOfUse>
+                        <ms:distributionAccessMedium>No value given</ms:distributionAccessMedium>
+                    </ms:licenceInfo>
+                </ms:distributionInfo>
+                <ms:contactPerson>
+                    <ms:surname>No value given</ms:surname>
+                    <ms:givenName>No value given</ms:givenName>
+                    <ms:communicationInfo>
+                        <ms:email>No value given</ms:email>
+                    </ms:communicationInfo>
+                </ms:contactPerson>
+                <ms:metadataInfo>
+                    <ms:metadataCreationDate><%= Time.zone.today %></ms:metadataCreationDate>
+                </ms:metadataInfo>
+                <ms:resourceComponentType>
+                    <ms:corpusInfo>
+                        <ms:resourceType>corpus</ms:resourceType>
+                        <ms:corpusMediaType>
+                            <ms:corpusTextInfo>
+                                <ms:mediaType>text</ms:mediaType>No value given<ms:sizeInfo>
+                                    <ms:size>No value given</ms:size>
+                                    <ms:sizeUnit>No value given</ms:sizeUnit>
+                                </ms:sizeInfo>
+                            </ms:corpusTextInfo>
+                        </ms:corpusMediaType>
+                    </ms:corpusInfo>
+                </ms:resourceComponentType>
+            </ms:resourceInfo>
+        </cmd:data>
+    </cmd:Components>
+</cmd:CMD>

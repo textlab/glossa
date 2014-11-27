@@ -23,6 +23,11 @@ module Rglossa
     end
 
 
+    def cimdi
+      @corpus = Corpus.where(short_name: params[:id]).first
+    end
+
+
     ########
     private
     ########

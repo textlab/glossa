@@ -7,6 +7,9 @@ Rglossa::Engine.routes.draw do
     collection do
       get 'find_by'
     end
+    member do
+      get 'cimdi'
+    end
   end
 
   resources :metadata_values

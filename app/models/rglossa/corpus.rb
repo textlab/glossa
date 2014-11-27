@@ -21,6 +21,8 @@ module Rglossa
                                :media_path],
           coder: JSON
 
+    store :cimdi, coder: JSON
+
     def multilingual?
       languages.class == Array && languages.size > 1
     end
