@@ -25,6 +25,13 @@ module Rglossa
 
     def cimdi
       @corpus = Corpus.where(short_name: params[:id]).first
+      # TODO: Move the language list to a more suitable location
+      @langs = {dan: 'Danish', fao: 'Faroese', isl: 'Icelandic',
+                nor: 'Norwegian', swe: 'Swedish'}
+
+      if @corpus.cimdi.empty?
+        render xml: "No CIMDI metadata found for corpus #{params[:id]}", status: :unprocessable_entity
+      end
     end
 
 

@@ -27,8 +27,13 @@
                 <olac:date><%= Time.zone.today %></olac:date>
                 <olac:description><%= @corpus.cimdi["dc.description"] %></olac:description>
                 <olac:identifier><%= @corpus.cimdi["dc.identifier.uri"] %></olac:identifier>
-                <olac:issued><%= Time.zone.today %></olac:issued>
-                <olac:publisher><%= @corpus.cimdi["dc.publisher"] %></olac:publisher>
+                <olac:issued><%= @corpus.cimdi["dc.date.issued"] || Time.zone.today %></olac:issued>
+              <% (@corpus.cimdi["dc.language.iso"] || []).each do |lang| %>
+                <olac:language olac-language="<%= lang %>"><%= lang %></olac:language>
+              <% end %>
+              <% (@corpus.cimdi["dc.publisher"] || []).each do |publisher| %>
+                <olac:publisher><%= publisher %></olac:publisher>
+              <% end %>
                 <olac:source><%= @corpus.cimdi["dc.source.uri"] %></olac:source>
                 <olac:title><%= @corpus.cimdi["dc.title"] %></olac:title>
                 <olac:type><%= @corpus.cimdi["dc.type"] %></olac:type>
@@ -60,10 +65,26 @@
                 </ms:metadataInfo>
                 <ms:resourceComponentType>
                     <ms:corpusInfo>
-                        <ms:resourceType>corpus</ms:resourceType>
+                        <ms:resourceType><%= @corpus.cimdi["dc.type"] %></ms:resourceType>
                         <ms:corpusMediaType>
                             <ms:corpusTextInfo>
-                                <ms:mediaType>text</ms:mediaType>No value given<ms:sizeInfo>
+                                <ms:mediaType>text</ms:mediaType>No value given
+                              <% if @corpus.cimdi["dc.language.iso"] %>
+                                <ms:lingualityInfo>
+                                <% if @corpus.cimdi["dc.language.iso"].class == Array && @corpus.cimdi["dc.language.iso"].size > 1 %>
+                                    <ms:lingualityType>multilingual</ms:lingualityType>
+                                <% else %>
+                                    <ms:lingualityType>monolingual</ms:lingualityType>
+                                <% end %>
+                                </ms:lingualityInfo>
+                              <% end %>
+                              <% (@corpus.cimdi["dc.language.iso"] || []).each do |lang| %>
+                                <ms:languageInfo>
+                                    <ms:languageId><%= lang %></ms:languageId>
+                                    <ms:languageName><%= @langs[lang.to_sym] %></ms:languageName>
+                                </ms:languageInfo>
+                              <% end %>
+                                <ms:sizeInfo>
                                     <ms:size>No value given</ms:size>
                                     <ms:sizeUnit>No value given</ms:sizeUnit>
                                 </ms:sizeInfo>
