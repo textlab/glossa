@@ -159,11 +159,13 @@ window.MainArea = React.createClass
       search = res[searchModel]
       id = search.id
 
-      if !@state.maxHits or search.num_hits < @state.maxHits
+      if !@state.maxHits or (search.num_hits and search.num_hits < @state.maxHits)
         # There were fewer than maxHits occurrences in the corpus
         search.total = search.num_hits
       else
-        # There were at least maxHits occurrences in the corpus; find out the total
+        # Either there were at least maxHits occurrences in the corpus, or num_hits
+        # was not set on the result (because we're searching in a multipart corpus).
+        # In either case, find out the total number of occurrences.
         $.getJSON("#{searchUrl}/#{id}/count").then (count) =>
           # Update the search model in the store with the total
           model = store.find('search', id)

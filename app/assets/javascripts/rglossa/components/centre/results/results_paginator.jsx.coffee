@@ -18,8 +18,9 @@ window.ResultsPaginator = React.createClass
       @setState(displayedPageNo: nextProps.currentResultPageNo)
 
   getNumPages: ->
+    return 0 unless @props.results.total
     pageLength = @props.results?.pages['1'].length
-    if pageLength then Math.ceil(@props.results.num_hits / pageLength) else 0
+    if pageLength then Math.ceil(@props.results.total / pageLength) else 0
 
   handlePageNoChanged: (e) ->
     # We cannot send the e argument directly into the debounced function,
@@ -96,7 +97,7 @@ window.ResultsPaginator = React.createClass
           <input ref="pageNoInput" type="text" className="input-mini" value={this.state.displayedPageNo}
             onClick={this.handlePageNoClicked} onChange={this.handlePageNoChanged} /></span>
         </li>
-        <li><span>of {numPages} pages</span></li>
+        {numPages ? <li><span>of {numPages} pages</span></li> : null}
         <li className={isLastPage ? 'disabled' : ''}>
           <a href="#" onClick={this.showNextPage}>»</a>
         </li>
