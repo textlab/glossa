@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/textlab/rglossa-fcs.git
-  revision: 7ff0c6805d1e24ed5e13eef8f6cbede5190496e3
+  revision: 48a361e8c4bd968acb75cfb55dd9dd24da6613c9
   specs:
     rglossa-fcs (0.0.1)
       nokogiri
@@ -116,7 +116,7 @@ GEM
     multi_json (1.10.1)
     mysql2 (0.3.17)
     netrc (0.8.0)
-    nokogiri (1.6.4.1)
+    nokogiri (1.6.5)
       mini_portile (~> 0.6.0)
     oj (2.11.1)
     orm_adapter (0.5.0)
