@@ -62,7 +62,7 @@ module Rglossa
 
       # Overridden by Speaker
       def write_positions(filename, conditions, sql)
-        if ActiveRecord::Base.configurations[Rails.env]['adapter'] == 'sqlite3'
+        if ENV['DATABASE_URL'].start_with?('sqlite3')
           # for SQLite
           sql << " WHERE #{conditions.join(" AND ")} AND positions IS NOT NULL"
           rows = run_query(sql)
