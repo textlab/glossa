@@ -57,7 +57,8 @@ module Rglossa
               corpus: @corpus.as_json(
                   only: [:id, :name, :logo, :short_name, :search_engine],
                   methods: [:langs, :display_attrs, :extra_row_attrs,
-                            :parts, :has_sound, :has_video, :has_phonetic, :metadata_categories]
+                            :parts, :has_sound, :has_video, :has_phonetic, :has_map,
+                            :metadata_categories]
               )
           }
         end

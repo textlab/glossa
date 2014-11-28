@@ -57,7 +57,7 @@ window.ResultsToolbar = React.createClass
             </li>
           </ul>
         </div>
-        <button className="btn" style={{marginBottom: 15, marginLeft: 10}} onClick={this.props.showMap}>Map</button>
+        {corpus.has_map ? <button className="btn" style={{marginBottom: 15, marginLeft: 10}} onClick={this.props.showMap}>Map</button> : null}
       </div>
       {this.hasMultipleResultPages()
         ? <ResultsPaginator
