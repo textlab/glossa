@@ -18,9 +18,11 @@ window.ResultsPaginator = React.createClass
       @setState(displayedPageNo: nextProps.currentResultPageNo)
 
   getNumPages: ->
-    return 0 unless @props.results.total
+    # If we have limited the number of hits, we have num_hits; otherwise we have total
+    num = @props.results.num_hits or @props.results.total
+    return 0 unless num
     pageLength = @props.results?.pages['1'].length
-    if pageLength then Math.ceil(@props.results.total / pageLength) else 0
+    if pageLength then Math.ceil(num / pageLength) else 0
 
   handlePageNoChanged: (e) ->
     # We cannot send the e argument directly into the debounced function,
