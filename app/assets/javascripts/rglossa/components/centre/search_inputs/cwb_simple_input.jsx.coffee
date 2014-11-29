@@ -57,7 +57,7 @@ window.CwbSimpleInput = React.createClass
         <div className="span10">
           <input ref="searchfield" type="text" className="span12" value={this.displayedQuery()}
             onChange={this.handleTextChanged} onClick={this.handleTextChanged} onKeyDown={this.handleKeyDown} />
-          {this.props.hasPhoneticForm && <label style={{marginTop: 5}}><input name="phonetic" type="checkbox" style={{marginTop: -3}} checked={this.isPhonetic()} onClick={this.handlePhoneticChanged} onFocus={this.handleTextChanged} />&nbsp;Phonetic form</label>}
+          {this.props.hasPhoneticForm && <label style={{marginTop: 5}}><input name="phonetic" type="checkbox" style={{marginTop: -3}} checked={this.isPhonetic()} onClick={this.handlePhoneticChanged} />&nbsp;Phonetic form</label>}
         </div>
       </form>
     </div>`
