@@ -58,7 +58,7 @@ window.CwbSimpleInput = React.createClass
       <form className="form-inline span12">
         <div className="span10">
           {this.props.showRemoveRow ? <button className="btn btn-small" title="Remove row" style={{cursor: 'pointer', margin: '0 5px 0 -35px'}} onClick={this.props.handleRemoveRow}><i className="icon-remove"></i></button> : null}
-            <input ref="searchfield" type="text" className="span10" value={this.displayedQuery()}
+          <input ref="searchfield" type="text" className="span10" value={this.displayedQuery()}
               onChange={this.handleTextChanged} onClick={this.handleTextChanged} onKeyDown={this.handleKeyDown} />
           <div>
             {this.props.hasPhoneticForm && <label style={{marginTop: 5}}><input name="phonetic" type="checkbox" style={{marginTop: -3}} checked={this.isPhonetic()} onClick={this.handlePhoneticChanged} />&nbsp;Phonetic form</label>}
