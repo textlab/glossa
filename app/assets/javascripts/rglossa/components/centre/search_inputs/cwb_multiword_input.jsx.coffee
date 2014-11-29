@@ -44,6 +44,7 @@ window.CwbMultiwordInput = React.createClass
     searchQuery: React.PropTypes.object.isRequired
     corpus: React.PropTypes.object.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
+    handleRemoveRow: React.PropTypes.func.isRequired
     handleSearch: React.PropTypes.func.isRequired
 
   getInitialState: ->
@@ -221,6 +222,7 @@ window.CwbMultiwordInput = React.createClass
             return (
               <CwbMultiwordTerm
                 key={this.state.queryTermIds[index]}
+                showRemoveRow={this.props.showRemoveRow}
                 hasPhoneticForm={this.props.corpus.has_phonetic}
                 term={term}
                 termIndex={index}
@@ -228,6 +230,7 @@ window.CwbMultiwordInput = React.createClass
                 isFirst={index === 0}
                 isLast={index === lastIndex}
                 tags={corpusNs.getTags(this.props.corpus)}
+                handleRemoveRow={this.props.handleRemoveRow}
                 handleKeyDown={this.handleKeyDown}
                 handleTermChanged={this.handleTermChanged}
                 handleAddTerm={this.handleAddTerm}
