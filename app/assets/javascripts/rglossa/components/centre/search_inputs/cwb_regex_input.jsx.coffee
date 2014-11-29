@@ -2,6 +2,7 @@
 
 window.CwbRegexInput = React.createClass
   propTypes:
+    showRemoveRow: React.PropTypes.bool.isRequired
     searchQuery: React.PropTypes.object.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
     handleSearch: React.PropTypes.func.isRequired

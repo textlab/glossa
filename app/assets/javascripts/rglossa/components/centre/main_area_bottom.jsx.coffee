@@ -21,6 +21,7 @@ window.MainAreaBottom = React.createClass
     isMetadataSelectionEmpty: React.PropTypes.bool.isRequired
     handleAddLanguage: React.PropTypes.func.isRequired
     handleAddPhrase: React.PropTypes.func.isRequired
+    handleRemoveRow: React.PropTypes.func.isRequired
 
   handleSidebarHidden: ->
     # When the sidebar is hidden, we make the content area full width. We also need to add
@@ -31,7 +32,8 @@ window.MainAreaBottom = React.createClass
 
   mainComponent: ->
     {store, statechart, corpus, results, searchQueries, handleQueryChanged, sortBy,
-    handleSortByChanged, handleAddLanguage,  handleAddPhrase, maxHits, handleSearch} = @props
+    handleSortByChanged, handleAddLanguage,  handleAddPhrase, handleRemoveRow,
+    maxHits, handleSearch} = @props
     if statechart.pathContains('start')
       `<StartMain
           store={store}
@@ -41,7 +43,8 @@ window.MainAreaBottom = React.createClass
           handleQueryChanged={handleQueryChanged}
           handleSearch={handleSearch}
           handleAddLanguage={handleAddLanguage}
-          handleAddPhrase={handleAddPhrase} />`
+          handleAddPhrase={handleAddPhrase}
+          handleRemoveRow={handleRemoveRow} />`
     else
       currentResultPageNo = statechart.getValue('currentResultPageNo')
       `<ResultsMain
@@ -56,6 +59,7 @@ window.MainAreaBottom = React.createClass
           handleSortByChanged={handleSortByChanged}
           handleAddLanguage={handleAddLanguage}
           handleAddPhrase={handleAddPhrase}
+          handleRemoveRow={handleRemoveRow}
           maxHits={maxHits}
           handleSearch={handleSearch} />`
 

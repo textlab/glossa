@@ -101,6 +101,13 @@ window.MainArea = React.createClass
     @setState(searchQueries: queries)
 
 
+  handleRemoveRow: (index, e) ->
+    e.preventDefault()
+    queries = @state.searchQueries.slice(0)
+    queries.splice(index, 1)
+    @setState(searchQueries: queries)
+
+
   handleMaxHitsChanged: (maxHits) ->
     newState = maxHits: maxHits
     if maxHits is null and @state.maxHits
@@ -197,7 +204,7 @@ window.MainArea = React.createClass
     results = if searchId then store.find('search', searchId) else null
 
     `<span>
-      <div className="container-fluid">
+      <div className="container-fluid" style={{paddingLeft: 45}}>
 
         <MainAreaTop
           statechart={statechart}
@@ -222,6 +229,7 @@ window.MainArea = React.createClass
           handleSearch={this.handleSearch}
           handleAddLanguage={this.handleAddLanguage}
           handleAddPhrase={this.handleAddPhrase}
+          handleRemoveRow={this.handleRemoveRow}
           handleMetadataSelectionsChanged={this.handleMetadataSelectionsChanged}
           isShowingSidebar={isShowingSidebar}
           isMetadataSelectionEmpty={Object.keys(this.state.selectedMetadataIds).length === 0} />

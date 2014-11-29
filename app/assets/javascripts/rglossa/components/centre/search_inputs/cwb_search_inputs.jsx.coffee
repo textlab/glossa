@@ -45,6 +45,7 @@ window.CwbSearchInputs = React.createClass
     handleSearch: React.PropTypes.func.isRequired
     handleAddLanguage: React.PropTypes.func.isRequired
     handleAddPhrase: React.PropTypes.func.isRequired
+    handleRemoveRow: React.PropTypes.func.isRequired
 
   getInitialState: ->
     statechart: new Statechart(
@@ -113,9 +114,11 @@ window.CwbSearchInputs = React.createClass
           return ([
             isMultilingual ? this.languageSelect(searchQuery) : null,
             <CwbSimpleInput
+              showRemoveRow={searchQueries.length > 1}
               hasPhoneticForm={corpus.has_phonetic}
               searchQuery={searchQuery}
               handleQueryChanged={handleQueryChanged.bind(null, index)}
+              handleRemoveRow={this.props.handleRemoveRow.bind(null, index)}
               handleSearch={handleSearch} />
           ])
         }.bind(this))}
@@ -136,9 +139,11 @@ window.CwbSearchInputs = React.createClass
           return ([
             isMultilingual ? this.languageSelect(searchQuery) : null,
             <CwbMultiwordInput
+              showRemoveRow={searchQueries.length > 1}
               searchQuery={searchQuery}
               corpus={corpus}
               handleQueryChanged={handleQueryChanged.bind(null, index)}
+              handleRemoveRow={this.props.handleRemoveRow.bind(null, index)}
               handleSearch={handleSearch} />
           ])
         }.bind(this))}
@@ -159,8 +164,10 @@ window.CwbSearchInputs = React.createClass
           return ([
             isMultilingual ? this.languageSelect(searchQuery) : null,
             <CwbRegexInput
+              showRemoveRow={searchQueries.length > 1}
               searchQuery={searchQuery}
               handleQueryChanged={handleQueryChanged.bind(null, index)}
+              handleRemoveRow={this.props.handleRemoveRow.bind(null, index)}
               handleSearch={handleSearch} />
           ])
         }.bind(this))}

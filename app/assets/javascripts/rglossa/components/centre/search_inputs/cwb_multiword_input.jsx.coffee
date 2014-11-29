@@ -40,6 +40,7 @@ createTerm = (overrides = {}) ->
 
 window.CwbMultiwordInput = React.createClass
   propTypes:
+    showRemoveRow: React.PropTypes.bool.isRequired
     searchQuery: React.PropTypes.object.isRequired
     corpus: React.PropTypes.object.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
