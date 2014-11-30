@@ -9,7 +9,7 @@ window.MarkerPicker = React.createClass
       Object.keys(@props.data.phons_per_place).filter (key) -> key isnt '_'
     else []
 
-    `<div className="distr-legend" id="legend0" style={{float: 'left'}}>
+    `<div className="distr-legend" id="legend0" style={{float: 'left', overflowY: 'auto'}}>
     {phons.map(function(phon) {
       return (
         <span key="phon">
