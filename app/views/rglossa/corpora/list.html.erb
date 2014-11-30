@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Glossa</title>
+  <!--[if lt IE 9]>
+  <%= javascript_include_tag 'es5-shim.min', 'es5-sham.min' %>
+  <![endif]-->
+
+  <%= csrf_meta_tag %>
+  <base href="<%= ENV['RAILS_RELATIVE_URL_ROOT'] %>/" />
+
+  <script type="text/javascript">
+    var authenticityToken = '<%= form_authenticity_token %>';
+  </script>
+</head>
+<body>
+<%= javascript_include_tag 'application' %>
+<% if flash[:msg] %><b><%= flash[:msg] %></b><br><% end %>
+Upload corpus:
+<%= form_tag({controller: :corpora, action: :upload}, multipart: true) do %>
+  <%= file_field_tag 'corpus' %>
+  <%= submit_tag %>
+<% end %>
+<p>
+Available corpora:
+<ul>
+<% @corpora.each do |c| %>
+<li><%= link_to c.name, controller: 'home', corpus: c.short_name %>
+<%= link_to 'Delete', corpus_path(c.short_name), :confirm => 'Are you sure?', :method => :delete %>
+<% end %>
+</ul>
+</body>
+</html>

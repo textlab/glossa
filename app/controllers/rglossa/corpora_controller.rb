@@ -9,12 +9,52 @@ module Rglossa
       respond_with @corpora
     end
 
+    def list
+      @corpora = Corpus.all
+    end
+
+    def upload
+      corpus_name = params[:corpus].original_filename.gsub('/', '').
+                                    gsub(/\.zip$/i, '').downcase
+      if Corpus.where(short_name: corpus_name).length > 0
+        flash[:msg] = "The corpus #{corpus_name} already exists, please delete it first"
+        flash.keep
+        respond_to do |format|
+          format.html { redirect_to action: 'list' }
+          format.xml  { head :forbidden }
+        end
+        return
+      end
+      do_delete(corpus_name)
+      Zip::File.open(params[:corpus].path) do |zip_file|
+        zip_file.each do |f|
+          next unless f.name =~ %r{\Acwb_dat/#{corpus_name.upcase}/} ||
+                      f.name =~ %r{\Acwb_reg/#{corpus_name}\z} ||
+                      f.name =~ %r{\Amedia/#{corpus_name}/}
+          puts f.name
+          f_path = File.join('/corpora', f.name)
+          FileUtils.mkdir_p(File.dirname(f_path))
+          f.extract(f_path)
+        end
+      end
+      corpus_params = YAML.load(File.open("/corpora/cwb_reg/#{corpus_name}").
+                           readline.gsub(/^\s*#\s*/, ""))
+      Corpus.create(name: corpus_params['name'], short_name: corpus_name,
+                    encoding: corpus_params['encoding'],
+                    config: corpus_params['config'].inject({}){|h,(k,v)| h[k.to_sym]=v; h },
+                    search_engine: corpus_params['search_engine'])
+      flash[:msg] = "The corpus #{corpus_name} has been uploaded"
+      flash.keep
+      respond_to do |format|
+        format.html { redirect_to action: 'list' }
+        format.xml  { head :ok }
+      end
+    end
 
     def show
       @corpus = @corpus.find(params[:id])
       create_response
     end
-
 
     def find_by
       raise "No short_name provided" unless params[:short_name]
@@ -22,6 +62,23 @@ module Rglossa
       create_response
     end
 
+    def do_delete(corpus_name)
+      FileUtils.rm_rf ["/corpora/cwb_dat/#{corpus_name.upcase}",
+                       "/corpora/cwb_reg/#{corpus_name}",
+                       "/corpora/media/#{corpus_name}"]
+      Corpus.where(short_name: corpus_name).destroy_all
+    end
+
+    def destroy
+      corpus_name = params[:id].gsub('/', '')
+      do_delete(corpus_name)
+      flash[:msg] = "The corpus #{corpus_name} has been removed"
+      flash.keep
+      respond_to do |format|
+        format.html { redirect_to action: 'list' }
+        format.xml  { head :ok }
+      end
+    end
 
     def cimdi
       @corpus = Corpus.where(short_name: params[:id]).first
