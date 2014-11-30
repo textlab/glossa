@@ -10,3 +10,4 @@
 //= require jquery
 //= require_tree ./components
 //= require ./jquery.jplayer.min
+//= require ./jquery.colorpicker
