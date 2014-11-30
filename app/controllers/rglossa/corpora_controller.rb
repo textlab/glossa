@@ -14,8 +14,7 @@ module Rglossa
     end
 
     def upload
-      corpus_name = params[:corpus].original_filename.gsub('/', '').
-                                    gsub(/\.zip$/i, '').downcase
+      corpus_name = params[:corpus].original_filename.downcase.gsub(/\.zip$/, '').gsub(/[^a-z_]/, '')
       if Corpus.where(short_name: corpus_name).length > 0
         flash[:msg] = "The corpus #{corpus_name} already exists, please delete it first"
         flash.keep
@@ -30,7 +29,8 @@ module Rglossa
         zip_file.each do |f|
           next unless f.name =~ %r{\Acwb_dat/#{corpus_name.upcase}/} ||
                       f.name =~ %r{\Acwb_reg/#{corpus_name}\z} ||
-                      f.name =~ %r{\Amedia/#{corpus_name}/}
+                      f.name =~ %r{\Amedia/#{corpus_name}/} ||
+                      f.name =~ %r{\Aimport/#{corpus_name.upcase}}
           puts f.name
           f_path = File.join('/corpora', f.name)
           FileUtils.mkdir_p(File.dirname(f_path))
@@ -39,10 +39,25 @@ module Rglossa
       end
       corpus_params = YAML.load(File.open("/corpora/cwb_reg/#{corpus_name}").
                            readline.gsub(/^\s*#\s*/, ""))
-      Corpus.create(name: corpus_params['name'], short_name: corpus_name,
-                    encoding: corpus_params['encoding'],
-                    config: corpus_params['config'].inject({}){|h,(k,v)| h[k.to_sym]=v; h },
-                    search_engine: corpus_params['search_engine'])
+      c = Corpus.create(name: corpus_params['name'], short_name: corpus_name,
+                        encoding: corpus_params['encoding'],
+                        config: JSON.parse(JSON.dump(corpus_params['config']), symbolize_names: true),
+                        search_engine: corpus_params['search_engine'])
+      c.cimdi = corpus_params['cimdi']
+      c.save
+      if File.exists? "tmp/dumps/#{corpus_name.upcase}segments_line_keys.tsv"
+        Process.wait2(spawn("bundle", "exec", "thor", "rglossa:line_keys:import", "--corpus", corpus_name, "--remove-existing"))[1] == 0 or
+          raise "rglossa:line_keys:import failed"
+      end
+      if File.exists? "tmp/dumps/#{corpus_name.upcase}text_categories.txt"
+        Process.wait2(spawn("bundle", "exec", "thor", "rglossa:metadata:import:categories", "--corpus", corpus_name,
+                            "--speech=#{corpus_params['config']['has_sound'].present? || corpus_params['config']['has_video'].present?}"))[1] == 0 or
+          raise "rglossa:metadata:import:categories failed"
+        Process.wait2(spawn("bundle", "exec", "thor", "rglossa:metadata:import:values", "--corpus", corpus_name, "--remove-existing",
+                            "--speech=#{corpus_params['config']['has_sound'].present? || corpus_params['config']['has_video'].present?}"))[1] == 0 or 
+          raise "rglossa:metadata:import:values failed"
+      end
+
       flash[:msg] = "The corpus #{corpus_name} has been uploaded"
       flash.keep
       respond_to do |format|
@@ -60,13 +75,6 @@ module Rglossa
       raise "No short_name provided" unless params[:short_name]
       @corpus = Corpus.where(short_name: params[:short_name]).first
       create_response
-    end
-
-    def do_delete(corpus_name)
-      FileUtils.rm_rf ["/corpora/cwb_dat/#{corpus_name.upcase}",
-                       "/corpora/cwb_reg/#{corpus_name}",
-                       "/corpora/media/#{corpus_name}"]
-      Corpus.where(short_name: corpus_name).destroy_all
     end
 
     def destroy
@@ -95,6 +103,14 @@ module Rglossa
     ########
     private
     ########
+
+    def do_delete(corpus_name)
+      FileUtils.rm_rf ["/corpora/cwb_dat/#{corpus_name.upcase}",
+                       "/corpora/cwb_reg/#{corpus_name}",
+                       "/corpora/media/#{corpus_name}",
+                       *Dir.glob("/corpora/import/#{corpus_name.upcase}*")]
+      Corpus.where(short_name: corpus_name).destroy_all
+    end
 
     def set_query_params
       query = params[:query]
