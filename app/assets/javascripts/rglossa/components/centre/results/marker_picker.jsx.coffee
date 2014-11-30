@@ -12,7 +12,7 @@ window.MarkerPicker = React.createClass
     `<div className="distr-legend" id="legend0" style={{float: 'left', overflowY: 'auto'}}>
     {phons.map(function(phon) {
       return (
-        <span key="phon">
+        <span key={phon}>
           <a id="a_0" style={{position: 'absolute', left: -10000}}>phon</a>
           <div className="colorpicker-wrap">
             <div className="colorpicker-label">{phon}</div>
