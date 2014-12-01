@@ -4,6 +4,7 @@
 
 window.CwbMultiwordTerm = React.createClass
   propTypes:
+    showRemoveRow: React.PropTypes.bool.isRequired
     hasPhoneticForm: React.PropTypes.bool.isRequired
     term: React.PropTypes.object.isRequired
     termIndex: React.PropTypes.number.isRequired
@@ -11,6 +12,7 @@ window.CwbMultiwordTerm = React.createClass
     isFirst: React.PropTypes.bool.isRequired
     isLast: React.PropTypes.bool.isRequired
     tags: React.PropTypes.object.isRequired
+    handleRemoveRow: React.PropTypes.func.isRequired
     handleKeyDown: React.PropTypes.func.isRequired
     handleTermChanged: React.PropTypes.func.isRequired
     handleAddTerm: React.PropTypes.func.isRequired
@@ -140,6 +142,7 @@ window.CwbMultiwordTerm = React.createClass
 
                 <div className="input-prepend input-append word">
                   <div className="dropdown">
+                    {this.props.showRemoveRow && isFirst ? <button className="btn btn-small" title="Remove row" style={{cursor: 'pointer', margin: '2px 7px 0 -35px'}} onClick={this.props.handleRemoveRow}><i className="icon-remove"></i></button> : null}
                     <span data-toggle="dropdown" className="add-on dropdown-toggle" style={{cursor: 'pointer'}}><i className="icon-cog" /></span>
                     <input ref="searchfield" type="text" className="searchfield multiword-field removable"
                       defaultValue={term.word} onChange={this.handleTextChanged} onKeyDown={this.props.handleKeyDown} />

@@ -140,6 +140,10 @@ var GeoDistributionMap = React.createClass({
   componentWillReceiveProps : function(props) {
     if( props.points ) this.updateMarkers(props.points);
     if( props.lines ) this.updatePolylines(props.lines);
+  },
+
+  getMap : function() {
+      return this.state.map;
   }
 
 });

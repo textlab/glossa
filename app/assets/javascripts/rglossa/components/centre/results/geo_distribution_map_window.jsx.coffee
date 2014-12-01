@@ -6,9 +6,10 @@
 # MarkerSets - an array for all MarkerSet objects
 
 class MarkerSets
-  @sets: []
-  @missing: []
-  @infoWindow: null
+  constructor: (@map) ->
+    @sets = []
+    @missing = []
+    @infoWindow = null
 
   add: (tok, locas, color) ->
     if @sets[tok]
@@ -16,7 +17,7 @@ class MarkerSets
       @sets[tok].color = color
       @sets[tok].add()
     else
-      set = new MarkerSet(locas, tok, color)
+      set = new MarkerSet(@map, locas, tok, color)
       set.add()
       @sets[tok] = set
       for loc of set.noCoords
@@ -51,7 +52,8 @@ class MarkerSets
 # MarkerSet - an object for groups of markers of same colour.
 
 class MarkerSet
-  constructor: (locas, tok, color) ->
+  constructor: (map, locas, tok, color) ->
+    @map = map
     @locations = locas   # an array of locations for marker set
     @color = color       # the chosen marker color
     @tok = tok
@@ -61,14 +63,14 @@ class MarkerSet
 
   createMarker: (latlng, map, color, contentString, loc) ->
     image = new google.maps.MarkerImage(
-      "../html/img/mm_20_#{color}.png",
+      "assets/rglossa/speech/mm_20_#{color}.png",
       new google.maps.Size(8, 13),    # size
       new google.maps.Point(0, 0),    # origin
       new google.maps.Point(4, 13),   # anchor
       new google.maps.Size(8, 13))    # size
 
     shadow = new google.maps.MarkerImage(
-      "../html/img/mm_20_shadow.png",
+      "assets/rglossa/speech/mm_20_shadow.png",
       new google.maps.Size(12, 16),   # size
       new google.maps.Point(0, 0),    # origin
       new google.maps.Point(4, 13),   # anchor
@@ -100,15 +102,26 @@ class MarkerSet
         @markers[j].infoWindow.close()
 
 
+  makeMessage: (loc, tok) ->
+    # TODO: Create message
+    return ""
+
+    infs1 = loc_inf[loc]
+    infs2 = tok_inf[tok]
+    infs = intersection(infs1, infs2)
+
+    "Location: #{loc}<br />Phonetic: #{tok}<br />Informants: #{profileLink(infs)}"
+
+
   add: ->
-    for loc of @locations
+    for loc in @locations
       unless coordinates[loc]
         @noCoord loc
         continue
       lat = coordinates[loc]["lat"]
       lng = coordinates[loc]["lng"]
       latlng = new google.maps.LatLng(lat, lng)
-      marker = @createMarker(latlng, map, @color, makeMessage(loc, @tok), loc)
+      marker = @createMarker(latlng, @map, @color, @makeMessage(loc, @tok), loc)
       @markers.push marker
 
   hide: ->
@@ -135,9 +148,11 @@ window.GeoDistributionMapWindow = React.createClass
   propTypes:
     data: React.PropTypes.object
 
-  markerSets: new MarkerSets()
   loc_inf: []
   allMarkers: []
+
+  componentDidUpdate: ->
+    @markerSets = new MarkerSets(@refs.map.getMap())
 
   addMarker: (loca) ->
     dot = new google.maps.MarkerImage(
@@ -170,19 +185,11 @@ window.GeoDistributionMapWindow = React.createClass
       @markerSets.remove(tok)
       return
 
-    locas = toksLocs[tok] #toksLocs[tok] is.. an Array!
+    locas = Object.keys(@props.data.phons_per_place[tok])
     i = 0
     noCoords = []
     @markerSets.add(tok, locas, color) # need to use this to remove, also!!!
-    report @markerSets.missing
-
-
-  makeMessage: (loc, tok) ->
-    infs1 = loc_inf[loc]
-    infs2 = tok_inf[tok]
-    infs = intersection(infs1, infs2)
-
-    "Location: #{loc}<br />Phonetic: #{tok}<br />Informants: #{profileLink(infs)}"
+    # @report @markerSets.missing
 
 
   # for reporting all missing coordinates
@@ -257,7 +264,7 @@ window.GeoDistributionMapWindow = React.createClass
 
     `<div>
       <div style={{float: 'left'}}>
-        <GeoDistributionMap initLat={62} initLon={6} initZoom={4} width={650} height={540} points={points} />
+        <GeoDistributionMap ref="map" initLat={62} initLon={6} initZoom={4} width={650} height={540} points={points} />
       </div>
-      <MarkerPicker data={this.props.data} />
+      <MarkerPicker data={this.props.data} addMarkers={this.addMarkers} />
     </div>`

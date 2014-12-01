@@ -22,6 +22,7 @@ window.ResultsMain = React.createClass
     handleSearch: React.PropTypes.func.isRequired
     handleAddLanguage: React.PropTypes.func.isRequired
     handleAddPhrase: React.PropTypes.func.isRequired
+    handleRemoveRow: React.PropTypes.func.isRequired
 
   getInitialState: ->
     frequencies: null
@@ -73,7 +74,7 @@ window.ResultsMain = React.createClass
 
   render: ->
     {store, statechart, results, currentResultPageNo, corpus, searchQueries, handleQueryChanged,
-      sortBy, handleSortByChanged, handleAddLanguage, handleAddPhrase,
+      sortBy, handleSortByChanged, handleAddLanguage, handleAddPhrase, handleRemoveRow,
       maxHits, handleSearch} = @props
     resultPage = results?.pages[currentResultPageNo]
 
@@ -94,7 +95,8 @@ window.ResultsMain = React.createClass
         maxHits={maxHits}
         handleSearch={handleSearch}
         handleAddLanguage={handleAddLanguage}
-        handleAddPhrase={handleAddPhrase} />
+        handleAddPhrase={handleAddPhrase}
+        handleRemoveRow={handleRemoveRow} />
       <ResultsToolbar
         store={store}
         statechart={statechart}
