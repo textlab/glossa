@@ -49,8 +49,6 @@ svn export -r{2014-09-30} http://svn.code.sf.net/p/cwb/code/cwb/branches/3.0 /tm
 cd /tmp/cwb
 ruby -i -pe '$_.sub!(%r{ / [^/\r\n]+ \s* $ }x, "/linux-64") if $_.start_with? "include $(TOP)/config/platform/"' /tmp/cwb/config.mk
 make clean && make depend && make all && make install
-mkdir -p /usr/local/share/cwb/registry
-mkdir -p /usr/local/share/cwb/data
 $remove $CWB_BUILD_DEPS
 $autoremove
 
