@@ -23,6 +23,10 @@ RUN mkdir -p /glossa/tmp && ln -s /corpora/import /glossa/tmp/dumps
 # Make thin reachable to other containers
 EXPOSE 3000
 
+# Run the application with an SQLite database
+ENV DATABASE_URL sqlite3:////corpora/glossa.sqlite3
+CMD rake db:migrate && rails server
+
 # Copy application code to container
 ADD . /glossa/
 
