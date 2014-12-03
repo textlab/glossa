@@ -16,8 +16,7 @@ ADD config/waveforms.json /glossa/config/waveforms.json
 RUN script/docker_build_deps.sh
 
 RUN mkdir -p /usr/local/share/cwb && ln -s /corpora/cwb_reg /usr/local/share/cwb/registry
-ADD . /glossa/public/
-RUN ln -s /corpora/media /glossa/public/media
+RUN mkdir -p /glossa/public && ln -s /corpora/media /glossa/public/media
 RUN mkdir -p /glossa/tmp && ln -s /corpora/import /glossa/tmp/dumps
 
 # Make thin reachable to other containers
