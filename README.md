@@ -1,11 +1,10 @@
 # Glossa
 
-This is the current version of the **Glossa search system**, implemented in
-Ruby on Rails.
+This is the the **Glossa search system**, implemented in Ruby on Rails.
 
 Glossa is currently under active development. It is functional but still has
-some way to go before it reaches feature parity with the [old Glossa
-version](https://github.com/noklesta/glossa_svn).
+some way to go before it reaches feature parity with the [old version of
+Glossa](https://github.com/noklesta/glossa_svn).
 
 ## Docker-based installation
 
@@ -13,22 +12,24 @@ The easiest way to install Glossa, is to use a ready-to-use Docker image that
 we provide. It can be done in a few easy steps:
 
 * [Install Docker](https://docs.docker.com/installation/). The linked website
-  provides installation instructions for all major operating systems.
+  provides installation instructions for all major operating systems. Note that
+  Docker works only on 64-bit systems.
 * Create a volume that will store your corpora and all other data used by
   Glossa. It needs to be done only once, by running the following command:
 
-    docker run -v /corpora --name glossa-data busybox true
+        docker run -v /corpora --name glossa-data busybox true
 
 * Run the Glossa image. If the image is not present on your machine, it will be
   downloaded automatically.
 
-    docker run -d -p 4096:3000 --volumes-from glossa-data textlab/glossa
+        docker run -d -p 4096:3000 --volumes-from glossa-data textlab/glossa
 
-* Connect to `http://127.0.0.1:4096/admin` in your web browser. The Glossa
-  should be up and running. **Note:** If you use *boot2docker* (which is the
-  case when you use Windows and MacOS), change `127.0.0.1` in the address to
-  the output of the `boot2docker ip` command. You may also run Glossa on a
-  different port by changing `4096` to some other number.
+* Connect to `http://127.0.0.1:4096/admin` in your web browser. Glossa should
+  be up and running. **Note:** If you use Boot2Docker (which is the case when
+  you use Windows or MacOS), change `127.0.0.1` in the address to the output
+  of the `boot2docker ip` command. You may also run Glossa on a different port
+  by changing `4096` to some other number in the `docker run` command and in
+  the address.
 
 ## Standard installation from GitHub
 
