@@ -42,6 +42,7 @@ Most important prerequisites:
 * [The IMS Open Corpus Workbench (CWB)](http://cwb.sourceforge.net/)
 
 ### Install Ruby and Rails
+
 Unless you have Ruby >= 1.9.2 installed, you need to install it. The easiest
 way is to use the [Ruby Version Manager (RVM)](https://rvm.io/), which lets you
 install Ruby without root access to the server and run several Ruby versions
@@ -60,6 +61,7 @@ create an *.rvmrc* file in your application directory that will automatically
 switch to this version when you enter the directory).
 
 ### Install the IMS Open Corpus Workbench (CWB)
+
 Some packages are required to compile CWB. In Debian-based distributions you
 may need to run:
 
@@ -81,21 +83,6 @@ The following commands install the required gems and initialise the database:
     cd glossa
     bundle
     rake db:migrate
-
-If you want to develop rglossa, the *rglossa* gem should be checked out in a
-separate directory, and you need to set up an override in the application
-directory, so that your checked-out version is used instead of the version from
-the Gemfile:
-
-    cd ..
-    git clone https://github.com/textlab/rglossa
-    cd glossa
-    bundle config --local local.rglossa ../rglossa
-
-If you want to work on a branch other than the default one, you may need to
-disable branch checking:
-
-    bundle config --local disable_local_branch_check true
 
 #### Troubleshooting
 
