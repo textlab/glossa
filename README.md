@@ -274,6 +274,31 @@ disable branch checking:
 
     bundle config --local disable_local_branch_check true
 
+## Upgrade
+### Docker image
+
+To upgrade the Glossa Docker image to the newest version, you need to pull the
+image, stop and remove the existing container, and start the new one:
+
+    docker pull textlab/glossa
+    docker stop glossa
+    docker rm glossa
+    docker run -d -p 4096:3000 --volumes-from glossa-data textlab/glossa
+
+Note that *glossa* is a container with the application, which can be deleted
+and upgraded, while *glossa-data* is a container with your data, and should
+never be removed.
+
+### Glossa from GitHub
+
+If you pulled Glossa from GitHub, you may upgrade it to the newest version
+with the following commands:
+
+    cd glossa
+    git pull
+    bundle
+    rake db:migrate
+
 ## More information
 
 For more information, see the [RGlossa wiki](http://github.com/textlab/rglossa/wiki).
