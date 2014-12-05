@@ -6,3 +6,6 @@ tmp
 *.sublime-project
 *.sublime-workspace
 .idea
+public/media
+public/tmp_waveforms
+.bundle
