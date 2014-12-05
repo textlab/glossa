@@ -13,7 +13,7 @@ EXPOSE 3000
 
 # Run the application with an SQLite database
 ENV DATABASE_URL sqlite3:////corpora/glossa.sqlite3
-CMD rake db:migrate && rails server
+CMD rake db:migrate && rails server -p 3000
 
 # Copy application code to container
 ADD . /glossa/

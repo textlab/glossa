@@ -22,13 +22,13 @@ we provide. It can be done in a few easy steps:
 * Run the Glossa image. If the image is not present on your machine, it will be
   downloaded automatically.
 
-        docker run -d -p 4096:3000 --volumes-from glossa-data textlab/glossa
+        docker run -d -p 61054:3000 --volumes-from glossa-data textlab/glossa
 
-* Connect to `http://127.0.0.1:4096/admin` in your web browser. Glossa should
+* Connect to `http://127.0.0.1:61054/admin` in your web browser. Glossa should
   be up and running. **Note**: If you use Boot2Docker (which is the case when
   you use Windows or MacOS), change `127.0.0.1` in the address to the output
   of the `boot2docker ip` command. You may also run Glossa on a different port
-  by changing `4096` to some other number in the `docker run` command and in
+  by changing `61054` to some other number in the `docker run` command and in
   the address.
 
 ## Standard installation from GitHub
@@ -86,10 +86,11 @@ The following commands install the required gems and initialise the database:
 
 Finally, you can start Glossa:
 
-    rails s
+    rails server
 
 With the default settings, Glossa will be available at
-`http://127.0.0.1:3000/admin` in your browser.
+`http://127.0.0.1:61054/admin` in your browser. You may add `-p `*`port_name`*
+to run Glossa on another port.
 
 ### Non-default database settings
 
@@ -327,7 +328,7 @@ image, stop and remove the existing container, and start the new one:
     docker pull textlab/glossa
     docker stop glossa
     docker rm glossa
-    docker run -d -p 4096:3000 --volumes-from glossa-data textlab/glossa
+    docker run -d -p 61054:3000 --volumes-from glossa-data textlab/glossa
 
 Note that *glossa* is a container with the application, which can be deleted
 and upgraded, while *glossa-data* is a container with your data, and should
