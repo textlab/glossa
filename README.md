@@ -25,11 +25,14 @@ we provide. It can be done in a few easy steps:
         docker run -d -p 61054:3000 --volumes-from glossa-data textlab/glossa
 
 * Connect to `http://127.0.0.1:61054/admin` in your web browser. Glossa should
-  be up and running. **Note**: If you use Boot2Docker (which is the case when
-  you use Windows or MacOS), change `127.0.0.1` in the address to the output
-  of the `boot2docker ip` command. You may also run Glossa on a different port
-  by changing `61054` to some other number in the `docker run` command and in
-  the address.
+  be up and running. You may also run Glossa on a different port by changing
+  `61054` to some other number in the `docker run` command and in the address.
+  
+### Troubleshooting
+If you use Boot2Docker (which is the case when you use Windows or MacOS), the
+address probably will be `192.168.59.103` instead of `127.0.0.1`. If it doesn't
+work, you may check the address by running `boot2docker ip` command (in
+Windows, open Git Bash to run that command).
 
 ## Standard installation from GitHub
 
