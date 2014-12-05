@@ -25,7 +25,7 @@ we provide. It can be done in a few easy steps:
         docker run -d -p 4096:3000 --volumes-from glossa-data textlab/glossa
 
 * Connect to `http://127.0.0.1:4096/admin` in your web browser. Glossa should
-  be up and running. **Note:** If you use Boot2Docker (which is the case when
+  be up and running. **Note**: If you use Boot2Docker (which is the case when
   you use Windows or MacOS), change `127.0.0.1` in the address to the output
   of the `boot2docker ip` command. You may also run Glossa on a different port
   by changing `4096` to some other number in the `docker run` command and in
@@ -83,6 +83,50 @@ The following commands install the required gems and initialise the database:
     cd glossa
     bundle
     rake db:migrate
+
+Finally, you can start Glossa:
+
+    rails s
+
+With the default settings, Glossa will be available at
+`http://127.0.0.1:3000/admin` in your browser.
+
+### Non-default database settings
+
+By default an SQLite database in the subdirectory `db` will be used. You can
+set the environment variable `DATABASE_URL` if you want to customise the
+database settings. This variable has to be set before running `rake` and
+`rails` commands.
+
+`DATABASE_URL` should have the form
+*`adapter`*`://`*`username`*`:`*`password`*`@`*`hostname`*`/`*`database`*. For
+example, if you want to connect to a MySQL database called `glossa_db` at your
+machine, providing the username `glossa_user` and the password `5pwd@#`, you should
+set it as follows:
+
+    export DATABASE_URL=mysql2://glossa_user:5pwd%40%23@localhost/glossa_db
+
+Note that the elements of the URL (including the password) are
+[URL-encoded](http://en.wikipedia.org/wiki/Percent-encoding).
+
+If you want to use SQLite, you only the path to the database file needs to be
+provided:
+
+    export DATABASE_URL=sqlite3:///db/glossa.db
+
+The above variable points to a relative path, `db/glossa.db`. To use an
+absolute path, one more slash is needed. The following example points to a
+database located in `/corpora/glossa.db`:
+
+    export DATABASE_URL=sqlite3:////corpora/glossa.db
+
+Alternatively, instead of setting `DATABASE_URL`, you may edit
+`config/database.yml` and provide your database settings there.
+
+If you use a database adapter other than SQLite, and the database doesn't
+exist, you need to create it with the following command:
+
+    rake db:create
 
 #### Troubleshooting
 
@@ -164,8 +208,8 @@ server, along with an R package called rcqp.
 
         R CMD INSTALL plyr rcqp
 
-  Note: If you get an error message saying that the glib-2.0 library was not
-  found by pkg-config, you need to install the header files for Glib 2.
+  **Note**: If you get an error message saying that the glib-2.0 library was
+  not found by pkg-config, you need to install the header files for Glib 2.
   Depending on your distribution, these header files can be found in a package
   called libglib2.0-dev, glib2-devel, or something similar.
 

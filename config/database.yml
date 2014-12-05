@@ -3,10 +3,14 @@
 #
 #   Ensure the SQLite 3 gem is defined in your Gemfile
 #   gem 'sqlite3'
+#
+# To integrate Glossa with the Docker MySQL container, the following code may be used:
+# db = URI.parse(ENV['DATABASE_URL'] ||
+#                'mysql2://root:%s@mysql:%d/glossa' % [URI.encode(ENV['MYSQL_ENV_MYSQL_ROOT_PASSWORD'] || ''),
+#                                                      ENV['MYSQL_PORT_3306_TCP_PORT'] || 3306])
+
 development:
-  <% db = URI.parse(ENV['DATABASE_URL'] ||
-                    'mysql2://root:%s@mysql:%d/glossa' % [URI.encode(ENV['MYSQL_ENV_MYSQL_ROOT_PASSWORD'] || ''),
-                                                          ENV['MYSQL_PORT_3306_TCP_PORT'] || 3306]) %>
+  <% db = URI.parse(ENV['DATABASE_URL'] || 'sqlite3:///db/development.sqlite3') %>
   adapter: <%= db.scheme %>
   host: <%= db.host %>
   port: <%= db.port %>
