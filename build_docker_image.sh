@@ -1,7 +1,11 @@
 #!/bin/sh
 
 set -e
-bundle update --source rglossa rglossa-r rglossa-fcs
+if [ "$1" = "--full" ]; then
+  bundle update
+else
+  bundle update --source rglossa rglossa-r rglossa-fcs
+fi
 rake railties:install:migrations   # installs migrations for all engines
 rake rglossa:install:thor
 
