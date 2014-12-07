@@ -16,6 +16,9 @@ rm_dockerfile() {
 set +e
 if [ "$1" = "--full" ]; then
   rm_dockerfile
+  ln -s Dockerfile.glossa-data Dockerfile || exit 1
+  docker build -t textlab/glossa-data . || { rm -f Dockerfile; exit 1; }
+  rm_dockerfile
   ln -s Dockerfile.glossa-base Dockerfile || exit 1
   docker build -t textlab/glossa-base . || { rm -f Dockerfile; exit 1; }
 fi
