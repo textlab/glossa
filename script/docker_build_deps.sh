@@ -11,6 +11,10 @@ GEM_BUILD_DEPS='make patch binutils gcc g++ libc6-dev ruby2.0-dev libmysqlclient
 CWB_BUILD_DEPS='subversion autoconf bison flex libglib2.0-dev libncurses5-dev make binutils gcc g++ libc6-dev' 
 SNACK_BUILD_DEPS='curl make patch binutils gcc g++ libc6-dev tcl8.4-dev tk8.4-dev'
 
+# Changes to these two files make the image unnecessarily large after running useradd:
+rm -f /var/log/faillog /var/log/lastlog
+useradd -u 61054 -d /glossa glossa
+
 # If you want to download Ubuntu packages or gems from another mirror, create
 # script/set_build_mirrors.sh, setting appropriate values, e.g.:
 # gem_mirror=http://192.168.59.3:9292

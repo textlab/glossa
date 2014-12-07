@@ -4,9 +4,11 @@ MAINTAINER Anders Nøklestad <anders.noklestad@iln.uio.no>, Michał Kosek <micha
 WORKDIR /glossa
 
 # All permanent data must be under /corpora, which is a place to mount a data volume
-RUN mkdir -p /usr/local/share/cwb && ln -s /corpora/cwb_reg /usr/local/share/cwb/registry
-RUN mkdir -p /glossa/public && ln -s /corpora/media /glossa/public/media
-RUN mkdir -p /glossa/tmp && ln -s /corpora/import /glossa/tmp/dumps
+# All temporary directories must be owned by glossa
+RUN mkdir -p /usr/local/share/cwb && ln -s /corpora/cwb_reg /usr/local/share/cwb/registry && \
+    mkdir -p /glossa/public && ln -s /corpora/media /glossa/public/media && \
+    mkdir -p /glossa/tmp /glossa/log && chown glossa /glossa/tmp /glossa/log && ln -s /corpora/import /glossa/tmp/dumps && \
+    mkdir -p /glossa/public/tmp_waveforms && chown glossa /glossa/public/tmp_waveforms
 
 ADD Gemfile /glossa/
 ADD Gemfile.lock /glossa/
@@ -17,10 +19,13 @@ EXPOSE 3000
 
 # Run the application with an SQLite database
 ENV DATABASE_URL sqlite3:////corpora/glossa.sqlite3
-CMD rake db:migrate && rails server -p 3000
 
 # Copy application code to container
 ADD . /glossa/
+RUN chown glossa /glossa/db/schema.rb
+
+USER glossa
+CMD bundle exec rake db:migrate && bundle exec rails server -p 3000
 
 # Try not to add steps after the last ADD so we can use the
 # Docker build cache more efficiently
