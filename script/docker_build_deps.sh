@@ -45,11 +45,9 @@ $autoremove
 
 # Install the IMS Open Corpus Workbench (http://cwb.sourceforge.net/) by
 # checking it out from svn and modifying config.mk to select linux-64 as the
-# platform to build for. The -r option has the same function as Gemfile.lock
-# for gems - it locks the code to a specific revision. When an update is
-# needed, change it to the current date.
+# platform to build for.
 $install $CWB_BUILD_DEPS
-svn export -r{2014-09-30} http://svn.code.sf.net/p/cwb/code/cwb/branches/3.0 /tmp/cwb
+svn export http://svn.code.sf.net/p/cwb/code/cwb/branches/3.0 /tmp/cwb
 cd /tmp/cwb
 ruby -i -pe '$_.sub!(%r{ / [^/\r\n]+ \s* $ }x, "/linux-64") if $_.start_with? "include $(TOP)/config/platform/"' /tmp/cwb/config.mk
 make clean && make depend && make all && make install
