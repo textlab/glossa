@@ -8,6 +8,10 @@ RUN mkdir -p /usr/local/share/cwb && ln -s /corpora/cwb_reg /usr/local/share/cwb
 RUN mkdir -p /glossa/public && ln -s /corpora/media /glossa/public/media
 RUN mkdir -p /glossa/tmp && ln -s /corpora/import /glossa/tmp/dumps
 
+ADD Gemfile /glossa/
+ADD Gemfile.lock /glossa/
+RUN bundle install
+
 # Make thin reachable to other containers
 EXPOSE 3000
 
