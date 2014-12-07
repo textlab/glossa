@@ -25,7 +25,7 @@ ADD . /glossa/
 RUN chown glossa /glossa/db/schema.rb
 
 USER glossa
-CMD bundle exec rake db:migrate && bundle exec rails server -p 3000
+CMD rake db:migrate && exec rails server -p 3000
 
 # Try not to add steps after the last ADD so we can use the
 # Docker build cache more efficiently
