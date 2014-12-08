@@ -8,7 +8,7 @@ WORKDIR /glossa
 RUN mkdir -p /usr/local/share/cwb && ln -s /corpora/cwb_reg /usr/local/share/cwb/registry && \
     mkdir -p /glossa/public && ln -s /corpora/media /glossa/public/media && \
     mkdir -p /glossa/tmp /glossa/log && chown glossa /glossa/tmp /glossa/log && ln -s /corpora/import /glossa/tmp/dumps && \
-    mkdir -p /glossa/public/tmp_waveforms && chown glossa /glossa/public/tmp_waveforms
+    mkdir -p /glossa/public/tmp_waveforms
 
 ADD Gemfile /glossa/
 ADD Gemfile.lock /glossa/
@@ -22,7 +22,7 @@ ENV DATABASE_URL sqlite3:////corpora/glossa.sqlite3
 
 # Copy application code to container
 ADD . /glossa/
-RUN chown glossa /glossa/db/schema.rb
+RUN chown glossa /glossa/db/schema.rb /glossa/public/tmp_waveforms
 
 USER glossa
 CMD rake db:migrate && exec rails server -p 3000
