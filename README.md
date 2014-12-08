@@ -8,32 +8,40 @@ Glossa](https://github.com/noklesta/glossa_svn).
 
 ## Docker-based installation
 
-The easiest way to install Glossa, is to use a ready-to-use Docker image that
+The simplest way to install Glossa, is to use a ready-to-use Docker image that
 we provide. It can be done in a few easy steps:
 
 * [Install Docker](https://docs.docker.com/installation/). The linked website
   provides installation instructions for all major operating systems. Note that
   Docker works only on 64-bit systems.
-* Create a volume that will store your corpora and all other data used by
-  Glossa. It needs to be done only once, by running the following command:
-
-        docker run -v /corpora --name glossa-data busybox true
-
 * Run the Glossa image. If the image is not present on your machine, it will be
-  downloaded automatically.
+  downloaded automatically. The easiest way to do this is to download the
+  control scripts:
+  [glossa_start](https://raw.githubusercontent.com/textlab/glossa/master/script/glossa_start.sh),
+  [glossa_stop](https://raw.githubusercontent.com/textlab/glossa/master/script/glossa_stop.sh),
+  [glossa_addr](https://raw.githubusercontent.com/textlab/glossa/master/script/glossa_addr.sh).
+  Docker installs Git Bash on Windows, so the scripts should work on all
+  operating systems. On Linux/Mac you will need to make them executable. If you
+  save them to your desktop, call `chmod 755 ~/Desktop/glossa_*.sh` or
+  something similar in your terminal. Now you can click on them or call them
+  from the command line to start, stop and check the address of Glossa,
+  respectively.
+* After you call `glossa_start.sh`, Glossa should be up and running. The default
+  address on Linux is <http://127.0.0.1:61054/admin>, and on other systems it
+  is <http://192.168.59.103:61054/admin>. In case of problems you may call
+  `glossa_addr.sh` to check the address.
 
-        docker run -d -p 61054:3000 --volumes-from glossa-data textlab/glossa
+### Notes
 
-* Connect to <http://127.0.0.1:61054/admin> in your web browser. Glossa should
-  be up and running. You may also run Glossa on a different port by changing
-  `61054` to some other number in the `docker run` command and in the address.
-  
-### Troubleshooting
-If you use Boot2Docker (which is the case when you run it on Windows or MacOS),
-you will probably need to change the above URL to
-<http://192.168.59.103:61054/admin>. If it doesn't work, you may check the
-right IP address by running `boot2docker ip` command (in Windows, open Git Bash
-to run that command).
+If you are adapting the Docker setup to your needs, keep in mind that the
+container `glossa` contains only the application code, so it is safe to delete
+it and re-create it from the `textlab/glossa` image. Conversely, the container
+`glossa-data` all your Glossa-related data, including settings and corpora. If
+you delete this container, they will be lost!
+
+If you have problems, first make sure that you can call `docker` (on Linux and
+Mac) and/or `boot2docker` (on Mac and Windows) from the command line (Git Bash
+on Windows). If you cannot, there is a problem with your Docker installation.
 
 ## Standard installation from GitHub
 
@@ -104,7 +112,7 @@ database settings. This variable has to be set before running `rake` and
 `rails` commands.
 
 `DATABASE_URL` should have the form
-*`adapter`*`://`*`username`*`:`*`password`*`@`*`hostname`*`/`*`database`*. For
+*adapter*`://`*username*`:`*password*`@`*hostname*`/`*database*. For
 example, if you want to connect to a MySQL database called `glossa_db` at your
 machine, providing the username `glossa_user` and the password `5pwd@#`, you should
 set it as follows:

@@ -15,5 +15,7 @@ else
   echo "Glossa is available at:"
   echo "http://$IP:$PORT"
 fi
-echo "Press Enter..."
-read PAUSE
+if [ "$1" != "--no-pause" ]; then
+  echo "Press Enter..."
+  read PAUSE
+fi
