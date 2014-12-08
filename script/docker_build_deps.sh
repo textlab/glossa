@@ -43,12 +43,6 @@ bundle install
 $remove $GEM_BUILD_DEPS
 $autoremove
 
-# This directory contains rglossa gems. They will change all the time, so there
-# is no point in including them in the base image. The build script for
-# textlab/glossa will run "bundle install" anyway, and will download their most
-# recent versions.
-rm -rf /var/lib/gems/2.0.0/bundler/gems
-
 # Install the IMS Open Corpus Workbench (http://cwb.sourceforge.net/) by
 # checking it out from svn and modifying config.mk to select linux-64 as the
 # platform to build for.
@@ -88,6 +82,12 @@ mv /etc/apt/apt.conf.d/disabled/* /etc/apt/apt.conf.d
 $autoremove
 rm -f /var/cache/apt/archives/*.deb /var/cache/apt/archives/partial/*.deb /var/cache/apt/*.bin
 rm -rf /tmp/snack /tmp/cwb /var/lib/gems/*/cache/* /var/lib/apt/lists
+
+# This directory contains rglossa gems. They will change all the time, so there
+# is no point in including them in the base image. The build script for
+# textlab/glossa will run "bundle install" anyway, and will download their most
+# recent versions.
+rm -rf /var/lib/gems/2.0.0/bundler/gems
 
 # Remove the suid/sgid bits from all files for increased security
 find / -mount ! -type d -perm +6000 -print0 |xargs -0 chmod ug-s
