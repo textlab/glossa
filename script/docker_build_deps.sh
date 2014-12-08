@@ -81,7 +81,7 @@ $autoremove
 mv /etc/apt/apt.conf.d/disabled/* /etc/apt/apt.conf.d
 $autoremove
 rm -f /var/cache/apt/archives/*.deb /var/cache/apt/archives/partial/*.deb /var/cache/apt/*.bin
-rm -rf /tmp/snack /tmp/cwb /var/lib/gems/*/cache/*
+rm -rf /tmp/snack /tmp/cwb /var/lib/gems/*/cache/* /var/lib/apt/lists
 
 # Remove the suid/sgid bits from all files for increased security
 find / -mount ! -type d -perm +6000 -print0 |xargs -0 chmod ug-s

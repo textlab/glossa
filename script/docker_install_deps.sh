@@ -25,3 +25,6 @@ libmysqlclient18 libav-tools mp3splt tcl8.4 tk8.4 python-tk imagemagick xvfb
   rm ruby gem irb rdoc erb; ln -s ruby2.0 ruby; ln -s gem2.0 gem
   ln -s irb2.0 irb; ln -s rdoc2.0 rdoc; ln -s erb2.0 erb
 )
+
+# Cleanup
+rm -rf /var/lib/apt/lists
