@@ -251,10 +251,10 @@ function update_sel_data() {
       f2_sel = formants_sel.map(function(el) { return el[2] });
       f3_sel = formants_sel.map(function(el) { return el[3] });
       avg_data += ' Formants (' + stats_str.join('/') + '): ';
-      avg_data += '<span style="width: auto; color: #ff8080">' + stats(f0_sel) + '</span>&nbsp;';
-      avg_data += '<span style="width: auto; color: lightgreen">' + stats(f1_sel) + '</span>&nbsp;';
-      avg_data += '<span style="width: auto; color: blue">' + stats(f2_sel) + '</span>&nbsp;';
-      avg_data += '<span style="width: auto; color: orange">' + stats(f3_sel) + '</span>&nbsp;';
+      avg_data += '<span style="width: auto; color: #ff8080">' + stats(f0_sel) + '</span> ';
+      avg_data += '<span style="width: auto; color: lightgreen">' + stats(f1_sel) + '</span> ';
+      avg_data += '<span style="width: auto; color: blue">' + stats(f2_sel) + '</span> ';
+      avg_data += '<span style="width: auto; color: orange">' + stats(f3_sel) + '</span> ';
     }
     $('#mouse-avg', document).html(avg_data);
     $('#export-mouse-avg').click(function(){
