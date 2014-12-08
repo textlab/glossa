@@ -1,5 +1,5 @@
 # Base image (https://registry.hub.docker.com/_/ubuntu/)
-FROM ubuntu:14.04
+FROM textlab/ubuntu-essential
 MAINTAINER Anders Nøklestad <anders.noklestad@iln.uio.no>, Michał Kosek <michalkk@student.iln.uio.no>
 
 WORKDIR /glossa
