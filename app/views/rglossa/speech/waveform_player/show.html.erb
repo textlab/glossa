@@ -220,7 +220,7 @@ function update_sel_data() {
     }
     pitch_sel = pitch.filter(function(el, idx) { return idx >= startX && idx <= stopX; });
     avg_data = '<span style="float: right; position: relative"><a href="#" id="export-mouse-avg" style="text-decoration: none; color: white; border: 1px solid white">Export selection stats</a></span>';
-    avg_data += 'Selection (ms): <span style="width: auto; color: blue">' + oSound.startPos + '</span>&ndash;<span style="width: auto; color: blue">' + oSound.stopPos + '</span>&nbsp;';
+    avg_data += 'Selection (ms): <span style="width: auto; color: blue">' + (oSound.stopPos - oSound.startPos) + '</span> (<span style="width: auto; color: blue">' + oSound.startPos + '</span>&ndash;<span style="width: auto; color: blue">' + oSound.stopPos + '</span>)&nbsp;';
     show_min = $('#show-min').prop('checked');
     show_avg = $('#show-avg').prop('checked');
     show_max = $('#show-max').prop('checked');
