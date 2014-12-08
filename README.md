@@ -122,7 +122,7 @@ you should set it as follows:
 Note that the elements of the URL (including the password) are
 [URL-encoded](http://en.wikipedia.org/wiki/Percent-encoding).
 
-If you want to use SQLite, you only the path to the database file needs to be
+If you want to use SQLite, only the path to the database file needs to be
 provided:
 
     export DATABASE_URL=sqlite3:///db/glossa.db
@@ -308,14 +308,14 @@ There is no start command, as it starts automatically when needed. Changes in
 ## Advanced installation
 
 As an alternative to creating a new application, you may already have a Rails
-application and want to make Glossa part of that. The RGlossa gem is
-implemented as a Rails engine, this can easily be achieved by mounting RGlossa
+application and want to make Glossa part of that. The `rglossa` gem is
+implemented as a Rails engine, this can easily be achieved by mounting `rglossa`
 at some subpath within the application. See the
 [wiki](http://github.com/textlab/rglossa/wiki) for more information.
 
 ## Development of Glossa
 
-The core of Glossa is in the *rglossa* gem. If you want to develop *rglossa*,
+The core of Glossa is in the `rglossa` gem. If you want to develop `rglossa`,
 it should be checked out in a separate directory, and you need to set up an
 override in the application directory, so that your checked-out version is used
 instead of the version from the Gemfile. Assuming that you are in the

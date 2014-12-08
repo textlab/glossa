@@ -14,7 +14,7 @@ cwd="`dirname -- "$0"`"
 if [ -f "$cwd/glossa_addr.sh" ]; then
   "$cwd/glossa_addr.sh" --no-pause
 fi
-# Pull textlab/glossa-base. Not strictly necessary, but will reduce upgrade time in the future.
+# Pull textlab/glossa-base. Not strictly necessary, but it will reduce upgrade time in the future.
 $run "docker pull textlab/glossa-base"
 echo "Press Enter..."
 read PAUSE
