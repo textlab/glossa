@@ -1,6 +1,6 @@
-FROM busybox
+FROM textlab/busybox-minimal
 MAINTAINER Michał Kosek <michalkk@student.iln.uio.no>
 
-RUN adduser -Du 61054 glossa && mkdir /corpora && chown glossa /corpora
+RUN ["busybox", "sh", "-c", "mkdir /corpora && chown 61054 /corpora"]
 VOLUME /corpora
-CMD ["echo", "OK"]
+CMD ["busybox", "echo", "OK"]
