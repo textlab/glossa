@@ -18,6 +18,7 @@ mv /etc/apt/apt.conf.d/01autoremove /etc/apt/apt.conf.d/disabled/
 
 # Install the necessary gems
 gem update --system && gem pristine --all && gem install bundler
+rm -rf /root/.gem
 $install $GEM_BUILD_DEPS
 bundle install
 $remove $GEM_BUILD_DEPS
