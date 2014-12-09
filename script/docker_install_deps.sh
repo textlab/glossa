@@ -12,7 +12,7 @@ if [ "$ubuntu_mirror" != "" ]; then
   sed -i "s|http://archive.ubuntu.com|$ubuntu_mirror|g" /etc/apt/sources.list
 fi
 apt-get update
-apt-get install --no-install-recommends -y git ruby2.0 sqlite3 libsqlite3-0 \
+apt-get install --no-install-recommends -y ruby2.0 sqlite3 libsqlite3-0 \
 libmysqlclient18 libav-tools mp3splt tcl8.4 tk8.4 python-tk imagemagick xvfb
 
 # FFmpeg is not available in this version of Ubuntu, so we're linking to
