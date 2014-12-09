@@ -8,12 +8,6 @@ set -ve
 rm -f /var/log/faillog /var/log/lastlog
 useradd -u 61054 -d /glossa glossa
 
-# If you want to download Ubuntu packages or gems from another mirror, create
-# script/set_build_mirrors.sh, setting appropriate values, e.g.:
-# gem_mirror=http://192.168.59.3:9292
-# ubuntu_mirror=http://ftp.uninett.no
-[ -f script/set_build_mirrors.sh ] && . script/set_build_mirrors.sh || true
-
 # Ensure that we will get the newest packages
 apt-get update
 
@@ -21,13 +15,6 @@ apt-get update
 mkdir -p /etc/apt/apt.conf.d/disabled
 mv /etc/apt/apt.conf.d/docker-clean /etc/apt/apt.conf.d/disabled/
 mv /etc/apt/apt.conf.d/01autoremove /etc/apt/apt.conf.d/disabled/
-
-# Change the gem source, if needed
-if [ "$gem_mirror" != "" ]; then
-  sed -i "s|https://rubygems.org|$gem_mirror|g" Gemfile
-  gem sources -a "$gem_mirror"
-  gem sources -r https://rubygems.org/
-fi
 
 # Install the necessary gems
 gem update --system && gem pristine --all && gem install bundler
