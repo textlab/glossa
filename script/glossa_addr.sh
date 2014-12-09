@@ -6,6 +6,7 @@ else
   IP=127.0.0.1
   run="sh -c"
 fi
+
 PORT=`$run 'ID=$(docker ps |awk '\''$NF=="glossa"{print $1}'\'');
 docker port "$ID" 2>/dev/null |awk -F: "{print \\\$2}"'`
 echo
@@ -15,6 +16,7 @@ else
   echo "Glossa is available at:"
   echo "http://$IP:$PORT"
 fi
+
 if [ "$1" != "--no-pause" ]; then
   echo "Press Enter..."
   read PAUSE

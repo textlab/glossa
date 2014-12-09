@@ -4,6 +4,7 @@ if docker >/dev/null 2>&1; then
 else
   run="boot2docker ssh"
 fi
+
 echo "Stopping Glossa..."
 $run "docker stop glossa; docker rm glossa"
 echo "Press Enter..."
