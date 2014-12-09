@@ -87,7 +87,7 @@ rm -rf /tmp/snack /tmp/cwb /var/lib/gems/*/cache/* /var/lib/apt/lists
 # is no point in including them in the base image. The build script for
 # textlab/glossa will run "bundle install" anyway, and will download their most
 # recent versions.
-rm -rf /var/lib/gems/2.0.0/bundler/gems
+rm -rf /var/lib/gems/*/bundler/gems
 
 # Remove the suid/sgid bits from all files for increased security
 find / -mount ! -type d -perm +6000 -print0 |xargs -0 chmod ug-s
