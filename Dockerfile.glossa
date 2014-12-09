@@ -1,17 +1,9 @@
 FROM textlab/glossa-base
 MAINTAINER Anders Nøklestad <anders.noklestad@iln.uio.no>, Michał Kosek <michalkk@student.iln.uio.no>
 
-# Copy application code to container
+# Copy the application code to the container and fix links/permissions
 ADD . /glossa/
-
-# All permanent data must be under /corpora, which is a place to mount a data volume
-# All temporary directories must be owned by glossa
-RUN mkdir -p /usr/local/share/cwb && ln -s /corpora/cwb_reg /usr/local/share/cwb/registry && \
-    mkdir -p /glossa/public && ln -s /corpora/media /glossa/public/media && \
-    mkdir -p /glossa/tmp /glossa/log && chown glossa /glossa/tmp /glossa/log && ln -s /corpora/import /glossa/tmp/dumps && \
-    mkdir -p /glossa/public/tmp_waveforms && \
-    chown glossa /glossa/public/tmp_waveforms /glossa/db/schema.rb && \
-    bundle install # Install gems that are newer than in glossa-base
+RUN script/docker_glossa_postinst.sh
 
 # Make thin reachable to other containers
 EXPOSE 3000
