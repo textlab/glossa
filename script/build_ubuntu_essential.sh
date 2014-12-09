@@ -17,8 +17,7 @@ docker rmi textlab/ubuntu-essential-multilayer
 docker import - textlab/ubuntu-essential-nocmd <"$TMP_FILE"
 docker build -t textlab/ubuntu-essential - <<'EOF'
 FROM textlab/ubuntu-essential-nocmd
-MAINTAINER Michał Kosek <michalkk@student.iln.uio.no>
-CMD /bin/bash
+CMD ["/bin/bash"]
 EOF
 docker rmi textlab/ubuntu-essential-nocmd
 rm -f "$TMP_FILE"
