@@ -18,3 +18,8 @@ chown glossa /glossa/public/tmp_waveforms /glossa/db/schema.rb
 # Install gems that are newer than in glossa-base and clear the cache
 bundle install
 rm -rf /var/lib/gems/*/cache/*
+find /var/lib/gems/2.0.0/gems/ -name '*.o' -print0 |xargs -0 rm -f
+
+# This image is not supposed to be directly upgraded, so we can save a few
+# dozens of MB by removing the git history:
+rm -rf /var/lib/gems/*/bundler/gems/*/.git
