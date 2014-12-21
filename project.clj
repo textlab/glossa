@@ -4,30 +4,31 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
-  :source-paths ["src/clj" "src/cljs"]
+  :source-paths ["src/clj"]
+
+  :test-paths ["spec/clj"]
 
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/clojurescript "0.0-2371" :scope "provided"]
                  [com.datomic/datomic-free "0.9.5067"]
                  [datomic-schema "1.1.0"]
-                 [ring "1.3.1"]
+                 [ring "1.3.2"]
+                 [ring/ring-defaults "0.1.2"]
                  [ring-middleware-format "0.4.0"]
                  [compojure "1.2.0"]
                  [enlive "1.1.5"]
                  [com.facebook/react "0.11.2"]
                  [whoops/reagent "0.4.4-alpha"]
-                 [figwheel "0.1.4-SNAPSHOT"]
                  [environ "1.0.0"]
-                 [com.cemerick/piggieback "0.1.3"]
-                 [weasel "0.4.0-SNAPSHOT"]
-                 [leiningen "2.5.0"]
                  [http-kit "2.1.19"]
                  [prismatic/plumbing "0.3.4"]
                  [cljs-ajax "0.3.3"]
                  [prone "0.6.0"]]
 
   :plugins [[lein-cljsbuild "1.0.3"]
-            [lein-environ "1.0.0"]]
+            [lein-environ "1.0.0"]
+            [org.clojars.aew/lein-sassc "0.10.0"]
+            [lein-auto "0.1.1"]]
 
   :min-lein-version "2.5.0"
 
@@ -44,16 +45,35 @@
                                         :optimizations :none
                                         :pretty-print  true}}}}
 
-  :profiles {:dev {:repl-options {:init-ns cglossa.server
-                                  :nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
-                   :plugins [[lein-figwheel "0.1.4-SNAPSHOT"]]
-                   :figwheel {:http-server-root "public"
-                              :port 3449
-                              :css-dirs ["resources/public/css"]}
-                   :env {:is-dev true}
-                   :cljsbuild {:builds {:app {:source-paths ["env/dev/cljs"]}}}}
+  :sassc [{:src "src/scss/style.scss"
+           :output-to "resources/public/css/style.css"}]
+  :auto {"sassc"  {:file-pattern  #"\.(scss)$"}}
 
-             :uberjar {:hooks [leiningen.cljsbuild]
+  :profiles {:dev {:source-paths ["env/dev/clj"]
+
+                   :dependencies [[figwheel "0.1.6-SNAPSHOT"]
+                                  [com.cemerick/piggieback "0.1.3"]
+                                  [weasel "0.4.2"]
+                                  [leiningen "2.5.0"]]
+
+                   :repl-options {:init-ns cglossa.server
+                                  :nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
+
+                   :plugins [[lein-figwheel "0.1.6-SNAPSHOT"]]
+
+                   :figwheel {:http-server-root "public"
+                              :server-port 3449
+                              :css-dirs ["resources/public/css"]
+                              :open-file-command "idea-opener"}
+
+                   :env {:is-dev true}
+
+                   :cljsbuild {:builds
+                               {:app
+                                {:source-paths ["env/dev/cljs"]}}}}
+
+             :uberjar {:source-paths ["env/prod/clj"]
+                       :hooks [leiningen.cljsbuild  ]
                        :env {:production true}
                        :omit-source true
                        :aot :all
