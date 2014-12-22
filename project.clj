@@ -27,7 +27,7 @@
 
   :plugins [[lein-cljsbuild "1.0.3"]
             [lein-environ "1.0.0"]
-            [org.clojars.aew/lein-sassc "0.10.0"]
+            [lein-sassc "0.10.0"]
             [lein-auto "0.1.1"]]
 
   :min-lein-version "2.5.0"
