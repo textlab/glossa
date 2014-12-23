@@ -1,5 +1,5 @@
 (ns cglossa.data-import.core
-  (require [clojure.string :as str]
+  (:require [clojure.string :as str]
            [datomic.api :as d]))
 
 (def data-path "resources/data")
@@ -12,7 +12,7 @@
        (map #(str/split % #"\t"))))
 
 (defn- tsv->tx-data [path namespace]
-  "Takes as input a tsv (tab-separated values) file with attribue names
+  "Takes as input a tsv (tab-separated values) file with attribute names
   on the first line and the actual model data on the following lines.
   Returns a Datomic transaction data seq that can be fed directly into
   datomic.api/transact."
@@ -25,7 +25,8 @@
               (filter #(seq (val %)) (zipmap attr-names row))))  ;ignore empty strings
       {:from-path path})))
 
-(defn- create-metadata-value-maps [val-id-maps headers categories]
+(defn- connect-metadata-vals-to-cats [val-id-maps headers categories]
+  "Creates metadata values in Datomic and connects them to their metadata categories"
   (mapcat (fn [category-vals header]
             (let [category (first (filter #(= (:metadata-category/short-name %) header)
                                           categories))]
@@ -68,10 +69,4 @@
                                    unique-vals)]
       (when-not (= (first headers) "tid")
         (throw (Exception. (str "The first column should be tid, not " (first headers) "!"))))
-      (for [row data
-            :let [[tid & fields] row]]
-        (map (fn [header value]
-               {:db/id (d/tempid :db.part/glossa)
-                :metadata_value value})
-             headers fields))
-      (create-metadata-value-maps val-id-maps headers categories))))
+      (connect-metadata-vals-to-cats val-id-maps headers categories))))
