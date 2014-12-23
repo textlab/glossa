@@ -1,6 +1,6 @@
 (ns cglossa.models.seeds
   (:require [datomic.api :as d]
-            [datomic-schema.schema :refer [generate-parts generate-schema]]
+            [datomic-schema.schema :refer [schema fields generate-parts generate-schema]]
             [clojure.java.io :as io]
             [cglossa.data-import.core :refer [import-corpora
                                               import-metadata-categories
@@ -9,6 +9,7 @@
             [cglossa.models.schema :as schema]))
 
 (defn- find-tsv-files [dir]
+  "Returns the paths of all tsv files in dir or subdirs"
   (->> (io/file dir)
        file-seq
        (map #(.getPath %))
@@ -33,6 +34,8 @@
                       (map #(import-metadata-values % db))))))
 (defn seed []
   (let [url models/db-uri
+        _ (d/delete-database url)
+        _ (d/create-database url)
         conn (d/connect url)]
     (d/transact conn (concat
                        (generate-parts d/tempid (schema/dbparts))
