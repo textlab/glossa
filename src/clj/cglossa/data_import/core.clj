@@ -26,14 +26,16 @@
       {:from-path path})))
 
 (defn- connect-metadata-vals-to-cats [val-id-maps headers categories]
-  "Creates metadata values in Datomic and connects them to their metadata categories"
+  "Creates Datomic transaction maps for metadata values and connects them
+  to their metadata categories"
   (mapcat (fn [category-vals header]
             (let [category (first (filter #(= (:metadata-category/short-name %) header)
-                                          categories))]
+                                          categories))
+                  cat-id (:db/id category)]
               (for [[val id] category-vals]
                 {:db/id                     (d/tempid :db.part/glossa (- -1 id))
                  :metadata-value/text-value val
-                 :metadata-category/_values (:db/id category)})))
+                 :metadata-category/_values cat-id})))
           val-id-maps headers))
 
 (defn import-corpora []
