@@ -25,18 +25,23 @@
               (filter #(seq (val %)) (zipmap attr-names row))))  ;ignore empty strings
       {:from-path path})))
 
-(defn- connect-metadata-vals-to-cats [val-id-maps headers categories]
+(defn- connect-metadata-values-to-cats [value-id-maps headers categories]
   "Creates Datomic transaction maps for metadata values and connects them
   to their metadata categories"
-  (mapcat (fn [category-vals header]
+  (mapcat (fn [category-values header]
             (let [category (first (filter #(= (:metadata-category/short-name %) header)
                                           categories))
                   cat-id (:db/id category)]
-              (for [[val id] category-vals]
+              (for [[value id] category-values]
                 {:db/id                     (d/tempid :db.part/glossa (- -1 id))
-                 :metadata-value/text-value val
+                 :metadata-value/text-value value
                  :metadata-category/_values cat-id})))
-          val-id-maps headers))
+          value-id-maps headers))
+
+(defn- connect-metadata-values-to-tids [value-id-maps]
+  "Connects each (non-tid) metadata value to its corresponding tid (text ID) value.
+  Since each tid represents a corpus text, this amounts to connecting the metadata
+  values to their respective texts.")
 
 (defn import-corpora []
   (tsv->tx-data (str data-path "/corpora.tsv") :corpus))
@@ -57,18 +62,18 @@
                               [:corpus/short-name corpus-short-name]))
           rows (tsv->rows path)
           headers (first rows)
-          data (rest rows)
-          cols (apply map list data)
-          unique-vals (map set cols)
-          tids (first unique-vals)
+          value-rows (rest rows)
+          cols (apply map list value-rows)
+          unique-values (map set cols)
+          tids (first unique-values)
           nrows (count tids)
-          val-id-maps (map-indexed (fn [index cat-vals]
+          value-id-maps (map-indexed (fn [index cat-values]
                                      (let [first-id (* index nrows)]
                                        (into {}
-                                             (map (fn [val id] [val id])
-                                                  cat-vals
+                                             (map (fn [value id] [value id])
+                                                  cat-values
                                                   (map #(+ % first-id) (range nrows))))))
-                                   unique-vals)]
+                                   unique-values)]
       (when-not (= (first headers) "tid")
         (throw (Exception. (str "The first column should be tid, not " (first headers) "!"))))
-      (connect-metadata-vals-to-cats val-id-maps headers categories))))
+      (connect-metadata-values-to-cats value-id-maps headers categories))))
