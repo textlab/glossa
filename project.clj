@@ -22,7 +22,7 @@
                  [whoops/reagent "0.4.4-alpha"]
                  [environ "1.0.0"]
                  [http-kit "2.1.19"]
-                 [prismatic/plumbing "0.3.4"]
+                 [prismatic/plumbing "0.3.5" :exclusions [potemkin]]
                  [cljs-ajax "0.3.3"]
                  [prone "0.6.0"]]
 
