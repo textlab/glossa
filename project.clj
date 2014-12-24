@@ -9,7 +9,7 @@
   :test-paths ["spec/clj"]
 
   :dependencies [[org.clojure/clojure "1.6.0"]
-                 [org.clojure/clojurescript "0.0-2371" :scope "provided"]
+                 [org.clojure/clojurescript "0.0-2511" :scope "provided"]
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                  [com.datomic/datomic-free "0.9.5067"]
                  [datomic-schema "1.1.0"]
@@ -37,13 +37,14 @@
 
   :jvm-opts ^:replace ["-Xmx1g" "-server"]
 
-  :cljsbuild {:builds {:app {:source-paths ["src/cljs"]
+  :cljsbuild {:builds {:app {:source-paths ["src/cljs" "target/classes"]
                              :compiler {:output-to     "resources/public/js/app.js"
                                         :output-dir    "resources/public/js/out"
                                         :source-map    "resources/public/js/out.js.map"
                                         :preamble      ["react/react.min.js"]
                                         :externs       ["react/externs/react.js"]
                                         :optimizations :none
+                                        :cache-analysis true
                                         :pretty-print  true}}}}
 
   :sassc [{:src "src/scss/style.scss"
