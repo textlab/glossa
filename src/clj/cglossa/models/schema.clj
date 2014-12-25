@@ -20,7 +20,9 @@
 
    (schema metadata-value
            (fields
-             [tid :ref]                                     ; ref to a value in the tid category
+             ; connect the metadata value to one or more text IDs (i.e.
+             ; metadata values in the 'tid' category)
+             [tids :ref :many]
              [text-value :string]
              [numeric-value :long]
              [bool-value :boolean]))

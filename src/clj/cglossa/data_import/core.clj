@@ -26,22 +26,48 @@
       {:from-path path})))
 
 (defn- connect-metadata-values-to-cats [value-id-maps headers categories]
-  "Creates Datomic transaction maps for metadata values and connects them
-  to their metadata categories"
-  (mapcat (fn [category-values header]
-            (let [category (first (filter #(= (:metadata-category/short-name %) header)
-                                          categories))
-                  cat-id (:db/id category)]
-              (for [[value id] category-values]
-                {:db/id                     (d/tempid :db.part/glossa (- -1 id))
-                 :metadata-value/text-value value
-                 :metadata-category/_values cat-id})))
-          value-id-maps headers))
+  "Creates Datomic transaction maps for metadata values that include references
+  to the metadata category of each value. Returns a sequence of hash maps, one for
+  each metadata category, where the keys are metadata values and the values are
+  transaction maps."
+  (map (fn [category-values header]
+         (let [category (first (filter #(= (:metadata-category/short-name %) header)
+                                       categories))
+               cat-id (:db/id category)]
+           (into {}
+                 (for [[value id] category-values]
+                   (let [tx-data {:db/id                     (d/tempid :db.part/glossa (- -1 id))
+                                  :metadata-value/text-value value
+                                  :metadata-category/_values cat-id}
+                         tx-data (if (not= header "tid")
+                                   ; only non-tid values will be connected to tids
+                                   (assoc tx-data :metadata-value/tids [])
+                                   tx-data)]
+                     [value tx-data])))))
+       value-id-maps headers))
 
-(defn- connect-metadata-values-to-tids [value-id-maps]
+(defn- connect-metadata-values-to-tids [value-tx-maps value-rows]
   "Connects each (non-tid) metadata value to its corresponding tid (text ID) value.
   Since each tid represents a corpus text, this amounts to connecting the metadata
-  values to their respective texts.")
+  values to their respective texts."
+  (let [tid-tx-map (first value-tx-maps)]
+    ; tx-maps is a sequence of maps, one for each non-first column
+    ; (i.e., non-tid category)
+    (loop [tx-maps (rest value-tx-maps)
+           rows value-rows]
+      (let [row (first rows)
+            [tid & other-cat-values] row
+            tid-id (-> tid-tx-map (get tid) :db/id)
+            tx-maps (map (fn [value value-tx-map]
+                           (update-in value-tx-map
+                                      [value :metadata-value/tids]
+                                      conj tid-id))
+                         other-cat-values
+                         tx-maps)
+            rest-rows (rest rows)]
+        (if (seq rest-rows)
+          (recur tx-maps rest-rows)
+          (mapcat vals (conj tx-maps tid-tx-map)))))))
 
 (defn import-corpora []
   (tsv->tx-data (str data-path "/corpora.tsv") :corpus))
@@ -62,6 +88,8 @@
                               [:corpus/short-name corpus-short-name]))
           rows (tsv->rows path)
           headers (first rows)
+          _ (when-not (= (first headers) "tid")
+              (throw (Exception. (str "The first column should be tid, not " (first headers) "!"))))
           value-rows (rest rows)
           cols (apply map list value-rows)
           unique-values (map set cols)
@@ -74,6 +102,6 @@
                                                   cat-values
                                                   (map #(+ % first-id) (range nrows))))))
                                    unique-values)]
-      (when-not (= (first headers) "tid")
-        (throw (Exception. (str "The first column should be tid, not " (first headers) "!"))))
-      (connect-metadata-values-to-cats value-id-maps headers categories))))
+      (-> value-id-maps
+          (connect-metadata-values-to-cats headers categories)
+          (connect-metadata-values-to-tids value-rows)))))
