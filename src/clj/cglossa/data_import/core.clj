@@ -51,23 +51,24 @@
   Since each tid represents a corpus text, this amounts to connecting the metadata
   values to their respective texts."
   (let [tid-tx-map (first value-tx-maps)]
-    ; tx-maps is a sequence of maps, one for each non-first column
-    ; (i.e., non-tid category)
-    (loop [tx-maps (rest value-tx-maps)
+    ; tx-maps is a vector of maps, one for each non-first column
+    ; (i.e., non-tid category). Converts to vectors to avoid stack
+    ; overflows due to lazy sequences when the number of rows is large.
+    (loop [tx-maps (vec (rest value-tx-maps))
            rows value-rows]
       (let [row (first rows)
             [tid & other-cat-values] row
             tid-id (-> tid-tx-map (get tid) :db/id)
-            tx-maps (map (fn [value value-tx-map]
-                           (update-in value-tx-map
-                                      [value :metadata-value/tids]
-                                      conj tid-id))
-                         other-cat-values
-                         tx-maps)
+            tm (mapv (fn [value value-tx-map]
+                       (update-in value-tx-map
+                                  [value :metadata-value/tids]
+                                  conj tid-id))
+                     other-cat-values
+                     tx-maps)
             rest-rows (rest rows)]
         (if (seq rest-rows)
-          (recur tx-maps rest-rows)
-          (mapcat vals (conj tx-maps tid-tx-map)))))))
+          (recur tm rest-rows)
+          (mapcat vals (conj tm tid-tx-map)))))))
 
 (defn import-corpora []
   (tsv->tx-data (str data-path "/corpora.tsv") :corpus))
