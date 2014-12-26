@@ -34,12 +34,11 @@
                       (map #(import-metadata-values % db))))))
 (defn seed []
   (let [url models/db-uri
-        _ (d/delete-database url)
-        _ (d/create-database url)
         conn (d/connect url)]
     (d/transact conn (concat
                        (generate-parts d/tempid (schema/dbparts))
                        (generate-schema d/tempid (schema/dbschema))))
     (d/transact conn (seed-corpora))
     (d/transact conn (seed-metadata-categories))
-    (d/transact conn (seed-metadata-values (d/db conn)))))
+    @(d/transact-async conn (seed-metadata-values (d/db conn)))
+    (println "Finished seeding the database")))
