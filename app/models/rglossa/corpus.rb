@@ -1,4 +1,4 @@
-require 'globalize3'
+require 'globalize'
 
 module Rglossa
   class Corpus < ActiveRecord::Base
