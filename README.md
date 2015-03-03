@@ -58,13 +58,13 @@ way is to use the [Ruby Version Manager (RVM)](https://rvm.io/), which lets you
 install Ruby without root access to the server and run several Ruby versions
 side by side. Installation instructions can be found
 [here](https://rvm.io/rvm/install/). After installing RVM, get the latest Ruby
-version (2.1 at the time of writing):
+version (2.2 at the time of writing):
 
-    rvm install 2.1
+    rvm install 2.2
 
 Set this version to be your default Ruby version:
 
-    rvm use 2.1 --default
+    rvm use 2.2 --default
 
 (or see [the RVM documentation](https://rvm.io/workflow/rvmrc/) about how to
 create an *.rvmrc* file in your application directory that will automatically
