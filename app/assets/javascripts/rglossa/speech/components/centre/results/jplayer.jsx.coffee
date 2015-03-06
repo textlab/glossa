@@ -1,11 +1,63 @@
 ###* @jsx React.DOM ###
 
+window.TextBox = React.createClass
+  propTypes:
+    mediaObj: React.PropTypes.object.isRequired
+    startAtLine: React.PropTypes.number.isRequired
+    endAtLine: React.PropTypes.number.isRequired
+
+  renderWord: (line) ->
+    att_string = ""
+    for att of line
+      if att is "pos"
+        # pos tags contain multiple values seperated by colons
+        line[att] = line[att].replace(/:/g,"/")
+      att_string += att + " : " + line[att] + "<br>"
+    `<a title={att_string} style={line.match ? {color: '#b00', fontWeight: 'bold', fontSize: '0.9em'} : {}}>{line[this.props.mediaObj.display_attribute]} </a>`
+
+  renderAnnotation: (annotation, lineNo) ->
+      timecode = annotation.from
+      end_timecode = annotation.to
+      speaker = annotation.speaker
+      speaker_brev = speaker.replace(/^.*_/,"")
+      segment = (@renderWord(annotation.line[i]) for i of annotation.line)
+      getStyle = () =>
+        if parseInt(lineNo) == parseInt(@props.highlightLine)
+          { display: 'table-row', color: '#000', 'background-color': '#eea' }
+        else if lineNo >= @props.startAtLine and lineNo <= @props.endAtLine
+          { display: 'table-row', color: '#000' }
+        else if annotation.from is @first_start or annotation.to is @last_end
+          # ie, overlapping segments
+          { display: 'table-row', color: '#ccc' }
+        else
+          { display: 'none' }
+
+      `<div className={'textDiv ' + timecode.replace(/\./,"_")}
+            id={'jp-' + lineNo}
+            data-start_timecode={timecode}
+            data-end_timecode={end_timecode}
+            style={getStyle()}
+            >
+         <div className="speakerDiv"><a className="speaker" title={speaker}>{speaker_brev}</a></div>
+         <div className="segmentDiv">{segment}</div>
+       </div>`
+
+  render: ->
+    display_attribute = @props.mediaObj.display_attribute
+    annotation = @props.mediaObj.divs.annotation
+    @first_start = annotation[@props.startAtLine].from
+    @last_end = annotation[@props.endAtLine].to
+
+    annotations = (@renderAnnotation(annotation[n], n) for n of annotation)
+    `<div>{annotations}</div>`
+
+
 window.Jplayer = React.createClass
   propTypes:
     mediaObj: React.PropTypes.object.isRequired
     mediaType: React.PropTypes.string.isRequired
 
-  getStartTime: (mediaObj) ->
+  getStartLine: (mediaObj) ->
     start_at = parseInt(mediaObj.start_at)
     min_start = parseInt(mediaObj.min_start)
     if !@props.ctx_lines
@@ -15,7 +67,7 @@ window.Jplayer = React.createClass
     else
       min_start
 
-  getEndTime: (mediaObj) ->
+  getEndLine: (mediaObj) ->
     end_at = parseInt(mediaObj.end_at)
     max_end = parseInt(mediaObj.max_end)
     if !@props.ctx_lines
@@ -25,12 +77,23 @@ window.Jplayer = React.createClass
     else
       max_end
 
+  getStartTime: (mediaObj) ->
+    parseFloat mediaObj.divs.annotation[@state.startLine].from
+
+  getEndTime: (mediaObj) ->
+    parseFloat mediaObj.divs.annotation[@state.endLine].to
+
+  getInitialState: ->
+    startLine: @getStartLine(@props.mediaObj)
+    endLine: @getEndLine(@props.mediaObj)
+    currentLine: @getStartLine(@props.mediaObj)
+    restart: false
+
   componentDidMount: ->
     @createPlayer()
 
   componentDidUpdate: ->
-    @destroyPlayer()
-    @createPlayer()
+    @restartPlayer() if @state.restart
 
   componentWillUnmount: ->
     @destroyPlayer()
@@ -38,7 +101,6 @@ window.Jplayer = React.createClass
   createPlayer: ->
     $node = $(@getDOMNode())
     mediaObj = @props.mediaObj
-    @textBox = @createTextBox()
 
     $(document).tooltip
       content: -> $node.prop('title')
@@ -49,38 +111,26 @@ window.Jplayer = React.createClass
     $("#movietitle").text(mediaObj.title)
     last_line = parseInt(mediaObj.last_line)
 
-    @textBox.init($node, mediaObj, @getStartTime(mediaObj), @getEndTime(mediaObj))
-
-    @textBox.currentID = @getStartTime(mediaObj)
-
-    start = @getStartTime(mediaObj)
-    stop  = @getEndTime(mediaObj)
-    @textBox.redraw(start,stop, last_line)
-    start = parseFloat($("#jp-"+start).data("start_timecode"))
-    stop  = parseFloat($("#jp-"+stop).data("end_timecode"))
-
-    console.log(mediaObj)
-
     $playerNode = $node.find(".jp-jplayer")
     $playerNode.jPlayer
       solution: "flash, html"
-      ready: ->
+      ready: =>
         $playerNode.jPlayer "setMedia",
           rtmpv: path + mov
           m4v: path+mov
           poster: "assets/rglossa/speech/_6.6-%27T%27_ligo.skev.graa.jpg"
-        $playerNode.jPlayer( "play", start)
+        $playerNode.jPlayer( "play", @getStartTime(mediaObj))
 
       timeupdate: (event) =>
         ct = event.jPlayer.status.currentTime
-        if ct > stop
+        if ct > @getEndTime(mediaObj)
           $playerNode = $node.find(".jp-jplayer")
-          $playerNode.jPlayer("play", start)
+          $playerNode.jPlayer("play", @getStartTime(mediaObj))
           $playerNode.jPlayer( "pause" )
-        else if ct > @textBox.currentEndTime
-          @textBox.update(ct)
+        else if ct > mediaObj.divs.annotation[@state.currentLine].to
+          @setState(currentLine: @state.currentLine+1, restart: false)
 
-      ended: -> alert("ended!")
+#      ended: -> alert("ended!")
 
       swfPath: ""
       supplied: supplied
@@ -93,147 +143,22 @@ window.Jplayer = React.createClass
         range: true
         min: 0
         max: last_line
-        values: [ @textBox.start_at_line, @textBox.end_at_line+1 ]
+        values: [ @state.startLine, @state.endLine+1 ]
 
         slide: ( event, ui ) =>
           return false if ui.values[1] - ui.values[0] < 1
-
-          first = ui.values[ 0 ]
-          last = ui.values[ 1 ] - 1  #eg,  2 - 3 means play 1 segment
-          @textBox.redraw(first,last, last_line)
-
-          start = parseFloat($("#jp-"+first).data("start_timecode"))
-          stop = parseFloat($("#jp-"+last).data("end_timecode"))
-
-          $node.find(".js-jplayer").jPlayer("play", start)
+          $playerNode.jPlayer( "stop" )
+          @setState(restart: true, currentLine: ui.values[0], startLine: ui.values[0], endLine: ui.values[1]-1) #eg,  2 - 3 means play 1 segment
 
 
   destroyPlayer: ->
     $node = $(@getDOMNode())
-    @textBox.empty($node)
     $node.find(".jp-jplayer").jPlayer('destroy')
 
-
-  createTextBox: =>
-    start_at_line:0
-    end_at_line:0
-    currentID:0
-    nextID:0
-    currentEndTime:0
-    currentStartTime:0
-
-    init: ($view, mediaObj, start_at_line, end_at_line) ->
-      display_attribute = mediaObj.display_attribute
-      annotation = mediaObj.divs.annotation
-      @start_at_line = start_at_line
-      @end_at_line = end_at_line
-      @currentID = @start_at_line
-      @nextID = @start_at_line + 1
-
-      for n of annotation
-        timecode = annotation[n].from
-        end_timecode = annotation[n].to
-        speaker = annotation[n].speaker
-        speaker_brev = speaker.replace(/^.*_/,"")
-
-        div = $('<div>')
-        .addClass("textDiv")
-        .addClass(timecode.replace(/\./,"_"))
-        .attr("id", 'jp-' + n)
-        .data("start_timecode",timecode)
-        .data("end_timecode",end_timecode)
-        .on "click", (e) -> alert($view.data("start_timecode")+" id:"+$view.attr("id"))
-
-        if n < @start_at_line or n > @end_at_line
-          div.css({"display":"none"})
-
-        speakerDiv = $('<div>')
-        .addClass('speakerDiv')
-
-        anchor = $('<a>')
-        .addClass('speaker')
-        .text(speaker_brev)
-        .attr("title",speaker)
-
-        speakerDiv.append(anchor)
-
-        segmentDiv = $("<div>")
-        .addClass('segmentDiv')
-
-        line = annotation[n].line
-
-        for i of line
-          match = false;
-          att_string = ""
-
-          match = true if line[i].match
-
-          for att of line[i]
-            if att is "pos"
-              # pos tags contain multiple values seperated by colons
-              line[i][att] = line[i][att].replace(/:/g,"/")
-            att_string += att + " : " + line[i][att] + "<br>"
-
-          anchor = $('<a>')
-          .attr("title",att_string)
-          .text(line[i][display_attribute])
-
-          segmentDiv.append(anchor)
-          segmentDiv.append(" ")
-
-          if match
-            anchor
-            .css({"color":"#b00"})
-            .css({"font-weight":"bold"})
-            .css({"font-size":"0.9em"})
-
-        div.append(speakerDiv)
-        div.append(segmentDiv)
-        $view.find('.jplayer-text').append(div)
-
-
-    redraw: (first, last, last_line) ->
-      @currentID = first
-      @currentEndTime = 0
-      first_start = $("#jp-"+first).data("start_timecode")
-      last_end = $("#jp-"+last).data("end_timecode")
-
-      for i in [0..last_line]
-        $("#jp-"+i).css("background-color","#fff")
-        if i >= first and i <= last
-          $("#jp-"+i).css({"display":"table-row","color":"#000"})
-          continue
-
-        if ($("#jp-"+i).data("start_timecode") is first_start) or ($("#jp-"+i).data("end_timecode") is last_end)
-          # ie, overlapping segments
-          $("#jp-"+i).css({"display":"table-row","color":"#ccc"})
-          continue
-
-      $("#jp-"+i).css({"display":"none"})
-
-
-    update: (ct) ->
-      iterate = true
-
-      while iterate
-        currentEndTime = $("#jp-"+@currentID).data("end_timecode")
-        currentStartTime = $("#jp-"+@currentID).data("start_timecode")
-        if currentEndTime > ct
-          @currentEndTime = currentEndTime
-          $("."+currentStartTime.replace(/\./,"_")).css("background-color","#eea")
-          @currentEndTime = currentEndTime
-          iterate = false
-        else
-          $("."+currentStartTime.replace(/\./,"_")).css("background-color","#fff")
-          @currentID++
-
-      @nextID++
-      @currentEndTime
-
-
-    empty: ($view) ->
-      $view.find('.jplayer-text').empty()
-
+  restartPlayer: ->
+    $node = $(@getDOMNode())
+    $playerNode = $node.find(".jp-jplayer")
+    $playerNode.jPlayer("play", @getStartTime(@props.mediaObj))
 
   render: ->
     `<div style={{position: 'relative'}}>
@@ -274,7 +199,7 @@ window.Jplayer = React.createClass
              </div>
          </div>
       </div>
-      <div className="jplayer-text autocue"></div>
+      <div className="jplayer-text autocue"><TextBox mediaObj={this.props.mediaObj} startAtLine={this.state.startLine} endAtLine={this.state.endLine} highlightLine={this.state.currentLine} /></div>
       <div className="slider-range ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" aria-disabled="false">
           <div className="ui-slider-range ui-widget-header ui-corner-all" style={{left: '40%', width: '40%'}}></div>
           <a className="ui-slider-handle ui-state-default ui-corner-all" href="#" style={{left: '40%'}}></a>
