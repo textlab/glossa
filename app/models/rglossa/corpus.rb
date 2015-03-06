@@ -18,7 +18,7 @@ module Rglossa
     store :config,
           accessors: [:languages, :extra_cwb_attrs, :display_attrs, :extra_row_attrs,
                                :s_tag, :s_tag_id, :parts, :has_sound, :has_video, :has_phonetic,
-                               :has_map, :media_path],
+                               :context_size, :has_map, :media_path],
           coder: JSON
 
     store :cimdi, coder: JSON

@@ -21,11 +21,7 @@
 }
 
 .autocue{
-  display: table;
-  position:absolute;
-  top:5px;
-  left: 500px;
-  width: 40%;
+  width: 100%;
   background-color: #fff;
   border-style:solid;
   border-width:1px;
@@ -34,11 +30,14 @@
 .textDiv{
   display: table-row;
 }
+.waveDiv{
+  display: block;
+}
 .slider-range{
   width:480px;
 
 }
-.speakerDiv{
+.speakerDiv,.waveformBtnDiv{
   /*
   border-style:solid;
   border-width:1px;
@@ -46,7 +45,6 @@
   */
   color:#33c;
   display: table-cell;
-  width: 50px;
 }
 .segmentDiv{
   /*

@@ -69,10 +69,11 @@ module Rglossa
         stop  = start + page_size - 1
         s_tag = corpus.s_tag || 's'
         s_tag_id = corpus.s_tag_id || "#{s_tag}_id"
+        context_size = corpus.context_size || default_context_size
         commands = [
           %Q{set DataDirectory "#{Dir.tmpdir}"},
           get_cwb_corpus_name,  # necessary for the display of id tags to work
-          "set Context #{default_context_size} #{s_tag}",
+          "set Context #{context_size} #{s_tag}",
           'set LD "{{"',
           'set RD "}}"',
           "show +#{s_tag_id}"]

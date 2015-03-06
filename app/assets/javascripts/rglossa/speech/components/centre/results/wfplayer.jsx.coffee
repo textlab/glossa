@@ -13,8 +13,8 @@ window.WFplayer = React.createClass
     mov = mediaObj.mov.movie_loc
     path = mediaObj.mov.path
     $("#movietitle").text(mediaObj.title)
-    start = mediaObj.divs.annotation[parseInt(mediaObj.start_at)].from
-    stop  = mediaObj.divs.annotation[parseInt(mediaObj.end_at)].to
+    start = mediaObj.divs.annotation[@props.startAt || parseInt(mediaObj.start_at)].from
+    stop  = mediaObj.divs.annotation[@props.endAt || parseInt(mediaObj.end_at)].to
 
     $node.find("#waveframe").attr('src', "wfplayer-#{corpus_id}-#{line_key}-#{start}-#{stop}")
 

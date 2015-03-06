@@ -177,9 +177,8 @@ module Rglossa
             }
             obj[:divs][:annotation][index][:is_match] = is_match
           end
-          start_at = end_at = matching_line_index
-          obj[:start_at] = start_at
-          obj[:end_at]   = end_at
+          obj[:start_at] = matching_line_index
+          obj[:end_at]   = matching_line_index
           obj[:min_start] = 0
           obj[:max_end] = lines.size - 1
           obj
