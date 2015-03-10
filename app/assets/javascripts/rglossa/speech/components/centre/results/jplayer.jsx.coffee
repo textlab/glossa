@@ -66,7 +66,7 @@ window.TextBox = React.createClass
 
     annotations = (@renderAnnotation(annotation[n], n) for n of annotation)
 
-    `<div><div className="jplayer-text autocue">{annotations}</div></div>`
+    `<div className="jplayer-text autocue">{annotations}</div>`
 
 
 window.Jplayer = React.createClass
@@ -189,6 +189,7 @@ window.Jplayer = React.createClass
 
   render: ->
     `<div style={{position: 'relative'}}>
+      <div style={{float: 'right', width: 480}}>
       <div className="jp-video jp-video-270p" id="jp_container_1">
          <div className="jp-type-single">
              <div className="jp-jplayer" style={this.props.mediaType == 'audio' ? {display: 'none'} : {width: 480, height: 270}}>
@@ -230,6 +231,7 @@ window.Jplayer = React.createClass
           <div className="ui-slider-range ui-widget-header ui-corner-all" style={{left: '40%', width: '40%'}}></div>
           <a className="ui-slider-handle ui-state-default ui-corner-all" href="#" style={{left: '40%'}}></a>
           <a className="ui-slider-handle ui-state-default ui-corner-all" href="#" style={{left: '80%'}}></a>
+      </div>
       </div>
       <TextBox mediaObj={this.props.mediaObj} startAtLine={this.state.startLine} endAtLine={this.state.endLine} highlightLine={this.state.currentLine} pauseJPlayer={this.pauseJPlayer} />
     </div>`
