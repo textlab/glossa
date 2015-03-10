@@ -167,7 +167,8 @@ window.CwbResultsTable = React.createClass
               rows.push(
                 <tr>
                   <td colSpan="10">
-                    <Jplayer mediaObj={result.mediaObj} mediaType={this.state.mediaTypePlaying} ctx_lines={'all'} />
+                    <Jplayer mediaObj={result.mediaObj} mediaType={this.state.mediaTypePlaying}
+                             ctx_lines={this.props.corpus.initial_context_size || 1} />
                   </td>
                 </tr>
               );
