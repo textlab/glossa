@@ -50,5 +50,6 @@ group :development do
   gem 'pry'
   gem 'table_print'
   gem 'awesome_print'
+  gem 'test-unit'
 end
 
