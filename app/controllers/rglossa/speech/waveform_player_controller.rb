@@ -98,8 +98,8 @@ class WaveformPlayerController < ActionController::Base
 
   def new_glossa_generate_audio(corpus_id, line_key, start, stop, output_path, file, fname)
     corpus = Corpus.find_by_id(corpus_id)
-    movie_loc = "%s_800.mp4" % corpus.media_files.where("line_key_begin <= ? AND ? <= line_key_end",
-                                                        line_key, line_key).limit(1).first.basename.rstrip
+    movie_loc = "%s.mp3" % corpus.media_files.where("line_key_begin <= ? AND ? <= line_key_end",
+                                                    line_key, line_key).limit(1).first.basename.rstrip
     local_path = Rails.root.join(Rails.public_path, corpus.media_path || "media/#{corpus.short_name}", "audio")
 
     start_time = sprintf("%d.%02d.%d", start.to_i / 60, start.to_i % 60, start.gsub(/^[^.]*(\.|$)/, "").to_i)

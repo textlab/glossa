@@ -137,13 +137,14 @@ window.Jplayer = React.createClass
     $("#movietitle").text(mediaObj.title)
     last_line = parseInt(mediaObj.last_line)
 
+    ext = if @props.mediaType == "audio" then ".mp3" else "_800.mp4"
     $playerNode = $node.find(".jp-jplayer")
     $playerNode.jPlayer
       solution: "flash, html"
       ready: =>
         $playerNode.jPlayer "setMedia",
-          rtmpv: path + mov
-          m4v: path+mov
+          rtmpv: path+mov+ext
+          m4v: path+mov+ext
           poster: "assets/rglossa/speech/_6.6-%27T%27_ligo.skev.graa.jpg"
         $playerNode.jPlayer( "play", @getStartTime(mediaObj))
 
