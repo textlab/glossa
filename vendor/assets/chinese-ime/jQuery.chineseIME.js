@@ -184,7 +184,7 @@ var _callbacks_ = {
         self.lastPage = false; // are we at the last page of options?
         //self.options = [];
         self.html = '<span class="typing"></span><ul class="options"></ul><div style="clear: both; font-size: 80%">dot (.) = show next 5 words<br />comma (,) = show previous 5 words</div>';
-        self.url = 'http://www.google.com/inputtools/request?ime=pinyin&ie=utf-8&oe=utf-8&app=translate&uv'
+        self.url = 'https://www.google.com/inputtools/request?ime=pinyin&ie=utf-8&oe=utf-8&app=translate&uv'
         self.paramNames = {'text': 'text',
                            'num': 'num',
                            'callback': 'cb'}
