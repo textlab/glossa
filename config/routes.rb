@@ -31,6 +31,22 @@ Rglossa::Engine.routes.draw do
     end
   end
 
+  resources :saml, only: [] do
+    collection do
+      get :sso
+      post :acs
+      get :metadata
+      get :logout
+    end
+  end
+
+  get 'login/:idp' => 'saml#sso'
+  post 'auth/:idp' => 'saml#acs'
+  get 'logout/:idp' => 'saml#logout'
+
+  post '(:idp)_auth' => 'saml#acs'
+  get 'logout_(:idp)_user' => 'saml#logout'
+
   scope module: 'speech' do
     get '/wfplayer-:corpus_id-:line_key-:start-:stop(-:oldstart-:oldstop(-:width))', to: 'waveform_player#show',
         :constraints => {:start => /\d+(\.\d+)?/, :stop => /\d+(\.\d+)?/, :width => /\d+/,

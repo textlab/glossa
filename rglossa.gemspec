@@ -33,6 +33,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'headless'
   s.add_dependency 'daemon_controller'
   s.add_dependency 'rubyzip'
+  s.add_dependency 'ruby-saml'
 
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'rb-fsevent', '~> 0.9.1'
