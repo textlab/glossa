@@ -16,7 +16,7 @@ class Account < ActiveRecord::Base
     settings.idp_sso_target_url     = ENV["#{idp_caps}_IDP_SSO_TARGET_URL"]
     settings.idp_slo_target_url     = ENV["#{idp_caps}_IDP_SLO_TARGET_URL"]
     settings.idp_cert_fingerprint   = ENV["#{idp_caps}_IDP_CERT_FINGERPRINT"]
-    settings.name_identifier_format = ENV["#{idp_caps}_NAME_IDENTIFIER_FORMAT"]
+    settings.name_identifier_format = "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"
     settings
   end
 end
