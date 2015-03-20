@@ -43,6 +43,7 @@ Rglossa::Engine.routes.draw do
   get 'login/:idp' => 'saml#sso'
   post 'auth/:idp' => 'saml#acs'
   get 'logout/:idp' => 'saml#logout'
+  get 'saml/metadata/:idp' => 'saml#metadata'
 
   post '(:idp)_auth' => 'saml#acs'
   get 'logout_(:idp)_user' => 'saml#logout'

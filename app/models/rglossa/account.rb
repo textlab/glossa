@@ -4,13 +4,12 @@ class Account < ActiveRecord::Base
     # To make things simpler with environment variable names, allow only
     # (case-insensitive) Latin characters and the underscore:
     idp_caps = idp.gsub(/[^a-z_]/i, '').upcase
+    idp_lc = idp_caps.downcase
     settings = OneLogin::RubySaml::Settings.new
-    app_url = URI::join(ENV['APP_HOST_URL'], ENV['RAILS_RELATIVE_URL_ROOT'])
-    settings.assertion_consumer_service_url        = URI::join(app_url,
-                                                               "#{idp_caps.downcase}_auth").to_s
-    settings.assertion_consumer_logout_service_url = URI::join(app_url,
-                                                               "logout_#{idp_caps.downcase}_user").to_s
-    settings.issuer                 = app_url
+    app_url = URI::join(ENV['APP_HOST_URL'], ENV['RAILS_RELATIVE_URL_ROOT'] + "/")
+    settings.assertion_consumer_service_url        = URI::join(app_url, "auth/#{idp_lc}").to_s
+    settings.assertion_consumer_logout_service_url = URI::join(app_url, "logout/#{idp_lc}").to_s
+    settings.issuer                 = URI::join(app_url, "saml/metadata/#{idp_lc}")
     settings.idp_entity_id          = ENV["#{idp_caps}_IDP_ENTITY_ID"]
     settings.idp_sso_target_url     = ENV["#{idp_caps}_IDP_SSO_TARGET_URL"]
     settings.idp_slo_target_url     = ENV["#{idp_caps}_IDP_SLO_TARGET_URL"]
