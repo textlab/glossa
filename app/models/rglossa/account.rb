@@ -5,13 +5,12 @@ class Account < ActiveRecord::Base
     # (case-insensitive) Latin characters and the underscore:
     idp_caps = idp.gsub(/[^a-z_]/i, '').upcase
     settings = OneLogin::RubySaml::Settings.new
-    app_host_url = ENV['APP_HOST_URL']
-    url_root = ENV['RAILS_RELATIVE_URL_ROOT']
-    settings.assertion_consumer_service_url        = URI::join(app_host_url, url_root,
+    app_url = URI::join(ENV['APP_HOST_URL'], ENV['RAILS_RELATIVE_URL_ROOT'])
+    settings.assertion_consumer_service_url        = URI::join(app_url,
                                                                "#{idp_caps.downcase}_auth").to_s
-    settings.assertion_consumer_logout_service_url = URI::join(app_host_url, url_root,
+    settings.assertion_consumer_logout_service_url = URI::join(app_url,
                                                                "logout_#{idp_caps.downcase}_user").to_s
-    settings.issuer                 = ENV["#{idp_caps}_ISSUER"]
+    settings.issuer                 = app_url
     settings.idp_entity_id          = ENV["#{idp_caps}_IDP_ENTITY_ID"]
     settings.idp_sso_target_url     = ENV["#{idp_caps}_IDP_SSO_TARGET_URL"]
     settings.idp_slo_target_url     = ENV["#{idp_caps}_IDP_SLO_TARGET_URL"]
