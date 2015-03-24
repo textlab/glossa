@@ -7,7 +7,7 @@ window.Navbar = React.createClass
         <a href={url} className="navbar-link">Log in ({idp})</a>&nbsp;</span>`
 
     login_status = if username is ''
-      `{idp_login_links}`
+      idp_login_links
     else
       `<span className="navbar-text pull-right">Logged in as: {username}&nbsp;
         <a href={logout_url} className="navbar-link">Log out</a></span>`
