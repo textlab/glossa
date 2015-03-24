@@ -96,80 +96,48 @@ window.CwbSearchInputs = React.createClass
     @updateChineseIME()
 
 
+  searchInput: (name, title, onClick, path) ->
+    if @state.statechart.pathContains(path)
+      `<b>{name}</b>`
+    else
+      `<a href="" title={title} onClick={onClick}>{name}</a>`
+
+  searchInputLinks: (isMultilingual) ->
+    `<div className="row-fluid search-input-links">
+      {this.searchInput("Simple", "Simple search box", this.showSimple, "simple")}&nbsp;|&nbsp;
+      {this.searchInput("Extended", "Search for grammatical categories etc.", this.showMultiword, "multiword")}&nbsp;|&nbsp;
+      {this.searchInput("Regexp", "Regular expressions", this.showRegex, "regex")}
+      {this.searchButton(isMultilingual)}
+      {isMultilingual ? this.languageAddButton() : null}
+    </div>`
+
   render: ->
     {corpus, searchQueries, handleQueryChanged, handleSearch} = @props
     isMultilingual = corpusNs.isMultilingual(@props.corpus)
 
     if @state.statechart.pathContains('simple')
-      `<span>
-        <ChineseIme corpus={this.props.corpus} />
-        <div className="row-fluid search-input-links">
-          <b>Simple</b>&nbsp;|&nbsp;
-          <a href="" title="Search for grammatical categories etc." onClick={this.showMultiword}>Extended</a>&nbsp;|&nbsp;
-          <a href="" title="Regular expressions" onClick={this.showRegex}>Regexp</a>
-          {this.searchButton(isMultilingual)}
-          {isMultilingual ? this.languageAddButton() : null}
-        </div>
-        {searchQueries.map(function(searchQuery, index) {
-          return ([
-            isMultilingual ? this.languageSelect(searchQuery) : null,
-            <CwbSimpleInput
-              showRemoveRow={searchQueries.length > 1}
-              hasPhoneticForm={corpus.has_phonetic}
-              searchQuery={searchQuery}
-              handleQueryChanged={handleQueryChanged.bind(null, index)}
-              handleRemoveRow={this.props.handleRemoveRow.bind(null, index)}
-              handleSearch={handleSearch} />
-          ])
-        }.bind(this))}
-        {isMultilingual ? null : this.addPhraseButton()}
-      </span>`
-
+      component = CwbSimpleInput
     else if @state.statechart.pathContains('multiword')
-      `<span>
-        <ChineseIme corpus={this.props.corpus} />
-        <div className="row-fluid search-input-links">
-          <a href="" title="Simple search box" onClick={this.showSimple}>Simple</a>&nbsp;|&nbsp;
-          <b>Extended</b>&nbsp;|&nbsp;
-          <a href="" title="Regular expressions" onClick={this.showRegex}>Regexp</a>
-          {this.searchButton(isMultilingual)}
-          {isMultilingual ? this.languageAddButton() : null}
-        </div>
-        {searchQueries.map(function(searchQuery, index) {
-          return ([
-            isMultilingual ? this.languageSelect(searchQuery) : null,
-            <CwbMultiwordInput
-              showRemoveRow={searchQueries.length > 1}
-              searchQuery={searchQuery}
-              corpus={corpus}
-              handleQueryChanged={handleQueryChanged.bind(null, index)}
-              handleRemoveRow={this.props.handleRemoveRow.bind(null, index)}
-              handleSearch={handleSearch} />
-          ])
-        }.bind(this))}
-        {isMultilingual ? null : this.addPhraseButton()}
-      </span>`
+      component = CwbMultiwordInput
+    else if @state.statechart.pathContains('regex')
+      component = CwbRegexInput
 
-    else
-      `<span>
-        <ChineseIme corpus={this.props.corpus} />
-        <div className="row-fluid search-input-links">
-          <a href="" title="Simple search box" onClick={this.showSimple}>Simple</a>&nbsp;|&nbsp;
-          <a href="" title="Search for grammatical categories etc." onClick={this.showMultiword}>Extended</a>&nbsp;|&nbsp;
-          <b>Regexp</b>
-          {this.searchButton(isMultilingual)}
-          {isMultilingual ? this.languageAddButton() : null}
-        </div>
-        {searchQueries.map(function(searchQuery, index) {
-          return ([
-            isMultilingual ? this.languageSelect(searchQuery) : null,
-            <CwbRegexInput
-              showRemoveRow={searchQueries.length > 1}
-              searchQuery={searchQuery}
-              handleQueryChanged={handleQueryChanged.bind(null, index)}
-              handleRemoveRow={this.props.handleRemoveRow.bind(null, index)}
-              handleSearch={handleSearch} />
-          ])
-        }.bind(this))}
-        {isMultilingual ? null : this.addPhraseButton()}
-      </span>`
+    `<span>
+      <ChineseIme corpus={this.props.corpus} />
+      {this.searchInputLinks(isMultilingual)}
+      {searchQueries.map(function(searchQuery, index) {
+        return ([
+          isMultilingual ? this.languageSelect(searchQuery) : null,
+          React.createElement(component, {
+            showRemoveRow: searchQueries.length > 1,
+            hasPhoneticForm: corpus.has_phonetic,
+            searchQuery: searchQuery,
+            corpus: corpus,
+            handleQueryChanged: handleQueryChanged.bind(null, index),
+            handleRemoveRow: this.props.handleRemoveRow.bind(null, index),
+            handleSearch: handleSearch
+          })
+        ])
+      }.bind(this))}
+      {isMultilingual ? null : this.addPhraseButton()}
+    </span>`
