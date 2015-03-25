@@ -131,7 +131,7 @@ module Rglossa
                   only: [:id, :name, :logo, :short_name, :search_engine],
                   methods: [:langs, :display_attrs, :extra_row_attrs,
                             :parts, :has_sound, :has_video, :has_phonetic, :has_map,
-                            :metadata_categories, :initial_context_size]
+                            :metadata_categories, :initial_context_size, :headword_search]
               )
           }
         end
