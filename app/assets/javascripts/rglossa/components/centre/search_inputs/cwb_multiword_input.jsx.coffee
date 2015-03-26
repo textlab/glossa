@@ -41,6 +41,7 @@ createTerm = (overrides = {}) ->
 window.CwbMultiwordInput = React.createClass
   propTypes:
     showRemoveRow: React.PropTypes.bool.isRequired
+    hasHeadwordSearch: React.PropTypes.bool.isRequired
     searchQuery: React.PropTypes.object.isRequired
     corpus: React.PropTypes.object.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
@@ -153,6 +154,14 @@ window.CwbMultiwordInput = React.createClass
     @props.handleQueryChanged
       lang: @props.searchQuery.lang
       query: @constructCQPQuery(queryTerms)
+      headwordSearch: @props.searchQuery.headwordSearch
+
+
+  handleHeadwordSearchChanged: (e) ->
+    @props.handleQueryChanged
+      lang: @props.searchQuery.lang
+      query: @constructCQPQuery(@state.queryTerms)
+      headwordSearch: e.target.checked
 
 
   handleAddTerm: ->
@@ -165,6 +174,7 @@ window.CwbMultiwordInput = React.createClass
     @props.handleQueryChanged
       lang: @props.searchQuery.lang
       query: @constructCQPQuery(queryTerms)
+      headwordSearch: @props.searchQuery.headwordSearch
 
 
   handleRemoveTerm: (termIndex) ->
@@ -177,6 +187,7 @@ window.CwbMultiwordInput = React.createClass
     @props.handleQueryChanged
       lang: @props.searchQuery.lang
       query: @constructCQPQuery(queryTerms)
+      headwordSearch: @props.searchQuery.headwordSearch
 
 
   constructCQPQuery: (queryTerms) ->
@@ -238,6 +249,7 @@ window.CwbMultiwordInput = React.createClass
             )
           }, this)}
           </div>
+          {this.props.hasHeadwordSearch && <label style={{lineHeight: '13px'}}><input type="checkbox" value="1" checked={this.props.searchQuery.headwordSearch} onChange={this.handleHeadwordSearchChanged} id="headword_search" name="headword_search" style={{margin: '0px'}} /> Headword search</label>}
         </div>
       </form>
     </div>`
