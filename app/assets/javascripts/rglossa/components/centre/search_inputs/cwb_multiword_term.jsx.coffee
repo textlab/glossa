@@ -41,7 +41,7 @@ window.CwbMultiwordTerm = React.createClass
     # features. We don't need to worry about removing any, because they
     # can only be removed either by a) clicking on a tag in the list, in
     # which case bootstrap-tags will remove it itself, or b) editing the
-    # search expression in the regex view, in which case the multiword view
+    # search expression in the CQP query view, in which case the multiword view
     # will be mounted anew when we switch to it and the tags will be set up
     # by componentDidMount.
     tagsInput = @getTagsInput()

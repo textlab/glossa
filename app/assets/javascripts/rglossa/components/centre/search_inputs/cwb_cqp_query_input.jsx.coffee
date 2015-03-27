@@ -1,6 +1,6 @@
 ###* @jsx React.DOM ###
 
-window.CwbRegexInput = React.createClass
+window.CwbCqpQueryInput = React.createClass
   propTypes:
     showRemoveRow: React.PropTypes.bool.isRequired
     searchQuery: React.PropTypes.object.isRequired
@@ -25,7 +25,7 @@ window.CwbRegexInput = React.createClass
   handleKeyDown: (e) ->
     if e.key is 'Enter'
       e.preventDefault()
-      @props.handleSearch(searchInput: 'regex')
+      @props.handleSearch(searchInput: 'cqp')
 
   render: ->
     `<div className="row-fluid">

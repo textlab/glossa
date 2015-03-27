@@ -3,7 +3,7 @@
 #= require ./language_select
 #= require ./cwb_simple_input
 #= require ./cwb_multiword_input
-#= require ./cwb_regex_input
+#= require ./cwb_cqp_query_input
 
 ###* @jsx React.DOM ###
 
@@ -28,11 +28,11 @@ window.CwbSearchInputs = React.createClass
       substates:
         simple: {}
         multiword: {}
-        regex: {}
+        cqp: {}
       actions:
         showSimple: -> @transitionTo('simple')
         showMultiword: -> @transitionTo('multiword')
-        showRegex: -> @transitionTo('regex')
+        showCqpQuery: -> @transitionTo('cqp')
 
     statechart: new Statechart(
       'CwbSearchInputs', root, (sc) => @setState(statechart: sc))
@@ -45,9 +45,9 @@ window.CwbSearchInputs = React.createClass
     e.preventDefault()
     @state.statechart.handleAction('showMultiword')
 
-  showRegex: (e) ->
+  showCqpQuery: (e) ->
     e.preventDefault()
-    @state.statechart.handleAction('showRegex')
+    @state.statechart.handleAction('showCqpQuery')
 
   languageSelect: (query) ->
     if @isMultilingual()
@@ -113,7 +113,7 @@ window.CwbSearchInputs = React.createClass
     `<div className="row-fluid search-input-links">
       {this.searchInput("Simple", "Simple search box", this.showSimple, "simple")}&nbsp;|&nbsp;
       {this.searchInput("Extended", "Search for grammatical categories etc.", this.showMultiword, "multiword")}&nbsp;|&nbsp;
-      {this.searchInput("Regexp", "Regular expressions", this.showRegex, "regex")}
+      {this.searchInput("CQP query", "The Corpus Workbench query language", this.showCqpQuery, "cqp")}
       {this.searchButton()}
       {this.languageAddButton()}
     </div>`
@@ -128,8 +128,8 @@ window.CwbSearchInputs = React.createClass
       component = CwbSimpleInput
     else if @state.statechart.pathContains('multiword')
       component = CwbMultiwordInput
-    else if @state.statechart.pathContains('regex')
-      component = CwbRegexInput
+    else if @state.statechart.pathContains('cqp')
+      component = CwbCqpQueryInput
 
     `<span>
       {this.chineseIME()}
