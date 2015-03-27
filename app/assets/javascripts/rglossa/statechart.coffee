@@ -80,9 +80,9 @@ class Statechart
 
 class State
   constructor: (@statechart, @parent, @name, @actions, substates, @initialSubstate) ->
-    @substates = createStates(statechart, @, substates)
+    @substates = createStates(@statechart, @, substates)
 
-    unless initialSubstate or @isLeaf()
+    unless @initialSubstate or @isLeaf()
       throw new Error("Missing initialSubstate for #{@getPath()}")
 
   # Transitions to a state located at the given path, with path being a UNIX-style
