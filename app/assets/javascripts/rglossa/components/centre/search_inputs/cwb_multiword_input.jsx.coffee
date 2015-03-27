@@ -65,6 +65,24 @@ window.CwbMultiwordInput = React.createClass
       @props.handleSearch()
 
 
+  # an interval, e.g. []{1,2}
+  intervalRegexp: /\[\]\{(.+?)\}/
+
+  # an attribute/value expression such as [lemma="car" %c] or [(lemma="car" & pos="n")]
+  attributeValueRegexp: ///\[\(?
+                             ([^"]+?                      # treat quoted strings separately;
+                               (?: "[^"]*" [^\]"]*? )*? ) # they may contain right brackets
+                             (?:\s+%c)?
+                             \)?\]///
+
+  # a quoted string or a single unspecified token
+  quotedStringOrEmptyTermRegexp: /".*?"|\[\]/
+
+  splitQuery: (query) ->
+    query.match(///#{@intervalRegexp.source}
+                  |#{@quotedStringOrEmptyTermRegexp.source}
+                  |#{@attributeValueRegexp.source}///g) or ['[]']
+
   constructQueryTerms: (queryObj) ->
     queryParts = @splitQuery(queryObj.query)
 
@@ -74,23 +92,15 @@ window.CwbMultiwordInput = React.createClass
 
     queryParts.forEach (item) =>
 
-      # a single unspecified token
-      if m is '[]'
-        min = 1
-        max = 1
-
-      # an interval, e.g. []{1,2}
-      else if m = item.match(/\[\]\{(.+?)\}/)
+      if m = item.match(@intervalRegexp)
         [min, max] = @handleIntervalSpecification(m)
 
-      # an attribute/value expression such as [lemma="car" %c] or [(lemma="car" & pos="n")]
-      else if m = item.match(/\[\(?(.+?)(?:\s+%c)?\)?\]/)
+      else if m = item.match(@attributeValueRegexp)
         dq.push @handleAttributes(m, min, max)
         min = null
         max = null
 
-      # just a quoted string
-      else
+      else if m = item.match(@quotedStringOrEmptyTermRegexp)
         word    = item.substring(1, item.length-1)
         isStart = /\.\+$/.test(word)
         isEnd   = /^\.\+/.test(word)
@@ -106,10 +116,6 @@ window.CwbMultiwordInput = React.createClass
         max = null
 
     dq
-
-
-  splitQuery: (query) ->
-    query.match(/\[\]\{(.+?)\}|".*?"|\[[^\]]*?\]/g) or ['']
 
 
   handleIntervalSpecification: (m) ->
