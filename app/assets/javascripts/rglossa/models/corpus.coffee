@@ -13,7 +13,7 @@ class Corpus
     if languageCode is 'single'  # monolingual corpus
       if languages.length then languages[0] else null
     else
-      (language in languages where language.lang is languageCode)?[0]
+      (language for language in languages when language.lang is languageCode)?[0]
 
 
   getLabels: (corpus, languageCode = 'single') ->

@@ -20,21 +20,6 @@ root =
     showMultiword: -> @transitionTo('multiword')
     showRegex: -> @transitionTo('regex')
 
-window.ChineseIme = React.createClass
-  propTypes:
-    corpus: React.PropTypes.object.isRequired
-
-  containsLanguage: (lng) ->
-    lngList = corpusNs.getLanguageList(@props.corpus).filter (cur_lng) ->
-      cur_lng.value == lng
-    lngList.length > 0
-
-  render: ->
-    if this.containsLanguage('zh')
-      `<label style={{lineHeight: '13px'}}><input type="checkbox" value="1" id="ime_check" name="ime_check" style={{margin: '0px'}} /> Enable Chinese Input Method</label>`
-    else
-      null
-
 window.CwbSearchInputs = React.createClass
   propTypes:
     store: React.PropTypes.object.isRequired
@@ -81,6 +66,12 @@ window.CwbSearchInputs = React.createClass
   addPhraseButton: ->
     unless @props.searchQueries[0].headwordSearch or @isMultilingual()
       `<button className="btn add-phrase-btn" onClick={this.props.handleAddPhrase}>Or...</button>`
+
+  chineseIME: ->
+    if corpusNs.getLanguage(@props.corpus, 'zh')
+      `<label style={{lineHeight: '13px'}}>
+        <input type="checkbox" value="1" id="ime_check" name="ime_check" style={{margin: '0px'}} /> Enable Chinese Input Method
+      </label>`
 
   updateChineseIME: ->
     $("input[type='text']").chineseInput
@@ -140,7 +131,7 @@ window.CwbSearchInputs = React.createClass
       component = CwbRegexInput
 
     `<span>
-      <ChineseIme corpus={this.props.corpus} />
+      {this.chineseIME()}
       {this.searchInputLinks()}
       {searchQueries.map(function(searchQuery, index) {
         return ([
