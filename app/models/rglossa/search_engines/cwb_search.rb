@@ -44,10 +44,7 @@ module Rglossa
             "#{named_query};",
             "#{named_query} = #{query_str};"].join("\n")
         end
-        # "sort by" cannot be used with "cut" in CQP
-        unless query_str[/\bsort\s+by\b/]
-          query_commands += " cut #{max_hits}" if max_hits.present?
-        end
+        query_commands += " cut #{max_hits}" if max_hits.present?
 
         commands = [
           %Q{set DataDirectory "#{Dir.tmpdir}"},
@@ -102,12 +99,14 @@ module Rglossa
         end
 
         if options[:sort_by] && options[:sort_by] != 'position'
+          sort_attr = options[:sort_by] == 'headword_len' ? 'headword_len' : 'word'
           sort_by = case options[:sort_by]
                       when 'match' then 'match'
                       when 'left' then 'match[-1]'
                       when 'right' then 'matchend[1]'
+                      when 'headword_len' then 'match'
                     end
-          commands << "sort #{query_info[:named_query]} by word on #{sort_by}"
+          commands << "sort #{query_info[:named_query]} by #{sort_attr} on #{sort_by}"
         end
 
         commands << "cat #{query_info[:named_query]} #{start} #{stop}"

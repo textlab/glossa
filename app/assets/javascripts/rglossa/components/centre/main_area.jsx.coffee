@@ -64,7 +64,7 @@ window.MainArea = React.createClass
   statics:
     headwordQueryPrefix: '<headword>'
     headwordQuerySuffixMoreWords: '[]{0,}'
-    headwordQuerySuffixTag: '</headword> sort by headword_len'
+    headwordQuerySuffixTag: '</headword>'
 
     convertToHeadwordQuery: (query) ->
       MainArea.headwordQueryPrefix + query + MainArea.headwordQuerySuffixMoreWords + MainArea.headwordQuerySuffixTag
@@ -163,6 +163,8 @@ window.MainArea = React.createClass
   handleSearch: (newState = {}) ->
     state = rglossaUtils.merge(@state, newState)
     @setState(searchInput: state.searchInput)
+    if state.searchQueries[0].headwordSearch
+      state.sortBy = 'headword_len'
     firstQueryString = state.searchQueries[0].query
     return unless firstQueryString and firstQueryString isnt '""'
 
