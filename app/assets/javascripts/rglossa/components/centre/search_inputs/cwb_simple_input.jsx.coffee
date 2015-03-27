@@ -60,7 +60,7 @@ window.CwbSimpleInput = React.createClass
   handleKeyDown: (e) ->
     if e.key is 'Enter'
       e.preventDefault()
-      @props.handleSearch()
+      @props.handleSearch(searchInput: 'simple')
 
   render: ->
     `<div className="row-fluid">

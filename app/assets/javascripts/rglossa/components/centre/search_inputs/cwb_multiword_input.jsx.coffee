@@ -62,7 +62,7 @@ window.CwbMultiwordInput = React.createClass
   handleKeyDown: (e) ->
     if e.key is 'Enter'
       e.preventDefault()
-      @props.handleSearch()
+      @props.handleSearch(searchInput: 'multiword')
 
 
   # an interval, e.g. []{1,2}

@@ -162,6 +162,7 @@ window.MainArea = React.createClass
 
   handleSearch: (newState = {}) ->
     state = rglossaUtils.merge(@state, newState)
+    @setState(searchInput: state.searchInput)
     firstQueryString = state.searchQueries[0].query
     return unless firstQueryString and firstQueryString isnt '""'
 
@@ -218,7 +219,7 @@ window.MainArea = React.createClass
 
   render: ->
     {store, statechart, corpus} = @props
-    {searchQueries, maxHits, sortBy, isShowingSidebar} = @state
+    {searchQueries, maxHits, sortBy, isShowingSidebar, searchInput} = @state
 
     searchId = statechart.getValue('searchId')
     results = if searchId then store.find('search', searchId) else null
@@ -241,6 +242,7 @@ window.MainArea = React.createClass
           statechart={statechart}
           corpus={corpus}
           results={results}
+          initialSearchInput={searchInput}
           searchQueries={searchQueries}
           handleQueryChanged={this.handleQueryChanged}
           sortBy={sortBy}

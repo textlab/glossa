@@ -33,7 +33,7 @@ window.MainAreaBottom = React.createClass
   mainComponent: ->
     {store, statechart, corpus, results, searchQueries, handleQueryChanged, sortBy,
     handleSortByChanged, handleAddLanguage,  handleAddPhrase, handleRemoveRow,
-    maxHits, handleSearch} = @props
+    maxHits, handleSearch, initialSearchInput} = @props
     if statechart.pathContains('start')
       `<StartMain
           store={store}
@@ -51,6 +51,7 @@ window.MainAreaBottom = React.createClass
           store={store}
           statechart={statechart}
           results={results}
+          initialSearchInput={initialSearchInput}
           currentResultPageNo={currentResultPageNo}
           corpus={corpus}
           searchQueries={searchQueries}

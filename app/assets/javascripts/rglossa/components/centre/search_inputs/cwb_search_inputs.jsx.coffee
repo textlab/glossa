@@ -9,21 +9,11 @@
 
 # Search inputs for corpora encoded with the IMS Corpus Workbench
 
-root =
-  initialSubstate: 'simple'
-  substates:
-    simple: {}
-    multiword: {}
-    regex: {}
-  actions:
-    showSimple: -> @transitionTo('simple')
-    showMultiword: -> @transitionTo('multiword')
-    showRegex: -> @transitionTo('regex')
-
 window.CwbSearchInputs = React.createClass
   propTypes:
     store: React.PropTypes.object.isRequired
     statechart: React.PropTypes.object.isRequired
+    initialSearchInput: React.PropTypes.string
     corpus: React.PropTypes.object.isRequired
     searchQueries: React.PropTypes.array.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
@@ -33,6 +23,17 @@ window.CwbSearchInputs = React.createClass
     handleRemoveRow: React.PropTypes.func.isRequired
 
   getInitialState: ->
+    root =
+      initialSubstate: @props.initialSearchInput || 'simple'
+      substates:
+        simple: {}
+        multiword: {}
+        regex: {}
+      actions:
+        showSimple: -> @transitionTo('simple')
+        showMultiword: -> @transitionTo('multiword')
+        showRegex: -> @transitionTo('regex')
+
     statechart: new Statechart(
       'CwbSearchInputs', root, (sc) => @setState(statechart: sc))
 

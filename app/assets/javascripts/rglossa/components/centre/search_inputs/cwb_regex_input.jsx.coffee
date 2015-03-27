@@ -25,7 +25,7 @@ window.CwbRegexInput = React.createClass
   handleKeyDown: (e) ->
     if e.key is 'Enter'
       e.preventDefault()
-      @props.handleSearch()
+      @props.handleSearch(searchInput: 'regex')
 
   render: ->
     `<div className="row-fluid">

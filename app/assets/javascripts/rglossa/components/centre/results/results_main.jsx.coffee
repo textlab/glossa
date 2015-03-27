@@ -75,7 +75,7 @@ window.ResultsMain = React.createClass
   render: ->
     {store, statechart, results, currentResultPageNo, corpus, searchQueries, handleQueryChanged,
       sortBy, handleSortByChanged, handleAddLanguage, handleAddPhrase, handleRemoveRow,
-      maxHits, handleSearch} = @props
+      maxHits, handleSearch, initialSearchInput} = @props
     resultPage = results?.pages[currentResultPageNo]
 
     # Select components based on the search engine name,
@@ -96,7 +96,8 @@ window.ResultsMain = React.createClass
         handleSearch={handleSearch}
         handleAddLanguage={handleAddLanguage}
         handleAddPhrase={handleAddPhrase}
-        handleRemoveRow={handleRemoveRow} />
+        handleRemoveRow={handleRemoveRow}
+        initialSearchInput={initialSearchInput} />
       <ResultsToolbar
         store={store}
         statechart={statechart}
