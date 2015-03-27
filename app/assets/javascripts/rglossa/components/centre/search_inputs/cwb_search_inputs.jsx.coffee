@@ -98,10 +98,22 @@ window.CwbSearchInputs = React.createClass
     $("input[type='text']").unbind()
     @updateChineseIME()
 
+  enabled: (path) ->
+    if path == "simple"
+      @props.searchQueries.every (query) ->
+        MainArea.convertToNonHeadwordQuery(query.query).
+                 match(///^\s*
+                         ( \[ \(? (?:word|phon) = "[^"]*" (?: \s+ %c )? \)? \] \s*
+                         | "[^"]*" \s*
+                         )*$///)
+    else
+      true
 
   searchInput: (name, title, onClick, path) ->
     if @state.statechart.pathContains(path)
       `<b>{name}</b>`
+    else if not @enabled(path)
+      `{name}`
     else
       `<a href="" title={title} onClick={onClick}>{name}</a>`
 
