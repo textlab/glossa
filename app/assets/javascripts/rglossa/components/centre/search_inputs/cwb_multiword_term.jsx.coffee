@@ -186,11 +186,13 @@ window.CwbMultiwordTerm = React.createClass
                   <div style={{display: 'table-cell'}}>
                   </div>
                 </div>
+                {this.props.hasPhoneticForm &&
                 <div>
                   <label className="checkbox">
                     <input type="checkbox" checked={term.isPhonetic} onChange={this.handleIsPhoneticChanged} /> Phonetic form
                   </label>
                 </div>
+                }
               </div>
               <div style={{display: 'table-row'}}>
 
