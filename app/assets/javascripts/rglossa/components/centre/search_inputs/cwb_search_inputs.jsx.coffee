@@ -104,7 +104,7 @@ window.CwbSearchInputs = React.createClass
         MainArea.convertToNonHeadwordQuery(query.query).
                  match(///^\s*
                          ( \[ \(? (?:word|phon) = "[^"]*" (?: \s+ %c )? \)? \] \s*
-                         | "[^"]*" \s*
+                         | "[^"]*" \s* | \[\] \s*
                          )*$///)
     else
       true

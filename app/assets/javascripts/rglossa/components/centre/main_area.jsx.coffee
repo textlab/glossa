@@ -83,6 +83,8 @@ window.MainArea = React.createClass
       query.query = MainArea.convertToHeadwordQuery(query.query)
     else
       query.query = MainArea.convertToNonHeadwordQuery(query.query)
+    # Simplify the query (".*" is used in the simplified search instead of []):
+    query.query = query.query.replace(///\[ \( ?\w+="\.\*" (?:\s+%c)? \)? \]///g, '[]')
 
     queries = @state.searchQueries.slice(0)
     queries[queryIndex] = query
