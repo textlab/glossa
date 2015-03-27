@@ -64,20 +64,23 @@ window.CwbSearchInputs = React.createClass
     @state.statechart.handleAction('showRegex')
 
   languageSelect: (query) ->
-    `<LanguageSelect
-      corpus={this.props.corpus}
-      selectedValue={query.lang} />`
+    if @isMultilingual()
+      `<LanguageSelect
+        corpus={this.props.corpus}
+        selectedValue={query.lang} />`
 
   languageAddButton: ->
-    `<button className="btn" style={{marginLeft: 20}} onClick={this.props.handleAddLanguage}>Add language</button>`
+    if @isMultilingual()
+      `<button className="btn" style={{marginLeft: 20}} onClick={this.props.handleAddLanguage}>Add language</button>`
 
-  searchButton: (isMultilingual) ->
-    marginLeft = if isMultilingual then 80 else 40  # adjust position relative to the language select
+  searchButton: () ->
+    marginLeft = if @isMultilingual() then 80 else 40  # adjust position relative to the language select
     `<button type="button" className="btn btn-success"
         style={{marginLeft: marginLeft}} onClick={this.props.handleSearch}>Search</button>`
 
   addPhraseButton: ->
-    `<button className="btn add-phrase-btn" onClick={this.props.handleAddPhrase}>Or...</button>`
+    unless @isMultilingual()
+      `<button className="btn add-phrase-btn" onClick={this.props.handleAddPhrase}>Or...</button>`
 
   updateChineseIME: ->
     $("input[type='text']").chineseInput
@@ -102,18 +105,20 @@ window.CwbSearchInputs = React.createClass
     else
       `<a href="" title={title} onClick={onClick}>{name}</a>`
 
-  searchInputLinks: (isMultilingual) ->
+  searchInputLinks: () ->
     `<div className="row-fluid search-input-links">
       {this.searchInput("Simple", "Simple search box", this.showSimple, "simple")}&nbsp;|&nbsp;
       {this.searchInput("Extended", "Search for grammatical categories etc.", this.showMultiword, "multiword")}&nbsp;|&nbsp;
       {this.searchInput("Regexp", "Regular expressions", this.showRegex, "regex")}
-      {this.searchButton(isMultilingual)}
-      {isMultilingual ? this.languageAddButton() : null}
+      {this.searchButton()}
+      {this.languageAddButton()}
     </div>`
+
+  isMultilingual: ->
+    corpusNs.isMultilingual(@props.corpus)
 
   render: ->
     {corpus, searchQueries, handleQueryChanged, handleSearch} = @props
-    isMultilingual = corpusNs.isMultilingual(@props.corpus)
 
     if @state.statechart.pathContains('simple')
       component = CwbSimpleInput
@@ -124,10 +129,10 @@ window.CwbSearchInputs = React.createClass
 
     `<span>
       <ChineseIme corpus={this.props.corpus} />
-      {this.searchInputLinks(isMultilingual)}
+      {this.searchInputLinks()}
       {searchQueries.map(function(searchQuery, index) {
         return ([
-          isMultilingual ? this.languageSelect(searchQuery) : null,
+          this.languageSelect(searchQuery),
           React.createElement(component, {
             showRemoveRow: searchQueries.length > 1,
             hasPhoneticForm: corpus.has_phonetic,
@@ -139,5 +144,5 @@ window.CwbSearchInputs = React.createClass
           })
         ])
       }.bind(this))}
-      {isMultilingual ? null : this.addPhraseButton()}
+      {this.addPhraseButton()}
     </span>`
