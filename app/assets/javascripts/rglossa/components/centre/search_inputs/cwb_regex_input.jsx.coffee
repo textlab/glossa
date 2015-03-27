@@ -14,7 +14,9 @@ window.CwbRegexInput = React.createClass
   handleTextChanged: (e) ->
     @props.handleQueryChanged
       lang: @props.searchQuery.lang
-      query: e.target.value
+      query: MainArea.convertToNonHeadwordQuery(e.target.value)
+      headwordSearch: MainArea.convertToHeadwordQuery(
+                        MainArea.convertToNonHeadwordQuery(e.target.value)) == e.target.value
 
   displayedQuery: ->
     # Just take the CQP expression

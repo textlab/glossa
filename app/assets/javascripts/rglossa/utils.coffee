@@ -31,3 +31,16 @@ window.rglossaUtils =
     res[key] = value for key, value of obj2
     res
 
+
+  withoutPrefix: (str, prefix) ->
+    if str.substr(0, prefix.length) == prefix
+      str.substr(prefix.length)
+    else
+      str
+
+
+  withoutSuffix: (str, suffix) ->
+    if str.substr(-suffix.length) == suffix
+      str.substr(0, str.length - suffix.length)
+    else
+      str

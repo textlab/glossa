@@ -44,7 +44,10 @@ module Rglossa
             "#{named_query};",
             "#{named_query} = #{query_str};"].join("\n")
         end
-        query_commands += " cut #{max_hits}" if max_hits.present?
+        # "sort by" cannot be used with "cut" in CQP
+        unless query_str[/\bsort\s+by\b/]
+          query_commands += " cut #{max_hits}" if max_hits.present?
+        end
 
         commands = [
           %Q{set DataDirectory "#{Dir.tmpdir}"},

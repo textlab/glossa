@@ -4,6 +4,7 @@ window.CwbSimpleInput = React.createClass
   propTypes:
     showRemoveRow: React.PropTypes.bool.isRequired
     hasPhoneticForm: React.PropTypes.bool.isRequired
+    hasHeadwordSearch: React.PropTypes.bool.isRequired
     searchQuery: React.PropTypes.object.isRequired
     handleQueryChanged: React.PropTypes.func.isRequired
     handleRemoveRow: React.PropTypes.func.isRequired
@@ -14,8 +15,9 @@ window.CwbSimpleInput = React.createClass
 
   displayedQuery: ->
     # Convert the CQP expression into a pure text search phrase
-    @props.searchQuery.query.replace(/\[\(?\w+="(.+?)"(?:\s+%c)?\)?\]/g, '$1')
-      .replace(/"([^\s=]+)"/g, '$1')
+    query = MainArea.convertToNonHeadwordQuery(@props.searchQuery.query)
+    query.replace(/\[\(?\w+="(.+?)"(?:\s+%c)?\)?\]/g, '$1').
+          replace(/"([^\s=]+)"/g, '$1')
 
   isPhonetic: ->
     @props.searchQuery.query.indexOf('phon=') isnt -1
@@ -37,7 +39,7 @@ window.CwbSimpleInput = React.createClass
     @props.handleQueryChanged
       lang: @props.searchQuery.lang
       query: query
-
+      headwordSearch: @props.searchQuery.headwordSearch
 
   handlePhoneticChanged: (e) ->
     query = if e.target.checked
@@ -47,6 +49,13 @@ window.CwbSimpleInput = React.createClass
     @props.handleQueryChanged
       lang: @props.searchQuery.lang
       query: query
+      headwordSearch: @props.searchQuery.headwordSearch
+
+  handleHeadwordSearchChanged: (e) ->
+    @props.handleQueryChanged
+      lang: @props.searchQuery.lang
+      query: @props.searchQuery.query
+      headwordSearch: e.target.checked
 
   handleKeyDown: (e) ->
     if e.key is 'Enter'
@@ -62,6 +71,7 @@ window.CwbSimpleInput = React.createClass
               onChange={this.handleTextChanged} onClick={this.handleTextChanged} onKeyDown={this.handleKeyDown} />
           <div>
             {this.props.hasPhoneticForm && <label style={{marginTop: 5}}><input name="phonetic" type="checkbox" style={{marginTop: -3}} checked={this.isPhonetic()} onClick={this.handlePhoneticChanged} />&nbsp;Phonetic form</label>}
+            {this.props.hasHeadwordSearch && <label style={{lineHeight: '13px'}}><input type="checkbox" value="1" checked={this.props.searchQuery.headwordSearch} onChange={this.handleHeadwordSearchChanged} id="headword_search" name="headword_search" style={{margin: '0px'}} /> Headword search</label>}
           </div>
         </div>
       </form>

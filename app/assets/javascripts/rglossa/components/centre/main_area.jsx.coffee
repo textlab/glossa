@@ -61,11 +61,29 @@ window.MainArea = React.createClass
     @setState(isShowingSidebar: shouldShow)
 
 
+  statics:
+    headwordQueryPrefix: '<headword>'
+    headwordQuerySuffixMoreWords: '[]{0,}'
+    headwordQuerySuffixTag: '</headword> sort by headword_len'
+
+    convertToHeadwordQuery: (query) ->
+      MainArea.headwordQueryPrefix + query + MainArea.headwordQuerySuffixMoreWords + MainArea.headwordQuerySuffixTag
+
+    convertToNonHeadwordQuery: (query) ->
+      query = rglossaUtils.withoutSuffix(query, MainArea.headwordQuerySuffixTag)
+      query = rglossaUtils.withoutSuffix(query, MainArea.headwordQuerySuffixMoreWords)
+      query = rglossaUtils.withoutPrefix(query, MainArea.headwordQueryPrefix)
+
   handleQueryChanged: (queryIndex, query) ->
     # When the query changes, also set maxHits to the last requested number of
     # hits if we have asked to see all hits in the mean time, in which case
     # @state.maxHits will be null. This way, we will always limit the number of
     # hits each time we do a new query.
+    if query.headwordSearch
+      query.query = MainArea.convertToHeadwordQuery(query.query)
+    else
+      query.query = MainArea.convertToNonHeadwordQuery(query.query)
+
     queries = @state.searchQueries.slice(0)
     queries[queryIndex] = query
     newState = searchQueries: queries
