@@ -73,7 +73,7 @@ window.CwbSearchInputs = React.createClass
     if @isMultilingual()
       `<button className="btn" style={{marginLeft: 20}} onClick={this.props.handleAddLanguage}>Add language</button>`
 
-  searchButton: () ->
+  searchButton: ->
     marginLeft = if @isMultilingual() then 80 else 40  # adjust position relative to the language select
     `<button type="button" className="btn btn-success"
         style={{marginLeft: marginLeft}} onClick={this.props.handleSearch}>Search</button>`
@@ -105,7 +105,7 @@ window.CwbSearchInputs = React.createClass
     else
       `<a href="" title={title} onClick={onClick}>{name}</a>`
 
-  searchInputLinks: () ->
+  searchInputLinks: ->
     `<div className="row-fluid search-input-links">
       {this.searchInput("Simple", "Simple search box", this.showSimple, "simple")}&nbsp;|&nbsp;
       {this.searchInput("Extended", "Search for grammatical categories etc.", this.showMultiword, "multiword")}&nbsp;|&nbsp;
