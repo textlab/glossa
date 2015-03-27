@@ -79,7 +79,7 @@ window.CwbSearchInputs = React.createClass
         style={{marginLeft: marginLeft}} onClick={this.props.handleSearch}>Search</button>`
 
   addPhraseButton: ->
-    unless @isMultilingual()
+    unless @props.searchQueries[0].headwordSearch or @isMultilingual()
       `<button className="btn add-phrase-btn" onClick={this.props.handleAddPhrase}>Or...</button>`
 
   updateChineseIME: ->
@@ -136,6 +136,7 @@ window.CwbSearchInputs = React.createClass
           React.createElement(component, {
             showRemoveRow: searchQueries.length > 1,
             hasPhoneticForm: corpus.has_phonetic,
+            hasHeadwordSearch: corpus.headword_search && searchQueries.length == 1,
             searchQuery: searchQuery,
             corpus: corpus,
             handleQueryChanged: handleQueryChanged.bind(null, index),
