@@ -140,7 +140,7 @@ window.CwbSearchInputs = React.createClass
           React.createElement(component, {
             showRemoveRow: searchQueries.length > 1,
             hasPhoneticForm: corpus.has_phonetic,
-            hasHeadwordSearch: corpus.headword_search && searchQueries.length == 1,
+            hasHeadwordSearch: !!corpus.headword_search && searchQueries.length == 1,
             searchQuery: searchQuery,
             corpus: corpus,
             handleQueryChanged: handleQueryChanged.bind(null, index),
