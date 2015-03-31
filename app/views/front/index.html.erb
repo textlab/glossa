@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Glossa</title>
+  <%= csrf_meta_tag %>
+  <%= stylesheet_link_tag 'bootstrap-2.3.1/bootstrap' %>
+</head>
+<body>
+<div class="container">
+  <div class="row-fluid">
+    <div class="span6" style="margin-top:28px;"><img src="http://www.hf.uio.no/iln/om/organisasjon/tekstlab/BILDER/logo173.png"></div>
+    <div class="span6"><%= image_tag "clarin.png", class: "pull-right", style: "height: 100px; margin-bottom: 10px;" %></div>
+  </div>
+  <div class="row-fluid">
+    <div class="hero-unit">
+      <h1>Glossa</h1>
+      <h3>Corpus search and results handling system</h3>
+      <br>
+      <ul>
+        <li>Developed at the <a href="http://www.hf.uio.no/iln/english/about/organization/text-laboratory/">Text Laboratory, Dept. of Linguistics and Scandinavian Studies, University of Oslo</a> with support from the <a href="http://clarin.eu/">CLARIN</a> project via <a href="http://clarin.b.uib.no/">CLARINO</a>.</li>
+        <li>Freely available for download from <a href="https://github.com/textlab/rglossa">GitHub</a>. Easy to install on your own server.</li>
+        <li>Search engine agnostic. Comes with support for the <a href="http://cwb.sourceforge.net/">IMS Corpus Workbench</a> and <a href="http://www.clarin.eu/node/3449">CLARIN federated content</a> search out of the box.</li>
+      </ul>
+
+      <h2>Demo corpora</h2>
+      <ul>
+        <li><a href="http://hf-tekstlab.uio.no/glossa2/?corpus=nowac_1_1">Norwegian Web as Corpus</a> (NoWaC) using the Corpus Workbench as search engine</li>
+        <li><a href="http://hf-tekstlab.uio.no/glossa2/?corpus=bokmal">Norwegian Corpus for <i>Bokm&aring;l</i> Lexicography</a> with rich metadata<br>&mdash; Send mail to <a href="mailto:anders.noklestad@iln.uio.no">anders.noklestad@iln.uio.no</a> for access</li>
+        <li><a href="http://hf-tekstlab.uio.no/glossa2/fcs/cwb/nowac_1_1?version=1.2&operation=searchRetrieve&query=han&maximumRecords=3">Incoming CLARIN federated content search</a> in the NoWaC corpus</li>
+        <li><a href="http://hf-tekstlab.uio.no/glossa2/?corpus=tbd">Outgoing CLARIN federated content search</a> in Tübingen Baumbank des Deutschen &mdash; Diachrones Corpus</li>
+        <li><a href="http://hf-tekstlab.uio.no/glossa2/?corpus=d3">Outgoing CLARIN federated content search</a> in a collection of German corpora<br>(C4 Corpus, TextGrid Digital Library, and Tübingen Baumbank des Deutschen - Diachrones Corpus)</li>
+      </ul>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

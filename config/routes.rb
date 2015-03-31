@@ -1,7 +1,9 @@
-Rglossa::Engine.routes.draw do
+Glossa2::Application.routes.draw do
+scope module: 'rglossa' do
   devise_for :users, :class_name => "Rglossa::User", module: :devise
 
   root :to => 'home#index'
+  match 'front', to: 'front#index'
   get 'admin', to: 'corpora#list'
 
   resources :corpora do
@@ -64,4 +66,5 @@ Rglossa::Engine.routes.draw do
       end
     end
   end
+end
 end
