@@ -54,7 +54,7 @@ module Rglossa
                             "--speech=#{corpus_params['config']['has_sound'].present? || corpus_params['config']['has_video'].present?}"))[1] == 0 or
           raise "rglossa:metadata:import:categories failed"
         Process.wait2(spawn("bundle", "exec", "thor", "rglossa:metadata:import:values", "--corpus", corpus_name, "--remove-existing",
-                            "--speech=#{corpus_params['config']['has_sound'].present? || corpus_params['config']['has_video'].present?}"))[1] == 0 or 
+                            "--speech=#{corpus_params['config']['has_sound'].present? || corpus_params['config']['has_video'].present?}"))[1] == 0 or
           raise "rglossa:metadata:import:values failed"
       end
 

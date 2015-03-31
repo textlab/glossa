@@ -101,7 +101,7 @@
                     }).fadeIn('fast');
                 });
             }
-	    
+
             function create_picker() {
                 for (var i in colors) {
                     picker.append('<span class="colorpicker-picker-span ' + (colors[i].color == $(obj).children(":selected").text() ? ' active' : '') + '" rel="' + colors[i].value + '" style="background-color: ' + colors[i].color + '; width: ' + options.size + 'px; height: ' + options.size + 'px;"></span>');

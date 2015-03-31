@@ -5,7 +5,7 @@ namespace :cwb_test_corpus do
 
     sh "bash  ./create_test_corpus.sh"
   end
-  
+
   desc "Delete CWB test corpus."
   task :delete do 't'
     Dir.chdir "test/cwb_test_data"
