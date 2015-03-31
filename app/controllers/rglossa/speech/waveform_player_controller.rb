@@ -52,7 +52,7 @@ class WaveformPlayerController < ActionController::Base
           :before_start => method(:before_start),
           :start_command =>
             'cd %s && exec %s %s %s >>%s 2>&1' %
-              [Rails.public_path, Rglossa::Engine.root.join('lib/waveforms/genwaveform.py').to_s,
+              [Rails.public_path, Rails.root.join('lib/waveforms/genwaveform.py').to_s,
                WaveformPlayer.conf_path, pid_file, log_file].
               map {|s| Shellwords.escape s },
           :daemonize_for_me => true,
