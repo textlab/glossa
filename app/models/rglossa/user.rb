@@ -1,4 +1,5 @@
 class Rglossa::User < ActiveRecord::Base
+  self.table_name = "rglossa_users"
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable

@@ -1,5 +1,6 @@
 module Rglossa
   class MetadataValue < ActiveRecord::Base
+    self.table_name = "rglossa_metadata_values"
     belongs_to :metadata_category
     has_and_belongs_to_many :corpus_texts, join_table: 'rglossa_corpus_texts_metadata_values',
                             foreign_key: 'rglossa_metadata_value_id',

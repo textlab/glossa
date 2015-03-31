@@ -1,5 +1,6 @@
 module Rglossa
   class CorpusText < ActiveRecord::Base
+    self.table_name = "rglossa_corpus_texts"
     belongs_to :corpus
     has_and_belongs_to_many :metadata_values, join_table: 'rglossa_corpus_texts_metadata_values',
                             foreign_key: 'rglossa_corpus_text_id',

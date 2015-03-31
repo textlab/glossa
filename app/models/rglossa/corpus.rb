@@ -2,6 +2,7 @@ require 'globalize'
 
 module Rglossa
   class Corpus < ActiveRecord::Base
+    self.table_name = "rglossa_corpora"
     attr_accessible :locale, :name, :short_name, :encoding, :search_engine, :config
 
     translates :name, fallbacks_for_empty_translations: true

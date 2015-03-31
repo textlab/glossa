@@ -1,5 +1,6 @@
 module Rglossa
   class MetadataCategory < ActiveRecord::Base
+    self.table_name = "rglossa_metadata_categories"
     attr_accessible :locale, :short_name, :name, :corpus, :category_type, :value_type
 
     translates :name, fallbacks_for_empty_translations: true
