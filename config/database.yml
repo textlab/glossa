@@ -9,7 +9,7 @@
 #                'mysql2://root:%s@mysql:%d/glossa' % [URI.encode(ENV['MYSQL_ENV_MYSQL_ROOT_PASSWORD'] || ''),
 #                                                      ENV['MYSQL_PORT_3306_TCP_PORT'] || 3306])
 
-development:
+development: &DEFAULT
   <% db = URI.parse(ENV['DATABASE_URL'] || 'sqlite3:///db/development.sqlite3') %>
   adapter: <%= db.scheme %>
   host: <%= db.host %>
@@ -31,10 +31,7 @@ test:
   timeout: 5000
 
 production:
-  adapter: sqlite3
-  database: db/production.sqlite3
-  pool: 5
-  timeout: 5000
+  <<: *DEFAULT
 
 oldglossa:
   <% old_db = URI.parse ENV['OLD_GLOSSA_DB_URL'] || "" %>
