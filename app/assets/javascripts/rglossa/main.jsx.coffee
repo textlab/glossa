@@ -3,4 +3,4 @@
 
 ###* @jsx React.DOM ###
 
-React.renderComponent(`<App />`, document.getElementById('application'))
+React.render(`<App />`, document.getElementById('application'))
