@@ -105,7 +105,7 @@ window.CwbSearchInputs = React.createClass
     if @state.statechart.pathContains(path)
       `<b>{name}</b>`
     else if not @enabled(path)
-      `{name}`
+      name
     else
       `<a href="" title={title} onClick={onClick}>{name}</a>`
 
