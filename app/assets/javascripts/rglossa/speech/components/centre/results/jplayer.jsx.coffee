@@ -194,7 +194,7 @@ window.Jplayer = React.createClass
       <div className="jp-video jp-video-270p" id="jp_container_1">
          <div className="jp-type-single">
              <div className="jp-jplayer" style={this.props.mediaType == 'audio' ? {display: 'none'} : {width: 480, height: 270}}>
-                 <img id="jp_poster_1" src="http://www.hf.uio.no/iln/om/organisasjon/tekstlab/BILDER/_6.6-%27T%27_ligo.skev.graa.jpg" style={{width: 480, height: 270, display: 'none'}} />
+                 <img id="jp_poster_1" src="assets/rglossa/speech/_6.6-%27T%27_ligo.skev.graa.jpg" style={{width: 480, height: 270, display: 'none'}} />
                  <object id="jp_flash_1" name="jp_flash_1" data="Jplayer.swf" type="application/x-shockwave-flash" width="1" height="1" tabIndex="-1" style={{width: 1, height: 1}}>
                      <param name="flashvars" value="jQuery=jQuery&amp;id=jplayer&amp;vol=0.8&amp;muted=false" />
                      <param name="allowscriptaccess" value="always" />
