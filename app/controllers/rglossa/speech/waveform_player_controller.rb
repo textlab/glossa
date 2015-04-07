@@ -163,15 +163,12 @@ class WaveformPlayerController < ActionController::Base
     FileUtils.rm_f "#{fname}.wav"
     FileUtils.rm_f "#{fname}.flv"
 
-    max_i = 0
     @total_imgwidth = 0
     @imgwidths = []
-    i = 0
     @basenames.each do |basename|
-      max_i = i
       sz = FastImage.size("#{output_path}/#{basename}-pitch.png")
       @total_imgwidth += sz[0]
-      @imgwidths[i] = sz[0]
+      @imgwidths.push sz[0]
     end
   end
 end
