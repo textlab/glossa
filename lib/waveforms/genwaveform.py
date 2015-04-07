@@ -6,6 +6,7 @@ import math
 import sys
 import os
 import os.path
+import stat
 import socket
 import subprocess
 import time
@@ -19,7 +20,10 @@ MAX_PITCH = 500.0
 MAX_FMT = 4000.0
 WAVEFORM_TOP_FREQ = 10000
 
-global_config = json.load(open(sys.argv[1]))
+conf_file = sys.argv[1]
+pid_file = sys.argv[2]
+sock_file = sys.argv[3]
+global_config = json.load(open(conf_file))
 os.environ['TCLLIBPATH'] = os.path.join(global_config['snack_dir'], 'lib', 'snack2.2')
 sys.path.append(os.path.join(global_config['snack_dir'], 'lib',
                              'python%d.%d' % sys.version_info[:2], 'site-packages'))
@@ -32,9 +36,15 @@ class GenWaveForm(Tkinter.Tk):
   def __init__(self, *args, **kwargs):
     Tkinter.Tk.__init__(self, *args, **kwargs)
     self.canvas = None
-    self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    self.socket.bind(('127.0.0.1', self.conf['listen_port']))
+    self.socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    try:
+      def is_socket(path): return stat.S_ISSOCK(os.stat(path).st_mode)
+      def is_unused(path): return subprocess.call(["fuser", path]) != 0
+      if is_socket(sock_file) and is_unused(sock_file):
+        os.unlink(sock_file)
+    except OSError:
+      pass
+    self.socket.bind(sock_file)
     self.socket.listen(5)
     atexit.register(delete_pidfile)
     create_pidfile()
@@ -218,11 +228,12 @@ class GenWaveForm(Tkinter.Tk):
       self.filesocket.close()
     if hasattr(self, 'socket') and self.socket:
       self.socket.close()
+    os.unlink(sock_file)
     sys.stdout.flush()
     sys.stderr.flush()
 
   def restart(self):
-    os.execl(sys.argv[0], sys.argv[0], sys.argv[1], sys.argv[2])
+    os.execl(sys.argv[0], sys.argv[0], sys.argv[1], sys.argv[2], sys.argv[3])
 
   def sighandler(self, signo, frame):
     self.cleanup()
@@ -232,11 +243,11 @@ class GenWaveForm(Tkinter.Tk):
       sys.exit(0)
 
 def create_pidfile():
-  with open(sys.argv[2], 'w') as f:
+  with open(pid_file, 'w') as f:
     print >>f, os.getpid()
 
 def delete_pidfile():
-  os.remove(sys.argv[2])
+  os.remove(pid_file)
 
 tkSnack.initializeSnack(Tkinter.Tk())
 Tkinter.Tk.report_callback_exception = GenWaveForm.show_error

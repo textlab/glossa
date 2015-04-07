@@ -7,8 +7,7 @@ class WaveformPlayerController < ActionController::Base
       width = @conf['pixels_per_second'] * 60
       height = @conf['total_height']
       # The display number is the same as the port number
-      opts = {:display => @conf['listen_port'], :dimensions => "#{width}x#{height}x16",
-              :destroy_at_exit => false}
+      opts = {:dimensions => "#{width}x#{height}x16", :destroy_at_exit => true}
 
       # Start Xvfb again if it already exists, as the dimensions may have changed
       headless = begin
@@ -32,6 +31,10 @@ class WaveformPlayerController < ActionController::Base
       !update_conf? && @conf ? @conf : update_conf
     end
 
+    def abs_path(file)
+      Rails.root.join(file).to_s
+    end
+
     private
 
     def update_conf?
@@ -45,24 +48,26 @@ class WaveformPlayerController < ActionController::Base
     def server_controller
       if update_conf?
         update_conf
-        pid_file = Rails.root.join(@conf['pid_file']).to_s
-        log_file = Rails.root.join(@conf['log_file']).to_s
+        start_command = "cd %s && exec %s %s %s %s >>%s 2>&1" %
+          [Rails.public_path, Rails.root.join('lib/waveforms/genwaveform.py').to_s,
+           WaveformPlayer.conf_path, self.abs_path(@conf['pid_file']),
+           self.abs_path(@conf['sock_file']), self.abs_path(@conf['log_file'])].
+          map {|s| Shellwords.escape s }
         @server_controller = DaemonController.new(
           :identifier => 'Waveform server',
           :before_start => method(:before_start),
-          :start_command =>
-            'cd %s && exec %s %s %s >>%s 2>&1' %
-              [Rails.public_path, Rails.root.join('lib/waveforms/genwaveform.py').to_s,
-               WaveformPlayer.conf_path, pid_file, log_file].
-              map {|s| Shellwords.escape s },
+          :start_command => start_command,
           :daemonize_for_me => true,
-          :ping_command => [:tcp, '127.0.0.1', @conf['listen_port']],
-          :pid_file => pid_file,
-          :log_file => log_file
+          :ping_command => [:unix, self.abs_path(@conf['sock_file'])],
+          :pid_file => self.abs_path(@conf['pid_file']),
+          :log_file => self.abs_path(@conf['log_file'])
         )
-      else
-        @server_controller
+        @server_controller.restart
+        at_exit do
+          @server_controller.stop
+        end
       end
+      @server_controller
     end
   end
 
@@ -113,7 +118,7 @@ class WaveformPlayerController < ActionController::Base
 
   def request_waveform(file)
     fp = self.class.connect do
-      TCPSocket.new '127.0.0.1', @conf['listen_port']
+      UNIXSocket.new self.class.abs_path(@conf['sock_file'])
     end
     fp.write("#{params[:width]}\n") if params[:width] =~ /\A\d+\z/
     fp.write("#{file}\n")
