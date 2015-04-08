@@ -44,6 +44,8 @@ window.CwbMultiwordTerm = React.createClass
     # search expression in the CQP query view, in which case the multiword view
     # will be mounted anew when we switch to it and the tags will be set up
     # by componentDidMount.
+    if not nextProps.term.pos and not nextProps.term.features.length
+      return
     tagsInput = @getTagsInput()
 
     if nextProps.term.pos isnt @props.term.pos
