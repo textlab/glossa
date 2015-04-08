@@ -201,10 +201,11 @@ window.CwbMultiwordInput = React.createClass
       {min, max, word, isLemma, isPhonetic, isStart, isEnd, pos, features} = term
       attrs = []
 
-      if word
+      if word or isLemma or isPhonetic
         attr = if isLemma then 'lemma' else if isPhonetic then 'phon' else 'word'
         word = "#{word}.+" if isStart
         word = ".+#{word}" if isEnd
+        word = ".*" if word is ""
         word = "(#{attr}=\"#{word}\" %c)"
         attrs.push(word)
 

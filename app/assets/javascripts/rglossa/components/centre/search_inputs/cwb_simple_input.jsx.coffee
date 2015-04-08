@@ -17,7 +17,8 @@ window.CwbSimpleInput = React.createClass
     # Convert the CQP expression into a pure text search phrase
     query = MainArea.convertToNonHeadwordQuery(@props.searchQuery.query)
     query.replace(/\[\(?\w+="(.*?)"(?:\s+%c)?\)?\]/g, '$1').
-          replace(/"([^\s=]+)"/g, '$1').replace(/\s*\[\]\s*/g, " .* ")
+          replace(/"([^\s=]+)"/g, '$1').replace(/\s*\[\]\s*/g, " .* ").
+          replace(/^\.\*$/, "")
 
   isPhonetic: ->
     @props.searchQuery.query.indexOf('phon=') isnt -1
@@ -25,7 +26,7 @@ window.CwbSimpleInput = React.createClass
 
   handleTextChanged: (e) ->
     # Convert the search phrase to CQP
-    if e.target.value is ''
+    if e.target.value is '' and not @isPhonetic()
       query = ''
     else
       attr = if @isPhonetic() then 'phon' else 'word'
@@ -33,7 +34,7 @@ window.CwbSimpleInput = React.createClass
       # to treat it as if it was an individual word:
       chineseCharsRange = '[\u4E00-\u9FFF\u3400-\u4DFF\uF900-\uFAFF]'
       terms = for term in e.target.value.replace(///(#{chineseCharsRange})///g, ' $1 ').split(/\s/)
-        if term is '' then '' else "[#{attr}=\"#{term}\" %c]"
+        if term is '' and not @isPhonetic() then '' else "[#{attr}=\"#{term || '.*'}\" %c]"
       query = terms.join(' ').replace(///\s(\[\w+="#{chineseCharsRange}"(?:\s+%c)?\])\s///g, "$1")
 
     @props.handleQueryChanged
@@ -43,7 +44,7 @@ window.CwbSimpleInput = React.createClass
 
   handlePhoneticChanged: (e) ->
     query = if e.target.checked
-              @props.searchQuery.query.replace(/word=/g, 'phon=')
+              @props.searchQuery.query.replace(/word=/g, 'phon=') || '[phon=".*" %c]'
             else
               @props.searchQuery.query.replace(/phon=/g, 'word=')
     @props.handleQueryChanged

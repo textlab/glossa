@@ -145,7 +145,7 @@ window.CwbMultiwordTerm = React.createClass
                     {this.props.showRemoveRow && isFirst ? <button className="btn btn-small" title="Remove row" style={{cursor: 'pointer', margin: '2px 7px 0 -35px'}} onClick={this.props.handleRemoveRow}><i className="icon-remove"></i></button> : null}
                     <span data-toggle="dropdown" className="add-on dropdown-toggle" style={{cursor: 'pointer'}}><i className="icon-cog" /></span>
                     <input ref="searchfield" type="text" className="searchfield multiword-field removable"
-                      defaultValue={term.word} onChange={this.handleTextChanged} onKeyDown={this.props.handleKeyDown} />
+                      defaultValue={term.word.replace(/^\.\*$/, "")} onChange={this.handleTextChanged} onKeyDown={this.props.handleKeyDown} />
 
                     {queryHasSingleTerm ? null :
                     <span className="add-on" title="Remove word" style={{cursor: 'pointer'}} onClick={this.handleRemoveTerm} ><i className="icon-minus" /></span>
