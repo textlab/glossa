@@ -168,6 +168,14 @@ window.MainArea = React.createClass
       state.sortBy = 'headword_len'
     firstQueryString = state.searchQueries[0].query
     return unless firstQueryString and firstQueryString isnt '""'
+    searchQueries = if corpusNs.getLanguage(@props.corpus, 'zh')
+      # If the tone number is missing, add a pattern that matches all tones
+      state.searchQueries.map (query) ->
+        newQuery = $.extend({}, query)
+        newQuery.query = query.query.replace(/\bphon="([^0-9\"]+)"/g, 'phon="$1[1-4]?"')
+        newQuery
+    else
+      state.searchQueries
 
     {store, statechart, corpus} = @props
 
@@ -179,7 +187,7 @@ window.MainArea = React.createClass
       method: 'POST'
       data: JSON.stringify
         corpus_short_name: corpus.short_name
-        queries: state.searchQueries
+        queries: searchQueries
         metadata_value_ids: state.selectedMetadataIds
         max_hits: state.maxHits
         sortBy: state.sortBy
