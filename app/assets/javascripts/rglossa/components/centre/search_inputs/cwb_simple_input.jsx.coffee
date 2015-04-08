@@ -49,7 +49,7 @@ window.CwbSimpleInput = React.createClass
               @props.searchQuery.query.replace(/phon=/g, 'word=')
     @props.handleQueryChanged
       lang: @props.searchQuery.lang
-      query: query
+      query: MainArea.convertToNonHeadwordQuery(query)
       headwordSearch: @props.searchQuery.headwordSearch
 
   handleHeadwordSearchChanged: (e) ->
