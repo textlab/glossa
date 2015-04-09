@@ -34,8 +34,9 @@ window.CwbSimpleInput = React.createClass
       # to treat it as if it was an individual word:
       chineseCharsRange = '[\u4E00-\u9FFF\u3400-\u4DFF\uF900-\uFAFF]'
       terms = for term in e.target.value.replace(///(#{chineseCharsRange})///g, ' $1 ').split(/\s/)
-        if term is '' and not @isPhonetic() then '' else "[#{attr}=\"#{term || '.*'}\" %c]"
-      query = terms.join(' ').replace(///\s(\[\w+="#{chineseCharsRange}"(?:\s+%c)?\])\s///g, "$1")
+        if term is '' then '' else "[#{attr}=\"#{term}\" %c]"
+      query = terms.join(' ').replace(///\s(\[\w+="#{chineseCharsRange}"(?:\s+%c)?\])\s///g, "$1") ||
+              "[#{attr}=\".*\" %c]"
 
     @props.handleQueryChanged
       lang: @props.searchQuery.lang
