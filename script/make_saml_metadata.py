@@ -20,7 +20,7 @@ idp = re.sub(r'[^a-zA-Z_]', '', sys.argv[1]).lower()
 
 APP_URL = "https://www.tekstlab.uio.no/glossa2"
 CONFIG = {
-    "entityid": "%s/metadata/%s" % (APP_URL, idp),
+    "entityid": "%s/saml/metadata/%s" % (APP_URL, idp),
     "description": "The Glossa corpus search system",
     "service": {
         "sp": {
