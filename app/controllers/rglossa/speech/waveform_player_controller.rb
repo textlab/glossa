@@ -109,7 +109,7 @@ class WaveformPlayerController < ActionController::Base
 
     start_time = sprintf("%d.%02d.%d", start.to_i / 60, start.to_i % 60, start.gsub(/^[^.]*(\.|$)/, "").to_i)
     stop_time = sprintf("%d.%02d.%d", stop.to_i / 60, stop.to_i % 60, stop.gsub(/^[^.]*(\.|$)/, "").to_i)
-    Process.wait spawn("mp3splt", Rails.root.join(local_path, movie_loc).to_s, start_time, stop_time,
+    Process.wait spawn("mp3splt", Rails.root.join(local_path, URI.decode(movie_loc)).to_s, start_time, stop_time,
                        "-d", output_path.to_s, "-o", file, {:in => :close})
     if !File.exists? "#{fname}.wav"
       Process.wait spawn("ffmpeg", "-i", "#{fname}.mp3", "-ac", "1", "#{fname}.wav", {:in => :close})

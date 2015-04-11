@@ -120,7 +120,7 @@ module Rglossa
                 conn.execute("DROP TABLE line_keys")
 
                 new_pages[page_no].map! do |result|
-                  result[:media_obj][:mov][:movie_loc] = basenames[result[:line_key].to_i]
+                  result[:media_obj][:mov][:movie_loc] = URI.encode basenames[result[:line_key].to_i]
                   result
                 end
               end
