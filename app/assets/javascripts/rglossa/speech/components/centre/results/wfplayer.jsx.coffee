@@ -10,8 +10,6 @@ window.WFplayer = React.createClass
 
     corpus_id = mediaObj.corpus_id
     line_key = mediaObj.mov.line_key
-    mov = mediaObj.mov.movie_loc
-    path = mediaObj.mov.path
     $("#movietitle").text(mediaObj.title)
     start = mediaObj.divs.annotation[@props.startAt || parseInt(mediaObj.start_at)].from
     stop  = mediaObj.divs.annotation[@props.endAt || parseInt(mediaObj.end_at)].to
