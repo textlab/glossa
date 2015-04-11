@@ -29,8 +29,10 @@ CONFIG = {
                 "assertion_consumer_service": [("%s/auth/%s" % (APP_URL, idp), BINDING_HTTP_POST)],
                 "single_logout_service" : [("%s/logout/%s" % (APP_URL, idp), BINDING_HTTP_REDIRECT)],
             },
-            "required_attributes": ["edupersonprincipalname", "mail"],
-            "optional_attributes": ["displayname"],
+            "required_attributes": ["edupersonprincipalname", "mail", "displayname"],
+            "optional_attributes": ["edupersonaffiliation", "edupersonorgdn", "edupersonorgunitdn",
+                                    "edupersonprimaryaffiliation", "edupersonprimaryorgunitdn",
+                                    "edupersonscopedaffiliation"],
             },
     },
     # Key and cert file used by the Apache instance that serves Glossa:
