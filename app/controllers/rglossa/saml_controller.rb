@@ -142,8 +142,9 @@ class SamlController < ApplicationController
     #  when "POST"
     #    # for POST requests (form) render the content as HTML
     #    render :inline => content
-    #end    logout_request_id = logout_request.id
+    #end
 
+    logout_request_id = logout_request.id
     logout_response = OneLogin::RubySaml::SloLogoutresponse.new.create(settings, logout_request_id, nil, :RelayState => params[:RelayState])
     redirect_to logout_response
   end
