@@ -1,4 +1,4 @@
-require "rglossa/thor_utils"
+require "./lib/tasks/thor_utils"
 
 module Rglossa
   class LineKeys < Thor
