@@ -9,8 +9,8 @@ window.Navbar = React.createClass
     login_status = if username is ''
       idp_login_links
     else
-      `<span className="navbar-text pull-right">Logged in as: {username}&nbsp;
-        <a href={logout_url} className="navbar-link">Log out</a></span>`
+      `<span className="navbar-text pull-right"><b>Logged in as</b>: {displayName}&nbsp;
+        <a href={logout_url} className="navbar-link"><b>Log out</b></a></span>`
 
     `<div className="navbar navbar-fixed-top">
       <div className="navbar-inner" style={{paddingLeft: 10}}>

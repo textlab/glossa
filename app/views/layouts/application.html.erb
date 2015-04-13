@@ -13,14 +13,16 @@
 
   <script type="text/javascript">
     var authenticityToken = '<%= form_authenticity_token %>';
-    var username = "<%=
-      j session[:attributes][:eduPersonPrincipalName] if session[:user_id].present? &&
-                                                         session[:attributes].present? &&
-                                                         session[:idp].present? %>";
-    var logout_url = "<%= j url_for controller: 'saml', action: 'logout', idp: session[:idp] %>";
     var login_urls = {};
-    <% (ENV['IDP_LIST'] || "").gsub(/[^a-z_:]/i, '').split(?:).each do |idp| %>
-      login_urls['<%= idp.upcase %>'] = "<%= j url_for controller: 'saml', action: 'sso', idp: idp.downcase %>";
+    <% if session[:user_id].present? && session[:attributes].present? && session[:idp].present? %>
+      var username = "<%= j session[:attributes][:eduPersonPrincipalName]  %>";
+      var displayName = "<%= j session[:attributes][:displayName] %>";
+      var logout_url = "<%= j url_for controller: 'saml', action: 'logout', idp: session[:idp] %>";
+    <% else %>
+      var username = "";
+      <% (ENV['IDP_LIST'] || "").gsub(/[^a-z_:]/i, '').split(?:).each do |idp| %>
+        login_urls['<%= idp.upcase %>'] = "<%= j url_for controller: 'saml', action: 'sso', idp: idp.downcase %>";
+      <% end %>
     <% end %>
   </script>
 </head>
