@@ -20,6 +20,7 @@ window.MainAreaBottom = React.createClass
     isShowingSidebar: React.PropTypes.bool.isRequired
     isMetadataSelectionEmpty: React.PropTypes.bool.isRequired
     handleAddLanguage: React.PropTypes.func.isRequired
+    handleChangeLanguage: React.PropTypes.func.isRequired
     handleAddPhrase: React.PropTypes.func.isRequired
     handleRemoveRow: React.PropTypes.func.isRequired
 
@@ -32,8 +33,8 @@ window.MainAreaBottom = React.createClass
 
   mainComponent: ->
     {store, statechart, corpus, results, searchQueries, handleQueryChanged, sortBy,
-    handleSortByChanged, handleAddLanguage,  handleAddPhrase, handleRemoveRow,
-    maxHits, handleSearch, initialSearchInput} = @props
+    handleSortByChanged, handleAddLanguage,  handleChangeLanguage, handleAddPhrase, 
+    handleRemoveRow, maxHits, handleSearch, initialSearchInput} = @props
     if statechart.pathContains('start')
       `<StartMain
           store={store}
@@ -43,6 +44,7 @@ window.MainAreaBottom = React.createClass
           handleQueryChanged={handleQueryChanged}
           handleSearch={handleSearch}
           handleAddLanguage={handleAddLanguage}
+          handleChangeLanguage={handleChangeLanguage}
           handleAddPhrase={handleAddPhrase}
           handleRemoveRow={handleRemoveRow} />`
     else
@@ -59,6 +61,7 @@ window.MainAreaBottom = React.createClass
           sortBy={sortBy}
           handleSortByChanged={handleSortByChanged}
           handleAddLanguage={handleAddLanguage}
+          handleChangeLanguage={handleChangeLanguage}
           handleAddPhrase={handleAddPhrase}
           handleRemoveRow={handleRemoveRow}
           maxHits={maxHits}

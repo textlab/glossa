@@ -116,6 +116,12 @@ window.MainArea = React.createClass
     @setState(searchQueries: queries)
 
 
+  handleChangeLanguage: (queryIndex, lang) ->
+    queries = @state.searchQueries.slice(0)
+    queries[queryIndex].lang = lang
+    @setState(searchQueries: queries)
+
+
   handleAddPhrase: ->
     queries = @state.searchQueries.slice(0)
     queries.push(lang: 'single', query: '')
@@ -261,6 +267,7 @@ window.MainArea = React.createClass
           maxHits={maxHits}
           handleSearch={this.handleSearch}
           handleAddLanguage={this.handleAddLanguage}
+          handleChangeLanguage={this.handleChangeLanguage}
           handleAddPhrase={this.handleAddPhrase}
           handleRemoveRow={this.handleRemoveRow}
           handleMetadataSelectionsChanged={this.handleMetadataSelectionsChanged}

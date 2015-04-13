@@ -19,6 +19,7 @@ window.CwbSearchInputs = React.createClass
     handleQueryChanged: React.PropTypes.func.isRequired
     handleSearch: React.PropTypes.func.isRequired
     handleAddLanguage: React.PropTypes.func.isRequired
+    handleChangeLanguage: React.PropTypes.func.isRequired
     handleAddPhrase: React.PropTypes.func.isRequired
     handleRemoveRow: React.PropTypes.func.isRequired
 
@@ -49,11 +50,13 @@ window.CwbSearchInputs = React.createClass
     e.preventDefault()
     @state.statechart.handleAction('showCqpQuery')
 
-  languageSelect: (query) ->
+  languageSelect: (query, index) ->
     if @isMultilingual()
       `<LanguageSelect
         corpus={this.props.corpus}
-        selectedValue={query.lang} />`
+        selectedValue={query.lang}
+        index={index}
+        handleChangeLanguage={this.props.handleChangeLanguage} />`
 
   languageAddButton: ->
     if @isMultilingual()
@@ -136,7 +139,7 @@ window.CwbSearchInputs = React.createClass
       {this.searchInputLinks()}
       {searchQueries.map(function(searchQuery, index) {
         return ([
-          this.languageSelect(searchQuery),
+          this.languageSelect(searchQuery, index),
           React.createElement(component, {
             showRemoveRow: searchQueries.length > 1,
             hasPhoneticForm: corpus.has_phonetic,
