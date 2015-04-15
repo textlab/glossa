@@ -11,7 +11,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141127013945) do
+ActiveRecord::Schema.define(:version => 20150414151848) do
+
+  create_table "rglossa_access_permissions", :force => true do |t|
+    t.integer "user_id",   :null => false
+    t.integer "corpus_id", :null => false
+  end
 
   create_table "rglossa_corpora", :force => true do |t|
     t.string   "name",                               :null => false
@@ -41,8 +46,8 @@ ActiveRecord::Schema.define(:version => 20141127013945) do
   end
 
   create_table "rglossa_corpus_translations", :force => true do |t|
-    t.integer  "rglossa_corpus_id"
-    t.string   "locale"
+    t.integer  "rglossa_corpus_id", :null => false
+    t.string   "locale",            :null => false
     t.string   "name"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
@@ -74,8 +79,8 @@ ActiveRecord::Schema.define(:version => 20141127013945) do
   end
 
   create_table "rglossa_metadata_category_translations", :force => true do |t|
-    t.integer  "rglossa_metadata_category_id"
-    t.string   "locale"
+    t.integer  "rglossa_metadata_category_id", :null => false
+    t.string   "locale",                       :null => false
     t.string   "name"
     t.datetime "created_at",                   :null => false
     t.datetime "updated_at",                   :null => false
