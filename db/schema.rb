@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150414151848) do
+ActiveRecord::Schema.define(:version => 20150415123131) do
 
   create_table "rglossa_access_permissions", :force => true do |t|
     t.integer "user_id",   :null => false
@@ -114,8 +114,8 @@ ActiveRecord::Schema.define(:version => 20150414151848) do
   end
 
   create_table "rglossa_users", :force => true do |t|
-    t.string   "email",                  :default => "", :null => false
-    t.string   "encrypted_password",     :default => "", :null => false
+    t.string   "email",                  :default => "",    :null => false
+    t.string   "encrypted_password",     :default => "",    :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -124,8 +124,9 @@ ActiveRecord::Schema.define(:version => 20150414151848) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.datetime "created_at",                             :null => false
-    t.datetime "updated_at",                             :null => false
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+    t.boolean  "admin",                  :default => false
   end
 
   add_index "rglossa_users", ["email"], :name => "index_rglossa_users_on_email", :unique => true
