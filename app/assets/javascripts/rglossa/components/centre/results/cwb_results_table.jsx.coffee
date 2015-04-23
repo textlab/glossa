@@ -72,13 +72,18 @@ window.CwbResultsTable = React.createClass
               if parts[i] != '__UNDEF__' and parts[i] != '_'
                 ot.push "#{labels[i-1]}: #{parts[i]}"
 
-          if ot.length
+          outToken = if ot.length
             "<span data-ot=\"#{ot.join('<br>')}\">#{parts[0]}</span>"
           else
             # No CWB attributes, so no data-ot attribute needed
             "<span>#{parts[0]}</span>"
+          chineseCharsRange = '[\u4E00-\u9FFF\u3400-\u4DFF\uF900-\uFAFF]'
+          if parts[0].match(///^#{chineseCharsRange}+$///)
+            outToken
+          else
+            " #{outToken} "
 
-        tokens.join(' ').replace(/span_class=/g, 'span class=')
+        tokens.join('').replace(/span_class=/g, 'span class=')
 
       sId:       sId
       preMatch:  fields[0]
