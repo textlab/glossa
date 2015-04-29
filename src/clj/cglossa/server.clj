@@ -1,6 +1,6 @@
 (ns cglossa.server
   (:require [clojure.java.io :as io]
-            [cglossa.dev :refer [is-dev? inject-devmode-html browser-repl start-figwheel]]
+            [cglossa.dev :refer [is-dev? inject-devmode-html]]
             [compojure.core :refer [GET defroutes routes context]]
             [compojure.route :refer [resources]]
             [compojure.handler :as handler]
@@ -52,7 +52,6 @@
 (defn run [& [port]]
   (defonce ^:private server
     (do
-      (if is-dev? (start-figwheel))
       (let [port (Integer. (or port (env :port) 10555))]
         (print "Starting web server on port" port ".\n")
         (run-server http-handler {:port port

@@ -9,19 +9,19 @@
   :test-paths ["spec/clj"]
 
   :dependencies [[org.clojure/clojure "1.6.0"]
-                 [org.clojure/clojurescript "0.0-2511" :scope "provided"]
+                 [org.clojure/clojurescript "0.0-3211" :scope "provided"]
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                  [ring "1.3.2"]
-                 [ring/ring-defaults "0.1.2"]
-                 [ring-middleware-format "0.4.0"]
-                 [compojure "1.2.0"]
+                 [ring/ring-defaults "0.1.4"]
+                 [ring-middleware-format "0.5.0"]
+                 [compojure "1.3.3"]
                  [enlive "1.1.5"]
                  [reagent "0.5.0"]
                  [environ "1.0.0"]
                  [http-kit "2.1.19"]
-                 [prismatic/plumbing "0.3.5" :exclusions [potemkin]]
-                 [cljs-ajax "0.3.3"]
-                 [prone "0.6.0"]]
+                 [prismatic/plumbing "0.4.2" :exclusions [potemkin]]
+                 [cljs-ajax "0.3.11"]
+                 [prone "0.8.1"]]
 
   :plugins [[lein-cljsbuild "1.0.3"]
             [lein-environ "1.0.0"]
@@ -34,14 +34,17 @@
 
   :jvm-opts ^:replace ["-Xmx1g" "-server"]
 
+  :clean-targets ^{:protect false} ["resources/public/js/out"]
+
   :cljsbuild {:builds {:app {:source-paths ["src/cljs" "target/classes"]
-                             :compiler {:output-to     "resources/public/js/app.js"
+                             :compiler {:output-to     "resources/public/js/out/app.js"
                                         :output-dir    "resources/public/js/out"
-                                        :source-map    "resources/public/js/out.js.map"
-                                        :preamble      ["react/react.min.js"]
-                                        :externs       ["react/externs/react.js"]
+                                        :source-map    "resources/public/js/out/out.js.map"
+                                        :source-map-timestamp true
                                         :optimizations :none
                                         :cache-analysis true
+                                        :main "cglossa.core"
+                                        :asset-path "js/out"
                                         :pretty-print  true}}}}
 
   :sassc [{:src "src/scss/style.scss"
@@ -50,15 +53,15 @@
 
   :profiles {:dev {:source-paths ["env/dev/clj"]
 
-                   :dependencies [[figwheel "0.1.6-SNAPSHOT"]
-                                  [com.cemerick/piggieback "0.1.3"]
-                                  [weasel "0.4.2"]
-                                  [leiningen "2.5.0"]]
+                   :dependencies [[figwheel "0.2.7"]
+                                  [com.cemerick/piggieback "0.2.1"]
+                                  [org.clojure/tools.nrepl "0.2.10"]
+                                  [leiningen "2.5.1"]]
 
                    :repl-options {:init-ns cglossa.server
                                   :nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
 
-                   :plugins [[lein-figwheel "0.1.6-SNAPSHOT"]]
+                   :plugins [[lein-figwheel "0.2.7"]]
 
                    :figwheel {:http-server-root "public"
                               :server-port 3449
@@ -79,5 +82,5 @@
                        :cljsbuild {:builds {:app
                                             {:source-paths ["env/prod/cljs"]
                                              :compiler
-                                             {:optimizations :advanced
-                                              :pretty-print false}}}}}})
+                                                           {:optimizations :advanced
+                                                            :pretty-print false}}}}}})

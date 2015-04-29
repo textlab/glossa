@@ -48,3 +48,5 @@
     (fn []
       [app app-state app-data])
     (. js/document (getElementById "app"))))
+
+(main)
