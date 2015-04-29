@@ -16,7 +16,6 @@
                  [ring-middleware-format "0.4.0"]
                  [compojure "1.2.0"]
                  [enlive "1.1.5"]
-                 [com.facebook/react "0.11.2"]
                  [reagent "0.5.0"]
                  [environ "1.0.0"]
                  [http-kit "2.1.19"]
