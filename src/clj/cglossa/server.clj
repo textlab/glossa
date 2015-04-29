@@ -12,40 +12,30 @@
             [ring.handler.dump :refer [handle-dump]]
             [prone.middleware :refer [wrap-exceptions]]
             [environ.core :refer [env]]
-            [org.httpkit.server :refer [run-server]]
-            [datomic.api :as d]
-            [cglossa.models.core :as models]
-            [cglossa.models.corpora :as corpora]
-            [cglossa.models.metadata-values :as metadata-values]))
+            [org.httpkit.server :refer [run-server]]))
 
 (deftemplate page
   (io/resource "index.html") [] [:body] (if is-dev? inject-devmode-html identity))
 
 (defroutes api-routes
-  (context "/corpora" {db :db}
-           (GET "/by-short-name" [short-name] (corpora/by-short-name db short-name)))
-  (context "/metadata-values" {db :db}
-           (GET "/" [category-id] (metadata-values/index db category-id))))
+           )
 
 (defroutes app-routes
   (resources "/")
-  (resources "/react" {:root "react"})
   (GET "/request" [] handle-dump)
   (GET "/" req (page)))
 
-(defn wrap-db [handler]
-  (fn [req]
-    (if (:db req)
-      ; TODO: handle selection of alternative db version
-      (handler req)
-      (handler (assoc req :db (models/current-db))))))
+(defroutes db-routes
+           (GET "/db" []
+                {:status  200
+                 :headers {}
+                 :body    "dummy"}))
 
 (def http-handler
-  (let [r (routes (wrap-restful-format #'api-routes :format [:transit-json :json])
+  (let [r (routes (wrap-restful-format #'db-routes :formats [:transit-json :json])
                   #'app-routes)
         r (if is-dev? (-> r reload/wrap-reload wrap-exceptions) r)]
     (-> r
-        wrap-db
         wrap-keyword-params
         wrap-params)))
 

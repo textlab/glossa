@@ -24,9 +24,6 @@
 (defonce app-state (into {} (map-vals atom state)))
 (defonce app-data (into {} (map-vals atom data)))
 
-(GET "/corpora/by-short-name?short-name=bokmal")
-(GET "/metadata-values?category-id=1234")
-
 (defn- header []
   [:div.navbar.navbar-fixed-top [:div.navbar-inner [:div.container [:span.brand "Glossa"]]]])
 
