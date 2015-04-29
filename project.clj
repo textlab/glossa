@@ -17,7 +17,7 @@
                  [compojure "1.2.0"]
                  [enlive "1.1.5"]
                  [com.facebook/react "0.11.2"]
-                 [whoops/reagent "0.4.4-alpha"]
+                 [reagent "0.5.0"]
                  [environ "1.0.0"]
                  [http-kit "2.1.19"]
                  [prismatic/plumbing "0.3.5" :exclusions [potemkin]]
