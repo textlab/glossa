@@ -15,14 +15,17 @@
             [org.httpkit.server :refer [run-server]]
             [datomic.api :as d]
             [cglossa.models.core :as models]
-            [cglossa.models.corpora :as corpora]))
+            [cglossa.models.corpora :as corpora]
+            [cglossa.models.metadata-values :as metadata-values]))
 
 (deftemplate page
   (io/resource "index.html") [] [:body] (if is-dev? inject-devmode-html identity))
 
 (defroutes api-routes
   (context "/corpora" {db :db}
-           (GET "/by-short-name" [short-name] (corpora/by-short-name db short-name))))
+           (GET "/by-short-name" [short-name] (corpora/by-short-name db short-name)))
+  (context "/metadata-values" {db :db}
+           (GET "/" [category-id] (metadata-values/index db category-id))))
 
 (defroutes app-routes
   (resources "/")
