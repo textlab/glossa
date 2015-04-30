@@ -7,12 +7,12 @@ window.CorpusInfo = React.createClass
 
   render: ->
     `<div className="row-fluid corpus-info">
-      <div className="span12">
+      <div className="span9">
         <div className="well">
           <h2>
             <span dangerouslySetInnerHTML={{__html: this.props.corpusName}} />
-            {this.props.corpusLogoUrl ? <img className="corpus-logo" src={this.props.corpusLogoUrl} /> : ''}
           </h2>
         </div>
       </div>
+      {this.props.corpusLogoUrl ? <img className="corpus-logo" src={this.props.corpusLogoUrl} /> : ''}
     </div>`

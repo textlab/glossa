@@ -14,12 +14,19 @@ h5.category-header {
   }
 }
 
+h2 {
+  font-family: "Times New Roman", Times;
+  font-size: 48px;
+}
+
 .corpus-logo {
-  width: 100px;
-  margin-left: 30px;
+  position: absolute;
+  top: 0px;
+  right: 0px;
 }
 
 .corpus-info {
+  position: relative;
   margin-bottom: 50px;
 }
 

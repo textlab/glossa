@@ -86,7 +86,8 @@ window.ResultsMain = React.createClass
     SearchInputs = window["#{capSearchEngine}SearchInputs"]
     ResultTable = window["#{capSearchEngine}ResultsTable"]
 
-    `<span>
+    `<span style={{position: 'relative'}}>
+      {corpus.logo ? <img className="corpus-logo" src={corpus.logo} style={{height: '250px'}} /> : ''}
       <SearchInputs
         store={store}
         corpus={corpus}
