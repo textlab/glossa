@@ -14,5 +14,7 @@ window.CorpusInfo = React.createClass
           </h2>
         </div>
       </div>
+      <div className="span3" style={{position: 'relative'}}>
       {this.props.corpusLogoUrl ? <img className="corpus-logo" src={this.props.corpusLogoUrl} /> : ''}
+      </div>
     </div>`
