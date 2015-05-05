@@ -55,6 +55,7 @@ gem 'daemon_controller'
 gem 'rubyzip'
 gem 'ruby-saml'
 gem "rserve-client", "~> 0.3.1"
+gem 'ting'
 
 group :development do
   gem 'thin'

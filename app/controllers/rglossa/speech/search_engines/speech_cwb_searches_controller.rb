@@ -170,6 +170,10 @@ module Rglossa
                   end
                   attr_values = token.split('/')
                   acc[token_no] = Hash[[word_attr].concat(corpus.display_attrs).zip(attr_values)]
+                  if corpus.languages.map{|h|h[:lang]} == [:zh] && acc[token_no]["phon"]
+                    acc[token_no]["phon"] = Ting.pretty_tones(acc[token_no]["phon"]) rescue
+                                              acc[token_no]["phon"]
+                  end
                   acc
                 end,
                 from: starttimes.shift,

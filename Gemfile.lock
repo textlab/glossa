@@ -252,6 +252,7 @@ GEM
     tilt (1.4.1)
     timers (4.0.1)
       hitimes
+    ting (0.9.0)
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
@@ -311,5 +312,6 @@ DEPENDENCIES
   test-unit
   therubyracer
   thin
+  ting
   turbo-sprockets-rails3
   uglifier (>= 1.2.7)
