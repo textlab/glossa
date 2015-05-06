@@ -63,9 +63,7 @@
 
                    :plugins [[lein-figwheel "0.2.7"]]
 
-                   :figwheel {:http-server-root "public"
-                              :server-port 3449
-                              :css-dirs ["resources/public/css"]
+                   :figwheel {:css-dirs ["resources/public/css"]
                               :open-file-command "idea-opener"}
 
                    :env {:is-dev true}
