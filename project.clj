@@ -23,7 +23,7 @@
                  [cljs-ajax "0.3.11"]
                  [prone "0.8.1"]]
 
-  :plugins [[lein-cljsbuild "1.0.3"]
+  :plugins [[lein-cljsbuild "1.0.6"]
             [lein-environ "1.0.0"]
             [lein-sassc "0.10.0"]
             [lein-auto "0.1.1"]]
