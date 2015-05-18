@@ -31,3 +31,6 @@ public/assets/
 
 # Ignore generated temporary waveforms
 public/tmp_waveforms/
+
+# Ignore installation-specific media files
+public/media/
