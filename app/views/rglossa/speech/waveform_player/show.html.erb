@@ -36,7 +36,7 @@ soundManager.setup({
   debugFlash: false,
   useHighPerformance: true, // keep flash on screen, boost performance
   wmode: 'transparent', // transparent SWF, if possible
-  url: '<%= File.join ENV["RAILS_RELATIVE_URL_ROOT"] || "", ActionController::Base.helpers.asset_path("rglossa/speech/") %>'
+  url: '<%= File.join ENV["RAILS_RELATIVE_URL_ROOT"] || "", "/swf/" %>'
 });
 
 // custom page player configuration
@@ -56,7 +56,7 @@ var PP_CONFIG = {
 
 <!-- Page player main script -->
 <%= javascript_include_tag ActionController::Base.helpers.asset_path("rglossa/speech/wfplayer.js") %>
-<%= javascript_include_tag ActionController::Base.helpers.asset_path("jquery.min") %>
+<%= javascript_include_tag ActionController::Base.helpers.asset_path("jquery.min.js") %>
 <script src="<%= '%s/%s.js' % [@conf['output_dir'], @file] %>" type="text/javascript"></script>
 </head>
 
