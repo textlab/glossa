@@ -25,3 +25,9 @@ test/dummy/tmp/
 test/dummy/.sass-cache
 test/dummy/config/database.yml
 node_modules
+
+# Ignore precompiled assets
+public/assets/
+
+# Ignore generated temporary waveforms
+public/tmp_waveforms/
