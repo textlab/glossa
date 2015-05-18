@@ -115,7 +115,9 @@ module Rglossa
       # running queries throws an exception
       ActiveRecord::Base.transaction do
         search = model_class.new(search_params)
-        search.user_id = (Rails.env == 'development' && !current_user) ? 1 : current_user.id
+        #search.user_id = (Rails.env == 'development' && !current_user) ? 1 : current_user.id
+        # FIXME: Associate searches with real users!
+        search.user_id = 1
         search.save
         search
       end
