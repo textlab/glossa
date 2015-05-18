@@ -47,6 +47,7 @@ Glossa2::Application.configure do
 
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
   # config.assets.precompile += %w( search.js )
+  config.assets.precompile += %w( es5-shim.min.js es5-sham.min.js bootstrap-2.3.1/bootstrap.css rglossa/speech/wfplayer.css rglossa/speech/wfplayer-flashblock.css rglossa/speech/soundmanager2-nodebug-jsmin.js rglossa/speech/wfplayer.js jquery.min.js rglossa/speech/zoom-in.png rglossa/speech/zoom-out.png rglossa/speech/play-pause.png )
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
