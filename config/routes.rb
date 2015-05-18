@@ -1,9 +1,9 @@
 Glossa2::Application.routes.draw do
+match 'front', to: 'front#index'
 scope module: 'rglossa' do
   devise_for :users, :class_name => "Rglossa::User", module: :devise
 
   root :to => 'home#index'
-  match 'front', to: 'front#index'
   get 'admin', to: 'corpora#list'
 
   resources :corpora do
