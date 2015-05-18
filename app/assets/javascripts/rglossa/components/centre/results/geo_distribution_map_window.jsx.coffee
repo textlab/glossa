@@ -260,8 +260,6 @@ window.GeoDistributionMapWindow = React.createClass
         label: key)
     else []
 
-    console.log(@props.data)
-
     `<div>
       <div style={{float: 'left'}}>
         <GeoDistributionMap ref="map" initLat={62} initLon={6} initZoom={4} width={650} height={540} points={points} />
