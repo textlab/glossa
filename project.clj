@@ -21,7 +21,9 @@
                  [http-kit "2.1.19"]
                  [prismatic/plumbing "0.4.2" :exclusions [potemkin]]
                  [cljs-ajax "0.3.11"]
-                 [prone "0.8.1"]]
+                 [prone "0.8.1"]
+                 [com.orientechnologies/orientdb-graphdb "2.0.8"]
+                 [clojurewerkz/ogre "2.5.0.0"]]
 
   :plugins [[lein-cljsbuild "1.0.6"]
             [lein-environ "1.0.0"]
@@ -55,8 +57,7 @@
 
                    :dependencies [[figwheel "0.2.7"]
                                   [com.cemerick/piggieback "0.2.1"]
-                                  [org.clojure/tools.nrepl "0.2.10"]
-                                  [leiningen "2.5.1"]]
+                                  [org.clojure/tools.nrepl "0.2.10"]]
 
                    :repl-options {:init-ns cglossa.server
                                   :nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}

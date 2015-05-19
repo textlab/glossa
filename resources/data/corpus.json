@@ -1,0 +1,30 @@
+{
+  "config": {
+    "log": "debug"
+  },
+  "begin": [
+    {"console": {"commands": [
+      "CONNECT remote:localhost/Glossa admin admin;",
+      "TRUNCATE CLASS Corpus;"
+    ]}}
+  ],
+  "source": { "file": { "path": "/Users/noklesta/prosjekter/lein/no.uio.tekstlab/cglossa/resources/data/corpora.tsv" } },
+  "extractor": { "row": {} },
+  "transformers": [
+    { "csv": { "separator": "\t" } },
+    { "vertex": { "class": "Corpus" } }
+  ],
+  "loader": {
+    "orientdb": {
+      "dbURL": "remote:localhost/Glossa",
+      "dbType": "graph",
+      "classes": [
+        {"name": "Corpus", "extends": "V"},
+        {"name": "MetadataCategory", "extends": "V"},
+        {"name": "HasMetadataCategories", "extends": "E"}
+      ], "indexes": [
+        {"class":"Corpus", "fields":["code:string"], "type":"UNIQUE_HASH_INDEX" }
+      ]
+    }
+  }
+}

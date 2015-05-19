@@ -1,0 +1,39 @@
+{
+  "config": {
+    "corpus": "bokmal",
+    "fileDirectory": "/Users/noklesta/prosjekter/lein/no.uio.tekstlab/cglossa/resources/data/metadata_categories/",
+    "log": "debug"
+  },
+  "begin": [
+    {"let": { "name": "$filePath", "expression": "$fileDirectory.append($corpus).append('.tsv')"}},
+    {"console": {"commands": [
+      "CONNECT remote:localhost/Glossa admin admin;",
+      "TRUNCATE CLASS MetadataCategory;",
+      "TRUNCATE CLASS HasMetadataCategory;"
+    ]}}
+  ],
+  "source": { "file": { "path": "$filePath" } },
+  "extractor": { "row": {} },
+  "transformers": [
+    { "csv": { "separator": "\t" } },
+    { "vertex": { "class": "MetadataCategory" } },
+    { "edge": {"class": "HasMetadataCategory",
+               "lookup": "Corpus.code",
+               "joinValue": "bokmal",
+               "unresolvedLinkAction": "ERROR"}}
+  ],
+  "loader": {
+    "orientdb": {
+      "dbURL": "remote:localhost/Glossa",
+      "dbType": "graph",
+      "classes": [
+        {"name": "Corpus", "extends": "V"},
+        {"name": "MetadataCategory", "extends": "V"},
+        {"name": "HasMetadataCategory", "extends": "E"}
+      ],
+      "indexes": [
+        {"class":"Corpus", "fields":["code:string"], "type":"UNIQUE_HASH_INDEX" }
+      ]
+    }
+  }
+}
