@@ -36,6 +36,8 @@
 
             :jvm-opts ^:replace ["-Xmx1g" "-server"]
 
+            :main cglossa.server
+
             :clean-targets ^{:protect false} ["resources/public/js/out"]
 
             :cljsbuild {:builds {:app {:source-paths ["src/cljs" "target/classes"]
