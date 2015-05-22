@@ -21,9 +21,9 @@
       "classes": [
         {"name": "Corpus", "extends": "V"},
         {"name": "MetadataCategory", "extends": "V"},
-        {"name": "HasMetadataCategories", "extends": "E"}
+        {"name": "HasMetadataCategory", "extends": "E"}
       ], "indexes": [
-        {"class":"Corpus", "fields":["code:string"], "type":"UNIQUE_HASH_INDEX" }
+        {"class":"Corpus", "fields":["code:string"], "type":"UNIQUE" }
       ]
     }
   }

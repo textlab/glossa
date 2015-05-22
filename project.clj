@@ -23,7 +23,10 @@
                            [cljs-ajax "0.3.11"]
                            [prone "0.8.1"]
                            [com.orientechnologies/orientdb-graphdb "2.0.8"]
-                           [clojurewerkz/ogre "2.5.0.0"]]
+                           [clojurewerkz/ogre "2.5.0.0"]
+                           [org.clojure/data.csv "0.1.2"]
+                           [me.raynes/conch "0.8.0"]
+                           [me.raynes/fs "1.4.6"]]
 
             :plugins [[lein-cljsbuild "1.0.6"]
                       [lein-environ "1.0.0"]
