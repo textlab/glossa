@@ -7,15 +7,40 @@
             [me.raynes.fs :as fs]
             [cheshire.core :as cheshire]))
 
-(def ^:private corpus-config-template
+(def ^:private corpora-config-template
   {:config       {:log "debug"},
    :begin        [{:console
                    {:commands
                     ["CONNECT remote:localhost/Glossa admin admin;"
                      "TRUNCATE CLASS Corpus;"]}}],
+   :source       {:file {:path :WILL-BE-REPLACED}},
    :extractor    {:row {}},
    :transformers [{:csv {:separator "\t"}}
                   {:vertex {:class "Corpus"}}],
+   :loader       {:orientdb
+                  {:dbURL   "remote:localhost/Glossa",
+                   :dbType  "graph",
+                   :classes [{:name "Corpus", :extends "V"}
+                             {:name "MetadataCategory", :extends "V"}
+                             {:name "HasMetadataCategory", :extends "E"}],
+                   :indexes [{:class "Corpus", :fields ["code:string"], :type "UNIQUE"}]}}})
+
+(def ^:private metadata-categories-config-template
+  {:config       {:log "debug"},
+   :begin        [{:console
+                   {:commands
+                    ["CONNECT remote:localhost/Glossa admin admin;"
+                     "TRUNCATE CLASS MetadataCategory;"
+                     "TRUNCATE CLASS HasMetadataCategory;"]}}],
+   :source       {:file {:path :WILL-BE-REPLACED}},
+   :extractor    {:row {}},
+   :transformers [{:csv {:separator "\t"}}
+                  {:vertex {:class "MetadataCategory"}}
+                  {:edge
+                   {:class                "HasMetadataCategory",
+                    :lookup               "Corpus.code",
+                    :joinValue            :WILL-BE-REPLACED,
+                    :unresolvedLinkAction "ERROR"}}],
    :loader       {:orientdb
                   {:dbURL   "remote:localhost/Glossa",
                    :dbType  "graph",
@@ -42,20 +67,20 @@
 (defn import-corpora []
   (let [tsv-path    (.getPath (io/resource "data/corpora.tsv"))
         config-path (fs/temp-file "corpus_config")
-        config      (-> corpus-config-template
-                        (assoc :source {:file {:path tsv-path}})
+        config      (-> corpora-config-template
+                        (assoc-in [:source :file :path] tsv-path)
                         (cheshire/generate-string {:pretty true}))]
     (spit config-path config)
     (import-2cols tsv-path config-path)))
 
 (defn import-metadata-categories [corpus]
-  (let [tsv-path        (-> (str "resources/data/metadata_categories/" corpus ".tsv")
-                            fs/absolute
-                            .getPath)
-        config-template (.getPath (fs/absolute "resources/data/metadata_categories.json"))
-        config-path     (fs/temp-file "metadata_cat_config")
-        config          (-> (slurp config-template)
-                            (str/replace "###CORPUS###" corpus)
-                            (str/replace "###TSV-PATH###" tsv-path))]
+  (let [tsv-path    (-> (str "data/metadata_categories/" corpus ".tsv")
+                        io/resource
+                        .getPath)
+        config-path (fs/temp-file "metadata_cat_config")
+        config      (-> metadata-categories-config-template
+                        (assoc-in [:source :file :path] tsv-path)
+                        (assoc-in [:transformers 2 :edge :joinValue] corpus)
+                        (cheshire/generate-string {:pretty true}))]
     (spit config-path config)
     (import-2cols tsv-path config-path)))
