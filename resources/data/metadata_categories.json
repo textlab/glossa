@@ -1,25 +1,22 @@
 {
   "config": {
-    "corpus": "bokmal",
-    "fileDirectory": "/Users/noklesta/prosjekter/lein/no.uio.tekstlab/cglossa/resources/data/metadata_categories/",
     "log": "debug"
   },
   "begin": [
-    {"let": { "name": "$filePath", "expression": "$fileDirectory.append($corpus).append('.tsv')"}},
     {"console": {"commands": [
       "CONNECT remote:localhost/Glossa admin admin;",
       "TRUNCATE CLASS MetadataCategory;",
       "TRUNCATE CLASS HasMetadataCategory;"
     ]}}
   ],
-  "source": { "file": { "path": "$filePath" } },
+  "source": { "file": { "path": "###TSV-PATH###" } },
   "extractor": { "row": {} },
   "transformers": [
     { "csv": { "separator": "\t" } },
     { "vertex": { "class": "MetadataCategory" } },
     { "edge": {"class": "HasMetadataCategory",
                "lookup": "Corpus.code",
-               "joinValue": "bokmal",
+               "joinValue": "###CORPUS###",
                "unresolvedLinkAction": "ERROR"}}
   ],
   "loader": {
@@ -32,7 +29,7 @@
         {"name": "HasMetadataCategory", "extends": "E"}
       ],
       "indexes": [
-        {"class":"Corpus", "fields":["code:string"], "type":"UNIQUE_HASH_INDEX" }
+        {"class":"Corpus", "fields":["code:string"], "type":"UNIQUE" }
       ]
     }
   }
