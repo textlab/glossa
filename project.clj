@@ -26,7 +26,8 @@
                            [clojurewerkz/ogre "2.5.0.0"]
                            [org.clojure/data.csv "0.1.2"]
                            [me.raynes/conch "0.8.0"]
-                           [me.raynes/fs "1.4.6"]]
+                           [me.raynes/fs "1.4.6"]
+                           [cheshire "5.4.0"]]
 
             :plugins [[lein-cljsbuild "1.0.6"]
                       [lein-environ "1.0.0"]

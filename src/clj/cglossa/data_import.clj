@@ -4,7 +4,25 @@
             [clojure.java.io :as io]
             [environ.core :as environ]
             [me.raynes.conch :as conch]
-            [me.raynes.fs :as fs]))
+            [me.raynes.fs :as fs]
+            [cheshire.core :as cheshire]))
+
+(def ^:private corpus-config-template
+  {:config       {:log "debug"},
+   :begin        [{:console
+                   {:commands
+                    ["CONNECT remote:localhost/Glossa admin admin;"
+                     "TRUNCATE CLASS Corpus;"]}}],
+   :extractor    {:row {}},
+   :transformers [{:csv {:separator "\t"}}
+                  {:vertex {:class "Corpus"}}],
+   :loader       {:orientdb
+                  {:dbURL   "remote:localhost/Glossa",
+                   :dbType  "graph",
+                   :classes [{:name "Corpus", :extends "V"}
+                             {:name "MetadataCategory", :extends "V"}
+                             {:name "HasMetadataCategory", :extends "E"}],
+                   :indexes [{:class "Corpus", :fields ["code:string"], :type "UNIQUE"}]}}})
 
 (defn- run-etl [config-path]
   (let [etl-path (:oetl environ/env)]
@@ -22,8 +40,12 @@
       (run-etl config-path))))
 
 (defn import-corpora []
-  (let [tsv-path    "resources/data/corpora.tsv"
-        config-path (.getPath (fs/absolute "resources/data/corpora.json"))]
+  (let [tsv-path    (.getPath (io/resource "data/corpora.tsv"))
+        config-path (fs/temp-file "corpus_config")
+        config      (-> corpus-config-template
+                        (assoc :source {:file {:path tsv-path}})
+                        (cheshire/generate-string {:pretty true}))]
+    (spit config-path config)
     (import-2cols tsv-path config-path)))
 
 (defn import-metadata-categories [corpus]
