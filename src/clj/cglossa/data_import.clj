@@ -63,8 +63,8 @@
                   {:edge
                    {:class                "HasMetadataValue",
                     :lookup               "MetadataCategory.corpus_cat",
-                    :direction            "in"
                     :joinValue            :WILL-BE-REPLACED
+                    :direction            "in"
                     :unresolvedLinkAction "ERROR"}}],
    :loader       {:orientdb
                   {:dbURL   "remote:localhost/Glossa",
@@ -73,6 +73,28 @@
                              {:name "MetadataValue", :extends "V"}
                              {:name "HasMetadataValue", :extends "E"}],
                    :indexes [{:class "MetadataCategory", :fields ["corpus_cat:string"], :type "UNIQUE"}]}}})
+
+(def ^:private metadata-values-config-template
+  {:config       {:log "debug"},
+   :source       {:file {:path :WILL-BE-REPLACED}},
+   :extractor    {:row {}},
+   :transformers [{:csv {:separator "\t"}}
+                  {:vertex {:class "MetadataValue"}}
+                  {:edge
+                   {:class                "HasMetadataValue",
+                    :lookup               "MetadataCategory.corpus_cat",
+                    :joinFieldName        "corpus_cat",
+                    :direction            "in"
+                    :unresolvedLinkAction "ERROR"}}],
+   :loader       {:orientdb
+                  {:dbURL   "remote:localhost/Glossa",
+                   :dbType  "graph",
+                   :classes [{:name "MetadataCategory", :extends "V"}
+                             {:name "MetadataValue", :extends "V"}
+                             {:name "HasMetadataValue", :extends "E"}],
+                   :indexes [{:class  "MetadataCategory",
+                              :fields ["corpus_cat:string"],
+                              :type   "UNIQUE"}]}}})
 
 (defn- read-csv [file]
   (csv/read-csv file :separator \tab :quote \^))
@@ -127,12 +149,40 @@
         (assert (= "tid" tid-header)
                 (str "Format error: Expected first line to contain column headers "
                      "with 'tid' (text ID) as the first header."))
-        (write-csv tsv-file (cons ["value"] (map #(subvec % 0 1) rows)))))))
+        (write-csv tsv-file (cons ["corpus_cat" "value"]
+                                  (map (fn [row]
+                                         [(str corpus "_tid") (first row)])
+                                       rows)))))))
 
 (defn- modify-tid-config! [corpus config-path tsv-path]
   (spit config-path (-> tids-config-template
                         (assoc-in [:source :file :path] tsv-path)
                         (assoc-in [:transformers 2 :edge :joinValue] (str corpus "_tid"))
+                        (cheshire/generate-string {:pretty true}))))
+
+(defn- modify-metadata-values-tsv! [corpus tsv-path]
+  (let [orig-tsv-path (-> (str "data/metadata_values/" corpus ".tsv")
+                          io/resource
+                          .getPath)]
+    (with-open [orig-tsv-file (io/reader orig-tsv-path)
+                tsv-file      (io/writer tsv-path)]
+      (let [[headers & rows] (read-csv orig-tsv-file)
+            [tid-header & other-headers] headers
+            non-blank? (complement str/blank?)]
+        (assert (= "tid" tid-header)
+                (str "Format error: Expected first line to contain column headers "
+                     "with 'tid' (text ID) as the first header."))
+        (write-csv tsv-file (->> rows
+                                 (mapcat (fn [row]
+                                       (map (fn [field header]
+                                              [(str corpus "_" header) field])
+                                            (rest row) other-headers)))
+                                 (filter #(non-blank? (second %)))
+                                 (cons ["corpus_cat" "value"])))))))
+
+(defn- modify-metadata-values-config! [config-path tsv-path]
+  (spit config-path (-> metadata-values-config-template
+                        (assoc-in [:source :file :path] tsv-path)
                         (cheshire/generate-string {:pretty true}))))
 
 (defn import-corpora! []
@@ -160,5 +210,7 @@
         other-config-path (.getPath (fs/temp-file "metadata_val_config"))]
     (create-tid-tsv! corpus tid-tsv-path)
     (modify-tid-config! corpus tid-config-path tid-tsv-path)
-    #_(modify-metadata-values-tsv! corpus tsv-path)
-    (run-etl tid-config-path)))
+    (modify-metadata-values-tsv! corpus other-tsv-path)
+    (modify-metadata-values-config! other-config-path other-tsv-path)
+    (run-etl tid-config-path)
+    (run-etl other-config-path)))
