@@ -56,31 +56,51 @@
     (conch/let-programs [etl etl-path]
                         (etl config-path {:seq true}))))
 
-(defn- import-2cols [tsv-path config-path]
-  (with-open [file (io/reader tsv-path)]
-    (let [headers (first (csv/read-csv file :separator \tab))]
-      (assert (= ["code" "name"] headers)
-              (str "Format error: Expected first line to contain column headers "
-                   "and the two columns to be 'code' and 'name'."))
-      (run-etl config-path))))
+(defn- modify-corpora-config! [config-path tsv-path]
+  (spit config-path
+        (-> corpora-config-template
+            (assoc-in [:source :file :path] tsv-path)
+            (cheshire/generate-string {:pretty true}))))
+
+(defn- modify-metadata-categories-tsv! [corpus tsv-path]
+  (let [orig-tsv-path (-> (str "data/metadata_categories/" corpus ".tsv")
+                          io/resource
+                          .getPath)]
+    (with-open [orig-tsv-file (io/reader orig-tsv-path)
+                tsv-file      (io/writer tsv-path)]
+      ;; Prepend a column with the code ("short name") for the corpus and
+      ;; the category combined, which will be used to create edges from
+      ;; the category to its values when we import the latter.
+      (let [[orig-headers & orig-rows] (read-csv orig-tsv-file)
+            headers (vec (cons "corpus_cat" orig-headers))
+            rows    (vec (map #(vec (cons (str corpus "_" (first %)) %)) orig-rows))]
+        (assert (= ["corpus_cat" "code" "name"] headers)
+                (str "Format error: Expected first line to contain column headers "
+                     "and the two columns to be 'code' and 'name'."))
+        (csv/write-csv tsv-file (vec (cons headers rows)) :separator \tab)))))
+
+(defn- modify-metadata-categories-config! [corpus config-path tsv-path]
+  (spit config-path (-> metadata-categories-config-template
+                        (assoc-in [:source :file :path] tsv-path)
+                        (assoc-in [:transformers 2 :edge :joinValue] corpus)
+                        (cheshire/generate-string {:pretty true}))))
+
 
 (defn import-corpora []
   (let [tsv-path    (.getPath (io/resource "data/corpora.tsv"))
-        config-path (fs/temp-file "corpus_config")
-        config      (-> corpora-config-template
-                        (assoc-in [:source :file :path] tsv-path)
-                        (cheshire/generate-string {:pretty true}))]
-    (spit config-path config)
-    (import-2cols tsv-path config-path)))
+        config-path (fs/temp-file "corpus_config")]
+    (modify-corpora-config! config-path tsv-path)
+    (with-open [file (io/reader tsv-path)]
+      (let [headers (first (read-csv file))]
+        (assert (= ["code" "name"] headers)
+                (str "Format error: Expected first line to contain column headers "
+                     "and the two columns to be 'code' and 'name'."))
+        (run-etl config-path)))))
 
 (defn import-metadata-categories [corpus]
-  (let [tsv-path    (-> (str "data/metadata_categories/" corpus ".tsv")
-                        io/resource
-                        .getPath)
-        config-path (fs/temp-file "metadata_cat_config")
-        config      (-> metadata-categories-config-template
-                        (assoc-in [:source :file :path] tsv-path)
-                        (assoc-in [:transformers 2 :edge :joinValue] corpus)
-                        (cheshire/generate-string {:pretty true}))]
-    (spit config-path config)
-    (import-2cols tsv-path config-path)))
+  (let [tsv-path    (.getPath (fs/temp-file "metadata-cats"))
+        config-path (.getPath (fs/temp-file "metadata_cat_config"))]
+    (modify-metadata-categories-tsv! corpus tsv-path)
+    (modify-metadata-categories-config! corpus config-path tsv-path)
+    (run-etl config-path)))
+
