@@ -63,6 +63,7 @@
                   {:edge
                    {:class                "HasMetadataValue",
                     :lookup               "MetadataCategory.corpus_cat",
+                    :direction            "in"
                     :joinValue            :WILL-BE-REPLACED
                     :unresolvedLinkAction "ERROR"}}],
    :loader       {:orientdb
@@ -115,6 +116,18 @@
                         (assoc-in [:transformers 2 :edge :joinValue] corpus)
                         (cheshire/generate-string {:pretty true}))))
 
+(defn- create-tid-tsv! [corpus tsv-path]
+  (let [orig-tsv-path (-> (str "data/metadata_values/" corpus ".tsv")
+                          io/resource
+                          .getPath)]
+    (with-open [orig-tsv-file (io/reader orig-tsv-path)
+                tsv-file      (io/writer tsv-path)]
+      (let [[headers & rows] (read-csv orig-tsv-file)
+            tid-header (first headers)]
+        (assert (= "tid" tid-header)
+                (str "Format error: Expected first line to contain column headers "
+                     "with 'tid' (text ID) as the first header."))
+        (write-csv tsv-file (cons ["value"] (map #(subvec % 0 1) rows)))))))
 
 (defn- modify-tid-config! [corpus config-path tsv-path]
   (spit config-path (-> tids-config-template
@@ -145,8 +158,7 @@
         other-tsv-path    (.getPath (fs/temp-file "metadata_vals"))
         tid-config-path   (.getPath (fs/temp-file "tid_config"))
         other-config-path (.getPath (fs/temp-file "metadata_val_config"))]
-    (println tid-config-path)
-    #_(create-tid-tsv! corpus tid-tsv-path)
+    (create-tid-tsv! corpus tid-tsv-path)
     (modify-tid-config! corpus tid-config-path tid-tsv-path)
     #_(modify-metadata-values-tsv! corpus tsv-path)
-    #_(run-etl config-path)))
+    (run-etl tid-config-path)))
