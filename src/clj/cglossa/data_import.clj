@@ -8,8 +8,7 @@
             [cheshire.core :as cheshire]))
 
 (def ^:private corpora-config-template
-  {:config       {:log "debug"},
-   :begin        [{:console
+  {:begin        [{:console
                    {:commands
                     ["CONNECT remote:localhost/Glossa admin admin;"
                      "TRUNCATE CLASS Corpus;"]}}],
@@ -24,8 +23,7 @@
                    :indexes [{:class "Corpus", :fields ["code:string"], :type "UNIQUE"}]}}})
 
 (def ^:private metadata-categories-config-template
-  {:config       {:log "debug"},
-   :begin        [{:console
+  {:begin        [{:console
                    {:commands
                     ["CONNECT remote:localhost/Glossa admin admin;"
                      "TRUNCATE CLASS MetadataCategory;"
@@ -50,8 +48,7 @@
                              {:class "MetadataCategory", :fields ["corpus_cat:string"], :type "UNIQUE"}]}}})
 
 (def ^:private tids-config-template
-  {:config       {:log "debug"},
-   :begin        [{:console
+  {:begin        [{:console
                    {:commands
                     ["CONNECT remote:localhost/Glossa admin admin;"
                      "TRUNCATE CLASS MetadataValue;"
@@ -75,8 +72,7 @@
                    :indexes [{:class "MetadataCategory", :fields ["corpus_cat:string"], :type "UNIQUE"}]}}})
 
 (def ^:private metadata-values-config-template
-  {:config       {:log "debug"},
-   :source       {:file {:path :WILL-BE-REPLACED}},
+  {:source       {:file {:path :WILL-BE-REPLACED}},
    :extractor    {:row {}},
    :transformers [{:csv {:separator "\t"}}
                   {:vertex {:class "MetadataValue"}}
