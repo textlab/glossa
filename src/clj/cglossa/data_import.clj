@@ -17,10 +17,12 @@
    :transformers [{:csv {:separator "\t"}}
                   {:vertex {:class "Corpus"}}],
    :loader       {:orientdb
-                  {:dbURL   "remote:localhost/Glossa",
-                   :dbType  "graph",
-                   :classes [{:name "Corpus", :extends "V"}],
-                   :indexes [{:class "Corpus", :fields ["code:string"], :type "UNIQUE"}]}}})
+                  {:dbURL               "remote:localhost/Glossa",
+                   :dbType              "graph",
+                   :wal                 false,
+                   :useLightweightEdges true,
+                   :classes             [{:name "Corpus", :extends "V"}],
+                   :indexes             [{:class "Corpus", :fields ["code:string"], :type "UNIQUE"}]}}})
 
 (def ^:private metadata-categories-config-template
   {:begin        [{:console
@@ -38,14 +40,16 @@
                     :joinValue            :WILL-BE-REPLACED,
                     :unresolvedLinkAction "ERROR"}}],
    :loader       {:orientdb
-                  {:dbURL   "remote:localhost/Glossa",
-                   :dbType  "graph",
-                   :classes [{:name "Corpus", :extends "V"}
-                             {:name "MetadataCategory", :extends "V"}
-                             {:name "HasMetadataCategory", :extends "E"}],
-                   :indexes [{:class "Corpus", :fields ["code:string"], :type "UNIQUE"}
-                             {:class "MetadataCategory", :fields ["code:string"], :type "UNIQUE"}
-                             {:class "MetadataCategory", :fields ["corpus_cat:string"], :type "UNIQUE"}]}}})
+                  {:dbURL               "remote:localhost/Glossa",
+                   :dbType              "graph",
+                   :wal                 false,
+                   :useLightweightEdges true,
+                   :classes             [{:name "Corpus", :extends "V"}
+                                         {:name "MetadataCategory", :extends "V"}
+                                         {:name "HasMetadataCategory", :extends "E"}],
+                   :indexes             [{:class "Corpus", :fields ["code:string"], :type "UNIQUE"}
+                                         {:class "MetadataCategory", :fields ["code:string"], :type "UNIQUE"}
+                                         {:class "MetadataCategory", :fields ["corpus_cat:string"], :type "UNIQUE"}]}}})
 
 (def ^:private tids-config-template
   {:begin        [{:console
@@ -64,12 +68,14 @@
                     :direction            "in"
                     :unresolvedLinkAction "ERROR"}}],
    :loader       {:orientdb
-                  {:dbURL   "remote:localhost/Glossa",
-                   :dbType  "graph",
-                   :classes [{:name "MetadataCategory", :extends "V"}
-                             {:name "MetadataValue", :extends "V"}
-                             {:name "HasMetadataValue", :extends "E"}],
-                   :indexes [{:class "MetadataCategory", :fields ["corpus_cat:string"], :type "UNIQUE"}]}}})
+                  {:dbURL               "remote:localhost/Glossa",
+                   :dbType              "graph",
+                   :wal                 false,
+                   :useLightweightEdges true,
+                   :classes             [{:name "MetadataCategory", :extends "V"}
+                                         {:name "MetadataValue", :extends "V"}
+                                         {:name "HasMetadataValue", :extends "E"}],
+                   :indexes             [{:class "MetadataCategory", :fields ["corpus_cat:string"], :type "UNIQUE"}]}}})
 
 (def ^:private metadata-values-config-template
   {:source       {:file {:path :WILL-BE-REPLACED}},
@@ -83,14 +89,16 @@
                     :direction            "in"
                     :unresolvedLinkAction "ERROR"}}],
    :loader       {:orientdb
-                  {:dbURL   "remote:localhost/Glossa",
-                   :dbType  "graph",
-                   :classes [{:name "MetadataCategory", :extends "V"}
-                             {:name "MetadataValue", :extends "V"}
-                             {:name "HasMetadataValue", :extends "E"}],
-                   :indexes [{:class  "MetadataCategory",
-                              :fields ["corpus_cat:string"],
-                              :type   "UNIQUE"}]}}})
+                  {:dbURL               "remote:localhost/Glossa",
+                   :dbType              "graph",
+                   :wal                 false,
+                   :useLightweightEdges true,
+                   :classes             [{:name "MetadataCategory", :extends "V"}
+                                         {:name "MetadataValue", :extends "V"}
+                                         {:name "HasMetadataValue", :extends "E"}],
+                   :indexes             [{:class  "MetadataCategory",
+                                          :fields ["corpus_cat:string"],
+                                          :type   "UNIQUE"}]}}})
 
 (defn- read-csv [file]
   (csv/read-csv file :separator \tab :quote \^))
@@ -182,31 +190,34 @@
                         (cheshire/generate-string {:pretty true}))))
 
 (defn import-corpora! []
-  (let [tsv-path    (.getPath (io/resource "data/corpora.tsv"))
-        config-path (fs/temp-file "corpus_config")]
-    (modify-corpora-config! config-path tsv-path)
-    (with-open [file (io/reader tsv-path)]
-      (let [headers (first (read-csv file))]
-        (assert (= ["code" "name"] headers)
-                (str "Format error: Expected first line to contain column headers "
-                     "and the two columns to be 'code' and 'name'."))
-        (run-etl config-path)))))
+  (println
+    (let [tsv-path    (.getPath (io/resource "data/corpora.tsv"))
+          config-path (fs/temp-file "corpus_config")]
+      (modify-corpora-config! config-path tsv-path)
+      (with-open [file (io/reader tsv-path)]
+        (let [headers (first (read-csv file))]
+          (assert (= ["code" "name"] headers)
+                  (str "Format error: Expected first line to contain column headers "
+                       "and the two columns to be 'code' and 'name'."))
+          (run-etl config-path))))))
 
 (defn import-metadata-categories! [corpus]
-  (let [tsv-path    (.getPath (fs/temp-file "metadata-cats"))
-        config-path (.getPath (fs/temp-file "metadata_cat_config"))]
-    (modify-metadata-categories-tsv! corpus tsv-path)
-    (modify-metadata-categories-config! corpus config-path tsv-path)
-    (run-etl config-path)))
+  (println
+    (let [tsv-path    (.getPath (fs/temp-file "metadata-cats"))
+          config-path (.getPath (fs/temp-file "metadata_cat_config"))]
+      (modify-metadata-categories-tsv! corpus tsv-path)
+      (modify-metadata-categories-config! corpus config-path tsv-path)
+      (run-etl config-path))))
 
 (defn import-metadata-values! [corpus]
-  (let [tid-tsv-path      (.getPath (fs/temp-file "tids"))
-        other-tsv-path    (.getPath (fs/temp-file "metadata_vals"))
-        tid-config-path   (.getPath (fs/temp-file "tid_config"))
-        other-config-path (.getPath (fs/temp-file "metadata_val_config"))]
-    (create-tid-tsv! corpus tid-tsv-path)
-    (modify-tid-config! corpus tid-config-path tid-tsv-path)
-    (modify-metadata-values-tsv! corpus other-tsv-path)
-    (modify-metadata-values-config! other-config-path other-tsv-path)
-    (run-etl tid-config-path)
-    (run-etl other-config-path)))
+  (println
+    (let [tid-tsv-path      (.getPath (fs/temp-file "tids"))
+          other-tsv-path    (.getPath (fs/temp-file "metadata_vals"))
+          tid-config-path   (.getPath (fs/temp-file "tid_config"))
+          other-config-path (.getPath (fs/temp-file "metadata_val_config"))]
+      (create-tid-tsv! corpus tid-tsv-path)
+      (modify-tid-config! corpus tid-config-path tid-tsv-path)
+      (modify-metadata-values-tsv! corpus other-tsv-path)
+      (modify-metadata-values-config! other-config-path other-tsv-path)
+      (run-etl tid-config-path)
+      (run-etl other-config-path))))
