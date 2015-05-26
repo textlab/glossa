@@ -59,16 +59,14 @@
                      :output-to "resources/public/css/style.css"}]
             :auto {"sassc" {:file-pattern #"\.(scss)$"}}
 
-            :profiles {:dev     {:source-paths ["env/dev/clj"]
-
-                                 :dependencies [[figwheel "0.2.7"]
+            :profiles {:dev     {:dependencies [[figwheel "0.3.3"]
                                                 [com.cemerick/piggieback "0.2.1"]
                                                 [org.clojure/tools.nrepl "0.2.10"]]
 
                                  :repl-options {:init-ns          cglossa.server
                                                 :nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
 
-                                 :plugins      [[lein-figwheel "0.2.7"]]
+                                 :plugins      [[lein-figwheel "0.3.3"]]
 
                                  :figwheel     {:css-dirs          ["resources/public/css"]
                                                 :open-file-command "idea-opener"}
@@ -77,15 +75,13 @@
 
                                  :cljsbuild    {:builds
                                                 {:app
-                                                 {:source-paths ["env/dev/cljs"]}}}}
+                                                 {:figwheel {:on-jsload "cglossa.core/main"}}}}}
 
-                       :uberjar {:source-paths ["env/prod/clj"]
-                                 :hooks        [leiningen.cljsbuild]
-                                 :env          {:production true}
-                                 :omit-source  true
-                                 :aot          :all
-                                 :cljsbuild    {:builds {:app
-                                                         {:source-paths ["env/prod/cljs"]
-                                                          :compiler
-                                                                        {:optimizations :advanced
-                                                                         :pretty-print  false}}}}}})
+                       :uberjar {:hooks       [leiningen.cljsbuild]
+                                 :env         {:production true}
+                                 :omit-source true
+                                 :aot         :all
+                                 :cljsbuild   {:builds {:app
+                                                        {:compiler
+                                                         {:optimizations :advanced
+                                                          :pretty-print  false}}}}}})
