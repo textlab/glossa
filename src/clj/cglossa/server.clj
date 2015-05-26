@@ -12,7 +12,8 @@
             [ring.handler.dump :refer [handle-dump]]
             [prone.middleware :refer [wrap-exceptions]]
             [environ.core :refer [env]]
-            [org.httpkit.server :refer [run-server]]))
+            [org.httpkit.server :refer [run-server]])
+  (:gen-class))
 
 (deftemplate page
   (io/resource "index.html") [] [:body] (if is-dev? inject-devmode-html identity))
