@@ -170,9 +170,9 @@
                      "with 'tid' (text ID) as the first header."))
         (write-csv tsv-file (->> rows
                                  (mapcat (fn [row]
-                                       (map (fn [field header]
-                                              [(str corpus "_" header) field])
-                                            (rest row) other-headers)))
+                                           (map (fn [field header]
+                                                  [(str corpus "_" header) field])
+                                                (rest row) other-headers)))
                                  (filter #(non-blank? (second %)))
                                  (cons ["corpus_cat" "value"])))))))
 
