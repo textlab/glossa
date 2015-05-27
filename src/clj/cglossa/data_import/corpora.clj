@@ -2,6 +2,7 @@
   (:require [cheshire.core :as cheshire]
             [clojure.java.io :as io]
             [me.raynes.fs :as fs]
+            [clojure.string :as str]
             [cglossa.data-import.utils :as utils]))
 
 (def ^:private config-template
@@ -11,7 +12,7 @@
                      "TRUNCATE CLASS MetadataValue UNSAFE;"
                      "TRUNCATE CLASS MetadataCategory UNSAFE;"
                      "TRUNCATE CLASS Corpus UNSAFE;"]}}]
-   :source       {:file {:path :WILL-BE-REPLACED}}
+   :source       {:file {:path "###TSV-PATH###"}}
    :extractor    {:row {}}
    :transformers [{:csv {:separator "\t"}}
                   {:vertex {:class "Corpus"}}]
@@ -26,8 +27,8 @@
 (defn- create-config! [config-path tsv-path]
   (spit config-path
         (-> config-template
-            (assoc-in [:source :file :path] tsv-path)
-            (cheshire/generate-string {:pretty true}))))
+            (cheshire/generate-string {:pretty true})
+            (str/replace "###TSV-PATH###" tsv-path))))
 
 (defn import! []
   (let [tsv-path    (.getPath (io/resource "data/corpora.tsv"))

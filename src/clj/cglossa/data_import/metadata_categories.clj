@@ -2,7 +2,8 @@
   (:require [clojure.java.io :as io]
             [cheshire.core :as cheshire]
             [me.raynes.fs :as fs]
-            [cglossa.data-import.utils :as utils]))
+            [cglossa.data-import.utils :as utils]
+            [clojure.string :as str]))
 
 (def ^:private config-template
   {:begin        [{:console
@@ -10,14 +11,14 @@
                     ["CONNECT remote:localhost/Glossa admin admin;"
                      "TRUNCATE CLASS MetadataValue UNSAFE;"
                      "TRUNCATE CLASS MetadataCategory UNSAFE;"]}}]
-   :source       {:file {:path :WILL-BE-REPLACED}}
+   :source       {:file {:path "###TSV-PATH###"}}
    :extractor    {:row {}}
    :transformers [{:csv {:separator "\t"}}
                   {:vertex {:class "MetadataCategory"}}
                   {:edge
                    {:class                "HasMetadataCategory"
                     :lookup               "Corpus.code"
-                    :joinValue            :WILL-BE-REPLACED
+                    :joinValue            "###CORPUS###"
                     :direction            "in"
                     :unresolvedLinkAction "ERROR"}}]
    :loader       {:orientdb
@@ -50,9 +51,9 @@
 
 (defn- create-config! [corpus config-path tsv-path]
   (spit config-path (-> config-template
-                        (assoc-in [:source :file :path] tsv-path)
-                        (assoc-in [:transformers 2 :edge :joinValue] corpus)
-                        (cheshire/generate-string {:pretty true}))))
+                        (cheshire/generate-string {:pretty true})
+                        (str/replace "###TSV-PATH###" tsv-path)
+                        (str/replace "###CORPUS###" corpus))))
 
 (defn import! [corpus]
   (let [tsv-path    (.getPath (fs/temp-file "metadata-cats"))

@@ -10,7 +10,7 @@
                    {:commands
                     ["CONNECT remote:localhost/Glossa admin admin;"
                      "TRUNCATE CLASS MetadataValue UNSAFE;"]}}]
-   :source       {:file {:path :WILL-BE-REPLACED}}
+   :source       {:file {:path "###TSV-PATH###"}}
    :extractor    {:row {}}
    :transformers [{:csv {:separator "\t"}}
                   {:vertex {:class "MetadataValue" :skipDuplicates true}}
@@ -32,14 +32,14 @@
                                           :type   "UNIQUE"}]}}})
 
 (def ^:private tids-template
-  {:source       {:file {:path :WILL-BE-REPLACED}}
+  {:source       {:file {:path "###TSV-PATH###"}}
    :extractor    {:row {}}
    :transformers [{:csv {:separator "\t"}}
                   {:vertex {:class "MetadataValue"}}
                   {:edge
                    {:class                "HasMetadataValue"
                     :lookup               "MetadataCategory.corpus_cat"
-                    :joinValue            :WILL-BE-REPLACED
+                    :joinValue            "###CORPUS###_tid"
                     :direction            "in"
                     :unresolvedLinkAction "ERROR"}}]
    :loader       {:orientdb
@@ -53,8 +53,8 @@
 
 (defn- create-non-tids-config! [config-path tsv-path]
   (spit config-path (-> non-tids-template
-                        (assoc-in [:source :file :path] tsv-path)
-                        (cheshire/generate-string {:pretty true}))))
+                        (cheshire/generate-string {:pretty true})
+                        (str/replace "###TSV-PATH###" tsv-path))))
 
 (defn- create-non-tids-tsv! [corpus tsv-path]
   (let [orig-tsv-path (-> (str "data/metadata_values/" corpus ".tsv") io/resource .getPath)]
@@ -97,9 +97,9 @@
 
 (defn- create-tid-config! [corpus config-path tsv-path]
   (spit config-path (-> tids-template
-                        (assoc-in [:source :file :path] tsv-path)
-                        (assoc-in [:transformers 2 :edge :joinValue] (str corpus "_tid"))
-                        (cheshire/generate-string {:pretty true}))))
+                        (cheshire/generate-string {:pretty true})
+                        (str/replace "###TSV-PATH###" tsv-path)
+                        (str/replace "###CORPUS###" corpus))))
 
 (defn import! [corpus]
   (let [tid-tsv-path         (.getPath (fs/temp-file "tids"))
