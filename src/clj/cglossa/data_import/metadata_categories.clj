@@ -9,26 +9,27 @@
                    {:commands
                     ["CONNECT remote:localhost/Glossa admin admin;"
                      "TRUNCATE CLASS MetadataValue UNSAFE;"
-                     "TRUNCATE CLASS MetadataCategory UNSAFE;"]}}],
-   :source       {:file {:path :WILL-BE-REPLACED}},
-   :extractor    {:row {}},
+                     "TRUNCATE CLASS MetadataCategory UNSAFE;"]}}]
+   :source       {:file {:path :WILL-BE-REPLACED}}
+   :extractor    {:row {}}
    :transformers [{:csv {:separator "\t"}}
                   {:vertex {:class "MetadataCategory"}}
                   {:edge
-                   {:class                "HasMetadataCategory",
-                    :lookup               "Corpus.code",
-                    :joinValue            :WILL-BE-REPLACED,
-                    :unresolvedLinkAction "ERROR"}}],
+                   {:class                "HasMetadataCategory"
+                    :lookup               "Corpus.code"
+                    :joinValue            :WILL-BE-REPLACED
+                    :direction            "in"
+                    :unresolvedLinkAction "ERROR"}}]
    :loader       {:orientdb
-                  {:dbURL               "remote:localhost/Glossa",
-                   :dbType              "graph",
-                   :wal                 false,
-                   :useLightweightEdges true,
-                   :classes             [{:name "Corpus", :extends "V"}
-                                         {:name "MetadataCategory", :extends "V"}],
-                   :indexes             [{:class "Corpus", :fields ["code:string"], :type "UNIQUE"}
-                                         {:class "MetadataCategory", :fields ["code:string"], :type "UNIQUE"}
-                                         {:class "MetadataCategory", :fields ["corpus_cat:string"], :type "UNIQUE"}]}}})
+                  {:dbURL               "remote:localhost/Glossa"
+                   :dbType              "graph"
+                   :wal                 false
+                   :useLightweightEdges true
+                   :classes             [{:name "Corpus" :extends "V"}
+                                         {:name "MetadataCategory" :extends "V"}]
+                   :indexes             [{:class "Corpus" :fields ["code:string"] :type "UNIQUE"}
+                                         {:class "MetadataCategory" :fields ["code:string"] :type "UNIQUE"}
+                                         {:class "MetadataCategory" :fields ["corpus_cat:string"] :type "UNIQUE"}]}}})
 
 (defn- create-tsv! [corpus tsv-path]
   (let [orig-tsv-path (-> (str "data/metadata_categories/" corpus ".tsv")

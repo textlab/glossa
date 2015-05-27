@@ -9,47 +9,47 @@
   {:begin        [{:console
                    {:commands
                     ["CONNECT remote:localhost/Glossa admin admin;"
-                     "TRUNCATE CLASS MetadataValue UNSAFE;"]}}],
-   :source       {:file {:path :WILL-BE-REPLACED}},
-   :extractor    {:row {}},
+                     "TRUNCATE CLASS MetadataValue UNSAFE;"]}}]
+   :source       {:file {:path :WILL-BE-REPLACED}}
+   :extractor    {:row {}}
    :transformers [{:csv {:separator "\t"}}
                   {:vertex {:class "MetadataValue" :skipDuplicates true}}
                   {:edge
-                   {:class                "HasMetadataValue",
-                    :lookup               "MetadataCategory.corpus_cat",
-                    :joinFieldName        "corpus_cat",
+                   {:class                "HasMetadataValue"
+                    :lookup               "MetadataCategory.corpus_cat"
+                    :joinFieldName        "corpus_cat"
                     :direction            "in"
-                    :unresolvedLinkAction "ERROR"}}],
+                    :unresolvedLinkAction "ERROR"}}]
    :loader       {:orientdb
-                  {:dbURL               "remote:localhost/Glossa",
-                   :dbType              "graph",
-                   :wal                 false,
-                   :useLightweightEdges true,
-                   :classes             [{:name "MetadataCategory", :extends "V"}
-                                         {:name "MetadataValue", :extends "V"}],
-                   :indexes             [{:class  "MetadataCategory",
-                                          :fields ["corpus_cat:string"],
+                  {:dbURL               "remote:localhost/Glossa"
+                   :dbType              "graph"
+                   :wal                 false
+                   :useLightweightEdges true
+                   :classes             [{:name "MetadataCategory" :extends "V"}
+                                         {:name "MetadataValue" :extends "V"}]
+                   :indexes             [{:class  "MetadataCategory"
+                                          :fields ["corpus_cat:string"]
                                           :type   "UNIQUE"}]}}})
 
 (def ^:private tids-template
-  {:source       {:file {:path :WILL-BE-REPLACED}},
-   :extractor    {:row {}},
+  {:source       {:file {:path :WILL-BE-REPLACED}}
+   :extractor    {:row {}}
    :transformers [{:csv {:separator "\t"}}
                   {:vertex {:class "MetadataValue"}}
                   {:edge
-                   {:class                "HasMetadataValue",
-                    :lookup               "MetadataCategory.corpus_cat",
+                   {:class                "HasMetadataValue"
+                    :lookup               "MetadataCategory.corpus_cat"
                     :joinValue            :WILL-BE-REPLACED
                     :direction            "in"
-                    :unresolvedLinkAction "ERROR"}}],
+                    :unresolvedLinkAction "ERROR"}}]
    :loader       {:orientdb
-                  {:dbURL               "remote:localhost/Glossa",
-                   :dbType              "graph",
-                   :wal                 false,
-                   :useLightweightEdges true,
-                   :classes             [{:name "MetadataCategory", :extends "V"}
-                                         {:name "MetadataValue", :extends "V"}],
-                   :indexes             [{:class "MetadataCategory", :fields ["corpus_cat:string"], :type "UNIQUE"}]}}})
+                  {:dbURL               "remote:localhost/Glossa"
+                   :dbType              "graph"
+                   :wal                 false
+                   :useLightweightEdges true
+                   :classes             [{:name "MetadataCategory" :extends "V"}
+                                         {:name "MetadataValue" :extends "V"}]
+                   :indexes             [{:class "MetadataCategory" :fields ["corpus_cat:string"] :type "UNIQUE"}]}}})
 
 (defn- create-non-tids-config! [config-path tsv-path]
   (spit config-path (-> non-tids-template

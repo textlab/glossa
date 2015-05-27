@@ -10,18 +10,18 @@
                     ["CONNECT remote:localhost/Glossa admin admin;"
                      "TRUNCATE CLASS MetadataValue UNSAFE;"
                      "TRUNCATE CLASS MetadataCategory UNSAFE;"
-                     "TRUNCATE CLASS Corpus UNSAFE;"]}}],
-   :source       {:file {:path :WILL-BE-REPLACED}},
-   :extractor    {:row {}},
+                     "TRUNCATE CLASS Corpus UNSAFE;"]}}]
+   :source       {:file {:path :WILL-BE-REPLACED}}
+   :extractor    {:row {}}
    :transformers [{:csv {:separator "\t"}}
-                  {:vertex {:class "Corpus"}}],
+                  {:vertex {:class "Corpus"}}]
    :loader       {:orientdb
-                  {:dbURL               "remote:localhost/Glossa",
-                   :dbType              "graph",
-                   :wal                 false,
-                   :useLightweightEdges true,
-                   :classes             [{:name "Corpus", :extends "V"}],
-                   :indexes             [{:class "Corpus", :fields ["code:string"], :type "UNIQUE"}]}}})
+                  {:dbURL               "remote:localhost/Glossa"
+                   :dbType              "graph"
+                   :wal                 false
+                   :useLightweightEdges true
+                   :classes             [{:name "Corpus" :extends "V"}]
+                   :indexes             [{:class "Corpus" :fields ["code:string"] :type "UNIQUE"}]}}})
 
 (defn- create-config! [config-path tsv-path]
   (spit config-path
