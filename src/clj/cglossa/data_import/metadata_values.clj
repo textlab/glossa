@@ -67,10 +67,16 @@
                 (str "Format error: Expected first line to contain column headers "
                      "with 'tid' (text ID) as the first header."))
         (utils/write-csv tsv-file (->> rows
-                                       (mapcat (fn [row]
-                                                 (map (fn [field header]
-                                                        [(str corpus "_" header) field])
-                                                      (rest row) other-headers)))
+                                       (apply map list)     ; Convert rows to columns
+                                       rest                 ; Skip 'tid' column
+                                       ;; Startpos and endpos are not metadata values; for the
+                                       ;; other columns, construct a [header column] vector
+                                       (keep-indexed (fn [index col]
+                                                       (let [header (get (vec other-headers) index)]
+                                                         (when-not (get #{"startpos" "endpos"} header)
+                                                           [header col]))))
+                                       (mapcat (fn [[header col-vals]]
+                                                 (map (fn [val] [(str corpus "_" header) val]) col-vals)))
                                        set
                                        (filter #(non-blank? (second %)))
                                        (cons ["corpus_cat" "value"])))))))
