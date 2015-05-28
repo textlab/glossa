@@ -92,12 +92,13 @@
                               rest
                               (filter #(not (get #{"startpos" "endpos"} %1))))
           cat-edges      (map (fn [cat]
-                                {:edge {:class                "HasMetadataValue"
-                                        :lookup               (str "SELECT from MetadataValue WHERE corpus_cat = '"
-                                                                   (str corpus "_" cat)
-                                                                   "' AND value = ?")
-                                        :joinFieldName        cat
-                                        :unresolvedLinkAction "ERROR"}})
+                                {:edge
+                                 {:class                "HasMetadataValue"
+                                  :lookup               (str "SELECT from MetadataValue WHERE corpus_cat = '"
+                                                             (str corpus "_" cat)
+                                                             "' AND value = ?")
+                                  :joinFieldName        cat
+                                  :unresolvedLinkAction "WARNING"}})
                               other-cats)
           field-removals (map (fn [cat]
                                 {:field {:fieldName cat
