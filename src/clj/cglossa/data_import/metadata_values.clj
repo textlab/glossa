@@ -85,20 +85,6 @@
                                      (filter #(non-blank? (second %)))
                                      (cons ["corpus_cat" "value"]))))))
 
-(defn- create-tid-tsv! [corpus tsv-path]
-  (let [orig-tsv-path (-> (str "data/metadata_values/" corpus ".tsv") io/resource .getPath)]
-    (with-open [orig-tsv-file (io/reader orig-tsv-path)
-                tsv-file      (io/writer tsv-path)]
-      (let [[headers & rows] (utils/read-csv orig-tsv-file)
-            tid-header (first headers)]
-        (assert (= "tid" tid-header)
-                (str "Format error: Expected first line to contain column headers "
-                     "with 'tid' (text ID) as the first header."))
-        (utils/write-csv tsv-file (cons ["corpus_cat" "value"]
-                                        (map (fn [row]
-                                               [(str corpus "_tid") (first row)])
-                                             rows)))))))
-
 (defn- create-tid-config! [corpus config-path orig-tsv-path]
   (with-open [tsv-file (io/reader orig-tsv-path)]
     (let [other-cats     (->> (utils/read-csv tsv-file)
