@@ -12,7 +12,8 @@
                      "TRUNCATE CLASS MetadataValue UNSAFE;"]}}]
    :source       {:file {:path "###TSV-PATH###"}}
    :extractor    {:row {}}
-   :transformers [{:csv {:separator "\t"}}
+   :transformers [{:csv {:separator "\t"
+                         :columns   ["corpus_cat:string" "value:string"]}}
                   {:vertex {:class "MetadataValue"}}
                   {:edge
                    {:class                "InCategory"
@@ -105,6 +106,12 @@
                                          :operation "remove"}})
                               other-cats)]
       (spit config-path (-> tids-template
+                            ;; Mark all columns except startpos and endpos as strings
+                            (update-in [:transformers 0 :csv]
+                                       assoc :columns (map (fn [cat] (if (get #{"startpos" "endpos"} cat)
+                                                                       cat
+                                                                       (str cat ":string")))
+                                                           cats))
                             (update-in [:transformers] concat cat-edges field-removals)
                             (cheshire/generate-string {:pretty true})
                             (str/replace "###TSV-PATH###" orig-tsv-path)
