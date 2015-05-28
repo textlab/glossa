@@ -19,7 +19,7 @@
                    {:class                "InCategory"
                     :lookup               "MetadataCategory.corpus_cat"
                     :joinFieldName        "corpus_cat"
-                    :unresolvedLinkAction "ERROR"}}]
+                    :unresolvedLinkAction "HALT"}}]
    :loader       {:orientdb
                   {:dbURL               "remote:localhost/Glossa"
                    :dbType              "graph"
@@ -36,13 +36,11 @@
    :extractor    {:row {}}
    :transformers [{:csv {:separator "\t"}}
                   {:vertex {:class "MetadataValue"}}
-                  {:field {:fieldName "value" :expression "tid"}}
-                  {:field {:fieldName "tid" :operation "remove"}}
                   {:edge
                    {:class                "InCategory"
                     :lookup               "MetadataCategory.corpus_cat"
                     :joinValue            "###CORPUS###_tid"
-                    :unresolvedLinkAction "ERROR"}}]
+                    :unresolvedLinkAction "HALT"}}]
    :loader       {:orientdb
                   {:dbURL               "remote:localhost/Glossa"
                    :dbType              "graph"
