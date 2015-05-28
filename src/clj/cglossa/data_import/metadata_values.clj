@@ -65,8 +65,7 @@
   (with-open [orig-tsv-file (io/reader orig-tsv-path)
               tsv-file      (io/writer tsv-path)]
     (let [[headers & rows] (utils/read-csv orig-tsv-file)
-          [tid-header & other-headers] headers
-          non-blank? (complement str/blank?)]
+          [tid-header & other-headers] headers]
       (assert (= "tid" tid-header)
               (str "Format error: Expected first line to contain column headers "
                    "with 'tid' (text ID) as the first header."))
@@ -82,7 +81,9 @@
                                      (mapcat (fn [[header col-vals]]
                                                (map (fn [val] [(str corpus "_" header) val]) col-vals)))
                                      set
-                                     (filter #(non-blank? (second %)))
+                                     (filter (fn [[_ val]]
+                                               (not (or (str/blank? val)
+                                                        (= "\\N" val)))))
                                      (cons ["corpus_cat" "value"]))))))
 
 (defn- create-tid-config! [corpus config-path orig-tsv-path]
