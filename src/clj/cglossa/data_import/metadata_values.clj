@@ -87,8 +87,8 @@
 
 (defn- create-tid-config! [corpus config-path orig-tsv-path]
   (with-open [tsv-file (io/reader orig-tsv-path)]
-    (let [other-cats     (->> (utils/read-csv tsv-file)
-                              first
+    (let [cats           (first (utils/read-csv tsv-file))
+          other-cats     (->> cats
                               rest
                               (filter #(not (get #{"startpos" "endpos"} %1))))
           cat-edges      (map (fn [cat]
@@ -116,13 +116,31 @@
                             (str/replace "###TSV-PATH###" orig-tsv-path)
                             (str/replace "###CORPUS###" corpus))))))
 
+(defn- fix-fields [row]
+  ;; Escape unescaped quotes with a backslash
+  (map #(str/replace % #"(?<!\\)\"" "\\\"") row))
+
+(defn- create-tid-tsv! [corpus orig-tsv-path tsv-path]
+  (with-open [orig-tsv-file (io/reader orig-tsv-path)
+              tsv-file      (io/writer tsv-path)]
+    (let [[headers & rows] (utils/read-csv orig-tsv-file)
+          [tid-header & other-headers] headers]
+      (assert (= "tid" tid-header)
+              (str "Format error: Expected first line to contain column headers "
+                   "with 'tid' (text ID) as the first header."))
+      (utils/write-csv tsv-file (->> rows
+                                     (map fix-fields)
+                                     (cons (cons "value" other-headers)))))))
+
 (defn import! [corpus]
   (let [orig-tsv-path       (-> (str "data/metadata_values/" corpus ".tsv") io/resource .getPath)
         non-tid-tsv-path    (.getPath (fs/temp-file "metadata_vals"))
-        tid-config-path     (.getPath (fs/temp-file "tid_config"))
-        non-tid-config-path (.getPath (fs/temp-file "metadata_val_config"))]
+        non-tid-config-path (.getPath (fs/temp-file "metadata_val_config"))
+        tid-tsv-path        (.getPath (fs/temp-file "tids"))
+        tid-config-path     (.getPath (fs/temp-file "tid_config"))]
     (create-non-tid-tsv! corpus orig-tsv-path non-tid-tsv-path)
     (create-non-tid-config! non-tid-config-path non-tid-tsv-path)
-    (create-tid-config! corpus tid-config-path orig-tsv-path)
+    (create-tid-tsv! corpus orig-tsv-path tid-tsv-path)
+    (create-tid-config! corpus tid-config-path tid-tsv-path)
     (utils/run-etl non-tid-config-path)
     (utils/run-etl tid-config-path)))
