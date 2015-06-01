@@ -16,9 +16,10 @@
                          :columns   ["corpus_cat:string" "value:string"]}}
                   {:vertex {:class "MetadataValue"}}
                   {:edge
-                   {:class                "InCategory"
+                   {:class                "HasMetadataValue"
                     :lookup               "MetadataCategory.corpus_cat"
                     :joinFieldName        "corpus_cat"
+                    :direction            "in"
                     :unresolvedLinkAction "HALT"}}]
    :loader       {:orientdb
                   {:dbURL               "remote:localhost/Glossa"
@@ -37,9 +38,10 @@
    :transformers [{:csv {:separator "\t"}}
                   {:vertex {:class "MetadataValue"}}
                   {:edge
-                   {:class                "InCategory"
+                   {:class                "HasMetadataValue"
                     :lookup               "MetadataCategory.corpus_cat"
                     :joinValue            "###CORPUS###_tid"
+                    :direction            "in"
                     :unresolvedLinkAction "HALT"}}]
    :loader       {:orientdb
                   {:dbURL               "remote:localhost/Glossa"
@@ -87,23 +89,30 @@
 
 (defn- create-tid-config! [corpus config-path orig-tsv-path]
   (with-open [tsv-file (io/reader orig-tsv-path)]
-    (let [cats           (first (utils/read-csv tsv-file))
-          other-cats     (->> cats
-                              rest
-                              (filter #(not (get #{"startpos" "endpos"} %1))))
-          cat-edges      (map (fn [cat]
-                                {:edge
-                                 {:class                "HasMetadataValue"
-                                  :lookup               (str "SELECT from MetadataValue WHERE corpus_cat = '"
-                                                             (str corpus "_" cat)
-                                                             "' AND value = ?")
-                                  :joinFieldName        cat
-                                  :unresolvedLinkAction "WARNING"}})
-                              other-cats)
-          field-removals (map (fn [cat]
-                                {:field {:fieldName cat
-                                         :operation "remove"}})
-                              other-cats)]
+    (let [cats            (first (utils/read-csv tsv-file))
+          non-tid-cats    (->> cats
+                               rest
+                               (filter #(not (get #{"startpos" "endpos"} %1))))
+          ;; Create edges from all the non-tid metadata values on the current tsv line
+          ;; to the tid value, representing the fact that these values describe the text
+          ;; identified by this tid. Note that the non-tid values were created in the
+          ;; database in a previous step, by importing a "uniqueified" list of values,
+          ;; since we would get lots of duplicate values if we created one value for each
+          ;; field on the current tsv line.
+          describes-edges (map (fn [cat]
+                                 {:edge
+                                  {:class                "DescribesText"
+                                   :lookup               (str "SELECT from MetadataValue WHERE corpus_cat = '"
+                                                              (str corpus "_" cat)
+                                                              "' AND value = ?")
+                                   :joinFieldName        cat
+                                   :direction            "in"
+                                   :unresolvedLinkAction "WARNING"}})
+                               non-tid-cats)
+          field-removals  (map (fn [cat]
+                                 {:field {:fieldName cat
+                                          :operation "remove"}})
+                               non-tid-cats)]
       (spit config-path (-> tids-template
                             ;; Mark all columns except startpos and endpos as strings
                             (update-in [:transformers 0 :csv]
@@ -111,7 +120,7 @@
                                                                        cat
                                                                        (str cat ":string")))
                                                            cats))
-                            (update-in [:transformers] concat cat-edges field-removals)
+                            (update-in [:transformers] concat describes-edges field-removals)
                             (cheshire/generate-string {:pretty true})
                             (str/replace "###TSV-PATH###" orig-tsv-path)
                             (str/replace "###CORPUS###" corpus))))))
