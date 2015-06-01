@@ -250,6 +250,15 @@
         "name": "noun",
         "value": "n",
         "features": [
+	  {
+	    "attr": "extra",
+            "options": [
+              {
+                "name": "compound",
+                "value": "compound"
+              }
+            ]
+	  },
           {
             "attr": "type",
             "options": [
