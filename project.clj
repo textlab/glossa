@@ -22,7 +22,7 @@
                            [prismatic/plumbing "0.4.2" :exclusions [potemkin]]
                            [cljs-ajax "0.3.11"]
                            [prone "0.8.1"]
-                           [com.orientechnologies/orientdb-graphdb "2.0.8"]
+                           [com.orientechnologies/orientdb-graphdb "2.1-rc3"]
                            [clojurewerkz/ogre "2.5.0.0"]
                            [org.clojure/data.csv "0.1.2"]
                            [me.raynes/conch "0.8.0"]
