@@ -16,21 +16,21 @@
   (:gen-class))
 
 (deftemplate page
-  (io/resource "index.html") [] [:body] (if is-dev? inject-devmode-html identity))
+             (io/resource "index.html") [] [:body] (if is-dev? inject-devmode-html identity))
 
 (defroutes api-routes
            )
 
 (defroutes app-routes
-  (resources "/")
+           (resources "/")
   (GET "/request" [] handle-dump)
   (GET "/" req (page)))
 
 (defroutes db-routes
-           (GET "/db" []
-                {:status  200
-                 :headers {}
-                 :body    "dummy"}))
+           (GET "/corpus" [code]
+             {:status  200
+              :headers {}
+              :body    (db/get-corpus code)}))
 
 (def http-handler
   (let [r (routes (wrap-restful-format #'db-routes :formats [:transit-json :json])
@@ -42,11 +42,11 @@
 
 (defn run [& [port]]
   (defonce ^:private server
-    (do
-      (let [port (Integer. (or port (env :port) 10555))]
-        (print "Starting web server on port" port ".\n")
-        (run-server http-handler {:port port
-                                  :join? false}))))
+           (do
+             (let [port (Integer. (or port (env :port) 10555))]
+               (print "Starting web server on port" port ".\n")
+               (run-server http-handler {:port  port
+                                         :join? false}))))
   server)
 
 (defn -main [& [port]]
