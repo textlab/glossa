@@ -15,9 +15,9 @@
   OrientDB database, and returns the query result as a seq. The params argument
   is a hash map with the following optional keys:
 
-  * targets: A vertex ID, or a sequence of such IDs, to use as the target in the
-  SQL query (e.g. '#12:1' or ['#12:1' '#12:2']), replacing the placeholder #TARGET
-  or #TARGETS (e.g. 'select from #TARGETS').
+  * target or targets: A vertex ID, or a sequence of such IDs, to use as the target
+  in the SQL query (e.g. '#12:1' or ['#12:1' '#12:2']), replacing the placeholder
+  #TARGET or #TARGETS (e.g. 'select from #TARGETS').
 
   * strings: Map with strings that will be interpolated into the SQL query, replacing
   placeholders with the same name preceded by an ampersand. Restricted to
@@ -38,9 +38,8 @@
    (query sql {}))
   ([sql params]
    (let [graph      (get-graph)
-         targets    (if (:targets params)
-                      (-> (:targets params) vector flatten vec)
-                      [])
+         t          (or (:target params) (:targets params))
+         targets    (if t (-> t vector flatten vec) [])
          _          (doseq [target targets] (assert (re-matches #"#\d+:\d+" target)
                                                     (str "Invalid target: " target)))
          strings    (:strings params)
