@@ -1,5 +1,4 @@
 (ns cglossa.core
-            [plumbing.core :as plumbing :refer [map-vals]]
   (:require [reagent.core :as r]
             [ajax.core :refer [GET]]
             [cglossa.start :as start]
@@ -21,8 +20,8 @@
                     :langs    [{:lang   :no
                                 :tagger :obt_bm_lbk}]}})
 
-(defonce app-state (into {} (map-vals atom state)))
-(defonce app-data (into {} (map-vals atom data)))
+(defonce app-state (into {} (map (fn [k v] [k (r/atom v)]) state)))
+(defonce app-data (into {} (map (fn [k v] [k (r/atom v)]) data)))
 
 (defn- header []
   [:div.navbar.navbar-fixed-top [:div.navbar-inner [:div.container [:span.brand "Glossa"]]]])
