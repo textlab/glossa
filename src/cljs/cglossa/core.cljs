@@ -1,6 +1,6 @@
 (ns cglossa.core
-  (:require [reagent.core :as reagent :refer [atom]]
             [plumbing.core :as plumbing :refer [map-vals]]
+  (:require [reagent.core :as r]
             [ajax.core :refer [GET]]
             [cglossa.start :as start]
             [cglossa.results :as results]))
@@ -41,7 +41,7 @@
       [:img.textlab-logo {:src "img/tekstlab.gif"}]]]))
 
 (defn ^:export main []
-  (reagent/render-component
+  (r/render-component
     (fn []
       [app app-state app-data])
     (. js/document (getElementById "app"))))
