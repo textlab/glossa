@@ -67,3 +67,12 @@
          cmd        (OCommandSQL. sql*)
          results    (.. graph (command cmd) (execute sql-params))]
      (map vertex->map results))))
+
+(defn get-corpus [code]
+  (let [res (sql-query (str "SELECT @rid, name, "
+                            "$cats.corpus_cat as cat_code, $cats.name as cat_name "
+                            "FROM Corpus "
+                            "LET $cats = out('HasMetadataCategory') "
+                            "WHERE code = ?")
+                       {:sql-params [code]})]
+    (first res)))
