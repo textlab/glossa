@@ -13,7 +13,6 @@
             [environ.core :refer [env]]
             [org.httpkit.server :refer [run-server]]
             [clojure.tools.logging :as log]
-            [cglossa.dev :refer [is-dev? inject-devmode-html]]
             [cglossa.db :as db])
   (:gen-class))
 
@@ -25,8 +24,7 @@
       (uncaughtException [_ thread ex]
         (log/error ex "Uncaught exception on" (.getName thread))))))
 
-(deftemplate page
-             (io/resource "index.html") [] [:body] (if is-dev? inject-devmode-html identity))
+(deftemplate page (io/resource "index.html") [])
 
 (defroutes api-routes
            )
@@ -45,7 +43,7 @@
 (def http-handler
   (let [r (routes (wrap-restful-format #'db-routes :formats [:transit-json :json])
                   #'app-routes)
-        r (if is-dev? (-> r reload/wrap-reload wrap-exceptions) r)]
+        r (if (:is-dev env) (-> r reload/wrap-reload wrap-exceptions) r)]
     (-> r
         wrap-keyword-params
         wrap-params)))
