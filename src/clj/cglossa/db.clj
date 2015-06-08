@@ -1,16 +1,29 @@
 (ns cglossa.db
   (:require [clojure.string :as str]
             [clojurewerkz.ogre.core :as q])
-  (:import (com.tinkerpop.blueprints.impls.orient OrientGraphFactory)
-           (com.orientechnologies.orient.core.sql OCommandSQL)))
+  (:import [com.tinkerpop.blueprints.impls.orient OrientGraphFactory]
+           [com.orientechnologies.orient.core.sql OCommandSQL]))
 
 (defn get-graph
-  ([] (get-graph true))
+  ([]
+   (get-graph true))
   ([transactional?]
    (let [factory (OrientGraphFactory. "remote:localhost/Glossa" "admin" "admin")]
      (if transactional? (.getTx factory) (.getNoTx factory)))))
 
-(defn query
+(defn vertex->map [v]
+  (as->
+    ;; Get all the key-value pairs for the OrientVertex
+    (.getProperties v) $
+    ;; Convert them to a Clojure hash map
+    (into {} $)
+    ;; @rid is just a temporary key for the result object, so remove it
+    (dissoc $ "@rid")
+    ;; The value of the 'rid' property is actually the entire OrientVertex object,
+    ;; but we just want it to be the string representation of its @rid (e.g. "12:0")
+    (update $ "rid" #(.. % getIdentity toString))))
+
+(defn sql-query
   "Takes an SQL query and optionally a map of parameters, runs it against the
   OrientDB database, and returns the query result as a seq. The params argument
   is a hash map with the following optional keys:
@@ -35,7 +48,7 @@
           :sql-params [\"bokmal\"]
           :strings    {:out \"HasMetadataCategory\"}})"
   ([sql]
-   (query sql {}))
+   (sql-query sql {}))
   ([sql params]
    (let [graph      (get-graph)
          t          (or (:target params) (:targets params))
@@ -52,5 +65,5 @@
                         (str/replace #"\&(\w+)" #(get strings (keyword (second %))))
                         (str/replace #"#TARGETS?" (str "[" (str/join ", " targets) "]")))
          cmd        (OCommandSQL. sql*)
-         ]
-     (seq (.. graph (command cmd) (execute sql-params))))))
+         results    (.. graph (command cmd) (execute sql-params))]
+     (map vertex->map results))))
