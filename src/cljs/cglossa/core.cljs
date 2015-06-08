@@ -20,8 +20,8 @@
                     :langs    [{:lang   :no
                                 :tagger :obt_bm_lbk}]}})
 
-(defonce app-state (into {} (map (fn [k v] [k (r/atom v)]) state)))
-(defonce app-data (into {} (map (fn [k v] [k (r/atom v)]) data)))
+(defonce app-state (into {} (map (fn [[k v]] [k (r/atom v)]) state)))
+(defonce app-data (into {} (map (fn [[k v]] [k (r/atom v)]) data)))
 
 (defn- header []
   [:div.navbar.navbar-fixed-top [:div.navbar-inner [:div.container [:span.brand "Glossa"]]]])
