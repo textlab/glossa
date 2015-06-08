@@ -4,16 +4,18 @@
             [compojure.route :refer [resources]]
             [compojure.handler :as handler]
             [net.cgrand.enlive-html :refer [deftemplate]]
+            [ring.util.response :as response]
             [ring.middleware.reload :as reload]
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
-            [ring.middleware.format :refer [wrap-restful-format]]
             [ring.handler.dump :refer [handle-dump]]
             [prone.middleware :refer [wrap-exceptions]]
             [environ.core :refer [env]]
             [org.httpkit.server :refer [run-server]]
             [clojure.tools.logging :as log]
+            [cognitect.transit :as transit]
             [cglossa.db :as db])
+  (:import [java.io ByteArrayOutputStream])
   (:gen-class))
 
 ;; Global exception handler. From http://stuartsierra.com/2015/05/27/clojure-uncaught-exceptions
@@ -26,9 +28,6 @@
 
 (deftemplate page (io/resource "index.html") [])
 
-(defroutes api-routes
-           )
-
 (defroutes app-routes
            (resources "/")
   (GET "/request" [] handle-dump)
@@ -36,13 +35,18 @@
 
 (defroutes db-routes
            (GET "/corpus" [code]
-             {:status  200
-              :headers {}
-              :body    (db/get-corpus code)}))
+             (let [baos   (ByteArrayOutputStream. 2000)
+                   writer (transit/writer baos :json)
+                   body   (db/get-corpus code)
+                   _      (transit/write writer body)
+                   res    (.toString baos)]
+               (.reset baos)
+               (-> (response/response res)
+                   (response/content-type "application/transit+json")
+                   (response/charset "utf-8")))))
 
 (def http-handler
-  (let [r (routes (wrap-restful-format #'db-routes :formats [:transit-json :json])
-                  #'app-routes)
+  (let [r (routes #'db-routes #'app-routes)
         r (if (:is-dev env) (-> r reload/wrap-reload wrap-exceptions) r)]
     (-> r
         wrap-keyword-params
