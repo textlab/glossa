@@ -16,11 +16,11 @@
            :metadata-categories nil})
 
 (defonce app-state (into {} (map (fn [[k v]] [k (reagent/atom v)]) state)))
-(defonce app-data (into {} (map (fn [[k v]] [k (reagent/atom v)]) data)))
+(defonce model-state (into {} (map (fn [[k v]] [k (reagent/atom v)]) data)))
 
 (defn response-handler [models response]
   (doseq [model (flatten [models])]
-    (reset! (get app-data model) (get response model))))
+    (reset! (get model-state model) (get response model))))
 
 (defn error-handler [{:keys [status status-text]}]
   (.log js/console (str "Error: " status " " status-text)))
@@ -32,7 +32,7 @@
 
 (defn ^:export main []
   (reagent/render-component
-    [app app-state app-data]
+    [app app-state model-state]
     (. js/document (getElementById "app"))))
 
 (main)

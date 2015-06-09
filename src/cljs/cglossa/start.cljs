@@ -15,9 +15,9 @@
       (when-let [logo (:logo @corpus)]
         [:img.corpus-logo {:src (str "img/" logo)}])]]]])
 
-(defn start [s {:keys [corpus] :as d}]
+(defn start [a {:keys [corpus] :as m}]
   (let [search-interface (search-interface-for-corpus corpus)]
     [:div
      [top]
-     [corpus-info s d]
-     [search-interface s d]]))
+     [corpus-info a m]
+     [search-interface a m]]))

@@ -4,8 +4,8 @@
 (defn- top []
   [:div.span9 "No matches found"])
 
-(defn results [s {:keys [corpus] :as d}]
+(defn results [a {:keys [corpus] :as m}]
   (let [search-interface (search-interface-for-corpus corpus)]
     [:div
      [top]
-     [search-interface s d]]))
+     [search-interface a m]]))
