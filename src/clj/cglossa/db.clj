@@ -38,12 +38,13 @@
     ;; @rid is just a temporary key for the result object, so remove it
     (dissoc $ "@rid")
     ;; Transform values as needed
-    (walk/walk (fn [[k v]] [k (xform-val v)]) identity $)))
+    (walk/walk (fn [[k v]] [k (xform-val v)]) identity $)
+    (walk/keywordize-keys $)))
 
 (defn sql-query
   "Takes an SQL query and optionally a map of parameters, runs it against the
-  OrientDB database, and returns the query result as a seq. The params argument
-  is a hash map with the following optional keys:
+  OrientDB database, and returns the query result as a lazy seq of hash maps.
+  The params argument is a hash map with the following optional keys:
 
   * target or targets: A vertex ID, or a sequence of such IDs, to use as the target
   in the SQL query (e.g. '#12:1' or ['#12:1' '#12:2']), replacing the placeholder
@@ -85,11 +86,23 @@
          results    (.. graph (command cmd) (execute sql-params))]
      (map vertex->map results))))
 
+(defn- vertex-name [name code]
+  "Creates a human-friendly name from code unless name already exists."
+  (or name (-> code str/capitalize (str/replace "_" " "))))
+
 (defn get-corpus [code]
-  (let [res (sql-query (str "SELECT @rid as corpus_rid, name as corpus_name, "
-                            "$cats.@rid as cat_rids, $cats.name as cat_names "
-                            "FROM Corpus "
-                            "LET $cats = out('HasMetadataCategory') "
-                            "WHERE code = ?")
-                       {:sql-params [code]})]
-    (first res)))
+  (let [ress (sql-query (str "SELECT @rid as corpus_rid, name as corpus_name, "
+                             "$cats.@rid as cat_rids, $cats.code as cat_codes, "
+                             "$cats.name as cat_names "
+                             "FROM Corpus "
+                             "LET $cats = out('HasMetadataCategory') "
+                             "WHERE code = ?")
+                        {:sql-params [code]})
+        res  (as-> ress $
+                   (first $)
+                   (update $ :cat_names (partial map vertex-name) (:cat_codes $)))]
+    {:corpus              {:rid  (:corpus_rid res)
+                           :name (:corpus_name res)}
+     :metadata-categories (-> (map (fn [rid name] {:rid rid :name name})
+                                   (:cat_rids res)
+                                   (:cat_names res)))}))
