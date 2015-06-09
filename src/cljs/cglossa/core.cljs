@@ -1,8 +1,7 @@
 (ns cglossa.core
   (:require [reagent.core :as reagent]
             [ajax.core :as ajax]
-            [cglossa.start :as start]
-            [cglossa.results :as results]))
+            [cglossa.app :refer [app]]))
 
 ; avoid "not resolved" messages in Cursive
 (declare getElementById)
@@ -31,26 +30,9 @@
                      :error           error-handler
                      :response-format (ajax/transit-response-format)})
 
-(defn- header []
-  [:div.navbar.navbar-fixed-top [:div.navbar-inner [:div.container [:span.brand "Glossa"]]]])
-
-(defn app [{:keys [showing-results?] :as s} {:keys [corpus] :as d}]
-  (let [cls (if (empty? (:metadata-categories @corpus)) "span12" "span9")]
-    [:div
-     [header]
-     [:div.container-fluid
-      [:div.row-fluid
-       [:div#main-content {:class-name cls}
-        (if @showing-results?
-          [results/main s d]
-          [start/main s d])]]]
-     [:div.app-footer
-      [:img.textlab-logo {:src "img/tekstlab.gif"}]]]))
-
 (defn ^:export main []
   (reagent/render-component
-    (fn []
-      [app app-state app-data])
+    [app app-state app-data]
     (. js/document (getElementById "app"))))
 
 (main)
