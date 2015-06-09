@@ -70,7 +70,7 @@
   ([sql params]
    (let [graph      (get-graph)
          t          (or (:target params) (:targets params))
-         targets    (if t (-> t vector flatten vec) [])
+         targets    (if t (flatten [t]) [])
          _          (doseq [target targets] (assert (re-matches #"#\d+:\d+" target)
                                                     (str "Invalid target: " target)))
          strings    (:strings params)
