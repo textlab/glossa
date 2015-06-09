@@ -1,5 +1,5 @@
 (ns cglossa.core
-  (:require [reagent.core :as r]
+  (:require [reagent.core :as reagent]
             [ajax.core :as ajax]
             [cglossa.start :as start]
             [cglossa.results :as results]))
@@ -16,8 +16,8 @@
 (def data {:corpus nil
            :metadata-categories nil})
 
-(defonce app-state (into {} (map (fn [[k v]] [k (r/atom v)]) state)))
-(defonce app-data (into {} (map (fn [[k v]] [k (r/atom v)]) data)))
+(defonce app-state (into {} (map (fn [[k v]] [k (reagent/atom v)]) state)))
+(defonce app-data (into {} (map (fn [[k v]] [k (reagent/atom v)]) data)))
 
 (defn response-handler [models response]
   (doseq [model (flatten [models])]
@@ -48,7 +48,7 @@
       [:img.textlab-logo {:src "img/tekstlab.gif"}]]]))
 
 (defn ^:export main []
-  (r/render-component
+  (reagent/render-component
     (fn []
       [app app-state app-data])
     (. js/document (getElementById "app"))))
