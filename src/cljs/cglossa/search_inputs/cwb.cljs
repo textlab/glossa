@@ -3,11 +3,13 @@
             [reagent.core :as reagent]))
 
 (defn- phrase->cqp [phrase phonetic?]
-  (let [attr (if phonetic? "phon" "word")
+  (let [attr                (if phonetic? "phon" "word")
         chinese-chars-range "[\u4E00-\u9FFF\u3400-\u4DFF\uF900-\uFAFF]"
         ; Surround every Chinese character by space when constructing a cqp query,
         ; to treat it as if it was an individual word:
-        phrase (str/replace phrase (re-pattern (str "(" chinese-chars-range ")")) " $1 ")]
+        phrase              (str/replace phrase
+                                         (re-pattern (str "(" chinese-chars-range ")"))
+                                         " $1 ")]
     (->> (str/split phrase #"\s")
          (map #(if (= % "")
                 ""
@@ -29,11 +31,11 @@
     (swap! query-cursor assoc-in [:query] query)))
 
 (defn- on-phonetic-changed [event query-cursor]
-  (let [query (:query @query-cursor)
+  (let [query    (:query @query-cursor)
         checked? (aget event "target" "checked")
-        query (if checked?
-                (str/replace query "word=" "phon=")
-                (str/replace query "phon=" "word="))]
+        query    (if checked?
+                   (str/replace query "word=" "phon=")
+                   (str/replace query "phon=" "word="))]
     (swap! query-cursor assoc-in [:query] query)))
 
 (defn- on-key-down [event query-cursor]
@@ -46,7 +48,7 @@
 ;;;;;;;;;;;;;
 
 (defn- search-button [multilingual?]
-  [:button.btn.btn-success {:style {:marginLeft (if multilingual? 80 40)}
+  [:button.btn.btn-success {:style    {:marginLeft (if multilingual? 80 40)}
                             :on-click search!} "Search"])
 
 (defn- add-language-button []
@@ -61,10 +63,9 @@
      [:option {:key (:value language) :value (:value language)} (:text language)])])
 
 (defn- simple [query-cursor]
-  [:span "hallo"]
-  (let [query (:query @query-cursor)
+  (let [query           (:query @query-cursor)
         displayed-query (str/replace query #"\[\(?\w+=\"(.+?)\"(?:\s+%c)?\)?\]" "$1")
-        phonetic? (not= -1 (.indexOf query "phon="))]
+        phonetic?       (not= -1 (.indexOf query "phon="))]
     [:div.row-fluid
      [:form.form-inline.span12
       [:div.span10
@@ -83,11 +84,11 @@
   [:span])
 
 (defn search-inputs [{:keys [search-view search-queries]} {:keys [corpus]}]
-  (let [view (case @search-view
-               :extended extended
-               :cqp cqp
-               simple)
-        languages (:langs @corpus)
+  (let [view          (case @search-view
+                        :extended extended
+                        :cqp cqp
+                        simple)
+        languages     (:langs @corpus)
         multilingual? (> (count languages) 1)]
     [:span
      [:div.row-fluid.search-input-links
@@ -109,7 +110,7 @@
      ; and display a row of search inputs for each of them. The doall call is needed
      ; because ratoms cannot be derefed inside lazy seqs.
      (doall (for [index (range (count @search-queries))]
-              (let [query-cursor (reagent/cursor search-queries [index])
+              (let [query-cursor      (reagent/cursor search-queries [index])
                     selected-language (-> @query-cursor :query :lang)]
                 (when multilingual? [language-select languages selected-language])
                 [view query-cursor multilingual?])))
