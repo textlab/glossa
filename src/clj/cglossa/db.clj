@@ -86,8 +86,8 @@
      (map vertex->map results))))
 
 (defn get-corpus [code]
-  (let [res (sql-query (str "SELECT @rid, name, "
-                            "$cats.corpus_cat as cat_code, $cats.name as cat_name "
+  (let [res (sql-query (str "SELECT @rid as corpus_rid, name as corpus_name, "
+                            "$cats.@rid as cat_rids, $cats.name as cat_names "
                             "FROM Corpus "
                             "LET $cats = out('HasMetadataCategory') "
                             "WHERE code = ?")
