@@ -1,6 +1,6 @@
 (ns cglossa.core
   (:require [reagent.core :as r]
-            [ajax.core :refer [GET]]
+            [ajax.core :as ajax]
             [cglossa.start :as start]
             [cglossa.results :as results]))
 
@@ -13,15 +13,23 @@
             :search-queries   [{:query "[word=\"han\" %c] [word=\"er\" %c]"}
                                {:query "[word=\"de\" %c] [word=\"sa\" %c]"}]})
 
-(def data {:corpus {:name     "Leksikografisk bokmålskorpus"
-                    :code     "bokmal"
-                    :encoding "iso-8859-1"
-                    :logo     "book-clip-art-3.png"
-                    :langs    [{:lang   :no
-                                :tagger :obt_bm_lbk}]}})
+(def data {:corpus nil
+           :metadata-categories nil})
 
 (defonce app-state (into {} (map (fn [[k v]] [k (r/atom v)]) state)))
 (defonce app-data (into {} (map (fn [[k v]] [k (r/atom v)]) data)))
+
+(defn response-handler [models response]
+  (doseq [model (flatten [models])]
+    (reset! (get app-data model) (get response model))))
+
+(defn error-handler [{:keys [status status-text]}]
+  (.log js/console (str "Error: " status " " status-text)))
+
+(ajax/GET "/corpus" {:params          {:code "bokmal"}
+                     :handler         (partial response-handler [:corpus :metadata-categories])
+                     :error           error-handler
+                     :response-format (ajax/transit-response-format)})
 
 (defn- header []
   [:div.navbar.navbar-fixed-top [:div.navbar-inner [:div.container [:span.brand "Glossa"]]]])
