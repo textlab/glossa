@@ -1,6 +1,6 @@
 (ns cglossa.search-inputs.cwb
   (:require [clojure.string :as str]
-            [reagent.core :as reagent :refer [cursor]]))
+            [reagent.core :as reagent]))
 
 (defn- phrase->cqp [phrase phonetic?]
   (let [attr (if phonetic? "phon" "word")
@@ -109,7 +109,7 @@
      ; and display a row of search inputs for each of them. The doall call is needed
      ; because ratoms cannot be derefed inside lazy seqs.
      (doall (for [index (range (count @search-queries))]
-              (let [query-cursor (cursor [index] search-queries)
+              (let [query-cursor (reagent/cursor search-queries [index])
                     selected-language (-> @query-cursor :query :lang)]
                 (when multilingual? [language-select languages selected-language])
                 [view query-cursor multilingual?])))
