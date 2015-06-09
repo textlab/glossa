@@ -1,8 +1,10 @@
 (ns cglossa.db
   (:require [clojure.string :as str]
+            [clojure.walk :as walk]
             [clojurewerkz.ogre.core :as q])
   (:import [com.tinkerpop.blueprints.impls.orient OrientGraphFactory]
-           [com.orientechnologies.orient.core.sql OCommandSQL]))
+           [com.orientechnologies.orient.core.sql OCommandSQL]
+           [com.orientechnologies.orient.core.db.record OIdentifiable]))
 
 (defn get-graph
   ([]
@@ -10,6 +12,22 @@
   ([transactional?]
    (let [factory (OrientGraphFactory. "remote:localhost/Glossa" "admin" "admin")]
      (if transactional? (.getTx factory) (.getNoTx factory)))))
+
+(defn db-record? [o]
+  (instance? OIdentifiable o))
+
+(defn stringify-rid [rid]
+  "When we ask for @rid in an SQL query, the value we get for the 'rid' property is
+  actually the entire record object. This function converts it into the string
+  representation of the record's @rid (e.g. 12:0)"
+  (.. rid getIdentity toString))
+
+(defn- xform-val [val]
+  "Transform the values of vertex properties retrieved via SQL as needed."
+  (cond
+    (db-record? val) (stringify-rid val)
+    (instance? Iterable val) (map xform-val val)
+    :else val))
 
 (defn vertex->map [v]
   (as->
@@ -19,9 +37,8 @@
     (into {} $)
     ;; @rid is just a temporary key for the result object, so remove it
     (dissoc $ "@rid")
-    ;; The value of the 'rid' property is actually the entire OrientVertex object,
-    ;; but we just want it to be the string representation of its @rid (e.g. "12:0")
-    (update $ "rid" #(.. % getIdentity toString))))
+    ;; Transform values as needed
+    (walk/walk (fn [[k v]] [k (xform-val v)]) identity $)))
 
 (defn sql-query
   "Takes an SQL query and optionally a map of parameters, runs it against the
