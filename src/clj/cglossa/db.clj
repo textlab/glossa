@@ -17,9 +17,9 @@
   (instance? OIdentifiable o))
 
 (defn stringify-rid [rid]
-  "When we ask for @rid in an SQL query, the value we get for the 'rid' property is
-  actually the entire record object. This function converts it into the string
-  representation of the record's @rid (e.g. 12:0)"
+  "When we ask for @rid in an SQL query, the value we get for the 'rid'
+  property is actually the entire record object. This function converts it into
+  the string representation of the record's @rid (e.g. 12:0)"
   (.. rid getIdentity toString))
 
 (defn- xform-val [val]
