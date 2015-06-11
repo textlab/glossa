@@ -113,6 +113,6 @@
               (let [query-cursor      (reagent/cursor search-queries [index])
                     selected-language (-> @query-cursor :query :lang)]
                 (when multilingual? [language-select languages selected-language])
-                [view query-cursor multilingual?])))
+                ^{:key index} [view query-cursor])))
      (when-not multilingual? [add-phrase-button])]))
 
