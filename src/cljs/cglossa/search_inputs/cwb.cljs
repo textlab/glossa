@@ -66,10 +66,10 @@
   (let [query           (:query @query-cursor)
         displayed-query (str/replace query #"\[\(?\w+=\"(.+?)\"(?:\s+%c)?\)?\]" "$1")
         phonetic?       (not= -1 (.indexOf query "phon="))]
-    [:div.row-fluid
-     [:form.form-inline.span12
-      [:div.span10
-       [:input.span12 {:type        "text" :value displayed-query
+    [:div.row
+     [:form.form-inline.col-md-12
+      [:div.col-md-10
+       [:input.col-md-12 {:type        "text" :value displayed-query
                        :on-change   #(on-text-changed % query-cursor phonetic?)
                        :on-key-down #(on-key-down % query-cursor)}]
        [:label {:style {:marginTop 5}}
@@ -91,7 +91,7 @@
         languages     (:langs @corpus)
         multilingual? (> (count languages) 1)]
     [:span
-     [:div.row-fluid.search-input-links
+     [:div.row.search-input-links
       (if (= view simple)
         [:b "Simple"]
         [:a {:href "" :title "Simple search box" :on-click #()} "Simple"])
@@ -115,4 +115,3 @@
                 (when multilingual? [language-select languages selected-language])
                 ^{:key index} [view query-cursor])))
      (when-not multilingual? [add-phrase-button])]))
-

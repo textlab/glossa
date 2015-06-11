@@ -106,3 +106,9 @@
      :metadata-categories (-> (map (fn [rid name] {:rid rid :name name})
                                    (:cat_rids res)
                                    (:cat_names res)))}))
+
+(defn get-metadata-values [initial-value category]
+  (sql-query (str "SELECT EXPAND(out('DescribesText').in('DescribesText')[corpus_cat = '&category']) "
+                  "FROM #TARGET")
+             {:strings {:category category}
+              :target  initial-value}))

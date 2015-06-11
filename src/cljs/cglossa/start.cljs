@@ -2,13 +2,13 @@
   (:require [cglossa.search-inputs.core :refer [search-interface-for-corpus]]))
 
 (defn- top []
-  [:div.row-fluid
-   [:div.span3.top-toolbar
-    [:button#new-search-button.btn.btn-mini.btn-primary {:title "Reset form"} "Reset form"]]])
+  [:div.row
+   [:div.col-md-3.top-toolbar
+    [:button#new-search-button.btn.btn-xs.btn-primary {:title "Reset form"} "Reset form"]]])
 
 (defn- corpus-info [_ {:keys [corpus]}]
-  [:div.row-fluid.corpus-info
-   [:div.span12
+  [:div.row.corpus-info
+   [:div.col-md-12
     [:div.well
      [:h2
       (:name @corpus)

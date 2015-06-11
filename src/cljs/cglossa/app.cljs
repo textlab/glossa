@@ -3,15 +3,15 @@
             [cglossa.results :refer [results]]))
 
 (defn- header []
-  [:div.navbar.navbar-fixed-top [:div.navbar-inner [:div.container [:span.brand "Glossa"]]]])
+  [:nav.navbar.navbar-default.navbar-fixed-top [:div.container [:span.navbar-brand "Glossa"]]])
 
 (defn app [{:keys [showing-results?] :as a} {:keys [corpus] :as m}]
   (let [cls (if (empty? (:metadata-categories @corpus)) "span12" "span9")]
     [:div
      [header]
-     [:div.container-fluid
-      [:div.row-fluid
-       [:div#main-content {:class-name cls}
+     [:div.container-fluid {:style {:padding-left 45}}
+      [:div.row
+       [:div#main-content.col-md-12
         (if @showing-results?
           [results a m]
           [start a m])]]]
