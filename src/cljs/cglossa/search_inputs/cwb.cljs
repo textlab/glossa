@@ -66,16 +66,18 @@
   (let [query           (:query @query-cursor)
         displayed-query (str/replace query #"\[\(?\w+=\"(.+?)\"(?:\s+%c)?\)?\]" "$1")
         phonetic?       (not= -1 (.indexOf query "phon="))]
-    [:div.row
-     [:form.form-inline.col-md-12
-      [:div.col-md-10
-       [:input.col-md-12 {:type        "text" :value displayed-query
-                       :on-change   #(on-text-changed % query-cursor phonetic?)
-                       :on-key-down #(on-key-down % query-cursor)}]
-       [:label {:style {:marginTop 5}}
-        [:input {:name      "phonetic" :type "checkbox"
-                 :style     {:marginTop -3} :checked phonetic?
-                 :on-change #(on-phonetic-changed % query-cursor)} " Phonetic form"]]]]]))
+    [:form
+     [:div.form-group
+      [:input.form-control.col-md-12 {:type        "text"
+                                      :value       displayed-query
+                                      :on-change   #(on-text-changed % query-cursor phonetic?)
+                                      :on-key-down #(on-key-down % query-cursor)}]]
+     [:div.checkbox
+      [:label {:style {:margin-top 5}}
+       [:input {:name      "phonetic"
+                :type      "checkbox"
+                :checked   phonetic?
+                :on-change #(on-phonetic-changed % query-cursor)}] " Phonetic form"]]]))
 
 (defn- extended [query-cursor]
   [:span])
@@ -91,7 +93,7 @@
         languages     (:langs @corpus)
         multilingual? (> (count languages) 1)]
     [:span
-     [:div.row.search-input-links
+     [:div.search-input-links
       (if (= view simple)
         [:b "Simple"]
         [:a {:href "" :title "Simple search box" :on-click #()} "Simple"])
