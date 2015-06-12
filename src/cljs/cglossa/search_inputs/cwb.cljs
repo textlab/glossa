@@ -101,8 +101,8 @@
         [:a {:href "" :title "Search for grammatical categories etc." :on-click #()} "Extended"])
       " | "
       (if (= view cqp)
-        [:b "CQP"]
-        [:a {:href "" :title "CQP expressions" :on-click #()} "CQP"])
+        [:b "CQP query"]
+        [:a {:href "" :title "CQP expressions" :on-click #()} "CQP query"])
       [search-button multilingual?]
       (when multilingual? [add-language-button])]
 
