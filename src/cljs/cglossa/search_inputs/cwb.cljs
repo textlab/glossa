@@ -62,18 +62,21 @@
    (for [language languages]
      [:option {:key (:value language) :value (:value language)} (:text language)])])
 
-(defn- simple [query-cursor]
+(defn- simple [query-cursor show-remove-btn?]
   (let [query           (:query @query-cursor)
         displayed-query (str/replace query #"\[\(?\w+=\"(.+?)\"(?:\s+%c)?\)?\]" "$1")
         phonetic?       (not= -1 (.indexOf query "phon="))]
     [:form {:style {:display "table" :margin-left -30 :margin-bottom 20}}
      [:div {:style {:display "table-row" :margin-bottom 10}}
-      [:button.btn.btn-default.btn-xs {:style {:display "table-cell"
-                                               :margin-right 5
-                                               :margin-top -25}}
-       [:span.glyphicon.glyphicon-remove]]
+      [:div {:style {:display "table-cell"}}
+       [:button.btn.btn-default.btn-xs {:style {:margin-right 5
+                                                :margin-top   -25
+                                                :visibility   (if show-remove-btn?
+                                                                "visible"
+                                                                "hidden")}}
+        [:span.glyphicon.glyphicon-remove]]]
       [:div.form-group {:style {:display "table-cell"}}
-       [:input.form-control.col-md-12 {:style {:width 500}
+       [:input.form-control.col-md-12 {:style       {:width 500}
                                        :type        "text"
                                        :value       displayed-query
                                        :on-change   #(on-text-changed % query-cursor phonetic?)
@@ -121,7 +124,8 @@
      ; because ratoms cannot be derefed inside lazy seqs.
      (doall (for [index (range (count @search-queries))]
               (let [query-cursor      (reagent/cursor search-queries [index])
+                    show-remove-btn?  (pos? index)
                     selected-language (-> @query-cursor :query :lang)]
                 (when multilingual? [language-select languages selected-language])
-                ^{:key index} [view query-cursor])))
+                ^{:key index} [view query-cursor show-remove-btn?])))
      (when-not multilingual? [add-phrase-button])]))
