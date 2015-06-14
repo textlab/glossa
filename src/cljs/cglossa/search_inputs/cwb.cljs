@@ -55,7 +55,7 @@
   [:button.btn {:style {:marginLeft 20} :on-click #()} "Add language"])
 
 (defn- add-phrase-button []
-  [:button.btn.add-phrase-btn {:on-click #()} "Or..."])
+  [:button.btn.btn-default.add-phrase-btn {:on-click #()} "Or..."])
 
 (defn- language-select [languages selected-language]
   [:select {:value selected-language}
@@ -66,18 +66,26 @@
   (let [query           (:query @query-cursor)
         displayed-query (str/replace query #"\[\(?\w+=\"(.+?)\"(?:\s+%c)?\)?\]" "$1")
         phonetic?       (not= -1 (.indexOf query "phon="))]
-    [:form
-     [:div.form-group
-      [:input.form-control.col-md-12 {:type        "text"
-                                      :value       displayed-query
-                                      :on-change   #(on-text-changed % query-cursor phonetic?)
-                                      :on-key-down #(on-key-down % query-cursor)}]]
-     [:div.checkbox
-      [:label {:style {:margin-top 5}}
-       [:input {:name      "phonetic"
-                :type      "checkbox"
-                :checked   phonetic?
-                :on-change #(on-phonetic-changed % query-cursor)}] " Phonetic form"]]]))
+    [:form {:style {:display "table" :margin-left -30 :margin-bottom 20}}
+     [:div {:style {:display "table-row" :margin-bottom 10}}
+      [:button.btn.btn-default.btn-xs {:style {:display "table-cell"
+                                               :margin-right 5
+                                               :margin-top -25}}
+       [:span.glyphicon.glyphicon-remove]]
+      [:div.form-group {:style {:display "table-cell"}}
+       [:input.form-control.col-md-12 {:style {:width 500}
+                                       :type        "text"
+                                       :value       displayed-query
+                                       :on-change   #(on-text-changed % query-cursor phonetic?)
+                                       :on-key-down #(on-key-down % query-cursor)}]]]
+     [:div {:style {:display "table-row"}}
+      [:div {:style {:display "table-cell"}}]
+      [:div.checkbox {:style {:display "table-cell"}}
+       [:label
+        [:input {:name      "phonetic"
+                 :type      "checkbox"
+                 :checked   phonetic?
+                 :on-change #(on-phonetic-changed % query-cursor)}] " Phonetic form"]]]]))
 
 (defn- extended [query-cursor]
   [:span])
