@@ -62,18 +62,20 @@
    (for [language languages]
      [:option {:key (:value language) :value (:value language)} (:text language)])])
 
-(defn- simple [query-cursor show-remove-btn?]
+(defn- simple [query-cursor show-remove-btn? remove-query-handler]
   (let [query           (:query @query-cursor)
         displayed-query (str/replace query #"\[\(?\w+=\"(.+?)\"(?:\s+%c)?\)?\]" "$1")
         phonetic?       (not= -1 (.indexOf query "phon="))]
     [:form {:style {:display "table" :margin-left -30 :margin-bottom 20}}
      [:div {:style {:display "table-row" :margin-bottom 10}}
       [:div {:style {:display "table-cell"}}
-       [:button.btn.btn-default.btn-xs {:style {:margin-right 5
-                                                :margin-top   -25
-                                                :visibility   (if show-remove-btn?
-                                                                "visible"
-                                                                "hidden")}}
+       [:button.btn.btn-default.btn-xs {:type     "button"
+                                        :on-click #(remove-query-handler)
+                                        :style    {:margin-right 5
+                                                   :margin-top   -25
+                                                   :visibility   (if show-remove-btn?
+                                                                   "visible"
+                                                                   "hidden")}}
         [:span.glyphicon.glyphicon-remove]]]
       [:div.form-group {:style {:display "table-cell"}}
        [:input.form-control.col-md-12 {:style       {:width 500}
@@ -132,10 +134,14 @@
      ; Now create a cursor into the search-queries ratom for each search expression
      ; and display a row of search inputs for each of them. The doall call is needed
      ; because ratoms cannot be derefed inside lazy seqs.
-     (doall (for [index (range (count @search-queries))]
-              (let [query-cursor      (reagent/cursor search-queries [index])
-                    show-remove-btn?  (pos? index)
-                    selected-language (-> @query-cursor :query :lang)]
-                (when multilingual? [language-select languages selected-language])
-                ^{:key index} [view query-cursor show-remove-btn?])))
+     (let [nqueries         (count @search-queries)
+           show-remove-btn? (> nqueries 1)
+           remove-query     (fn [i] (swap! search-queries
+                                           #(vec (concat (subvec % 0 i) (subvec % (inc i))))))]
+       (doall (for [index (range nqueries)]
+                (let [query-cursor         (reagent/cursor search-queries [index])
+                      selected-language    (-> @query-cursor :query :lang)
+                      remove-query-handler (partial remove-query index)]
+                  (when multilingual? [language-select languages selected-language])
+                  ^{:key index} [view query-cursor show-remove-btn? remove-query-handler]))))
      (when-not multilingual? [add-phrase-button])]))

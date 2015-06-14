@@ -10,7 +10,8 @@
             :showing-sidebar? false
             :search-view      :simple
             :search-queries   [{:query "[word=\"han\" %c] [word=\"er\" %c]"}
-                               {:query "[word=\"de\" %c] [word=\"sa\" %c]"}]})
+                               {:query "[word=\"de\" %c] [word=\"sa\" %c]"}
+                               {:query "[word=\"hun\" %c] [word=\"vet\" %c]"}]})
 
 (def data {:corpus nil
            :metadata-categories nil})
