@@ -103,23 +103,29 @@
                         simple)
         languages     (:langs @corpus)
         multilingual? (> (count languages) 1)
-        set-view (fn [view e] (reset! search-view view) (.preventDefault e))]
+        set-view      (fn [view e] (reset! search-view view) (.preventDefault e))]
     [:span
      [:div.search-input-links
       (if (= view simple)
         [:b "Simple"]
-        [:a {:href "" :title "Simple search box"
-             :on-click #(set-view :simple %)} "Simple"])
+        [:a {:href     ""
+             :title    "Simple search box"
+             :on-click #(set-view :simple %)}
+         "Simple"])
       " | "
       (if (= view extended)
         [:b "Extended"]
-        [:a {:href "" :title "Search for grammatical categories etc."
-             :on-click #(set-view :extended %)} "Extended"])
+        [:a {:href     ""
+             :title    "Search for grammatical categories etc."
+             :on-click #(set-view :extended %)}
+         "Extended"])
       " | "
       (if (= view cqp)
         [:b "CQP query"]
-        [:a {:href "" :title "CQP expressions"
-             :on-click #(set-view :cqp %)} "CQP query"])
+        [:a {:href     ""
+             :title    "CQP expressions"
+             :on-click #(set-view :cqp %)}
+         "CQP query"])
       [search-button multilingual?]
       (when multilingual? [add-language-button])]
 
