@@ -70,6 +70,7 @@
      [:div {:style {:display "table-row" :margin-bottom 10}}
       [:div {:style {:display "table-cell"}}
        [:button.btn.btn-default.btn-xs {:type     "button"
+                                        :title    "Remove row"
                                         :on-click #(remove-query-handler)
                                         :style    {:margin-right 5
                                                    :margin-top   -25
