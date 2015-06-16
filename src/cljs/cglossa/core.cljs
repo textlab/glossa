@@ -26,7 +26,7 @@
 (defn error-handler [{:keys [status status-text]}]
   (.log js/console (str "Error: " status " " status-text)))
 
-(ajax/GET "/corpus" {:params          {:code "bokmal"}
+(ajax/GET "/corpus" {:params          {:code "scandiasyn"}
                      :handler         (partial response-handler [:corpus :metadata-categories])
                      :error           error-handler
                      :response-format (ajax/transit-response-format)})

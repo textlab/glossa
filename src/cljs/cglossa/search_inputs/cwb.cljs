@@ -107,7 +107,7 @@
    (for [language languages]
      [:option {:key (:value language) :value (:value language)} (:text language)])])
 
-(defn- simple [query-cursor show-remove-btn? remove-query-handler]
+(defn- simple [corpus query-cursor show-remove-btn? remove-query-handler]
   (let [query           (:query @query-cursor)
         displayed-query (-> query
                             (->non-headword-query)
@@ -137,11 +137,20 @@
      [:div {:style {:display "table-row"}}
       [:div {:style {:display "table-cell"}}]
       [:div.checkbox {:style {:display "table-cell"}}
-       [:label
-        [:input {:name      "phonetic"
-                 :type      "checkbox"
-                 :checked   phonetic?
-                 :on-change #(on-phonetic-changed % query-cursor)}] " Phonetic form"]]]]))
+       (when (:has-phonetic corpus)
+         [:label
+          [:input {:name      "phonetic"
+                   :type      "checkbox"
+                   :checked   phonetic?
+                   :on-change #(on-phonetic-changed % query-cursor)}] " Phonetic form"])
+       (when (:has-headword-search corpus)
+         [:label {:style {:margin-left 20}}
+          [:input {:type      "checkbox"
+                   :value     "1"
+                   :checked   (:headword-search @query-cursor)
+                   :on-change #(on-headword-search-changed % query-cursor)
+                   :id        "headword_search"
+                   :name=     "headword_search"} " Headword search"]])]]]))
 
 (defn- extended [query-cursor]
   [:span])
@@ -209,5 +218,6 @@
                       selected-language    (-> @query-cursor :query :lang)
                       remove-query-handler (partial remove-query index)]
                   (when multilingual? [language-select languages selected-language])
-                  ^{:key index} [view query-cursor show-remove-btn? remove-query-handler]))))
+                  (.log js/console corpus)
+                  ^{:key index} [view @corpus query-cursor show-remove-btn? remove-query-handler]))))
      (when-not multilingual? [add-phrase-button])]))
