@@ -104,7 +104,12 @@
 
 (defn- simple [query-cursor show-remove-btn? remove-query-handler]
   (let [query           (:query @query-cursor)
-        displayed-query (str/replace query #"\[\(?\w+=\"(.+?)\"(?:\s+%c)?\)?\]" "$1")
+        displayed-query (-> query
+                            (->non-headword-query)
+                            (str/replace #"\[\(?\w+=\"(.*?)\"(?:\s+%c)?\)?\]" "$1")
+                            (str/replace #"\"([^\s=]+)\"" "$1")
+                            (str/replace #"\s*\[\]\s*" " .* ")
+                            (str/replace #"^\.\*$" ""))
         phonetic?       (not= -1 (.indexOf query "phon="))]
     [:form {:style {:display "table" :margin-left -30 :margin-bottom 20}}
      [:div {:style {:display "table-row" :margin-bottom 10}}
