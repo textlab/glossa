@@ -65,11 +65,6 @@
 ; Event handlers
 ;;;;;;;;;;;;;;;;;
 
-(defn- on-text-changed [event query-cursor phonetic?]
-  (let [value (aget event "target" "value")
-        query (if (= value "") "" (phrase->cqp value phonetic?))]
-    (swap! query-cursor assoc :query query)))
-
 (defn- on-phonetic-changed [event query-cursor]
   (let [q        (:query @query-cursor)
         checked? (aget event "target" "checked")
@@ -107,15 +102,10 @@
    (for [language languages]
      [:option {:key (:value language) :value (:value language)} (:text language)])])
 
-(defn- simple [corpus query-cursor show-remove-btn? remove-query-handler]
-  (let [query           (:query @query-cursor)
-        displayed-query (-> query
-                            (->non-headword-query)
-                            (str/replace #"\[\(?\w+=\"(.*?)\"(?:\s+%c)?\)?\]" "$1")
-                            (str/replace #"\"([^\s=]+)\"" "$1")
-                            (str/replace #"\s*\[\]\s*" " .* ")
-                            (str/replace #"^\.\*$" ""))
-        phonetic?       (not= -1 (.indexOf query "phon="))]
+(defn- single-input-view [corpus query-cursor displayed-query show-remove-btn?
+                          remove-query-handler on-text-changed]
+  (let [query     (:query @query-cursor)
+        phonetic? (not= -1 (.indexOf query "phon="))]
     [:form {:style {:display "table" :margin-left -30 :margin-bottom 20}}
      [:div {:style {:display "table-row" :margin-bottom 10}}
       [:div {:style {:display "table-cell"}}
@@ -152,11 +142,31 @@
                    :id        "headword_search"
                    :name=     "headword_search"} " Headword search"]])]]]))
 
+(defn- simple [corpus query-cursor show-remove-btn? remove-query-handler]
+  (let [query           (:query @query-cursor)
+        displayed-query (-> query
+                            (->non-headword-query)
+                            (str/replace #"\[\(?\w+=\"(.*?)\"(?:\s+%c)?\)?\]" "$1")
+                            (str/replace #"\"([^\s=]+)\"" "$1")
+                            (str/replace #"\s*\[\]\s*" " .* ")
+                            (str/replace #"^\.\*$" ""))
+        on-text-changed (fn [event query-cursor phonetic?]
+                          (let [value (aget event "target" "value")
+                                query (if (= value "") "" (phrase->cqp value phonetic?))]
+                            (swap! query-cursor assoc :query query)))]
+    (single-input-view corpus query-cursor displayed-query show-remove-btn?
+                       remove-query-handler on-text-changed)))
+
 (defn- extended [query-cursor]
   [:span])
 
-(defn- cqp [query-cursor]
-  [:span])
+(defn- cqp [corpus query-cursor show-remove-btn? remove-query-handler]
+  (let [displayed-query (:query @query-cursor)
+        on-text-changed (fn [event query-cursor phonetic?]
+                          (let [query (aget event "target" "value")]
+                            (swap! query-cursor assoc :query query)))]
+    (single-input-view corpus query-cursor displayed-query show-remove-btn?
+                       remove-query-handler on-text-changed)))
 
 (defn search-inputs [{:keys [search-view search-queries]} {:keys [corpus]}]
   (let [view          (case @search-view
@@ -218,6 +228,5 @@
                       selected-language    (-> @query-cursor :query :lang)
                       remove-query-handler (partial remove-query index)]
                   (when multilingual? [language-select languages selected-language])
-                  (.log js/console corpus)
                   ^{:key index} [view @corpus query-cursor show-remove-btn? remove-query-handler]))))
      (when-not multilingual? [add-phrase-button])]))
