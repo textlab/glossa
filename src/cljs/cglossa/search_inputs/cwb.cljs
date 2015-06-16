@@ -143,6 +143,9 @@
                    :name=     "headword_search"} " Headword search"]])]]]))
 
 (defn- simple [corpus query-cursor show-remove-btn? remove-query-handler]
+(defn- simple
+  "Simple search view component"
+  [corpus query-cursor show-remove-btn? remove-query-handler]
   (let [query           (:query @query-cursor)
         displayed-query (-> query
                             (->non-headword-query)
@@ -160,7 +163,9 @@
 (defn- extended [query-cursor]
   [:span])
 
-(defn- cqp [corpus query-cursor show-remove-btn? remove-query-handler]
+(defn- cqp
+  "CQP query view component"
+  [corpus query-cursor show-remove-btn? remove-query-handler]
   (let [displayed-query (:query @query-cursor)
         on-text-changed (fn [event query-cursor phonetic?]
                           (let [query (aget event "target" "value")]
@@ -168,7 +173,10 @@
     (single-input-view corpus query-cursor displayed-query show-remove-btn?
                        remove-query-handler on-text-changed)))
 
-(defn search-inputs [{:keys [search-view search-queries]} {:keys [corpus]}]
+(defn search-inputs
+  "Component that lets the user select a search view (simple, extended
+  or CQP query view) and displays it."
+  [{:keys [search-view search-queries]} {:keys [corpus]}]
   (let [view          (case @search-view
                         :extended extended
                         :cqp cqp
