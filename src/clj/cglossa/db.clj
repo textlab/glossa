@@ -92,7 +92,7 @@
 
 (defn get-corpus [code]
   (let [ress (sql-query (str "SELECT @rid as corpus_rid, name as corpus_name, "
-                             "has_phonetic, has_headword_search, "
+                             "logo, has_phonetic, has_headword_search, "
                              "$cats.@rid as cat_rids, $cats.code as cat_codes, "
                              "$cats.name as cat_names "
                              "FROM Corpus "
@@ -104,6 +104,7 @@
                    (update $ :cat_names (partial map vertex-name) (:cat_codes $)))]
     {:corpus              {:rid                 (:corpus_rid res)
                            :name                (:corpus_name res)
+                           :logo                (:logo res)
                            :has-phonetic        (:has_phonetic res)
                            :has-headword-search (:has_headword_search res)}
      :metadata-categories (-> (map (fn [rid name] {:rid rid :name name})
