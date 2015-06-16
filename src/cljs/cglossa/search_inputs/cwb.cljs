@@ -35,10 +35,10 @@
         chinese-ch "[\u4E00-\u9FFF\u3400-\u4DFF\uF900-\uFAFF]"
         ; Surround every Chinese character by space when constructing a cqp query,
         ; to treat it as if it was an individual word:
-        phrase     (str/replace phrase
+        p1         (str/replace phrase
                                 (re-pattern (str "(" chinese-ch ")"))
                                 " $1 ")
-        phrase     (as-> (str/split phrase #"\s") $
+        p2         (as-> (str/split p1 #"\s") $
                          (map #(if (= % "")
                                 ""
                                 (str "[" attr "=\"" % "\" %c]"))
@@ -48,10 +48,15 @@
                                       (re-pattern (str "\\s(\\[\\w+=\""
                                                        chinese-ch
                                                        "\"(?:\\s+%c)?\\])\\s"))
-                                      "$1"))]
-    (if (str/blank? phrase)
+                                      "$1")
+                         ;; NOTE: In JavaScript, "han ".split(/\s/) yields the array
+                         ;; ["han", " "], but in ClojureScript (str/split "han " #"\s")
+                         ;; only yields ["han"]. Hence, in the CLJS version we need to
+                         ;; add the extra element if the query ends in a space.
+                         (if (= \space (last (seq p1))) (str $ " ") $))]
+    (if (str/blank? p2)
       (str "[" attr "=\".*\" %c]")
-      phrase)))
+      p2)))
 
 (defn- search! [query-cursor]
   (.log js/console "soker"))
