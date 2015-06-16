@@ -2,9 +2,9 @@
   (:require [clojure.string :as str]
             [reagent.core :as reagent]))
 
-(def headword-query-prefix "<headword>")
-(def headword-query-suffix-more-words "[]{0,}")
-(def headword-query-suffix-tag "</headword>")
+(def ^:private headword-query-prefix "<headword>")
+(def ^:private headword-query-suffix-more-words "[]{0,}")
+(def ^:private headword-query-suffix-tag "</headword>")
 
 (defn- ->headword-query [query]
   (str headword-query-prefix
@@ -18,7 +18,7 @@
       (subs s prefix-len)
       s)))
 
-(defn without-suffix [s suffix]
+(defn- without-suffix [s suffix]
   (let [suffix-start (- (count s) (count suffix))]
     (if (= (subs s suffix-start) suffix)
       (subs s 0 suffix-start)
