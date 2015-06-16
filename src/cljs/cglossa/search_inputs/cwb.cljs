@@ -102,8 +102,11 @@
    (for [language languages]
      [:option {:key (:value language) :value (:value language)} (:text language)])])
 
-(defn- single-input-view [corpus query-cursor displayed-query show-remove-btn?
-                          remove-query-handler on-text-changed]
+(defn- single-input-view
+  "HTML that is shared by the search views that only show a single text input,
+  i.e., the simple and CQP views."
+  [corpus query-cursor displayed-query show-remove-btn? show-checkboxes?
+   remove-query-handler on-text-changed]
   (let [query     (:query @query-cursor)
         phonetic? (not= -1 (.indexOf query "phon="))]
     [:form {:style {:display "table" :margin-left -30 :margin-bottom 20}}
@@ -124,25 +127,25 @@
                                        :value       displayed-query
                                        :on-change   #(on-text-changed % query-cursor phonetic?)
                                        :on-key-down #(on-key-down % query-cursor)}]]]
-     [:div {:style {:display "table-row"}}
-      [:div {:style {:display "table-cell"}}]
-      [:div.checkbox {:style {:display "table-cell"}}
-       (when (:has-phonetic corpus)
-         [:label
-          [:input {:name      "phonetic"
-                   :type      "checkbox"
-                   :checked   phonetic?
-                   :on-change #(on-phonetic-changed % query-cursor)}] " Phonetic form"])
-       (when (:has-headword-search corpus)
-         [:label {:style {:margin-left 20}}
-          [:input {:type      "checkbox"
-                   :value     "1"
-                   :checked   (:headword-search @query-cursor)
-                   :on-change #(on-headword-search-changed % query-cursor)
-                   :id        "headword_search"
-                   :name=     "headword_search"} " Headword search"]])]]]))
+     (when show-checkboxes?
+       [:div {:style {:display "table-row"}}
+        [:div {:style {:display "table-cell"}}]
+        [:div.checkbox {:style {:display "table-cell"}}
+         (when (:has-phonetic corpus)
+           [:label
+            [:input {:name      "phonetic"
+                     :type      "checkbox"
+                     :checked   phonetic?
+                     :on-change #(on-phonetic-changed % query-cursor)}] " Phonetic form"])
+         (when (:has-headword-search corpus)
+           [:label {:style {:margin-left 20}}
+            [:input {:type      "checkbox"
+                     :value     "1"
+                     :checked   (:headword-search @query-cursor)
+                     :on-change #(on-headword-search-changed % query-cursor)
+                     :id        "headword_search"
+                     :name=     "headword_search"} " Headword search"]])]])]))
 
-(defn- simple [corpus query-cursor show-remove-btn? remove-query-handler]
 (defn- simple
   "Simple search view component"
   [corpus query-cursor show-remove-btn? remove-query-handler]
@@ -158,7 +161,7 @@
                                 query (if (= value "") "" (phrase->cqp value phonetic?))]
                             (swap! query-cursor assoc :query query)))]
     (single-input-view corpus query-cursor displayed-query show-remove-btn?
-                       remove-query-handler on-text-changed)))
+                       true remove-query-handler on-text-changed)))
 
 (defn- extended [query-cursor]
   [:span])
@@ -171,7 +174,7 @@
                           (let [query (aget event "target" "value")]
                             (swap! query-cursor assoc :query query)))]
     (single-input-view corpus query-cursor displayed-query show-remove-btn?
-                       remove-query-handler on-text-changed)))
+                       false remove-query-handler on-text-changed)))
 
 (defn search-inputs
   "Component that lets the user select a search view (simple, extended
