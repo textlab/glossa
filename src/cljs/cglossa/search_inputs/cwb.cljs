@@ -71,12 +71,14 @@
     (swap! query-cursor assoc :query query)))
 
 (defn- on-phonetic-changed [event query-cursor]
-  (let [query    (:query @query-cursor)
+  (let [q        (:query @query-cursor)
         checked? (aget event "target" "checked")
         query    (if checked?
-                   (str/replace query "word=" "phon=")
-                   (str/replace query "phon=" "word="))]
-    (swap! query-cursor assoc-in [:query] query)))
+                   (if (str/blank? q)
+                     "[phon=\".*\" %c]"
+                     (str/replace q "word=" "phon="))
+                   (str/replace q "phon=" "word="))]
+    (swap! query-cursor assoc :query query)))
 
 (defn- on-key-down [event query-cursor]
   (when (= "Enter" (aget event "key"))
