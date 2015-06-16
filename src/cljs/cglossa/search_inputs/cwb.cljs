@@ -80,6 +80,9 @@
                    (str/replace q "phon=" "word="))]
     (swap! query-cursor assoc :query query)))
 
+(defn- on-headword-search-changed [event query-cursor]
+  (swap! query-cursor assoc :headword-search (aget event "target" "checked")))
+
 (defn- on-key-down [event query-cursor]
   (when (= "Enter" (aget event "key"))
     (.preventDefault event)
