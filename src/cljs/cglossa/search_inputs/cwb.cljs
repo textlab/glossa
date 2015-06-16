@@ -2,19 +2,56 @@
   (:require [clojure.string :as str]
             [reagent.core :as reagent]))
 
+(def headword-query-prefix "<headword>")
+(def headword-query-suffix-more-words "[]{0,}")
+(def headword-query-suffix-tag "</headword>")
+
+(defn- ->headword-query [query]
+  (str headword-query-prefix
+       query
+       headword-query-suffix-more-words
+       headword-query-suffix-tag))
+
+(defn- without-prefix [s prefix]
+  (let [prefix-len (count prefix)]
+    (if (= (subs s 0 prefix-len) prefix)
+      (subs s prefix-len)
+      s)))
+
+(defn without-suffix [s suffix]
+  (let [suffix-start (- (count s) (count suffix))]
+    (if (= (subs s suffix-start) suffix)
+      (subs s 0 suffix-start)
+      s)))
+
+(defn- ->non-headword-query [query]
+  (-> query
+      (without-suffix headword-query-suffix-tag)
+      (without-suffix headword-query-suffix-more-words)
+      (without-prefix headword-query-prefix)))
+
 (defn- phrase->cqp [phrase phonetic?]
-  (let [attr                (if phonetic? "phon" "word")
-        chinese-chars-range "[\u4E00-\u9FFF\u3400-\u4DFF\uF900-\uFAFF]"
+  (let [attr       (if phonetic? "phon" "word")
+        chinese-ch "[\u4E00-\u9FFF\u3400-\u4DFF\uF900-\uFAFF]"
         ; Surround every Chinese character by space when constructing a cqp query,
         ; to treat it as if it was an individual word:
-        phrase              (str/replace phrase
-                                         (re-pattern (str "(" chinese-chars-range ")"))
-                                         " $1 ")]
-    (->> (str/split phrase #"\s")
-         (map #(if (= % "")
-                ""
-                (str "[" attr "=\"" % "\" %c]")))
-         (str/join " "))))
+        phrase     (str/replace phrase
+                                (re-pattern (str "(" chinese-ch ")"))
+                                " $1 ")
+        phrase     (as-> (str/split phrase #"\s") $
+                         (map #(if (= % "")
+                                ""
+                                (str "[" attr "=\"" % "\" %c]"))
+                              $)
+                         (str/join " " $)
+                         (str/replace $
+                                      (re-pattern (str "\\s(\\[\\w+=\""
+                                                       chinese-ch
+                                                       "\"(?:\\s+%c)?\\])\\s"))
+                                      "$1"))]
+    (if (str/blank? phrase)
+      (str "[" attr "=\".*\" %c]")
+      phrase)))
 
 (defn- search! [query-cursor]
   (.log js/console "soker"))
@@ -25,10 +62,8 @@
 
 (defn- on-text-changed [event query-cursor phonetic?]
   (let [value (aget event "target" "value")
-        query (if (= value "")
-                ""
-                (phrase->cqp value phonetic?))]
-    (swap! query-cursor assoc-in [:query] query)))
+        query (if (= value "") "" (phrase->cqp value phonetic?))]
+    (swap! query-cursor assoc :query query)))
 
 (defn- on-phonetic-changed [event query-cursor]
   (let [query    (:query @query-cursor)
@@ -106,7 +141,22 @@
                         simple)
         languages     (:langs @corpus)
         multilingual? (> (count languages) 1)
-        set-view      (fn [view e] (reset! search-view view) (.preventDefault e))]
+        set-view      (fn [view e] (reset! search-view view) (.preventDefault e))
+        query-get-set (fn
+                        ([k] (get-in @search-queries k))
+                        ([k v] (let [query (as-> (:query v) $
+                                                 (if (get-in @search-queries [k :headword-search])
+                                                   (->headword-query $)
+                                                   (->non-headword-query $))
+                                                 ;; Simplify the query (".*" is used in the
+                                                 ;; simplified search instead of [])
+                                                 (str/replace $
+                                                              #"\[\(?word=\"\.\*\"(?:\s+%c)?\)?\]"
+                                                              "[]")
+                                                 (str/replace $ #"^\s*\[\]\s*$" ""))]
+                                 (swap! search-queries assoc-in [(first k) :query] query)
+                                 ;; TODO: Handle state.maxHits and state.lastSelectedMaxHits
+                                 )))]
     [:span
      [:div.search-input-links
       (if (= view simple)
@@ -140,7 +190,7 @@
            remove-query     (fn [i] (swap! search-queries
                                            #(vec (concat (subvec % 0 i) (subvec % (inc i))))))]
        (doall (for [index (range nqueries)]
-                (let [query-cursor         (reagent/cursor search-queries [index])
+                (let [query-cursor         (reagent/cursor query-get-set [index])
                       selected-language    (-> @query-cursor :query :lang)
                       remove-query-handler (partial remove-query index)]
                   (when multilingual? [language-select languages selected-language])
