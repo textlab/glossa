@@ -170,7 +170,7 @@
   "CQP query view component"
   [corpus query-cursor show-remove-btn? remove-query-handler]
   (let [displayed-query (:query @query-cursor)
-        on-text-changed (fn [event query-cursor phonetic?]
+        on-text-changed (fn [event query-cursor _]
                           (let [query (aget event "target" "value")]
                             (swap! query-cursor assoc :query query)))]
     [single-input-view corpus query-cursor displayed-query show-remove-btn?
