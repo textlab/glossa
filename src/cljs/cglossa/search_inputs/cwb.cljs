@@ -160,8 +160,8 @@
                           (let [value (aget event "target" "value")
                                 query (if (= value "") "" (phrase->cqp value phonetic?))]
                             (swap! query-cursor assoc :query query)))]
-    (single-input-view corpus query-cursor displayed-query show-remove-btn?
-                       true remove-query-handler on-text-changed)))
+    [single-input-view corpus query-cursor displayed-query show-remove-btn?
+     true remove-query-handler on-text-changed]))
 
 (defn- extended [query-cursor]
   [:span])
@@ -173,8 +173,8 @@
         on-text-changed (fn [event query-cursor phonetic?]
                           (let [query (aget event "target" "value")]
                             (swap! query-cursor assoc :query query)))]
-    (single-input-view corpus query-cursor displayed-query show-remove-btn?
-                       false remove-query-handler on-text-changed)))
+    [single-input-view corpus query-cursor displayed-query show-remove-btn?
+     false remove-query-handler on-text-changed]))
 
 (defn search-inputs
   "Component that lets the user select a search view (simple, extended
