@@ -1,6 +1,7 @@
 (ns cglossa.search-inputs.cwb
   (:require [clojure.string :as str]
-            [reagent.core :as reagent]))
+            [reagent.core :as reagent]
+            [goog.dom :as dom]))
 
 (def ^:private headword-query-prefix "<headword>")
 (def ^:private headword-query-suffix-more-words "[]{0,}")
@@ -102,6 +103,9 @@
    (for [language languages]
      [:option {:key (:value language) :value (:value language)} (:text language)])])
 
+(defn- focus-text-input [c]
+  (.focus (dom/findNode (reagent/dom-node c) #(= "text" (.-type %)))))
+
 (defn- single-input-view
   "HTML that is shared by the search views that only show a single text input,
   i.e., the simple and CQP views."
@@ -180,64 +184,76 @@
   "Component that lets the user select a search view (simple, extended
   or CQP query view) and displays it."
   [{:keys [search-view search-queries]} {:keys [corpus]}]
-  (let [view          (case @search-view
-                        :extended extended
-                        :cqp cqp
-                        simple)
-        languages     (:langs @corpus)
-        multilingual? (> (count languages) 1)
-        set-view      (fn [view e] (reset! search-view view) (.preventDefault e))
-        query-get-set (fn
-                        ([k] (get-in @search-queries k))
-                        ([k v] (let [query (as-> (:query v) $
-                                                 (if (get-in @search-queries [k :headword-search])
-                                                   (->headword-query $)
-                                                   (->non-headword-query $))
-                                                 ;; Simplify the query (".*" is used in the
-                                                 ;; simplified search instead of [])
-                                                 (str/replace $
-                                                              #"\[\(?word=\"\.\*\"(?:\s+%c)?\)?\]"
-                                                              "[]")
-                                                 (str/replace $ #"^\s*\[\]\s*$" ""))]
-                                 (swap! search-queries assoc-in [(first k) :query] query)
-                                 ;; TODO: Handle state.maxHits and state.lastSelectedMaxHits
-                                 )))]
-    [:span
-     [:div.search-input-links
-      (if (= view simple)
-        [:b "Simple"]
-        [:a {:href     ""
-             :title    "Simple search box"
-             :on-click #(set-view :simple %)}
-         "Simple"])
-      " | "
-      (if (= view extended)
-        [:b "Extended"]
-        [:a {:href     ""
-             :title    "Search for grammatical categories etc."
-             :on-click #(set-view :extended %)}
-         "Extended"])
-      " | "
-      (if (= view cqp)
-        [:b "CQP query"]
-        [:a {:href     ""
-             :title    "CQP expressions"
-             :on-click #(set-view :cqp %)}
-         "CQP query"])
-      [search-button multilingual?]
-      (when multilingual? [add-language-button])]
+  (reagent/create-class
+    {:component-did-mount
+     focus-text-input
 
-     ; Now create a cursor into the search-queries ratom for each search expression
-     ; and display a row of search inputs for each of them. The doall call is needed
-     ; because ratoms cannot be derefed inside lazy seqs.
-     (let [nqueries         (count @search-queries)
-           show-remove-btn? (> nqueries 1)
-           remove-query     (fn [i] (swap! search-queries
-                                           #(vec (concat (subvec % 0 i) (subvec % (inc i))))))]
-       (doall (for [index (range nqueries)]
-                (let [query-cursor         (reagent/cursor query-get-set [index])
-                      selected-language    (-> @query-cursor :query :lang)
-                      remove-query-handler (partial remove-query index)]
-                  (when multilingual? [language-select languages selected-language])
-                  ^{:key index} [view @corpus query-cursor show-remove-btn? remove-query-handler]))))
-     (when-not multilingual? [add-phrase-button])]))
+     :component-did-update
+     focus-text-input
+
+     :reagent-render
+     (fn [{:keys [search-view search-queries]} {:keys [corpus]}]
+       (let [view          (case @search-view
+                             :extended extended
+                             :cqp cqp
+                             simple)
+             languages     (:langs @corpus)
+             multilingual? (> (count languages) 1)
+             set-view      (fn [view e] (reset! search-view view) (.preventDefault e))
+             query-get-set (fn
+                             ([k] (get-in @search-queries k))
+                             ([k v] (let [query (as-> (:query v) $
+                                                      (if (get-in @search-queries
+                                                                  [k :headword-search])
+                                                        (->headword-query $)
+                                                        (->non-headword-query $))
+                                                      ;; Simplify the query (".*" is used in the
+                                                      ;; simplified search instead of [])
+                                                      (str/replace $
+                                                                   #"\[\(?word=\"\.\*\"(?:\s+%c)?\)?\]"
+                                                                   "[]")
+                                                      (str/replace $ #"^\s*\[\]\s*$" ""))]
+                                      (swap! search-queries assoc-in [(first k) :query] query)
+                                      ;; TODO: Handle state.maxHits and state.lastSelectedMaxHits
+                                      )))]
+         [:span
+          [:div.search-input-links
+           (if (= view simple)
+             [:b "Simple"]
+             [:a {:href     ""
+                  :title    "Simple search box"
+                  :on-click #(set-view :simple %)}
+              "Simple"])
+           " | "
+           (if (= view extended)
+             [:b "Extended"]
+             [:a {:href     ""
+                  :title    "Search for grammatical categories etc."
+                  :on-click #(set-view :extended %)}
+              "Extended"])
+           " | "
+           (if (= view cqp)
+             [:b "CQP query"]
+             [:a {:href     ""
+                  :title    "CQP expressions"
+                  :on-click #(set-view :cqp %)}
+              "CQP query"])
+           [search-button multilingual?]
+           (when multilingual? [add-language-button])]
+
+          ; Now create a cursor into the search-queries ratom for each search expression
+          ; and display a row of search inputs for each of them. The doall call is needed
+          ; because ratoms cannot be derefed inside lazy seqs.
+          (let [nqueries         (count @search-queries)
+                show-remove-btn? (> nqueries 1)
+                remove-query     (fn [i] (swap! search-queries
+                                                #(vec (concat (subvec % 0 i)
+                                                              (subvec % (inc i))))))]
+            (doall (for [index (range nqueries)]
+                     (let [query-cursor         (reagent/cursor query-get-set [index])
+                           selected-language    (-> @query-cursor :query :lang)
+                           remove-query-handler (partial remove-query index)]
+                       (when multilingual? [language-select languages selected-language])
+                       ^{:key index} [view @corpus query-cursor show-remove-btn?
+                                      remove-query-handler]))))
+          (when-not multilingual? [add-phrase-button])]))}))
