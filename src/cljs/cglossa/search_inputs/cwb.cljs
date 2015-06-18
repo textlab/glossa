@@ -190,9 +190,6 @@
     {:component-did-mount
      focus-text-input
 
-     :component-did-update
-     focus-text-input
-
      :reagent-render
      (fn [{:keys [search-view search-queries]} {:keys [corpus]}]
        (let [view          (case @search-view
