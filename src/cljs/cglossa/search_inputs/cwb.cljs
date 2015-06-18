@@ -175,8 +175,10 @@
   [corpus query-cursor show-remove-btn? remove-query-handler]
   (let [displayed-query (:query @query-cursor)
         on-text-changed (fn [event query-cursor _]
-                          (let [query (aget event "target" "value")]
-                            (swap! query-cursor assoc :query query)))]
+                          (let [value      (aget event "target" "value")
+                                query      (->non-headword-query value)
+                                hw-search? (= (->headword-query query) value)]
+                            (swap! query-cursor assoc :query query :headword-search hw-search?)))]
     [single-input-view corpus query-cursor displayed-query show-remove-btn?
      false remove-query-handler on-text-changed]))
 
