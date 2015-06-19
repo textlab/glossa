@@ -68,7 +68,7 @@
 
 (defn- on-phonetic-changed [event query-cursor]
   (let [q        (:query @query-cursor)
-        checked? (aget event "target" "checked")
+        checked? (.-target.checked event)
         query    (if checked?
                    (if (str/blank? q)
                      "[phon=\".*\" %c]"
@@ -77,10 +77,10 @@
     (swap! query-cursor assoc :query query)))
 
 (defn- on-headword-search-changed [event query-cursor]
-  (swap! query-cursor assoc :headword-search (aget event "target" "checked")))
+  (swap! query-cursor assoc :headword-search (.-target.checked event)))
 
 (defn- on-key-down [event query-cursor]
-  (when (= "Enter" (aget event "key"))
+  (when (= "Enter" (.-key event))
     (.preventDefault event)
     (search! query-cursor)))
 
@@ -161,7 +161,7 @@
                             (str/replace #"\s*\[\]\s*" " .* ")
                             (str/replace #"^\.\*$" ""))
         on-text-changed (fn [event query-cursor phonetic?]
-                          (let [value (aget event "target" "value")
+                          (let [value (.-target.value event)
                                 query (if (= value "") "" (phrase->cqp value phonetic?))]
                             (swap! query-cursor assoc :query query)))]
     [single-input-view corpus query-cursor displayed-query show-remove-btn?
@@ -175,7 +175,7 @@
   [corpus query-cursor show-remove-btn? remove-query-handler]
   (let [displayed-query (:query @query-cursor)
         on-text-changed (fn [event query-cursor _]
-                          (let [value      (aget event "target" "value")
+                          (let [value      (.-target.value event)
                                 query      (->non-headword-query value)
                                 hw-search? (= (->headword-query query) value)]
                             (swap! query-cursor assoc :query query :headword-search hw-search?)))]
