@@ -26,6 +26,23 @@
       (uncaughtException [_ thread ex]
         (log/error ex "Uncaught exception on" (.getName thread))))))
 
+(defn- transit-response* [body]
+  (let [baos   (ByteArrayOutputStream. 2000)
+        writer (transit/writer baos :json)
+        _      (transit/write writer body)
+        res    (.toString baos)]
+    (.reset baos)
+    (-> (response/response res)
+        (response/content-type "application/transit+json")
+        (response/charset "utf-8"))))
+
+(defmacro transit-response [db-call]
+  `(try (let [res# ~db-call]
+          (transit-response* res#))
+        (catch Exception e#
+          {:status 500
+           :body   (.toString e#)})))
+
 (deftemplate page (io/resource "index.html") [])
 
 (defroutes app-routes
@@ -34,16 +51,7 @@
            (GET "/" req (page)))
 
 (defroutes db-routes
-           (GET "/corpus" [code]
-             (let [baos   (ByteArrayOutputStream. 2000)
-                   writer (transit/writer baos :json)
-                   body   (db/get-corpus code)
-                   _      (transit/write writer body)
-                   res    (.toString baos)]
-               (.reset baos)
-               (-> (response/response res)
-                   (response/content-type "application/transit+json")
-                   (response/charset "utf-8")))))
+           (GET "/corpus" [code] (transit-response (db/get-corpus code))))
 
 (def http-handler
   (let [r (routes #'db-routes #'app-routes)
