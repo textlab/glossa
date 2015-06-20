@@ -1,7 +1,9 @@
 (ns cglossa.core
   (:require [reagent.core :as reagent]
-            [ajax.core :as ajax]
-            [cglossa.app :refer [app]]))
+            [cljs-http.client :as http]
+            [cljs.core.async :refer [<!]]
+            [cglossa.app :refer [app]])
+  (:require-macros [cljs.core.async.macros :refer [go]]))
 
 ; avoid "not resolved" messages in Cursive
 (declare getElementById)
@@ -13,23 +15,23 @@
                                {:query "[word=\"de\" %c] [word=\"sa\" %c]"}
                                {:query "[word=\"hun\" %c] [word=\"vet\" %c]"}]})
 
-(def data {:corpus nil
+(def data {:corpus              nil
            :metadata-categories nil})
 
 (defonce app-state (into {} (map (fn [[k v]] [k (reagent/atom v)]) state)))
 (defonce model-state (into {} (map (fn [[k v]] [k (reagent/atom v)]) data)))
 
-(defn response-handler [models response]
-  (doseq [model (flatten [models])]
-    (reset! (get model-state model) (get response model))))
+(defn- get-models
+  ([url] (get-models url {}))
+  ([url params]
+   (go (let [response (<! (http/get url {:query-params params}))
+             body     (:body response)]
+         (doseq [[model-name data] body]
+           (if (http/unexceptional-status? (:status response))
+             (reset! (get model-state model-name) data)
+             (.error js/console (str "Error: " (:status response) " " body))))))))
 
-(defn error-handler [{:keys [status status-text]}]
-  (.log js/console (str "Error: " status " " status-text)))
-
-(ajax/GET "/corpus" {:params          {:code "scandiasyn"}
-                     :handler         (partial response-handler [:corpus :metadata-categories])
-                     :error           error-handler
-                     :response-format (ajax/transit-response-format)})
+(get-models "/corpus" {:code "scandiasyn"})
 
 (defn ^:export main []
   (reagent/render-component

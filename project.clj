@@ -20,7 +20,7 @@
                            [reagent "0.5.0"]
                            [environ "1.0.0"]
                            [http-kit "2.1.19"]
-                           [cljs-ajax "0.3.12"]
+                           [cljs-http "0.1.35"]
                            [prone "0.8.2"]
                            [com.orientechnologies/orientdb-graphdb "2.1-rc3"]
                            [clojurewerkz/ogre "2.5.0.0"]
