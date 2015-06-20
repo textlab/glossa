@@ -30,8 +30,8 @@
 
 (defroutes app-routes
            (resources "/")
-  (GET "/request" [] handle-dump)
-  (GET "/" req (page)))
+           (GET "/request" [] handle-dump)
+           (GET "/" req (page)))
 
 (defroutes db-routes
            (GET "/corpus" [code]
