@@ -7,6 +7,24 @@
 (def ^:private headword-query-suffix-more-words "[]{0,}")
 (def ^:private headword-query-suffix-tag "</headword>")
 
+(defn- combine-regexes [regexes]
+  "Since there is no way to concatenate regexes directly, we convert
+  them to strings, remove the initial and final slash from each one,
+  concatenate the resulting strings with a pipe symbol, and finally
+  convert the concatenated string back to a single regex."
+  (->> regexes
+       (map str)
+       (map (partial re-matches #"/(.+)/"))
+       (map last)
+       (str/join \|)
+       re-pattern))
+
+(def interval #"\[\]\{(.+?)\}")
+;; Treat quoted strings separately; they may contain right brackets
+(def attribute-value #"\[\(?([^\"]+?(?:\"[^\"]*\"[^\]\"]*?)*?)(?:\s+%c)?\)?\]")
+(def quoted-str-or-empty-term #"\".*?\"|\[\]")
+(def terms-regex (combine-regexes [interval quoted-str-or-empty-term attribute-value]))
+
 (defn- ->headword-query [query]
   (str headword-query-prefix
        query
@@ -103,6 +121,15 @@
    (for [language languages]
      [:option {:key (:value language) :value (:value language)} (:text language)])])
 
+(defn- headword-search-checkbox [query-cursor]
+  [:label {:style {:margin-left 20}}
+   [:input {:type      "checkbox"
+            :value     "1"
+            :checked   (:headword-search @query-cursor)
+            :on-change #(on-headword-search-changed % query-cursor)
+            :id        "headword_search"
+            :name      "headword_search"} " Headword search"]])
+
 (defn- focus-text-input [c]
   (.focus (dom/findNode (reagent/dom-node c) #(= "text" (.-type %)))))
 
@@ -142,13 +169,7 @@
                      :checked   phonetic?
                      :on-change #(on-phonetic-changed % query-cursor)}] " Phonetic form"])
          (when (:has-headword-search corpus)
-           [:label {:style {:margin-left 20}}
-            [:input {:type      "checkbox"
-                     :value     "1"
-                     :checked   (:headword-search @query-cursor)
-                     :on-change #(on-headword-search-changed % query-cursor)
-                     :id        "headword_search"
-                     :name=     "headword_search"} " Headword search"]])]])]))
+           [headword-search-checkbox query-cursor])]])]))
 
 (defn- simple
   "Simple search view component"
@@ -167,8 +188,31 @@
     [single-input-view corpus query-cursor displayed-query show-remove-btn?
      true remove-query-handler on-text-changed]))
 
-(defn- extended [query-cursor]
-  [:span])
+(defn- multiword-term [term]
+  )
+
+(defn query-terms [query]
+  (let [terms (re-seq terms-regex query)]
+    (if (str/blank? terms)
+      ["[]"]
+      terms)))
+
+(defn- extended
+  " Search view component with text inputs, checkboxes and menus
+for easily building complex and grammatically specified queries. "
+  [corpus query-cursor show-remove-btn? remove-query-handler]
+  (let [terms (query-terms (:query @query-cursor))]
+    #_(.log js/console terms)
+    [:div.row-fluid.multiword-container
+     [:form.form-inline.multiword-search-form
+      [:div {:style {:display 'table'}}
+       [:div {:style {:display 'table-row'}}
+        (for [term terms]
+          (.log js/console (str term))
+          #_[multiword-term term])]
+       " AAAA "
+       (when (:has-headword-search corpus)
+         [headword-search-checkbox query-cursor])]]]))
 
 (defn- cqp
   "CQP query view component"

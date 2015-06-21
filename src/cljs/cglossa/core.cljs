@@ -12,8 +12,8 @@
             :showing-sidebar? false
             :search-view      :simple
             :search-queries   [{:query "[word=\"han\" %c] [word=\"er\" %c]"}
-                               {:query "[word=\"de\" %c] [word=\"sa\" %c]"}
-                               {:query "[word=\"hun\" %c] [word=\"vet\" %c]"}]})
+                               #_{:query "[word=\"de\" %c] [word=\"sa\" %c]"}
+                               #_{:query "[word=\"hun\" %c] [word=\"vet\" %c]"}]})
 
 (def data {:corpus              nil
            :metadata-categories nil})
@@ -29,7 +29,7 @@
          (doseq [[model-name data] body]
            (if (http/unexceptional-status? (:status response))
              (reset! (get model-state model-name) data)
-             (.error js/console (str "Error: " (:status response) " " body))))))))
+             (.error js/console (str "Error: " body))))))))
 
 (get-models "/corpus" {:code "scandiasyn"})
 
