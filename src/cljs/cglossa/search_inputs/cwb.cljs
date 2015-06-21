@@ -22,8 +22,8 @@
 (def interval #"\[\]\{(.+?)\}")
 ;; Treat quoted strings separately; they may contain right brackets
 (def attribute-value #"\[\(?([^\"]+?(?:\"[^\"]*\"[^\]\"]*?)*?)(?:\s+%c)?\)?\]")
-(def quoted-str-or-empty-term #"\".*?\"|\[\]")
-(def terms-regex (combine-regexes [interval quoted-str-or-empty-term attribute-value]))
+(def quoted-or-empty-term #"\".*?\"|\[\]")
+(def terms-regex (combine-regexes [interval quoted-or-empty-term attribute-value]))
 
 (defn- ->headword-query [query]
   (str headword-query-prefix
@@ -191,23 +191,51 @@
 (defn- multiword-term [term]
   )
 
-(defn query-terms [query]
+(defn- split-query [query]
   (let [terms (re-seq terms-regex query)]
     (if (str/blank? terms)
       ["[]"]
       terms)))
 
+(defn- construct-query-terms [parts]
+  (for [item parts]
+    (condp re-matches (first item)
+      interval (let [values (second item)
+                     min    (some->> values
+                                     (re-find #"(\d+),")
+                                     last)
+                     max    (some->> values
+                                     (re-find #",(\d+)")
+                                     last)]
+                 [min max])
+      attribute-value (let [attrs (str/split (last item) #"\s*&\s*")]
+                        (reduce (fn [m attr]
+                                  (let [[_ name val]
+                                        (re-find #"\(?(\S+)\s*=\s*\"(\S+)\"" attr)]
+                                    (case name
+                                      ("word" "lemma" "phon")
+                                      (cond-> (assoc m :word val)
+                                              (= name "lemma") (assoc :lemma? true)
+                                              (= name "phon") (assoc :phon? true)
+                                              (re-find #"\.\+$" val) (assoc :start? true)
+                                              (re-find #"^\.\+" val) (assoc :end? true)))))
+                                {}
+                                attrs))
+      quoted-or-empty-term (.log js/console "quoted-or-empty")
+      "hei")))
+
 (defn- extended
-  " Search view component with text inputs, checkboxes and menus
-for easily building complex and grammatically specified queries. "
+  "Search view component with text inputs, checkboxes and menus
+  for easily building complex and grammatically specified queries."
   [corpus query-cursor show-remove-btn? remove-query-handler]
-  (let [terms (query-terms (:query @query-cursor))]
-    #_(.log js/console terms)
+  (let [parts (split-query (:query @query-cursor))
+        terms (construct-query-terms parts)]
+    (.log js/console (str terms))
     [:div.row-fluid.multiword-container
      [:form.form-inline.multiword-search-form
       [:div {:style {:display 'table'}}
        [:div {:style {:display 'table-row'}}
-        (for [term terms]
+        #_(for [term parts]
           (.log js/console (str term))
           #_[multiword-term term])]
        " AAAA "

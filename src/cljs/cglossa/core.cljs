@@ -11,7 +11,7 @@
 (def state {:showing-results? false
             :showing-sidebar? false
             :search-view      :simple
-            :search-queries   [{:query "[word=\"han\" %c] [word=\"er\" %c]"}
+            :search-queries   [{:query "[word=\"han\" %c] []{1,2} [word=\"er\" %c]"}
                                #_{:query "[word=\"de\" %c] [word=\"sa\" %c]"}
                                #_{:query "[word=\"hun\" %c] [word=\"vet\" %c]"}]})
 
