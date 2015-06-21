@@ -218,7 +218,10 @@
                                               (= name "lemma") (assoc :lemma? true)
                                               (= name "phon") (assoc :phon? true)
                                               (re-find #"\.\+$" val) (assoc :start? true)
-                                              (re-find #"^\.\+" val) (assoc :end? true)))))
+                                              (re-find #"^\.\+" val) (assoc :end? true))
+
+                                      "pos"
+                                      (assoc m :pos val))))
                                 {}
                                 attrs))
       quoted-or-empty-term (.log js/console "quoted-or-empty")
