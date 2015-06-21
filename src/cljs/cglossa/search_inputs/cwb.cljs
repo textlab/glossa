@@ -221,7 +221,9 @@
                                               (re-find #"^\.\+" val) (assoc :end? true))
 
                                       "pos"
-                                      (assoc m :pos val))))
+                                      (assoc m :pos val)
+
+                                      (update-in m [:features] assoc name val))))
                                 {}
                                 attrs))
       quoted-or-empty-term (.log js/console "quoted-or-empty")
