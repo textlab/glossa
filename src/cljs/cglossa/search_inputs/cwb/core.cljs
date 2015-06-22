@@ -1,29 +1,12 @@
-(ns cglossa.search-inputs.cwb
+(ns cglossa.search-inputs.cwb.core
   (:require [clojure.string :as str]
             [reagent.core :as reagent]
-            [goog.dom :as dom]))
+            [goog.dom :as dom]
+            [cglossa.search-inputs.cwb.impl.extended :as extended]))
 
 (def ^:private headword-query-prefix "<headword>")
 (def ^:private headword-query-suffix-more-words "[]{0,}")
 (def ^:private headword-query-suffix-tag "</headword>")
-
-(defn- combine-regexes [regexes]
-  "Since there is no way to concatenate regexes directly, we convert
-  them to strings, remove the initial and final slash from each one,
-  concatenate the resulting strings with a pipe symbol, and finally
-  convert the concatenated string back to a single regex."
-  (->> regexes
-       (map str)
-       (map (partial re-matches #"/(.+)/"))
-       (map last)
-       (str/join \|)
-       re-pattern))
-
-(def interval #"\[\]\{(.+?)\}")
-;; Treat quoted strings separately; they may contain right brackets
-(def attribute-value #"\[\(?([^\"]+?(?:\"[^\"]*\"[^\]\"]*?)*?)(?:\s+%c)?\)?\]")
-(def quoted-or-empty-term #"\".*?\"|\[\]")
-(def terms-regex (combine-regexes [interval quoted-or-empty-term attribute-value]))
 
 (defn- ->headword-query [query]
   (str headword-query-prefix
@@ -188,53 +171,12 @@
     [single-input-view corpus query-cursor displayed-query show-remove-btn?
      true remove-query-handler on-text-changed]))
 
-(defn- multiword-term [term]
-  )
-
-(defn- split-query [query]
-  (let [terms (re-seq terms-regex query)]
-    (if (str/blank? terms)
-      ["[]"]
-      terms)))
-
-(defn- construct-query-terms [parts]
-  (for [item parts]
-    (condp re-matches (first item)
-      interval (let [values (second item)
-                     min    (some->> values
-                                     (re-find #"(\d+),")
-                                     last)
-                     max    (some->> values
-                                     (re-find #",(\d+)")
-                                     last)]
-                 [min max])
-      attribute-value (let [attrs (str/split (last item) #"\s*&\s*")]
-                        (reduce (fn [m attr]
-                                  (let [[_ name val]
-                                        (re-find #"\(?(\S+)\s*=\s*\"(\S+)\"" attr)]
-                                    (case name
-                                      ("word" "lemma" "phon")
-                                      (cond-> (assoc m :word val)
-                                              (= name "lemma") (assoc :lemma? true)
-                                              (= name "phon") (assoc :phon? true)
-                                              (re-find #"\.\+$" val) (assoc :start? true)
-                                              (re-find #"^\.\+" val) (assoc :end? true))
-
-                                      "pos"
-                                      (assoc m :pos val)
-
-                                      (update-in m [:features] assoc name val))))
-                                {}
-                                attrs))
-      quoted-or-empty-term (.log js/console "quoted-or-empty")
-      "hei")))
-
 (defn- extended
   "Search view component with text inputs, checkboxes and menus
   for easily building complex and grammatically specified queries."
   [corpus query-cursor show-remove-btn? remove-query-handler]
-  (let [parts (split-query (:query @query-cursor))
-        terms (construct-query-terms parts)]
+  (let [parts (extended/split-query (:query @query-cursor))
+        terms (extended/construct-query-terms parts)]
     (.log js/console (str terms))
     [:div.row-fluid.multiword-container
      [:form.form-inline.multiword-search-form
