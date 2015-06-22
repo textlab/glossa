@@ -34,7 +34,6 @@
   (let [[_ name val] (re-find #"\(?(\S+)\s*=\s*\"(\S+)\"" attr)]
     (case name
       ("word" "lemma" "phon")
-      (cond-> (assoc term :word val)
       (cond-> (assoc term :word (-> val
                                     (str/replace #"^(?:\.\+)?(.+?)" "$1")
                                     (str/replace #"(.+?)(?:\.\+)?$" "$1")))
