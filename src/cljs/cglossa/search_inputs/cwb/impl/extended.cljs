@@ -35,6 +35,9 @@
     (case name
       ("word" "lemma" "phon")
       (cond-> (assoc term :word val)
+      (cond-> (assoc term :word (-> val
+                                    (str/replace #"^(?:\.\+)?(.+?)" "$1")
+                                    (str/replace #"(.+?)(?:\.\+)?$" "$1")))
               (= name "lemma") (assoc :lemma? true)
               (= name "phon") (assoc :phon? true)
               (re-find #"\.\+$" val) (assoc :start? true)
