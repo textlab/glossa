@@ -2,7 +2,9 @@
   (:require [clojure.string :as str]
             [reagent.core :as reagent]
             [goog.dom :as dom]
-            [cglossa.search-inputs.cwb.impl.extended :as extended :refer [multiword-term]]))
+            [cglossa.search-inputs.cwb.shared :refer [on-key-down search!
+                                                      remove-row-btn]]
+            [cglossa.search-inputs.cwb.extended :as extended :refer [multiword-term]]))
 
 (def ^:private headword-query-prefix "<headword>")
 (def ^:private headword-query-suffix-more-words "[]{0,}")
@@ -60,9 +62,6 @@
       (str "[" attr "=\".*\" %c]")
       p2)))
 
-(defn- search! [query-cursor]
-  (.log js/console "soker"))
-
 ;;;;;;;;;;;;;;;;;
 ; Event handlers
 ;;;;;;;;;;;;;;;;;
@@ -79,11 +78,6 @@
 
 (defn- on-headword-search-changed [event query-cursor]
   (swap! query-cursor assoc :headword-search (.-target.checked event)))
-
-(defn- on-key-down [event query-cursor]
-  (when (= "Enter" (.-key event))
-    (.preventDefault event)
-    (search! query-cursor)))
 
 ;;;;;;;;;;;;;
 ; Components
@@ -126,15 +120,7 @@
     [:form {:style {:display "table" :margin-left -30 :margin-bottom 20}}
      [:div {:style {:display "table-row" :margin-bottom 10}}
       [:div {:style {:display "table-cell"}}
-       [:button.btn.btn-default.btn-xs {:type     "button"
-                                        :title    "Remove row"
-                                        :on-click #(remove-row-handler)
-                                        :style    {:margin-right 5
-                                                   :margin-top   -25
-                                                   :visibility   (if show-remove-row-btn?
-                                                                   "visible"
-                                                                   "hidden")}}
-        [:span.glyphicon.glyphicon-remove]]]
+       [remove-row-btn show-remove-row-btn? remove-row-handler]]
       [:div.form-group {:style {:display "table-cell"}}
        [:input.form-control.col-md-12 {:style       {:width 500}
                                        :type        "text"
@@ -192,8 +178,7 @@
                              remove-term-handler   #()]
                          [multiword-term query-cursor term first? last? has-phonetic?
                           show-remove-row-btn? remove-row-handler
-                          show-remove-term-btn? remove-term-handler
-                          on-key-down]))
+                          show-remove-term-btn? remove-term-handler]))
                      terms)]
        (when (:has-headword-search corpus)
          [headword-search-checkbox query-cursor])]]]))

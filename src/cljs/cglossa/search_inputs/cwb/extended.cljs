@@ -1,7 +1,8 @@
-(ns cglossa.search-inputs.cwb.impl.extended
+(ns cglossa.search-inputs.cwb.extended
   "Implementation of search view component with text inputs, checkboxes
   and menus for easily building complex and grammatically specified queries."
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [cglossa.search-inputs.cwb.shared :refer [on-key-down remove-row-btn]]))
 
 (defn- combine-regexes [regexes]
   "Since there is no way to concatenate regexes directly, we convert
@@ -54,20 +55,20 @@
     (reduce (fn [terms part]
               (condp re-matches (first part)
                 interval-rx (let [values (second part)
-                               min    (some->> values
-                                               (re-find #"(\d+),")
-                                               last)
-                               max    (some->> values
-                                               (re-find #",(\d+)")
-                                               last)]
-                           (reset! interval [min max])
-                           terms)
+                                  min    (some->> values
+                                                  (re-find #"(\d+),")
+                                                  last)
+                                  max    (some->> values
+                                                  (re-find #",(\d+)")
+                                                  last)]
+                              (reset! interval [min max])
+                              terms)
                 attribute-value-rx (let [attrs (str/split (last part) #"\s*&\s*")
-                                      term  (as-> {} $
-                                                  (reduce process-attr $ attrs)
-                                                  (assoc $ :interval @interval))]
-                                  (reset! interval [nil nil])
-                                  (conj terms term))
+                                         term  (as-> {} $
+                                                     (reduce process-attr $ attrs)
+                                                     (assoc $ :interval @interval))]
+                                     (reset! interval [nil nil])
+                                     (conj terms term))
                 quoted-or-empty-term-rx (.log js/console "quoted-or-empty")
                 "hei"))
             []
@@ -76,8 +77,7 @@
 (defn multiword-term
   [query-cursor term first? last? has-phonetic?
    show-remove-row-btn? remove-row-handler
-   show-remove-term-btn? remove-term-handler
-   on-key-down]
+   show-remove-term-btn? remove-term-handler]
   [:div {:style {:display "table-cell"}}
    [:div {:style {:display "table-cell"}}
     [:div {:style {:display "table"}}
@@ -98,16 +98,8 @@
                              :on-key-down #(on-key-down % query-cursor)}] "max"])
         [:div.input-prepend.input-append.word
          [:div.dropdown
-          (when (and first? show-remove-row-btn?)
-            [:button.btn.btn-default.btn-xs {:type     "button"
-                                             :title    "Remove row"
-                                             :on-click #(remove-row-handler)
-                                             :style    {:margin-right 5
-                                                        :margin-top   -25
-                                                        :visibility   (if show-remove-row-btn?
-                                                                        "visible"
-                                                                        "hidden")}}
-             [:span.glyphicon.glyphicon-remove]])
+          (when first?
+            [remove-row-btn show-remove-row-btn? remove-row-handler])
           [:span.add-on.dropdown-toggle {:data-toggle "dropdown"
                                          :style       {:cursor "pointer"}}
            [:i.icon-align-justify]]
@@ -118,7 +110,7 @@
                                                                                      "")
                                                          ;:on-change     #(on-text-changed)
                                                          :on-key-down   #(on-key-down % query-cursor)}]
-          (if show-remove-term-btn?
+          (when show-remove-term-btn?
             [:span.add-on {:title " Remove word "
                            :style {:cursor "pointer"}
                            ;:on-click #(on-remove-term)
