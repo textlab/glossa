@@ -167,8 +167,8 @@
     (.log js/console (str terms))
     [:div.multiword-container
      [:form.form-inline.multiword-search-form {:style {:margin-left -30}}
-      [:div {:style {:display 'table'}}
-       [:div {:style {:display 'table-row'}}
+      [:div {:style {:display "table"}}
+       [:div {:style {:display "table-row"}}
         (map-indexed (fn [index term]
                        (let [first?                (zero? index)
                              last?                 (= index last-term-index)

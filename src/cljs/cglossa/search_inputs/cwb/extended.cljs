@@ -131,24 +131,23 @@
           [:div.table-cell])
         [:div.table-cell
          [:div.word-checkboxes
-          [:label.checkbox
+          [:label.checkbox-inline
            [:input {:type    "checkbox"
                     :checked (:lemma? term)
                     ;:on-change #(on-lemma?-changed)
                     }] "Lemma"]
-          [:label.checkbox
+          [:label.checkbox-inline
            [:input {:type    "checkbox"
                     :title   "Start of word"
                     :checked (:start? term)
                     ;:on-change #(on-start?-changed)
                     }] "Start"]
-          [:label.checkbox
+          [:label.checkbox-inline
            [:input {:type    "checkbox"
-                    :title   "End of wordd"
+                    :title   "End of word"
                     :checked (:end? term)
                     ;:on-change #(on-end?-changed)
-                    }] "End"]
-          [:div.table-cell]]
+                    }] "End"]]
          (when has-phonetic?
            [:div
             [:label.checkbox

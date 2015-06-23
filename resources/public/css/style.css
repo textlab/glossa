@@ -158,8 +158,8 @@ h5.category-header {
 .row-fluid script:first-child + [class*="span"] {
   margin-left: 0; }
 
-.form-inline input.multiword-field {
-  width: 108px; }
+.multiword-field {
+  width: 108px !important; }
 
 .pagination {
   margin-top: 0;
