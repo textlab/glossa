@@ -2,7 +2,7 @@
   (:require [clojure.string :as str]
             [reagent.core :as reagent]
             [goog.dom :as dom]
-            [cglossa.search-inputs.cwb.impl.extended :as extended]))
+            [cglossa.search-inputs.cwb.impl.extended :as extended :refer [multiword-term]]))
 
 (def ^:private headword-query-prefix "<headword>")
 (def ^:private headword-query-suffix-more-words "[]{0,}")
@@ -119,8 +119,8 @@
 (defn- single-input-view
   "HTML that is shared by the search views that only show a single text input,
   i.e., the simple and CQP views."
-  [corpus query-cursor displayed-query show-remove-btn? show-checkboxes?
-   remove-query-handler on-text-changed]
+  [corpus query-cursor displayed-query show-remove-row-btn? show-checkboxes?
+   remove-row-handler on-text-changed]
   (let [query     (:query @query-cursor)
         phonetic? (not= -1 (.indexOf query "phon="))]
     [:form {:style {:display "table" :margin-left -30 :margin-bottom 20}}
@@ -128,10 +128,10 @@
       [:div {:style {:display "table-cell"}}
        [:button.btn.btn-default.btn-xs {:type     "button"
                                         :title    "Remove row"
-                                        :on-click #(remove-query-handler)
+                                        :on-click #(remove-row-handler)
                                         :style    {:margin-right 5
                                                    :margin-top   -25
-                                                   :visibility   (if show-remove-btn?
+                                                   :visibility   (if show-remove-row-btn?
                                                                    "visible"
                                                                    "hidden")}}
         [:span.glyphicon.glyphicon-remove]]]
@@ -156,7 +156,7 @@
 
 (defn- simple
   "Simple search view component"
-  [corpus query-cursor show-remove-btn? remove-query-handler]
+  [corpus query-cursor show-remove-row-btn? remove-row-handler]
   (let [query           (:query @query-cursor)
         displayed-query (-> query
                             (->non-headword-query)
@@ -168,37 +168,46 @@
                           (let [value (.-target.value event)
                                 query (if (= value "") "" (phrase->cqp value phonetic?))]
                             (swap! query-cursor assoc :query query)))]
-    [single-input-view corpus query-cursor displayed-query show-remove-btn?
-     true remove-query-handler on-text-changed]))
+    [single-input-view corpus query-cursor displayed-query show-remove-row-btn?
+     true remove-row-handler on-text-changed]))
 
 (defn- extended
   "Search view component with text inputs, checkboxes and menus
   for easily building complex and grammatically specified queries."
-  [corpus query-cursor show-remove-btn? remove-query-handler]
-  (let [parts (extended/split-query (:query @query-cursor))
-        terms (extended/construct-query-terms parts)]
+  [corpus query-cursor show-remove-row-btn? remove-row-handler]
+  (let [parts           (extended/split-query (:query @query-cursor))
+        terms           (extended/construct-query-terms parts)
+        last-term-index (dec (count terms))]
     (.log js/console (str terms))
     [:div.row-fluid.multiword-container
      [:form.form-inline.multiword-search-form
       [:div {:style {:display 'table'}}
        [:div {:style {:display 'table-row'}}
-        #_(for [term parts]
-          (.log js/console (str term))
-          #_[multiword-term term])]
-       " AAAA "
+        (map-indexed (fn [index term]
+                       (let [first?                (zero? index)
+                             last?                 (= index last-term-index)
+                             ;; Show buttons to remove terms if there are more than one term
+                             show-remove-term-btn? (pos? last-term-index)
+                             has-phonetic?         (:has-phonetic corpus)
+                             remove-term-handler   #()]
+                         [multiword-term query-cursor term first? last? has-phonetic?
+                          show-remove-row-btn? remove-row-handler
+                          show-remove-term-btn? remove-term-handler
+                          on-key-down]))
+                     terms)]
        (when (:has-headword-search corpus)
          [headword-search-checkbox query-cursor])]]]))
 
 (defn- cqp
   "CQP query view component"
-  [corpus query-cursor show-remove-btn? remove-query-handler]
+  [corpus query-cursor show-remove-row-btn? remove-query-handler]
   (let [displayed-query (:query @query-cursor)
         on-text-changed (fn [event query-cursor _]
                           (let [value      (.-target.value event)
                                 query      (->non-headword-query value)
                                 hw-search? (= (->headword-query query) value)]
                             (swap! query-cursor assoc :query query :headword-search hw-search?)))]
-    [single-input-view corpus query-cursor displayed-query show-remove-btn?
+    [single-input-view corpus query-cursor displayed-query show-remove-row-btn?
      false remove-query-handler on-text-changed]))
 
 (defn search-inputs
@@ -262,16 +271,16 @@
           ; Now create a cursor into the search-queries ratom for each search expression
           ; and display a row of search inputs for each of them. The doall call is needed
           ; because ratoms cannot be derefed inside lazy seqs.
-          (let [nqueries         (count @search-queries)
-                show-remove-btn? (> nqueries 1)
-                remove-query     (fn [i] (swap! search-queries
-                                                #(vec (concat (subvec % 0 i)
-                                                              (subvec % (inc i))))))]
+          (let [nqueries             (count @search-queries)
+                show-remove-row-btn? (> nqueries 1)
+                remove-query         (fn [i] (swap! search-queries
+                                                    #(vec (concat (subvec % 0 i)
+                                                                  (subvec % (inc i))))))]
             (doall (for [index (range nqueries)]
-                     (let [query-cursor         (reagent/cursor query-get-set [index])
-                           selected-language    (-> @query-cursor :query :lang)
-                           remove-query-handler (partial remove-query index)]
+                     (let [query-cursor       (reagent/cursor query-get-set [index])
+                           selected-language  (-> @query-cursor :query :lang)
+                           remove-row-handler (partial remove-query index)]
                        (when multilingual? [language-select languages selected-language])
-                       ^{:key index} [view @corpus query-cursor show-remove-btn?
-                                      remove-query-handler]))))
+                       ^{:key index} [view @corpus query-cursor show-remove-row-btn?
+                                      remove-row-handler]))))
           (when-not multilingual? [add-phrase-button])]))}))
