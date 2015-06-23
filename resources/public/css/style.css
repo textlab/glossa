@@ -126,14 +126,17 @@ h5.category-header {
     font-weight: bold; }
 
 .sidebar {
-  transition: width .1s; }
+  transition: width 0.1s; }
   .sidebar.sidebar-enter {
     width: 0 !important; }
   .sidebar.sidebar-leave-active {
     width: 0 !important; }
 
+.table-row {
+  display: table-row !important; }
+
 .table-cell {
-  display: table-cell; }
+  display: table-cell !important; }
 
 .top-toolbar button {
   margin-bottom: 20px;
@@ -156,9 +159,7 @@ h5.category-header {
   margin-left: 0; }
 
 .form-inline input.multiword-field {
-  width: 131px; }
-  .form-inline input.multiword-field.removable {
-    width: 108px; }
+  width: 108px; }
 
 .pagination {
   margin-top: 0;
@@ -186,5 +187,3 @@ h5.category-header {
 
 .select2-container-multi .select2-choices .select2-search-choice {
   margin-top: 6px; }
-
-/*# sourceMappingURL=style.css.map */

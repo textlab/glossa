@@ -197,8 +197,12 @@ h5.category-header {
   }
 }
 
+.table-row {
+  display: table-row !important;
+}
+
 .table-cell {
-  display: table-cell;
+  display: table-cell !important;
 }
 
 .top-toolbar button {
@@ -231,11 +235,7 @@ h5.category-header {
 }
 
 .form-inline input.multiword-field {
-  width: 131px;
-
-  &.removable {
-    width: 108px;
-  }
+  width: 108px;
 }
 
 .pagination {

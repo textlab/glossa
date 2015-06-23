@@ -78,12 +78,12 @@
   [query-cursor term first? last? has-phonetic?
    show-remove-row-btn? remove-row-handler
    show-remove-term-btn? remove-term-handler]
-  [:div {:style {:display "table-cell"}}
-   [:div {:style {:display "table-cell"}}
-    [:div {:style {:display "table"}}
-     [:div.multiword-term
-      [:div.control-group
-       [:div {:style {:display "table-row"}}
+  [:div.table-cell
+   [:div
+    [:div.multiword-term
+     [:div.control-group
+      [:div {:style {:display "table"}}
+       [:div.dropdown.table-row
         (when-not first?
           [:div.interval
            [:h6 "Interval"]
@@ -96,64 +96,70 @@
                              :value       (last (:maxmin term))
                              ;:on-change   #(on-max-changed)
                              :on-key-down #(on-key-down % query-cursor)}] "max"])
-        [:div.input-prepend.input-append.word
-         [:div.dropdown
-          (when first?
-            [remove-row-btn show-remove-row-btn? remove-row-handler])
-          [:span.add-on.dropdown-toggle {:data-toggle "dropdown"
-                                         :style       {:cursor "pointer"}}
-           [:i.icon-align-justify]]
-          [:input.searchfield.multiword-field.removable {:ref           "searchfield"
-                                                         :type          "text"
-                                                         :default-value (str/replace (:word term)
-                                                                                     #"^\.\*$"
-                                                                                     "")
-                                                         ;:on-change     #(on-text-changed)
-                                                         :on-key-down   #(on-key-down % query-cursor)}]
+        (when first?
+          [:div.table-cell
+           [remove-row-btn show-remove-row-btn? remove-row-handler]])
+        [:div.table-cell
+         [:div.input-group
+          [:span.input-group-addon.dropdown-toggle {:data-toggle "dropdown"
+                                                    :style       {:cursor "pointer"}}
+           [:span.glyphicon.glyphicon-menu-hamburger]]
+          [:input.form-control.multiword-field {:ref           "searchfield"
+                                                :type          "text"
+                                                :default-value (str/replace (:word term)
+                                                                            #"^\.\*$"
+                                                                            "")
+                                                ;:on-change     #(on-text-changed)
+                                                :on-key-down   #(on-key-down % query-cursor)}]
           (when show-remove-term-btn?
-            [:span.add-on {:title " Remove word "
-                           :style {:cursor "pointer"}
-                           ;:on-click #(on-remove-term)
-                           }
-             [:i.icon-minus]])
+            [:span.input-group-addon {:title " Remove word "
+                                      :style {:cursor "pointer"}
+                                      ;:on-click #(on-remove-term)
+                                      }
+             [:span.glyphicon.glyphicon-minus]])
           (when last?
             [:div.add-search-word
              [:button.btn.btn-sm {:data-add-term-button ""
                                   :title                "Add search word"
                                   ;:on-click             #(on-add-term)
                                   }
-              [:i.icon-plus]]])
-          [:div {:style {:display "table-row"}}
-           (when-not first?
-             [:div.interval-filler {:style {:display "table-cell"}}])
-           [:div.word-checkboxes
+              [:i.icon-plus]]])]]]
+       [:div.table-row
+        (when-not first?
+          [:div.interval-filler.table-cell])
+        (when first?
+          [:div.table-cell])
+        [:div.table-cell
+         [:div.word-checkboxes
+          [:label.checkbox
+           [:input {:type    "checkbox"
+                    :checked (:lemma? term)
+                    ;:on-change #(on-lemma?-changed)
+                    }] "Lemma"]
+          [:label.checkbox
+           [:input {:type    "checkbox"
+                    :title   "Start of word"
+                    :checked (:start? term)
+                    ;:on-change #(on-start?-changed)
+                    }] "Start"]
+          [:label.checkbox
+           [:input {:type    "checkbox"
+                    :title   "End of wordd"
+                    :checked (:end? term)
+                    ;:on-change #(on-end?-changed)
+                    }] "End"]
+          [:div.table-cell]]
+         (when has-phonetic?
+           [:div
             [:label.checkbox
              [:input {:type    "checkbox"
-                      :checked (:lemma? term)
-                      ;:on-change #(on-lemma?-changed)
-                      }] "Lemma"]
-            [:label.checkbox
-             [:input {:type    "checkbox"
-                      :title   "Start of word"
-                      :checked (:start? term)
-                      ;:on-change #(on-start?-changed)
-                      }] "Start"]
-            [:label.checkbox
-             [:input {:type    "checkbox"
-                      :title   "End of wordd"
-                      :checked (:end? term)
-                      ;:on-change #(on-end?-changed)
-                      }] "End"]
-            [:div {:style {:display "table-cell"}}]]
-           (when has-phonetic?
-             [:div
-              [:label.checkbox
-               [:input {:type    "checkbox"
-                        :checked (:phonetic? term)
-                        ;:on-change #(on-phonetic?-changed)
-                        }] "Phonetic form"]])]
-          [:div {:style {:display "table-row"}}
-           (when-not first?
-             [:div.interval-filler {:style {:display "table-cell"}}])
-           [:div.tag-list {:ref "taglist"}
-            [:div.tags]]]]]]]]]]])
+                      :checked (:phonetic? term)
+                      ;:on-change #(on-phonetic?-changed)
+                      }] "Phonetic form"]])]]
+       [:div.table-row
+        (when-not first?
+          [:div.interval-filler.table-cell])
+        (when first?
+          [:div.table-cell])
+        [:div.tag-list.table-cell {:ref "taglist"}
+         [:div.tags]]]]]]]])

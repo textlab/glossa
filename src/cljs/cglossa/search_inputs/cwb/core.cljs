@@ -165,8 +165,8 @@
         terms           (extended/construct-query-terms parts)
         last-term-index (dec (count terms))]
     (.log js/console (str terms))
-    [:div.row-fluid.multiword-container
-     [:form.form-inline.multiword-search-form
+    [:div.multiword-container
+     [:form.form-inline.multiword-search-form {:style {:margin-left -30}}
       [:div {:style {:display 'table'}}
        [:div {:style {:display 'table-row'}}
         (map-indexed (fn [index term]
@@ -229,29 +229,30 @@
                                       ;; TODO: Handle state.maxHits and state.lastSelectedMaxHits
                                       )))]
          [:span
-          [:div.search-input-links
-           (if (= view simple)
-             [:b "Simple"]
-             [:a {:href     ""
-                  :title    "Simple search box"
-                  :on-click #(set-view :simple %)}
-              "Simple"])
-           " | "
-           (if (= view extended)
-             [:b "Extended"]
-             [:a {:href     ""
-                  :title    "Search for grammatical categories etc."
-                  :on-click #(set-view :extended %)}
-              "Extended"])
-           " | "
-           (if (= view cqp)
-             [:b "CQP query"]
-             [:a {:href     ""
-                  :title    "CQP expressions"
-                  :on-click #(set-view :cqp %)}
-              "CQP query"])
-           [search-button multilingual?]
-           (when multilingual? [add-language-button])]
+          [:div.row.search-input-links
+           [:div.col-md-12
+            (if (= view simple)
+              [:b "Simple"]
+              [:a {:href     ""
+                   :title    "Simple search box"
+                   :on-click #(set-view :simple %)}
+               "Simple"])
+            " | "
+            (if (= view extended)
+              [:b "Extended"]
+              [:a {:href     ""
+                   :title    "Search for grammatical categories etc."
+                   :on-click #(set-view :extended %)}
+               "Extended"])
+            " | "
+            (if (= view cqp)
+              [:b "CQP query"]
+              [:a {:href     ""
+                   :title    "CQP expressions"
+                   :on-click #(set-view :cqp %)}
+               "CQP query"])
+            [search-button multilingual?]
+            (when multilingual? [add-language-button])]]
 
           ; Now create a cursor into the search-queries ratom for each search expression
           ; and display a row of search inputs for each of them. The doall call is needed
@@ -265,7 +266,9 @@
                      (let [query-cursor       (reagent/cursor query-get-set [index])
                            selected-language  (-> @query-cursor :query :lang)
                            remove-row-handler (partial remove-query index)]
-                       (when multilingual? [language-select languages selected-language])
-                       ^{:key index} [view @corpus query-cursor show-remove-row-btn?
-                                      remove-row-handler]))))
+                       [:div.row
+                        [:div.col-md-12
+                         (when multilingual? [language-select languages selected-language])
+                         ^{:key index} [view @corpus query-cursor show-remove-row-btn?
+                                        remove-row-handler]]]))))
           (when-not multilingual? [add-phrase-button])]))}))
