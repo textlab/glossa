@@ -15,14 +15,14 @@
        (str/join \|)
        re-pattern))
 
-(def interval #"\[\]\{(.+?)\}")
+(def interval-rx #"\[\]\{(.+?)\}")
 ;; Treat quoted strings separately; they may contain right brackets
-(def attribute-value #"\[\(?([^\"]+?(?:\"[^\"]*\"[^\]\"]*?)*?)(?:\s+%c)?\)?\]")
-(def quoted-or-empty-term #"\".*?\"|\[\]")
-(def terms-regex (combine-regexes [interval quoted-or-empty-term attribute-value]))
+(def attribute-value-rx #"\[\(?([^\"]+?(?:\"[^\"]*\"[^\]\"]*?)*?)(?:\s+%c)?\)?\]")
+(def quoted-or-empty-term-rx #"\".*?\"|\[\]")
+(def terms-rx (combine-regexes [interval-rx quoted-or-empty-term-rx attribute-value-rx]))
 
 (defn split-query [query]
-  (let [terms (re-seq terms-regex query)]
+  (let [terms (re-seq terms-rx query)]
     (if (str/blank? terms)
       ["[]"]
       terms)))
@@ -50,25 +50,25 @@
   ;; Use an atom to keep track of interval specifications so that we can set
   ;; them as the value of the :interval key in the map representing the following
   ;; query term.
-  (let [minmax (atom [nil nil])]
+  (let [interval (atom [nil nil])]
     (reduce (fn [terms part]
               (condp re-matches (first part)
-                interval (let [values (second part)
+                interval-rx (let [values (second part)
                                min    (some->> values
                                                (re-find #"(\d+),")
                                                last)
                                max    (some->> values
                                                (re-find #",(\d+)")
                                                last)]
-                           (reset! minmax [min max])
+                           (reset! interval [min max])
                            terms)
-                attribute-value (let [attrs (str/split (last part) #"\s*&\s*")
+                attribute-value-rx (let [attrs (str/split (last part) #"\s*&\s*")
                                       term  (as-> {} $
                                                   (reduce process-attr $ attrs)
-                                                  (assoc $ :interval @minmax))]
-                                  (reset! minmax [nil nil])
+                                                  (assoc $ :interval @interval))]
+                                  (reset! interval [nil nil])
                                   (conj terms term))
-                quoted-or-empty-term (.log js/console "quoted-or-empty")
+                quoted-or-empty-term-rx (.log js/console "quoted-or-empty")
                 "hei"))
             []
             parts)))
