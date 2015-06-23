@@ -117,7 +117,7 @@
    remove-row-handler on-text-changed]
   (let [query     (:query @query-cursor)
         phonetic? (not= -1 (.indexOf query "phon="))]
-    [:form {:style {:display "table" :margin-left -30 :margin-bottom 20}}
+    [:form {:style {:display "table" :margin "10px 0px 20px -30px"}}
      [:div {:style {:display "table-row" :margin-bottom 10}}
       [:div {:style {:display "table-cell"}}
        [remove-row-btn show-remove-row-btn? remove-row-handler]]

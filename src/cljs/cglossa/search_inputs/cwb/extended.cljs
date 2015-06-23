@@ -85,17 +85,16 @@
       [:div {:style {:display "table"}}
        [:div.dropdown.table-row
         (when-not first?
-          [:div.interval
-           [:h6 "Interval"]
-           [:input.interval {:type        "text"
-                             :value       (first (:maxmin term))
-                             ;:on-change   #(on-min-changed)
-                             :on-key-down #(on-key-down % query-cursor)}] "min"
+          [:div.interval.form-group.form-group-sm.table-cell
+           [:input.form-control.interval {:type        "text"
+                                          :value       (first (:maxmin term))
+                                          ;:on-change   #(on-min-changed)
+                                          :on-key-down #(on-key-down % query-cursor)}] "min"
            [:br]
-           [:input.interval {:type        "text"
-                             :value       (last (:maxmin term))
-                             ;:on-change   #(on-max-changed)
-                             :on-key-down #(on-key-down % query-cursor)}] "max"])
+           [:input.form-control.interval {:type        "text"
+                                          :value       (last (:maxmin term))
+                                          ;:on-change   #(on-max-changed)
+                                          :on-key-down #(on-key-down % query-cursor)}] "max"])
         (when first?
           [:div.table-cell
            [remove-row-btn show-remove-row-btn? remove-row-handler]])
@@ -150,7 +149,7 @@
                     }] "End"]]
          (when has-phonetic?
            [:div
-            [:label.checkbox
+            [:label.checkbox-inline
              [:input {:type    "checkbox"
                       :checked (:phonetic? term)
                       ;:on-change #(on-phonetic?-changed)
