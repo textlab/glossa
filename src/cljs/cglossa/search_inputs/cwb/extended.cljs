@@ -96,7 +96,7 @@
       [:div {:style {:display "table"}}
        [:div.dropdown.table-row
         (when first?
-          [:div.table-cell
+          [:div.table-cell.remove-row-btn-container
            [remove-row-btn show-remove-row-btn? remove-row-handler]])
         [:div.table-cell
          [:div.input-group

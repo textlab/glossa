@@ -46,6 +46,7 @@ h5.category-header {
 
 .multiword-container {
   margin-top: 10px;
+  margin-bottom: 30px;
 }
 .multiword-container ~ .add-phrase-btn {
   margin-top: -15px;
@@ -133,6 +134,10 @@ div.interval {
   &:first-of-type {
     margin-top: 0;
   }
+}
+
+.remove-row-btn-container {
+  vertical-align: middle;
 }
 
 .row-fluid {

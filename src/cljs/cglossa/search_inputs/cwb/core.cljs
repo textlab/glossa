@@ -119,7 +119,7 @@
         phonetic? (not= -1 (.indexOf query "phon="))]
     [:form {:style {:display "table" :margin "10px 0px 20px -30px"}}
      [:div {:style {:display "table-row" :margin-bottom 10}}
-      [:div {:style {:display "table-cell"}}
+      [:div.table-cell.remove-row-btn-container
        [remove-row-btn show-remove-row-btn? remove-row-handler]]
       [:div.form-group {:style {:display "table-cell"}}
        [:input.form-control.col-md-12 {:style       {:width 500}

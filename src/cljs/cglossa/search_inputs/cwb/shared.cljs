@@ -13,7 +13,6 @@
                                    :title    "Remove row"
                                    :on-click #(handler)
                                    :style    {:margin-right 5
-                                              :margin-top   -25
                                               :visibility   (if show?
                                                               "visible"
                                                               "hidden")}}
