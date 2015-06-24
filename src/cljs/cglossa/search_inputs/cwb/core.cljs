@@ -177,7 +177,9 @@
                              has-phonetic?         (:has-phonetic corpus)
                              remove-term-handler   #()]
                          (list (when-not first?
+                                 ^{:key (str "interval" index)}
                                  [interval query-cursor term])
+                               ^{:key (str "term" index)}
                                [multiword-term query-cursor term first? last? has-phonetic?
                                 show-remove-row-btn? remove-row-handler
                                 show-remove-term-btn? remove-term-handler])))
@@ -202,7 +204,10 @@
   or CQP query view) and displays it."
   [{:keys [search-view search-queries]} {:keys [corpus]}]
   (reagent/create-class
-    {:component-did-mount
+    {:display-name
+     "search-inputs"
+
+     :component-did-mount
      focus-text-input
 
      :reagent-render
@@ -268,9 +273,10 @@
                      (let [query-cursor       (reagent/cursor query-get-set [index])
                            selected-language  (-> @query-cursor :query :lang)
                            remove-row-handler (partial remove-query index)]
+                       ^{:key index}
                        [:div.row
                         [:div.col-md-12
-                         (when multilingual? [language-select languages selected-language])
-                         ^{:key index} [view @corpus query-cursor show-remove-row-btn?
-                                        remove-row-handler]]]))))
+                         (when multilingual?
+                           [language-select languages selected-language])
+                         [view @corpus query-cursor show-remove-row-btn? remove-row-handler]]]))))
           (when-not multilingual? [add-phrase-button])]))}))
