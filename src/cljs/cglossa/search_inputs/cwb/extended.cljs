@@ -44,7 +44,7 @@
       (assoc term :pos val)
 
       ;; default
-      (update-in term [:features] assoc name val))))
+      (assoc-in term [:features name] val))))
 
 
 (defn construct-query-terms [parts]
