@@ -36,7 +36,7 @@
                                     (str/replace #"^(?:\.\+)?(.+?)" "$1")
                                     (str/replace #"(.+?)(?:\.\+)?$" "$1")))
               (= name "lemma") (assoc :lemma? true)
-              (= name "phon") (assoc :phon? true)
+              (= name "phon") (assoc :phonetic? true)
               (re-find #"\.\+$" val) (assoc :start? true)
               (re-find #"^\.\+" val) (assoc :end? true))
 
