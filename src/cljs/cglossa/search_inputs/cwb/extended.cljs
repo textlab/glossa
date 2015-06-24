@@ -118,11 +118,11 @@
              [:span.glyphicon.glyphicon-minus]])
           (when last?
             [:div.add-search-word
-             [:button.btn.btn-sm {:data-add-term-button ""
+             [:button.btn.btn-default.btn-sm {:data-add-term-button ""
                                   :title                "Add search word"
                                   ;:on-click             #(on-add-term)
                                   }
-              [:i.icon-plus]]])]]]
+              [:span.glyphicon.glyphicon-plus]]])]]]
        [:div.table-row
         (when first?
           [:div.table-cell])
