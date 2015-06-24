@@ -4,7 +4,7 @@
             [goog.dom :as dom]
             [cglossa.search-inputs.cwb.shared :refer [on-key-down search!
                                                       remove-row-btn]]
-            [cglossa.search-inputs.cwb.extended :as extended :refer [multiword-term]]))
+            [cglossa.search-inputs.cwb.extended :as extended :refer [interval multiword-term]]))
 
 (def ^:private headword-query-prefix "<headword>")
 (def ^:private headword-query-suffix-more-words "[]{0,}")
@@ -176,9 +176,11 @@
                              show-remove-term-btn? (pos? last-term-index)
                              has-phonetic?         (:has-phonetic corpus)
                              remove-term-handler   #()]
-                         [multiword-term query-cursor term first? last? has-phonetic?
-                          show-remove-row-btn? remove-row-handler
-                          show-remove-term-btn? remove-term-handler]))
+                         (list (when-not first?
+                                 [interval query-cursor term])
+                               [multiword-term query-cursor term first? last? has-phonetic?
+                                show-remove-row-btn? remove-row-handler
+                                show-remove-term-btn? remove-term-handler])))
                      terms)]
        (when (:has-headword-search corpus)
          [headword-search-checkbox query-cursor])]]]))

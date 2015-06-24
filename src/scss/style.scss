@@ -76,29 +76,27 @@ h5.category-header {
   width: 20px;
 }
 
+div.interval {
+  display: table-cell;
+  padding-left: 15px;
+  padding-right: 15px;
+
+  input.interval {
+    width: 25px;
+    padding: 0px 4px;
+    margin: 2px 5px 5px 0px;
+    text-align: right;
+  }
+
+  h6 {
+    margin-top: 0;
+    margin-bottom: 2px;
+  }
+}
+
 .multiword-search-form {
   .multiword-term .control-group {
       display: table;
-
-      div.interval {
-        display: table-cell;
-        vertical-align: bottom;
-        padding-left: 15px;
-        padding-right: 15px;
-
-        input.interval {
-          width: 25px;
-          padding: 0px 4px;
-          margin-bottom: 5px;
-          margin-right: 5px;
-          text-align: right;
-        }
-
-        h6 {
-          margin-top: 0;
-          margin-bottom: 2px;
-        }
-      }
 
       div.word {
         display: table-cell;
@@ -113,7 +111,7 @@ h5.category-header {
       }
 
     div.word-checkboxes {
-      margin-top: 9px;
+      margin-top: 5px;
     }
   }
 

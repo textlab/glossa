@@ -74,27 +74,27 @@
             []
             parts)))
 
-(defn multiword-term
-  [query-cursor term first? last? has-phonetic?
-   show-remove-row-btn? remove-row-handler
-   show-remove-term-btn? remove-term-handler]
+(defn interval [query-cursor term]
+  [:div.interval.table-cell
+   [:input.form-control.interval {:type        "text"
+                                  :value       (first (:maxmin term))
+                                  ;:on-change   #(on-min-changed)
+                                  :on-key-down #(on-key-down % query-cursor)}] "min"
+   [:br]
+   [:input.form-control.interval {:type        "text"
+                                  :value       (last (:maxmin term))
+                                  ;:on-change   #(on-max-changed)
+                                  :on-key-down #(on-key-down % query-cursor)}] "max"])
+
+(defn multiword-term [query-cursor term first? last? has-phonetic?
+                      show-remove-row-btn? remove-row-handler
+                      show-remove-term-btn? remove-term-handler]
   [:div.table-cell
    [:div
     [:div.multiword-term
      [:div.control-group
       [:div {:style {:display "table"}}
        [:div.dropdown.table-row
-        (when-not first?
-          [:div.interval.form-group.form-group-sm.table-cell
-           [:input.form-control.interval {:type        "text"
-                                          :value       (first (:maxmin term))
-                                          ;:on-change   #(on-min-changed)
-                                          :on-key-down #(on-key-down % query-cursor)}] "min"
-           [:br]
-           [:input.form-control.interval {:type        "text"
-                                          :value       (last (:maxmin term))
-                                          ;:on-change   #(on-max-changed)
-                                          :on-key-down #(on-key-down % query-cursor)}] "max"])
         (when first?
           [:div.table-cell
            [remove-row-btn show-remove-row-btn? remove-row-handler]])
@@ -124,8 +124,6 @@
                                   }
               [:i.icon-plus]]])]]]
        [:div.table-row
-        (when-not first?
-          [:div.interval-filler.table-cell])
         (when first?
           [:div.table-cell])
         [:div.table-cell
@@ -155,8 +153,6 @@
                       ;:on-change #(on-phonetic?-changed)
                       }] "Phonetic form"]])]]
        [:div.table-row
-        (when-not first?
-          [:div.interval-filler.table-cell])
         (when first?
           [:div.table-cell])
         [:div.tag-list.table-cell {:ref "taglist"}
