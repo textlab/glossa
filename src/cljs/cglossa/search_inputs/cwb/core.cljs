@@ -65,40 +65,38 @@
 (defn- focus-text-input [c]
   (.focus (dom/findNode (reagent/dom-node c) #(= "text" (.-type %)))))
 
-(defn- query-cursor-fns
-  "Creates a pair of getter and setter functions for search queries that
-  can be used to create a Reagent cursor."
-  [queries]
-  (fn
-    ([k] (get @queries k))
-    ([k v] (let [query (as-> (:query v) $
-                             (if (get-in @queries [k :headword-search])
-                               (->headword-query $)
-                               (->non-headword-query $))
-                             ;; Simplify the query (".*" is used in the
-                             ;; simplified search instead of [])
-                             (str/replace $ #"\[\(?word=\"\.\*\"(?:\s+%c)?\)?\]" "[]")
-                             (str/replace $ #"^\s*\[\]\s*$" ""))]
-             (swap! queries assoc-in [k :query] query)
-             ;; TODO: Handle state.maxHits and state.lastSelectedMaxHits
-             ))))
+(defn- wrapped-query-changed [queries index query]
+  "Takes a changed query, performs some cleanup on it, and swaps it into
+  the appropriate position in the vector of queries that constitute the
+  current search."
+  (let [query* (as-> (:query query) $
+                     (if (get-in @queries [index :headword-search])
+                       (->headword-query $)
+                       (->non-headword-query $))
+                     ;; Simplify the query (".*" is used in the
+                     ;; simplified search instead of [])
+                     (str/replace $ #"\[\(?word=\"\.\*\"(?:\s+%c)?\)?\]" "[]")
+                     (str/replace $ #"^\s*\[\]\s*$" ""))]
+    (swap! queries assoc-in [index :query] query*)
+    ;; TODO: Handle state.maxHits and state.lastSelectedMaxHits
+    ))
 
 ;;;;;;;;;;;;;;;;;
 ; Event handlers
 ;;;;;;;;;;;;;;;;;
 
-(defn- on-phonetic-changed [event query-cursor]
-  (let [q        (:query @query-cursor)
+(defn- on-phonetic-changed [event wrapped-query]
+  (let [q        (:query @wrapped-query)
         checked? (.-target.checked event)
         query    (if checked?
                    (if (str/blank? q)
                      "[phon=\".*\" %c]"
                      (str/replace q "word=" "phon="))
                    (str/replace q "phon=" "word="))]
-    (swap! query-cursor assoc :query query)))
+    (swap! wrapped-query assoc :query query)))
 
-(defn- on-headword-search-changed [event query-cursor]
-  (swap! query-cursor assoc :headword-search (.-target.checked event)))
+(defn- on-headword-search-changed [event wrapped-query]
+  (swap! wrapped-query assoc :headword-search (.-target.checked event)))
 
 ;;;;;;;;;;;;;
 ; Components
@@ -119,21 +117,21 @@
    (for [language languages]
      [:option {:key (:value language) :value (:value language)} (:text language)])])
 
-(defn- headword-search-checkbox [query-cursor]
+(defn- headword-search-checkbox [wrapped-query]
   [:label {:style {:margin-left 20}}
    [:input {:type      "checkbox"
             :value     "1"
-            :checked   (:headword-search @query-cursor)
-            :on-change #(on-headword-search-changed % query-cursor)
+            :checked   (:headword-search @wrapped-query)
+            :on-change #(on-headword-search-changed % wrapped-query)
             :id        "headword_search"
             :name      "headword_search"} " Headword search"]])
 
 (defn- single-input-view
   "HTML that is shared by the search views that only show a single text input,
   i.e., the simple and CQP views."
-  [corpus query-cursor displayed-query show-remove-row-btn? show-checkboxes?
+  [corpus wrapped-query displayed-query show-remove-row-btn? show-checkboxes?
    remove-row-handler on-text-changed]
-  (let [query     (:query @query-cursor)
+  (let [query     (:query @wrapped-query)
         phonetic? (not= -1 (.indexOf query "phon="))]
     [:form {:style {:display "table" :margin "10px 0px 15px -30px"}}
      [:div {:style {:display "table-row" :margin-bottom 10}}
@@ -143,8 +141,8 @@
        [:input.form-control.col-md-12 {:style       {:width 500}
                                        :type        "text"
                                        :value       displayed-query
-                                       :on-change   #(on-text-changed % query-cursor phonetic?)
-                                       :on-key-down #(on-key-down % query-cursor)}]]]
+                                       :on-change   #(on-text-changed % wrapped-query phonetic?)
+                                       :on-key-down #(on-key-down % wrapped-query)}]]]
      (when show-checkboxes?
        [:div {:style {:display "table-row"}}
         [:div {:style {:display "table-cell"}}]
@@ -154,34 +152,34 @@
             [:input {:name      "phonetic"
                      :type      "checkbox"
                      :checked   phonetic?
-                     :on-change #(on-phonetic-changed % query-cursor)}] " Phonetic form"])
+                     :on-change #(on-phonetic-changed % wrapped-query)}] " Phonetic form"])
          (when (:has-headword-search corpus)
-           [headword-search-checkbox query-cursor])]])]))
+           [headword-search-checkbox wrapped-query])]])]))
 
 ;;; The three different CWB interfaces: simple, extended and cqp
 
 (defn- simple
   "Simple search view component"
-  [corpus query-cursor show-remove-row-btn? remove-row-handler]
-  (let [query           (:query @query-cursor)
+  [corpus wrapped-query show-remove-row-btn? remove-row-handler]
+  (let [query           (:query @wrapped-query)
         displayed-query (-> query
                             (->non-headword-query)
                             (str/replace #"\[\(?\w+=\"(.*?)\"(?:\s+%c)?\)?\]" "$1")
                             (str/replace #"\"([^\s=]+)\"" "$1")
                             (str/replace #"\s*\[\]\s*" " .* ")
                             (str/replace #"^\.\*$" ""))
-        on-text-changed (fn [event query-cursor phonetic?]
+        on-text-changed (fn [event wrapped-query phonetic?]
                           (let [value (.-target.value event)
                                 query (if (= value "") "" (phrase->cqp value phonetic?))]
-                            (swap! query-cursor assoc :query query)))]
-    [single-input-view corpus query-cursor displayed-query show-remove-row-btn?
+                            (swap! wrapped-query assoc :query query)))]
+    [single-input-view corpus wrapped-query displayed-query show-remove-row-btn?
      true remove-row-handler on-text-changed]))
 
 (defn- extended
   "Search view component with text inputs, checkboxes and menus
   for easily building complex and grammatically specified queries."
-  [corpus query-cursor show-remove-row-btn? remove-row-handler]
-  (let [parts           (ext/split-query (:query @query-cursor))
+  [corpus wrapped-query show-remove-row-btn? remove-row-handler]
+  (let [parts           (ext/split-query (:query @wrapped-query))
         terms           (ext/construct-query-terms parts)
         last-term-index (dec (count terms))]
     (.log js/console (str terms))
@@ -198,25 +196,25 @@
                              remove-term-handler   #()]
                          (list (when-not first?
                                  ^{:key (str "interval" index)}
-                                 [interval query-cursor term])
+                                 [interval wrapped-query term])
                                ^{:key (str "term" index)}
-                               [multiword-term query-cursor term first? last? has-phonetic?
+                               [multiword-term wrapped-query term first? last? has-phonetic?
                                 show-remove-row-btn? remove-row-handler
                                 show-remove-term-btn? remove-term-handler])))
                      terms)]
        (when (:has-headword-search corpus)
-         [headword-search-checkbox query-cursor])]]]))
+         [headword-search-checkbox wrapped-query])]]]))
 
 (defn- cqp
   "CQP query view component"
-  [corpus query-cursor show-remove-row-btn? remove-query-handler]
-  (let [displayed-query (:query @query-cursor)
-        on-text-changed (fn [event query-cursor _]
+  [corpus wrapped-query show-remove-row-btn? remove-query-handler]
+  (let [displayed-query (:query @wrapped-query)
+        on-text-changed (fn [event wrapped-query _]
                           (let [value      (.-target.value event)
                                 query      (->non-headword-query value)
                                 hw-search? (= (->headword-query query) value)]
-                            (swap! query-cursor assoc :query query :headword-search hw-search?)))]
-    [single-input-view corpus query-cursor displayed-query show-remove-row-btn?
+                            (swap! wrapped-query assoc :query query :headword-search hw-search?)))]
+    [single-input-view corpus wrapped-query displayed-query show-remove-row-btn?
      false remove-query-handler on-text-changed]))
 
 (defn search-inputs
@@ -238,8 +236,7 @@
                              simple)
              languages     (:langs @corpus)
              multilingual? (> (count languages) 1)
-             set-view      (fn [view e] (reset! search-view view) (.preventDefault e))
-             query-get-set (query-cursor-fns search-queries)]
+             set-view      (fn [view e] (reset! search-view view) (.preventDefault e))]
          [:span
           [:div.row.search-input-links
            [:div.col-md-12
@@ -275,13 +272,15 @@
                                                     #(vec (concat (subvec % 0 i)
                                                                   (subvec % (inc i))))))]
             (doall (for [index (range nqueries)]
-                     (let [query-cursor       (reagent/cursor query-get-set index)
-                           selected-language  (-> @query-cursor :query :lang)
+                     (let [wrapped-query       (reagent/wrap
+                                                 (nth @search-queries index)
+                                                 wrapped-query-changed search-queries index)
+                           selected-language  (-> @wrapped-query :query :lang)
                            remove-row-handler (partial remove-query index)]
                        ^{:key index}
                        [:div.row
                         [:div.col-md-12
                          (when multilingual?
                            [language-select languages selected-language])
-                         [view @corpus query-cursor show-remove-row-btn? remove-row-handler]]]))))
+                         [view @corpus wrapped-query show-remove-row-btn? remove-row-handler]]]))))
           (when-not multilingual? [add-phrase-button])]))}))

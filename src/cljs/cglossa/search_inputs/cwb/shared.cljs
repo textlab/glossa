@@ -1,12 +1,12 @@
 (ns cglossa.search-inputs.cwb.shared)
 
-(defn- search! [query-cursor]
+(defn- search! [wrapped-query]
   (.log js/console "soker"))
 
-(defn on-key-down [event query-cursor]
+(defn on-key-down [event wrapped-query]
   (when (= "Enter" (.-key event))
     (.preventDefault event)
-    (search! query-cursor)))
+    (search! wrapped-query)))
 
 (defn remove-row-btn [show? handler]
   [:button.btn.btn-danger.btn-xs {:type     "button"

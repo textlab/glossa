@@ -74,19 +74,19 @@
             []
             parts)))
 
-(defn interval [query-cursor term]
+(defn interval [wrapped-query term]
   [:div.interval.table-cell
    [:input.form-control.interval {:type        "text"
-                                  :value       (first (:interval term))
-                                  ;:on-change   #(on-min-changed)
-                                  :on-key-down #(on-key-down % query-cursor)}] "min"
+                                  ;:value       (first (:interval term))
+                                  :on-change   #(construct-cqp-query wrapped-query)
+                                  :on-key-down #(on-key-down % wrapped-query)}] "min"
    [:br]
    [:input.form-control.interval {:type        "text"
                                   :value       (last (:interval term))
                                   ;:on-change   #(on-max-changed)
-                                  :on-key-down #(on-key-down % query-cursor)}] "max"])
+                                  :on-key-down #(on-key-down % wrapped-query)}] "max"])
 
-(defn multiword-term [query-cursor term first? last? has-phonetic?
+(defn multiword-term [wrapped-query term first? last? has-phonetic?
                       show-remove-row-btn? remove-row-handler
                       show-remove-term-btn? remove-term-handler]
   [:div.table-cell
@@ -109,7 +109,7 @@
                                                                             #"^\.\*$"
                                                                             "")
                                                 ;:on-change     #(on-text-changed)
-                                                :on-key-down   #(on-key-down % query-cursor)}]
+                                                :on-key-down   #(on-key-down % wrapped-query)}]
           (when show-remove-term-btn?
             [:span.input-group-addon {:title " Remove word "
                                       :style {:cursor "pointer"}
