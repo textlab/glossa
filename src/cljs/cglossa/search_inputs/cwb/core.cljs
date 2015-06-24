@@ -62,6 +62,27 @@
       (str "[" attr "=\".*\" %c]")
       p2)))
 
+(defn- focus-text-input [c]
+  (.focus (dom/findNode (reagent/dom-node c) #(= "text" (.-type %)))))
+
+(defn- query-cursor-fns
+  "Creates a pair of getter and setter functions for search queries that
+  can be used to create a Reagent cursor."
+  [queries]
+  (fn
+    ([k] (get @queries k))
+    ([k v] (let [query (as-> (:query v) $
+                             (if (get-in @queries [k :headword-search])
+                               (->headword-query $)
+                               (->non-headword-query $))
+                             ;; Simplify the query (".*" is used in the
+                             ;; simplified search instead of [])
+                             (str/replace $ #"\[\(?word=\"\.\*\"(?:\s+%c)?\)?\]" "[]")
+                             (str/replace $ #"^\s*\[\]\s*$" ""))]
+             (swap! queries assoc-in [k :query] query)
+             ;; TODO: Handle state.maxHits and state.lastSelectedMaxHits
+             ))))
+
 ;;;;;;;;;;;;;;;;;
 ; Event handlers
 ;;;;;;;;;;;;;;;;;
@@ -107,9 +128,6 @@
             :id        "headword_search"
             :name      "headword_search"} " Headword search"]])
 
-(defn- focus-text-input [c]
-  (.focus (dom/findNode (reagent/dom-node c) #(= "text" (.-type %)))))
-
 (defn- single-input-view
   "HTML that is shared by the search views that only show a single text input,
   i.e., the simple and CQP views."
@@ -139,6 +157,8 @@
                      :on-change #(on-phonetic-changed % query-cursor)}] " Phonetic form"])
          (when (:has-headword-search corpus)
            [headword-search-checkbox query-cursor])]])]))
+
+;;; The three different CWB interfaces: simple, extended and cqp
 
 (defn- simple
   "Simple search view component"
@@ -219,22 +239,7 @@
              languages     (:langs @corpus)
              multilingual? (> (count languages) 1)
              set-view      (fn [view e] (reset! search-view view) (.preventDefault e))
-             query-get-set (fn
-                             ([k] (get @search-queries k))
-                             ([k v] (let [query (as-> (:query v) $
-                                                      (if (get-in @search-queries
-                                                                  [k :headword-search])
-                                                        (->headword-query $)
-                                                        (->non-headword-query $))
-                                                      ;; Simplify the query (".*" is used in the
-                                                      ;; simplified search instead of [])
-                                                      (str/replace $
-                                                                   #"\[\(?word=\"\.\*\"(?:\s+%c)?\)?\]"
-                                                                   "[]")
-                                                      (str/replace $ #"^\s*\[\]\s*$" ""))]
-                                      (swap! search-queries assoc-in [k :query] query)
-                                      ;; TODO: Handle state.maxHits and state.lastSelectedMaxHits
-                                      )))]
+             query-get-set (query-cursor-fns search-queries)]
          [:span
           [:div.row.search-input-links
            [:div.col-md-12
