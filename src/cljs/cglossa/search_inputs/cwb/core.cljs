@@ -83,8 +83,8 @@
 ; Components
 ;;;;;;;;;;;;;
 
-(defn- search-button [multilingual?]
-  [:button.btn.btn-success {:style    {:marginLeft (if multilingual? 80 40)}
+(defn- search-button [margin-left]
+  [:button.btn.btn-success {:style    {:marginLeft margin-left}
                             :on-click search!} "Search"])
 
 (defn- add-language-button []
@@ -117,7 +117,7 @@
    remove-row-handler on-text-changed]
   (let [query     (:query @query-cursor)
         phonetic? (not= -1 (.indexOf query "phon="))]
-    [:form {:style {:display "table" :margin "10px 0px 20px -30px"}}
+    [:form {:style {:display "table" :margin "10px 0px 15px -30px"}}
      [:div {:style {:display "table-row" :margin-bottom 10}}
       [:div.table-cell.remove-row-btn-container
        [remove-row-btn show-remove-row-btn? remove-row-handler]]
@@ -132,7 +132,7 @@
         [:div {:style {:display "table-cell"}}]
         [:div.checkbox {:style {:display "table-cell"}}
          (when (:has-phonetic corpus)
-           [:label
+           [:label {:style {:margin-top 7}}
             [:input {:name      "phonetic"
                      :type      "checkbox"
                      :checked   phonetic?
@@ -253,7 +253,7 @@
                    :title    "CQP expressions"
                    :on-click #(set-view :cqp %)}
                "CQP query"])
-            [search-button multilingual?]
+            [search-button (if (= @search-view :extended) 75 233)]
             (when multilingual? [add-language-button])]]
 
           ; Now create a cursor into the search-queries ratom for each search expression
