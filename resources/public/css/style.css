@@ -62,12 +62,14 @@ h5.category-header {
 
 div.interval {
   display: table-cell;
+  vertical-align: top;
   padding-left: 15px;
   padding-right: 15px; }
   div.interval input.interval {
     width: 25px;
+    height: 25px;
     padding: 0px 4px;
-    margin: 2px 5px 5px 0px;
+    margin: 0px 5px 8px 0px;
     text-align: right; }
   div.interval h6 {
     margin-top: 0;
