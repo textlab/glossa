@@ -220,7 +220,7 @@
              multilingual? (> (count languages) 1)
              set-view      (fn [view e] (reset! search-view view) (.preventDefault e))
              query-get-set (fn
-                             ([k] (get-in @search-queries k))
+                             ([k] (get @search-queries k))
                              ([k v] (let [query (as-> (:query v) $
                                                       (if (get-in @search-queries
                                                                   [k :headword-search])
@@ -232,7 +232,7 @@
                                                                    #"\[\(?word=\"\.\*\"(?:\s+%c)?\)?\]"
                                                                    "[]")
                                                       (str/replace $ #"^\s*\[\]\s*$" ""))]
-                                      (swap! search-queries assoc-in [(first k) :query] query)
+                                      (swap! search-queries assoc-in [k :query] query)
                                       ;; TODO: Handle state.maxHits and state.lastSelectedMaxHits
                                       )))]
          [:span
@@ -270,7 +270,7 @@
                                                     #(vec (concat (subvec % 0 i)
                                                                   (subvec % (inc i))))))]
             (doall (for [index (range nqueries)]
-                     (let [query-cursor       (reagent/cursor query-get-set [index])
+                     (let [query-cursor       (reagent/cursor query-get-set index)
                            selected-language  (-> @query-cursor :query :lang)
                            remove-row-handler (partial remove-query index)]
                        ^{:key index}
