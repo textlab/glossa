@@ -192,7 +192,7 @@
         (map-indexed (fn [index term]
                        (let [first?                (zero? index)
                              last?                 (= index last-term-index)
-                             ;; Show buttons to remove terms if there are more than one term
+                             ;; Show buttons to remove terms if there is more than one term
                              show-remove-term-btn? (pos? last-term-index)
                              has-phonetic?         (:has-phonetic corpus)
                              remove-term-handler   #()]
