@@ -77,12 +77,12 @@
 (defn interval [query-cursor term]
   [:div.interval.table-cell
    [:input.form-control.interval {:type        "text"
-                                  :value       (first (:maxmin term))
+                                  :value       (first (:interval term))
                                   ;:on-change   #(on-min-changed)
                                   :on-key-down #(on-key-down % query-cursor)}] "min"
    [:br]
    [:input.form-control.interval {:type        "text"
-                                  :value       (last (:maxmin term))
+                                  :value       (last (:interval term))
                                   ;:on-change   #(on-max-changed)
                                   :on-key-down #(on-key-down % query-cursor)}] "max"])
 
