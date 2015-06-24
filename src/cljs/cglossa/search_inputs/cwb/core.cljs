@@ -4,7 +4,7 @@
             [goog.dom :as dom]
             [cglossa.search-inputs.cwb.shared :refer [on-key-down search!
                                                       remove-row-btn]]
-            [cglossa.search-inputs.cwb.extended :as extended :refer [interval multiword-term]]))
+            [cglossa.search-inputs.cwb.extended :as ext :refer [interval multiword-term]]))
 
 (def ^:private headword-query-prefix "<headword>")
 (def ^:private headword-query-suffix-more-words "[]{0,}")
@@ -181,8 +181,8 @@
   "Search view component with text inputs, checkboxes and menus
   for easily building complex and grammatically specified queries."
   [corpus query-cursor show-remove-row-btn? remove-row-handler]
-  (let [parts           (extended/split-query (:query @query-cursor))
-        terms           (extended/construct-query-terms parts)
+  (let [parts           (ext/split-query (:query @query-cursor))
+        terms           (ext/construct-query-terms parts)
         last-term-index (dec (count terms))]
     (.log js/console (str terms))
     [:div.multiword-container
