@@ -9,7 +9,9 @@
 (defn- corpus-info [_ {:keys [corpus]}]
   [:div.row.corpus-info
    [:div.col-md-12
-    [:div.well
+    ;; Remove the background image (gradient, really) set by bootstrap-theme,
+    ;; since the unthemed well is actually nicer.
+    [:div.well {:style {:background-image "url()"}}
      [:h2
       (:name @corpus)
       (when-let [logo (:logo @corpus)]
