@@ -4,7 +4,10 @@
             [goog.dom :as dom]
             [cglossa.search-inputs.cwb.shared :refer [on-key-down search!
                                                       remove-row-btn]]
-            [cglossa.search-inputs.cwb.extended :as ext :refer [interval multiword-term]]))
+            [cglossa.search-inputs.cwb.extended :refer [interval multiword-term
+                                                        split-query
+                                                        construct-query-terms
+                                                        wrapped-term-changed]]))
 
 (def ^:private headword-query-prefix "<headword>")
 (def ^:private headword-query-suffix-more-words "[]{0,}")
@@ -67,14 +70,13 @@
 
 (defn- wrapped-query-changed [queries index query]
   "Takes a changed query, performs some cleanup on it, and swaps it into
-  the appropriate position in the vector of queries that constitute the
+  the appropriate position in the vector of queries that constitutes the
   current search."
   (let [query* (as-> (:query query) $
-                     (if (get-in @queries [index :headword-search])
+                     (if (:headword-search query)
                        (->headword-query $)
                        (->non-headword-query $))
-                     ;; Simplify the query (".*" is used in the
-                     ;; simplified search instead of [])
+                     ;; Simplify the query (".*" is used in the simple search instead of [])
                      (str/replace $ #"\[\(?word=\"\.\*\"(?:\s+%c)?\)?\]" "[]")
                      (str/replace $ #"^\s*\[\]\s*$" ""))]
     (swap! queries assoc-in [index :query] query*)
@@ -179,8 +181,8 @@
   "Search view component with text inputs, checkboxes and menus
   for easily building complex and grammatically specified queries."
   [corpus wrapped-query show-remove-row-btn? remove-row-handler]
-  (let [parts           (ext/split-query (:query @wrapped-query))
-        terms           (ext/construct-query-terms parts)
+  (let [parts           (split-query (:query @wrapped-query))
+        terms           (construct-query-terms parts)
         last-term-index (dec (count terms))]
     (.log js/console (str terms))
     [:div.multiword-container
