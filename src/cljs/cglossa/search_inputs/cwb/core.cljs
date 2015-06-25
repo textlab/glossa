@@ -190,7 +190,10 @@
       [:div {:style {:display "table"}}
        [:div {:style {:display "table-row"}}
         (map-indexed (fn [index term]
-                       (let [first?                (zero? index)
+                       (let [wrapped-term          (reagent/wrap term
+                                                                 wrapped-term-changed
+                                                                 wrapped-query terms index)
+                             first?                (zero? index)
                              last?                 (= index last-term-index)
                              ;; Show buttons to remove terms if there is more than one term
                              show-remove-term-btn? (pos? last-term-index)
@@ -198,10 +201,10 @@
                              remove-term-handler   #()]
                          (list (when-not first?
                                  ^{:key (str "interval" index)}
-                                 [interval wrapped-query term])
+                                 [interval wrapped-query wrapped-term])
                                ^{:key (str "term" index)}
-                               [multiword-term wrapped-query term first? last? has-phonetic?
-                                show-remove-row-btn? remove-row-handler
+                               [multiword-term wrapped-query wrapped-term first? last?
+                                has-phonetic? show-remove-row-btn? remove-row-handler
                                 show-remove-term-btn? remove-term-handler])))
                      terms)]
        (when (:has-headword-search corpus)
