@@ -272,9 +272,26 @@
                                                     #(vec (concat (subvec % 0 i)
                                                                   (subvec % (inc i))))))]
             (doall (for [index (range nqueries)]
-                     (let [wrapped-query       (reagent/wrap
-                                                 (nth @search-queries index)
-                                                 wrapped-query-changed search-queries index)
+                     ;; Use wrap rather than cursor to send individual queries down to
+                     ;; child components (and in the extended view, we do the same for
+                     ;; individual terms). When a query (or query term) changes, the wrap
+                     ;; callbacks are called all the way up to the one setting the top-level
+                     ;; search-queries ratom, and all query views (potentially) re-render.
+                     ;;
+                     ;; By using cursors we could have restricted re-rendering to smaller
+                     ;; sub-views, but we need to do some processing of the query (such as
+                     ;; changing " .* " to []) before updating it in the search-queries ratom.
+                     ;; We could do this with a getter/setter-style cursor, but then we would
+                     ;; have to update the search-queries ratom anyway, causing the same potential
+                     ;; re-rendering of all query views.
+                     ;;
+                     ;; Probably the most efficient approach would be to use a standard cursor
+                     ;; (which only re-renders the view that derefs it) and explicitly call the
+                     ;; query processing function before updating the cursor, but then we would
+                     ;; have to make sure to do that every time we change a query...
+                     (let [wrapped-query      (reagent/wrap
+                                                (nth @search-queries index)
+                                                wrapped-query-changed search-queries index)
                            selected-language  (-> @wrapped-query :query :lang)
                            remove-row-handler (partial remove-query index)]
                        ^{:key index}
