@@ -96,7 +96,7 @@
     (str/join \space parts)))
 
 (defn wrapped-term-changed [wrapped-query terms index term]
-  (.log js/console (construct-cqp-query (assoc terms index term))))
+  (swap! wrapped-query assoc :query (construct-cqp-query (assoc terms index term))))
 
 (defn- interval-input [wrapped-query wrapped-term index]
   [:input.form-control.interval {:type        "text"
