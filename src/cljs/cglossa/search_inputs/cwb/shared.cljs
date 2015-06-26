@@ -8,10 +8,10 @@
     (.preventDefault event)
     (search! wrapped-query)))
 
-(defn remove-row-btn [show? handler]
+(defn remove-row-btn [show? wrapped-query]
   [:button.btn.btn-danger.btn-xs {:type     "button"
                                   :title    "Remove row"
-                                  :on-click #(handler)
+                                  :on-click #(reset! wrapped-query nil)
                                   :style    {:margin-right 5
                                              :padding-top  3
                                              :visibility   (if show?

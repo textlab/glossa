@@ -112,8 +112,7 @@
    [interval-input wrapped-query wrapped-term 1] "max"])
 
 (defn multiword-term [wrapped-query wrapped-term first? last? has-phonetic?
-                      show-remove-row-btn? remove-row-handler
-                      show-remove-term-btn? remove-term-handler]
+                      show-remove-row-btn? show-remove-term-btn? remove-term-handler]
   (let [term-val @wrapped-term]
     [:div.table-cell
      [:div
@@ -123,7 +122,7 @@
          [:div.dropdown.table-row
           (when first?
             [:div.table-cell.remove-row-btn-container
-             [remove-row-btn show-remove-row-btn? remove-row-handler]])
+             [remove-row-btn show-remove-row-btn? wrapped-query]])
           [:div.table-cell
            [:div.input-group
             [:span.input-group-addon.dropdown-toggle {:data-toggle "dropdown"

@@ -71,17 +71,20 @@
 (defn- wrapped-query-changed [queries index query]
   "Takes a changed query, performs some cleanup on it, and swaps it into
   the appropriate position in the vector of queries that constitutes the
-  current search."
-  (let [query* (as-> (:query query) $
-                     (if (:headword-search query)
-                       (->headword-query $)
-                       (->non-headword-query $))
-                     ;; Simplify the query (".*" is used in the simple search instead of [])
-                     (str/replace $ #"\[\(?word=\"\.\*\"(?:\s+%c)?\)?\]" "[]")
-                     (str/replace $ #"^\s*\[\]\s*$" ""))]
-    (swap! queries assoc-in [index :query] query*)
-    ;; TODO: Handle state.maxHits and state.lastSelectedMaxHits
-    ))
+  current search. If the query is nil, removes it from the vector instead."
+  (if (nil? query)
+    (swap! queries #(into (subvec % 0 index)
+                          (subvec % (inc index))))
+    (let [query* (as-> (:query query) $
+                       (if (:headword-search query)
+                         (->headword-query $)
+                         (->non-headword-query $))
+                       ;; Simplify the query (".*" is used in the simple search instead of [])
+                       (str/replace $ #"\[\(?word=\"\.\*\"(?:\s+%c)?\)?\]" "[]")
+                       (str/replace $ #"^\s*\[\]\s*$" ""))]
+      (swap! queries assoc-in [index :query] query*)
+      ;; TODO: Handle state.maxHits and state.lastSelectedMaxHits
+      )))
 
 ;;;;;;;;;;;;;;;;;
 ; Event handlers
@@ -131,14 +134,13 @@
 (defn- single-input-view
   "HTML that is shared by the search views that only show a single text input,
   i.e., the simple and CQP views."
-  [corpus wrapped-query displayed-query show-remove-row-btn? show-checkboxes?
-   remove-row-handler on-text-changed]
+  [corpus wrapped-query displayed-query show-remove-row-btn? show-checkboxes? on-text-changed]
   (let [query     (:query @wrapped-query)
         phonetic? (not= -1 (.indexOf query "phon="))]
     [:form {:style {:display "table" :margin "10px 0px 15px -30px"}}
      [:div {:style {:display "table-row" :margin-bottom 10}}
       [:div.table-cell.remove-row-btn-container
-       [remove-row-btn show-remove-row-btn? remove-row-handler]]
+       [remove-row-btn show-remove-row-btn? wrapped-query]]
       [:div.form-group {:style {:display "table-cell"}}
        [:input.form-control.col-md-12 {:style       {:width 500}
                                        :type        "text"
@@ -162,7 +164,7 @@
 
 (defn- simple
   "Simple search view component"
-  [corpus wrapped-query show-remove-row-btn? remove-row-handler]
+  [corpus wrapped-query show-remove-row-btn?]
   (let [query           (:query @wrapped-query)
         displayed-query (-> query
                             (->non-headword-query)
@@ -175,12 +177,12 @@
                                 query (if (= value "") "" (phrase->cqp value phonetic?))]
                             (swap! wrapped-query assoc :query query)))]
     [single-input-view corpus wrapped-query displayed-query show-remove-row-btn?
-     true remove-row-handler on-text-changed]))
+     true on-text-changed]))
 
 (defn- extended
   "Search view component with text inputs, checkboxes and menus
   for easily building complex and grammatically specified queries."
-  [corpus wrapped-query show-remove-row-btn? remove-row-handler]
+  [corpus wrapped-query show-remove-row-btn?]
   (let [parts           (split-query (:query @wrapped-query))
         terms           (construct-query-terms parts)
         last-term-index (dec (count terms))]
@@ -204,7 +206,7 @@
                                  [interval wrapped-query wrapped-term])
                                ^{:key (str "term" index)}
                                [multiword-term wrapped-query wrapped-term first? last?
-                                has-phonetic? show-remove-row-btn? remove-row-handler
+                                has-phonetic? show-remove-row-btn?
                                 show-remove-term-btn? remove-term-handler])))
                      terms)]
        (when (:has-headword-search corpus)
@@ -212,7 +214,7 @@
 
 (defn- cqp
   "CQP query view component"
-  [corpus wrapped-query show-remove-row-btn? remove-query-handler]
+  [corpus wrapped-query show-remove-row-btn?]
   (let [displayed-query (:query @wrapped-query)
         on-text-changed (fn [event wrapped-query _]
                           (let [value      (.-target.value event)
@@ -220,7 +222,7 @@
                                 hw-search? (= (->headword-query query) value)]
                             (swap! wrapped-query assoc :query query :headword-search hw-search?)))]
     [single-input-view corpus wrapped-query displayed-query show-remove-row-btn?
-     false remove-query-handler on-text-changed]))
+     false on-text-changed]))
 
 (defn search-inputs
   "Component that lets the user select a search view (simple, extended
@@ -272,10 +274,7 @@
           ; and display a row of search inputs for each of them. The doall call is needed
           ; because ratoms cannot be derefed inside lazy seqs.
           (let [nqueries             (count @search-queries)
-                show-remove-row-btn? (> nqueries 1)
-                remove-query         (fn [i] (swap! search-queries
-                                                    #(vec (concat (subvec % 0 i)
-                                                                  (subvec % (inc i))))))]
+                show-remove-row-btn? (> nqueries 1)]
             (doall (for [index (range nqueries)]
                      ;; Use wrap rather than cursor to send individual queries down to
                      ;; child components (and in the extended view, we do the same for
@@ -297,12 +296,11 @@
                      (let [wrapped-query      (reagent/wrap
                                                 (nth @search-queries index)
                                                 wrapped-query-changed search-queries index)
-                           selected-language  (-> @wrapped-query :query :lang)
-                           remove-row-handler (partial remove-query index)]
+                           selected-language  (-> @wrapped-query :query :lang)]
                        ^{:key index}
                        [:div.row
                         [:div.col-md-12
                          (when multilingual?
                            [language-select languages selected-language])
-                         [view @corpus wrapped-query show-remove-row-btn? remove-row-handler]]]))))
+                         [view @corpus wrapped-query show-remove-row-btn?]]]))))
           (when-not multilingual? [add-phrase-button])]))}))
