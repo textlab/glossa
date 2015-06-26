@@ -2,7 +2,9 @@
   "Implementation of search view component with text inputs, checkboxes
   and menus for easily building complex and grammatically specified queries."
   (:require [clojure.string :as str]
-            [cglossa.search-inputs.cwb.shared :refer [on-key-down remove-row-btn]]))
+            [cglossa.search-inputs.cwb.shared :refer [headword-search-checkbox
+                                                      on-key-down remove-row-btn]]
+            [reagent.core :as reagent]))
 
 (defn- combine-regexes [regexes]
   "Since there is no way to concatenate regexes directly, we convert
@@ -182,3 +184,36 @@
             [:div.table-cell])
           [:div.tag-list.table-cell {:ref "taglist"}
            [:div.tags]]]]]]]]))
+
+(defn extended
+  "Search view component with text inputs, checkboxes and menus
+  for easily building complex and grammatically specified queries."
+  [corpus wrapped-query show-remove-row-btn?]
+  (let [parts           (split-query (:query @wrapped-query))
+        terms           (construct-query-terms parts)
+        last-term-index (dec (count terms))]
+    (.log js/console (str terms))
+    [:div.multiword-container
+     [:form.form-inline.multiword-search-form {:style {:margin-left -30}}
+      [:div {:style {:display "table"}}
+       [:div {:style {:display "table-row"}}
+        (map-indexed (fn [index term]
+                       (let [wrapped-term          (reagent/wrap term
+                                                                 wrapped-term-changed
+                                                                 wrapped-query terms index)
+                             first?                (zero? index)
+                             last?                 (= index last-term-index)
+                             ;; Show buttons to remove terms if there is more than one term
+                             show-remove-term-btn? (pos? last-term-index)
+                             has-phonetic?         (:has-phonetic corpus)
+                             remove-term-handler   #()]
+                         (list (when-not first?
+                                 ^{:key (str "interval" index)}
+                                 [interval wrapped-query wrapped-term])
+                               ^{:key (str "term" index)}
+                               [multiword-term wrapped-query wrapped-term first? last?
+                                has-phonetic? show-remove-row-btn?
+                                show-remove-term-btn? remove-term-handler])))
+                     terms)]
+       (when (:has-headword-search corpus)
+         [headword-search-checkbox wrapped-query])]]]))

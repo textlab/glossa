@@ -2,9 +2,11 @@
   (:require [clojure.string :as str]
             [reagent.core :as reagent]
             [goog.dom :as dom]
-            [cglossa.search-inputs.cwb.shared :refer [on-key-down search!
+            [cglossa.search-inputs.cwb.shared :refer [headword-search-checkbox
+                                                      on-key-down search!
                                                       remove-row-btn]]
-            [cglossa.search-inputs.cwb.extended :refer [interval multiword-term
+            [cglossa.search-inputs.cwb.extended :refer [extended
+                                                        interval multiword-term
                                                         split-query
                                                         construct-query-terms
                                                         wrapped-term-changed]]))
@@ -100,9 +102,6 @@
                    (str/replace q "phon=" "word="))]
     (swap! wrapped-query assoc :query query)))
 
-(defn- on-headword-search-changed [event wrapped-query]
-  (swap! wrapped-query assoc :headword-search (.-target.checked event)))
-
 ;;;;;;;;;;;;;
 ; Components
 ;;;;;;;;;;;;;
@@ -121,15 +120,6 @@
   [:select {:value selected-language}
    (for [language languages]
      [:option {:key (:value language) :value (:value language)} (:text language)])])
-
-(defn- headword-search-checkbox [wrapped-query]
-  [:label {:style {:margin-left 20}}
-   [:input {:type      "checkbox"
-            :value     "1"
-            :checked   (:headword-search @wrapped-query)
-            :on-change #(on-headword-search-changed % wrapped-query)
-            :id        "headword_search"
-            :name      "headword_search"} " Headword search"]])
 
 (defn- single-input-view
   "HTML that is shared by the search views that only show a single text input,
@@ -179,38 +169,6 @@
     [single-input-view corpus wrapped-query displayed-query show-remove-row-btn?
      true on-text-changed]))
 
-(defn- extended
-  "Search view component with text inputs, checkboxes and menus
-  for easily building complex and grammatically specified queries."
-  [corpus wrapped-query show-remove-row-btn?]
-  (let [parts           (split-query (:query @wrapped-query))
-        terms           (construct-query-terms parts)
-        last-term-index (dec (count terms))]
-    (.log js/console (str terms))
-    [:div.multiword-container
-     [:form.form-inline.multiword-search-form {:style {:margin-left -30}}
-      [:div {:style {:display "table"}}
-       [:div {:style {:display "table-row"}}
-        (map-indexed (fn [index term]
-                       (let [wrapped-term          (reagent/wrap term
-                                                                 wrapped-term-changed
-                                                                 wrapped-query terms index)
-                             first?                (zero? index)
-                             last?                 (= index last-term-index)
-                             ;; Show buttons to remove terms if there is more than one term
-                             show-remove-term-btn? (pos? last-term-index)
-                             has-phonetic?         (:has-phonetic corpus)
-                             remove-term-handler   #()]
-                         (list (when-not first?
-                                 ^{:key (str "interval" index)}
-                                 [interval wrapped-query wrapped-term])
-                               ^{:key (str "term" index)}
-                               [multiword-term wrapped-query wrapped-term first? last?
-                                has-phonetic? show-remove-row-btn?
-                                show-remove-term-btn? remove-term-handler])))
-                     terms)]
-       (when (:has-headword-search corpus)
-         [headword-search-checkbox wrapped-query])]]]))
 
 (defn- cqp
   "CQP query view component"
