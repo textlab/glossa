@@ -76,29 +76,32 @@
             []
             parts)))
 
-(defn- construct-cqp-query [terms]
-  (let [parts (for [{:keys [interval word lemma? phonetic? start? end? features]} terms]
-                (let [attr   (cond
-                               lemma? "lemma"
-                               phonetic? "phon"
-                               :else "word")
-                      form   (if (empty? word)
-                               ".*"
-                               (cond-> word
-                                       start? (str word ".+")
-                                       end? (str ".+" word)))
-                      main   (str "(" attr "=\"" form "\" %c)")
-                      feats  (for [[name value] features]
-                               (str name "=\"" value "\""))
-                      [min max] interval
-                      interv (if (or min max)
-                               (str "[]{" (or min 0) "," (or max "") "} ")
-                               "")]
-                  (str interv "[" (str/join " & " (cons main feats)) "]")))]
+(defn- construct-cqp-query [terms query-term-ids]
+  (let [;; Remove ids whose corresponding terms have been set to nil
+        _      (swap! query-term-ids #(keep-indexed (fn [index id] (when (nth terms index) id)) %))
+        terms* (filter identity terms)                      ; nil means term should be removed
+        parts  (for [{:keys [interval word lemma? phonetic? start? end? features]} terms*]
+                 (let [attr   (cond
+                                lemma? "lemma"
+                                phonetic? "phon"
+                                :else "word")
+                       form   (if (empty? word)
+                                ".*"
+                                (cond-> word
+                                        start? (str word ".+")
+                                        end? (str ".+" word)))
+                       main   (str "(" attr "=\"" form "\" %c)")
+                       feats  (for [[name value] features]
+                                (str name "=\"" value "\""))
+                       [min max] interval
+                       interv (if (or min max)
+                                (str "[]{" (or min 0) "," (or max "") "} ")
+                                "")]
+                   (str interv "[" (str/join " & " (cons main feats)) "]")))]
     (str/join \space parts)))
 
-(defn wrapped-term-changed [wrapped-query terms index term]
-  (swap! wrapped-query assoc :query (construct-cqp-query (assoc terms index term))))
+(defn wrapped-term-changed [wrapped-query terms index query-term-ids term]
+  (swap! wrapped-query assoc :query (construct-cqp-query (assoc terms index term) query-term-ids)))
 
 (defn- interval-input [wrapped-query wrapped-term index]
   [:input.form-control.interval {:type        "text"
@@ -114,7 +117,7 @@
    [interval-input wrapped-query wrapped-term 1] "max"])
 
 (defn multiword-term [wrapped-query wrapped-term first? last? has-phonetic?
-                      show-remove-row-btn? show-remove-term-btn? remove-term-handler]
+                      show-remove-row-btn? show-remove-term-btn?]
   (let [term-val @wrapped-term]
     [:div.table-cell
      [:div
@@ -138,10 +141,9 @@
                                                   ;:on-change     #(on-text-changed)
                                                   :on-key-down   #(on-key-down % wrapped-query)}]
             (when show-remove-term-btn?
-              [:span.input-group-addon {:title " Remove word "
-                                        :style {:cursor "pointer"}
-                                        ;:on-click #(on-remove-term)
-                                        }
+              [:span.input-group-addon {:title    " Remove word "
+                                        :style    {:cursor "pointer"}
+                                        :on-click #(reset! wrapped-term nil)}
                [:span.glyphicon.glyphicon-minus]])
             (when last?
               [:div.add-search-word
@@ -189,31 +191,52 @@
   "Search view component with text inputs, checkboxes and menus
   for easily building complex and grammatically specified queries."
   [corpus wrapped-query show-remove-row-btn?]
-  (let [parts           (split-query (:query @wrapped-query))
-        terms           (construct-query-terms parts)
-        last-term-index (dec (count terms))]
-    (.log js/console (str terms))
-    [:div.multiword-container
-     [:form.form-inline.multiword-search-form {:style {:margin-left -30}}
-      [:div {:style {:display "table"}}
-       [:div {:style {:display "table-row"}}
-        (map-indexed (fn [index term]
-                       (let [wrapped-term          (reagent/wrap term
-                                                                 wrapped-term-changed
-                                                                 wrapped-query terms index)
-                             first?                (zero? index)
-                             last?                 (= index last-term-index)
-                             ;; Show buttons to remove terms if there is more than one term
-                             show-remove-term-btn? (pos? last-term-index)
-                             has-phonetic?         (:has-phonetic corpus)
-                             remove-term-handler   #()]
-                         (list (when-not first?
-                                 ^{:key (str "interval" index)}
-                                 [interval wrapped-query wrapped-term])
-                               ^{:key (str "term" index)}
-                               [multiword-term wrapped-query wrapped-term first? last?
-                                has-phonetic? show-remove-row-btn?
-                                show-remove-term-btn? remove-term-handler])))
-                     terms)]
-       (when (:has-headword-search corpus)
-         [headword-search-checkbox wrapped-query])]]]))
+  (let [;; This will hold a unique ID for each query term component. React wants a
+        ;; unique key for each component in a sequence, such as the set of search inputs
+        ;; in the multiword interface, and it will mess up the text in the search boxes
+        ;; when we remove a term from the query if we don't provide this. Using the index
+        ;; of the term is meaningless, since it does not provide any more information
+        ;; than the order of the term itself. What we need is a way to uniquely identify
+        ;; each term irrespective of ordering.
+        ;;
+        ;; Normally, the items in a list have some kind of database ID that we can use,
+        ;; but query terms don't. Also, we cannot just use a hash code created from the
+        ;; term object, since we may have several identical terms in a query. Hence, we
+        ;; need to provide this list of query term IDs containing a unique ID number for
+        ;; each term in the initial query (i.e., the one provided in the props when this
+        ;; component is mounted), and then we add a newly created ID when adding a query
+        ;; term in the multiword interface and remove the ID from the list when the term is
+        ;; removed. This is the kind of ugly state manipulation that React normally saves
+        ;; us from, but in cases like this it seems unavoidable...
+        query-term-ids (atom nil)]
+    (fn [corpus wrapped-query show-remove-row-btn?]
+      (let [parts           (split-query (:query @wrapped-query))
+            terms           (construct-query-terms parts)
+            last-term-index (dec (count terms))]
+        (when (nil? @query-term-ids)
+          (reset! query-term-ids (range (count terms))))
+        [:div.multiword-container
+         [:form.form-inline.multiword-search-form {:style {:margin-left -30}}
+          [:div {:style {:display "table"}}
+           [:div {:style {:display "table-row"}}
+            (map-indexed (fn [index term]
+                           (let [wrapped-term          (reagent/wrap term
+                                                                     wrapped-term-changed
+                                                                     wrapped-query terms index
+                                                                     query-term-ids)
+                                 term-id               (nth @query-term-ids index)
+                                 first?                (zero? index)
+                                 last?                 (= index last-term-index)
+                                 ;; Show buttons to remove terms if there is more than one term
+                                 show-remove-term-btn? (pos? last-term-index)
+                                 has-phonetic?         (:has-phonetic corpus)]
+                             (list (when-not first?
+                                     ^{:key (str "interval" term-id)}
+                                     [interval wrapped-query wrapped-term])
+                                   ^{:key (str "term" term-id)}
+                                   [multiword-term wrapped-query wrapped-term first? last?
+                                    has-phonetic? show-remove-row-btn?
+                                    show-remove-term-btn?])))
+                         terms)]
+           (when (:has-headword-search corpus)
+             [headword-search-checkbox wrapped-query])]]]))))
