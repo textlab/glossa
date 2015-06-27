@@ -5,11 +5,7 @@
             [cglossa.search-inputs.cwb.shared :refer [headword-search-checkbox
                                                       on-key-down search!
                                                       remove-row-btn]]
-            [cglossa.search-inputs.cwb.extended :refer [extended
-                                                        interval multiword-term
-                                                        split-query
-                                                        construct-query-terms
-                                                        wrapped-term-changed]]))
+            [cglossa.search-inputs.cwb.extended :refer [extended]]))
 
 (def ^:private headword-query-prefix "<headword>")
 (def ^:private headword-query-suffix-more-words "[]{0,}")
