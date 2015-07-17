@@ -73,12 +73,18 @@
                                      (conj terms term))
                 quoted-or-empty-term-rx (let [p    (first part)
                                               len  (count p)
-                                              form (if (> 2 len)
+                                              form (if (> len 2)
                                                      (subs p 1 len)
-                                                     "[]")]
-                                          (cond-> {:word form}
-                                                  (re-find #"\.\+$" form) (assoc :start? true)
-                                                  (re-find #"^\.\+" form) (assoc :end? true)))))
+                                                     "")
+                                              term (cond-> {:word     form
+                                                            :interval @interval}
+                                                           (re-find #"\.\+$" form)
+                                                           (assoc :start? true)
+
+                                                           (re-find #"^\.\+" form)
+                                                           (assoc :end? true))]
+                                          (reset! interval [nil nil])
+                                          (conj terms term))))
             []
             parts)))
 
@@ -122,7 +128,8 @@
    [:br]
    [interval-input wrapped-query wrapped-term 1] "max"])
 
-(defn multiword-term [wrapped-query wrapped-term first? last? has-phonetic?
+(defn multiword-term [wrapped-query wrapped-term query-term-ids
+                      first? last? has-phonetic?
                       show-remove-row-btn? show-remove-term-btn?]
   (let [term-val @wrapped-term]
     [:div.table-cell
@@ -153,8 +160,14 @@
             [:div.add-search-word
              [:button.btn.btn-info.btn-sm {:type     "button"
                                            :title    "Add search word"
-                                           :on-click #(swap! wrapped-query
-                                                             update :query str " []")}
+                                           :on-click (fn []
+                                                       ; Append greatest-current-id-plus-one to the
+                                                       ; query-term-ids vector
+                                                       (swap! query-term-ids
+                                                              #(conj % (inc (max %))))
+                                                       ; Append [] to the CQP query expression
+                                                       (swap! wrapped-query
+                                                              update :query str " []"))}
               [:span.glyphicon.glyphicon-plus]]])]]]
        [:div.table-row
         (when first?
@@ -238,8 +251,8 @@
                                      ^{:key (str "interval" term-id)}
                                      [interval wrapped-query wrapped-term])
                                    ^{:key (str "term" term-id)}
-                                   [multiword-term wrapped-query wrapped-term first? last?
-                                    has-phonetic? show-remove-row-btn?
+                                   [multiword-term wrapped-query wrapped-term query-term-ids
+                                    first? last? has-phonetic? show-remove-row-btn?
                                     show-remove-term-btn?])))
                          terms)]
            (when (:has-headword-search corpus)
