@@ -153,10 +153,10 @@
                [:span.glyphicon.glyphicon-minus]])
             (when last?
               [:div.add-search-word
-               [:button.btn.btn-info.btn-sm {:data-add-term-button ""
-                                             :title                "Add search word"
-                                             ;:on-click             #(on-add-term)
-                                             }
+               [:button.btn.btn-info.btn-sm {:type     "button"
+                                             :title    "Add search word"
+                                             :on-click #(swap! wrapped-query
+                                                               update :query str " []")}
                 [:span.glyphicon.glyphicon-plus]]])]]]
          [:div.table-row
           (when first?
