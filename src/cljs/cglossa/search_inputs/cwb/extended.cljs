@@ -71,8 +71,14 @@
                                                      (assoc $ :interval @interval))]
                                      (reset! interval [nil nil])
                                      (conj terms term))
-                quoted-or-empty-term-rx (.log js/console "quoted-or-empty")
-                "hei"))
+                quoted-or-empty-term-rx (let [p    (first part)
+                                              len  (count p)
+                                              form (if (> 2 len)
+                                                     (subs p 1 len)
+                                                     "[]")]
+                                          (cond-> {:word form}
+                                                  (re-find #"\.\+$" form) (assoc :start? true)
+                                                  (re-find #"^\.\+" form) (assoc :end? true)))))
             []
             parts)))
 
