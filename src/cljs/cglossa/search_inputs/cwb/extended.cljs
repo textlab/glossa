@@ -144,13 +144,12 @@
           [:span.input-group-addon.dropdown-toggle {:data-toggle "dropdown"
                                                     :style       {:cursor "pointer"}}
            [:span.glyphicon.glyphicon-menu-hamburger]]
-          [:input.form-control.multiword-field {:ref           "searchfield"
-                                                :type          "text"
-                                                :default-value (str/replace (:word term-val)
-                                                                            #"^\.\*$"
-                                                                            "")
-                                                ;:on-change     #(on-text-changed)
-                                                :on-key-down   #(on-key-down % wrapped-query)}]
+          [:input.form-control.multiword-field
+           {:ref           "searchfield"
+            :type          "text"
+            :default-value (str/replace (:form term-val) #"^\.\*$" "")
+            :on-change     #(swap! wrapped-term assoc :form (.-target.value %))
+            :on-key-down   #(on-key-down % wrapped-query)}]
           (when show-remove-term-btn?
             [:span.input-group-addon {:title    " Remove word "
                                       :style    {:cursor "pointer"}
