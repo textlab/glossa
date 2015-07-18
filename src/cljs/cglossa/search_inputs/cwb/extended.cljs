@@ -34,7 +34,7 @@
   (let [[_ name val] (re-find #"\(?(\S+)\s*=\s*\"(\S+)\"" attr)]
     (case name
       ("word" "lemma" "phon")
-      (cond-> (assoc term :word (-> val
+      (cond-> (assoc term :form (-> val
                                     (str/replace #"^(?:\.\+)?(.+?)" "$1")
                                     (str/replace #"(.+?)(?:\.\+)?$" "$1")))
               (= name "lemma") (assoc :lemma? true)
@@ -76,7 +76,7 @@
                                               form (if (> len 2)
                                                      (subs p 1 len)
                                                      "")
-                                              term (cond-> {:word     form
+                                              term (cond-> {:form     form
                                                             :interval @interval}
                                                            (re-find #"\.\+$" form)
                                                            (assoc :start? true)
@@ -92,17 +92,17 @@
   (let [;; Remove ids whose corresponding terms have been set to nil
         _      (swap! query-term-ids #(keep-indexed (fn [index id] (when (nth terms index) id)) %))
         terms* (filter identity terms)                      ; nil means term should be removed
-        parts  (for [{:keys [interval word lemma? phonetic? start? end? features]} terms*]
+        parts  (for [{:keys [interval form lemma? phonetic? start? end? features]} terms*]
                  (let [attr   (cond
                                 lemma? "lemma"
                                 phonetic? "phon"
                                 :else "word")
-                       form   (if (empty? word)
+                       form*  (if (empty? form)
                                 ".*"
-                                (cond-> word
-                                        start? (str word ".+")
-                                        end? (str ".+" word)))
-                       main   (str "(" attr "=\"" form "\" %c)")
+                                (cond-> form
+                                        start? (str form ".+")
+                                        end? (str ".+" form)))
+                       main   (str "(" attr "=\"" form* "\" %c)")
                        feats  (for [[name value] features]
                                 (str name "=\"" value "\""))
                        [min max] interval
