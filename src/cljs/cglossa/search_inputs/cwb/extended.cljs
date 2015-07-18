@@ -100,8 +100,8 @@
                        form*  (if (empty? form)
                                 ".*"
                                 (cond-> form
-                                        start? (str form ".+")
-                                        end? (str ".+" form)))
+                                        start? (str ".+")
+                                        end? (#(str ".+" %))))
                        main   (str "(" attr "=\"" form* "\" %c)")
                        feats  (for [[name value] features]
                                 (str name "=\"" value "\""))
@@ -176,26 +176,26 @@
           [:label.checkbox-inline
            [:input {:type    "checkbox"
                     :checked (:lemma? term-val)
-                    ;:on-change #(on-lemma?-changed)
+                    :on-change #(swap! wrapped-term assoc :lemma? (.-target.checked %))
                     }] "Lemma"]
           [:label.checkbox-inline
            [:input {:type    "checkbox"
                     :title   "Start of word"
                     :checked (:start? term-val)
-                    ;:on-change #(on-start?-changed)
+                    :on-change #(swap! wrapped-term assoc :start? (.-target.checked %))
                     }] "Start"]
           [:label.checkbox-inline
            [:input {:type    "checkbox"
                     :title   "End of word"
                     :checked (:end? term-val)
-                    ;:on-change #(on-end?-changed)
+                    :on-change #(swap! wrapped-term assoc :end? (.-target.checked %))
                     }] "End"]]
          (when has-phonetic?
            [:div
             [:label.checkbox-inline
              [:input {:type    "checkbox"
                       :checked (:phonetic? term-val)
-                      ;:on-change #(on-phonetic?-changed)
+                      :on-change #(swap! wrapped-term assoc :phonetic? (.-target.checked %))
                       }] "Phonetic form"]])]]
        [:div.table-row
         (when first?
