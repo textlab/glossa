@@ -8,9 +8,6 @@
     (.preventDefault event)
     (search! wrapped-query)))
 
-(defn- on-headword-search-changed [event wrapped-query]
-  (swap! wrapped-query assoc :headword-search (.-target.checked event)))
-
 (defn remove-row-btn [show? wrapped-query]
   [:button.btn.btn-danger.btn-xs {:type     "button"
                                   :title    "Remove row"
@@ -22,8 +19,11 @@
                                                              "hidden")}}
    [:span.glyphicon.glyphicon-remove]])
 
-(defn- headword-search-checkbox [wrapped-query]
-  [:label {:style {:margin-left 20}}
+(defn- on-headword-search-changed [event wrapped-query]
+  (swap! wrapped-query assoc :headword-search (.-target.checked event)))
+
+(defn headword-search-checkbox [wrapped-query margin-left]
+  [:label {:style {:margin-left margin-left}}
    [:input {:type      "checkbox"
             :value     "1"
             :checked   (:headword-search @wrapped-query)
