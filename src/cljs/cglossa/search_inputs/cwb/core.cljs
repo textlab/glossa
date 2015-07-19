@@ -144,7 +144,7 @@
                      :checked   phonetic?
                      :on-change #(on-phonetic-changed % wrapped-query)}] " Phonetic form"])
          (when (:has-headword-search corpus)
-           [headword-search-checkbox wrapped-query])]])]))
+           [headword-search-checkbox wrapped-query 20])]])]))
 
 ;;; The three different CWB interfaces: simple, extended and cqp
 

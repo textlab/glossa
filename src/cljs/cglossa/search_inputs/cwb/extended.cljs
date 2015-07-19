@@ -255,4 +255,4 @@
                                     show-remove-term-btn?])))
                          terms)]
            (when (:has-headword-search corpus)
-             [headword-search-checkbox wrapped-query])]]]))))
+             [headword-search-checkbox wrapped-query 2])]]]))))
