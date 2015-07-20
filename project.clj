@@ -17,7 +17,7 @@
                            [ring-transit "0.1.3"]
                            [compojure "1.3.4"]
                            [enlive "1.1.5"]
-                           [reagent "0.5.0"]
+                           [reagent "0.5.1-SNAPSHOT"]
                            [environ "1.0.0"]
                            [http-kit "2.1.19"]
                            [cljs-http "0.1.35"]
