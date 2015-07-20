@@ -109,8 +109,9 @@
 (defn- add-language-button []
   [:button.btn {:style {:marginLeft 20} :on-click #()} "Add language"])
 
-(defn- add-phrase-button []
-  [:button.btn.btn-default.add-phrase-btn {:on-click #()} "Or..."])
+(defn- add-phrase-button [view]
+  [:button.btn.btn-default {:style    {:margin-top (if (= view extended) -15 0)}
+                            :on-click #()} "Or..."])
 
 (defn- language-select [languages selected-language]
   [:select {:value selected-language}
@@ -123,19 +124,19 @@
   [corpus wrapped-query displayed-query show-remove-row-btn? show-checkboxes? on-text-changed]
   (let [query     (:query @wrapped-query)
         phonetic? (not= -1 (.indexOf query "phon="))]
-    [:form {:style {:display "table" :margin "10px 0px 15px -30px"}}
-     [:div {:style {:display "table-row" :margin-bottom 10}}
+    [:form.table-display {:style {:margin "10px 0px 15px -30px"}}
+     [:div.table-row {:style {:margin-bottom 10}}
       [:div.table-cell.remove-row-btn-container
        [remove-row-btn show-remove-row-btn? wrapped-query]]
-      [:div.form-group {:style {:display "table-cell"}}
+      [:div.form-group.table-cell
        [:input.form-control.col-md-12 {:style       {:width 500}
                                        :type        "text"
                                        :value       displayed-query
                                        :on-change   #(on-text-changed % wrapped-query phonetic?)
                                        :on-key-down #(on-key-down % wrapped-query)}]]]
      (when show-checkboxes?
-       [:div {:style {:display "table-row"}}
-        [:div {:style {:display "table-cell"}}]
+       [:div.table-row
+        [:div.table-cell]
         [:div.checkbox {:style {:display "table-cell"}}
          (when (:has-phonetic corpus)
            [:label {:style {:margin-top 7}}
@@ -199,30 +200,29 @@
              multilingual? (> (count languages) 1)
              set-view      (fn [view e] (reset! search-view view) (.preventDefault e))]
          [:span
-          [:div.row.search-input-links
-           [:div.col-md-12
-            (if (= view simple)
-              [:b "Simple"]
-              [:a {:href     ""
-                   :title    "Simple search box"
-                   :on-click #(set-view :simple %)}
-               "Simple"])
-            " | "
-            (if (= view extended)
-              [:b "Extended"]
-              [:a {:href     ""
-                   :title    "Search for grammatical categories etc."
-                   :on-click #(set-view :extended %)}
-               "Extended"])
-            " | "
-            (if (= view cqp)
-              [:b "CQP query"]
-              [:a {:href     ""
-                   :title    "CQP expressions"
-                   :on-click #(set-view :cqp %)}
-               "CQP query"])
-            [search-button (if (= @search-view :extended) 75 233)]
-            (when multilingual? [add-language-button])]]
+          [:div.row.search-input-links>div.col-md-12
+           (if (= view simple)
+             [:b "Simple"]
+             [:a {:href     ""
+                  :title    "Simple search box"
+                  :on-click #(set-view :simple %)}
+              "Simple"])
+           " | "
+           (if (= view extended)
+             [:b "Extended"]
+             [:a {:href     ""
+                  :title    "Search for grammatical categories etc."
+                  :on-click #(set-view :extended %)}
+              "Extended"])
+           " | "
+           (if (= view cqp)
+             [:b "CQP query"]
+             [:a {:href     ""
+                  :title    "CQP expressions"
+                  :on-click #(set-view :cqp %)}
+              "CQP query"])
+           [search-button (if (= @search-view :extended) 75 233)]
+           (when multilingual? [add-language-button])]
 
           ; Now create a cursor into the search-queries ratom for each search expression
           ; and display a row of search inputs for each of them. The doall call is needed
@@ -247,14 +247,13 @@
                      ;; (which only re-renders the view that derefs it) and explicitly call the
                      ;; query processing function before updating the cursor, but then we would
                      ;; have to make sure to do that every time we change a query...
-                     (let [wrapped-query      (reagent/wrap
-                                                (nth @search-queries index)
-                                                wrapped-query-changed search-queries index)
-                           selected-language  (-> @wrapped-query :query :lang)]
+                     (let [wrapped-query     (reagent/wrap
+                                               (nth @search-queries index)
+                                               wrapped-query-changed search-queries index)
+                           selected-language (-> @wrapped-query :query :lang)]
                        ^{:key index}
-                       [:div.row
-                        [:div.col-md-12
-                         (when multilingual?
-                           [language-select languages selected-language])
-                         [view @corpus wrapped-query show-remove-row-btn?]]]))))
-          (when-not multilingual? [add-phrase-button])]))}))
+                       [:div.row>div.col-md-12
+                        (when multilingual?
+                          [language-select languages selected-language])
+                        [view @corpus wrapped-query show-remove-row-btn?]]))))
+          (when-not multilingual? [add-phrase-button view])]))}))

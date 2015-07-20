@@ -49,9 +49,6 @@ h5.category-header {
   margin-top: 10px;
   margin-bottom: 30px;
 }
-.multiword-container ~ .add-phrase-btn {
-  margin-top: -15px;
-}
 
 .spinner-searching-large {
   background-image: url(spinner-large.gif);
@@ -202,6 +199,10 @@ div.interval {
   &.sidebar-leave-active {
     width: 0 !important;
   }
+}
+
+.table-display {
+  display: table !important;
 }
 
 .table-row {

@@ -132,76 +132,72 @@
                       first? last? has-phonetic?
                       show-remove-row-btn? show-remove-term-btn?]
   (let [term-val @wrapped-term]
-    [:div.table-cell
-     [:div.multiword-term
-      [:div.control-group
-       [:div.dropdown.table-row
-        (when first?
-          [:div.table-cell.remove-row-btn-container
-           [remove-row-btn show-remove-row-btn? wrapped-query]])
-        [:div.table-cell
-         [:div.input-group
-          [:span.input-group-addon.dropdown-toggle {:data-toggle "dropdown"
-                                                    :style       {:cursor "pointer"}}
-           [:span.glyphicon.glyphicon-menu-hamburger]]
-          [:input.form-control.multiword-field
-           {:ref           "searchfield"
-            :type          "text"
-            :default-value (str/replace (:form term-val) #"^\.\*$" "")
-            :on-change     #(swap! wrapped-term assoc :form (.-target.value %))
-            :on-key-down   #(on-key-down % wrapped-query)}]
-          (when show-remove-term-btn?
-            [:span.input-group-addon {:title    " Remove word "
-                                      :style    {:cursor "pointer"}
-                                      :on-click #(reset! wrapped-term nil)}
-             [:span.glyphicon.glyphicon-minus]])
-          (when last?
-            [:div.add-search-word
-             [:button.btn.btn-info.btn-sm {:type     "button"
-                                           :title    "Add search word"
-                                           :on-click (fn []
-                                                       ; Append greatest-current-id-plus-one to the
-                                                       ; query-term-ids vector
-                                                       (swap! query-term-ids
-                                                              #(conj % (inc (max %))))
-                                                       ; Append [] to the CQP query expression
-                                                       (swap! wrapped-query
-                                                              update :query str " []"))}
-              [:span.glyphicon.glyphicon-plus]]])]]]
-       [:div.table-row
-        (when first?
-          [:div.table-cell])
-        [:div.table-cell
-         [:div.word-checkboxes
-          [:label.checkbox-inline
-           [:input {:type    "checkbox"
-                    :checked (:lemma? term-val)
-                    :on-change #(swap! wrapped-term assoc :lemma? (.-target.checked %))
-                    }] "Lemma"]
-          [:label.checkbox-inline
-           [:input {:type    "checkbox"
-                    :title   "Start of word"
-                    :checked (:start? term-val)
-                    :on-change #(swap! wrapped-term assoc :start? (.-target.checked %))
-                    }] "Start"]
-          [:label.checkbox-inline
-           [:input {:type    "checkbox"
-                    :title   "End of word"
-                    :checked (:end? term-val)
-                    :on-change #(swap! wrapped-term assoc :end? (.-target.checked %))
-                    }] "End"]]
-         (when has-phonetic?
-           [:div
-            [:label.checkbox-inline
-             [:input {:type    "checkbox"
-                      :checked (:phonetic? term-val)
-                      :on-change #(swap! wrapped-term assoc :phonetic? (.-target.checked %))
-                      }] "Phonetic form"]])]]
-       [:div.table-row
-        (when first?
-          [:div.table-cell])
-        [:div.tag-list.table-cell {:ref "taglist"}
-         [:div.tags]]]]]]))
+    [:div.table-cell>div.multiword-term>div.control-group
+     [:div.dropdown.table-row
+      (when first?
+        [:div.table-cell.remove-row-btn-container
+         [remove-row-btn show-remove-row-btn? wrapped-query]])
+      [:div.table-cell>div.input-group
+       [:span.input-group-addon.dropdown-toggle {:data-toggle "dropdown"
+                                                 :style       {:cursor "pointer"}}
+        [:span.glyphicon.glyphicon-menu-hamburger]]
+       [:input.form-control.multiword-field
+        {:ref           "searchfield"
+         :type          "text"
+         :default-value (str/replace (:form term-val) #"^\.\*$" "")
+         :on-change     #(swap! wrapped-term assoc :form (.-target.value %))
+         :on-key-down   #(on-key-down % wrapped-query)}]
+       (when show-remove-term-btn?
+         [:span.input-group-addon {:title    " Remove word "
+                                   :style    {:cursor "pointer"}
+                                   :on-click #(reset! wrapped-term nil)}
+          [:span.glyphicon.glyphicon-minus]])
+       (when last?
+         [:div.add-search-word
+          [:button.btn.btn-info.btn-sm {:type     "button"
+                                        :title    "Add search word"
+                                        :on-click (fn []
+                                                    ; Append greatest-current-id-plus-one to the
+                                                    ; query-term-ids vector
+                                                    (swap! query-term-ids
+                                                           #(conj % (inc (max %))))
+                                                    ; Append [] to the CQP query expression
+                                                    (swap! wrapped-query
+                                                           update :query str " []"))}
+           [:span.glyphicon.glyphicon-plus]]])]]
+     [:div.table-row
+      (when first?
+        [:div.table-cell])
+      [:div.table-cell
+       [:div.word-checkboxes
+        [:label.checkbox-inline
+         [:input {:type      "checkbox"
+                  :checked   (:lemma? term-val)
+                  :on-change #(swap! wrapped-term assoc :lemma? (.-target.checked %))
+                  }] "Lemma"]
+        [:label.checkbox-inline
+         [:input {:type      "checkbox"
+                  :title     "Start of word"
+                  :checked   (:start? term-val)
+                  :on-change #(swap! wrapped-term assoc :start? (.-target.checked %))
+                  }] "Start"]
+        [:label.checkbox-inline
+         [:input {:type      "checkbox"
+                  :title     "End of word"
+                  :checked   (:end? term-val)
+                  :on-change #(swap! wrapped-term assoc :end? (.-target.checked %))
+                  }] "End"]]
+       (when has-phonetic?
+         [:div>label.checkbox-inline
+          [:input {:type      "checkbox"
+                   :checked   (:phonetic? term-val)
+                   :on-change #(swap! wrapped-term assoc :phonetic? (.-target.checked %))
+                   }] "Phonetic form"])]]
+     [:div.table-row
+      (when first?
+        [:div.table-cell])
+      [:div.tag-list.table-cell {:ref "taglist"}
+       [:div.tags]]]]))
 
 (defn extended
   "Search view component with text inputs, checkboxes and menus
@@ -233,8 +229,8 @@
           (reset! query-term-ids (range (count terms))))
         [:div.multiword-container
          [:form.form-inline.multiword-search-form {:style {:margin-left -30}}
-          [:div {:style {:display "table"}}
-           [:div {:style {:display "table-row"}}
+          [:div.table-display
+           [:div.table-row
             (map-indexed (fn [index term]
                            (let [wrapped-term          (reagent/wrap term
                                                                      wrapped-term-changed
