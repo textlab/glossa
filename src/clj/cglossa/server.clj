@@ -1,6 +1,6 @@
 (ns cglossa.server
   (:require [clojure.java.io :as io]
-            [compojure.core :refer [GET defroutes routes context]]
+            [compojure.core :refer [GET POST defroutes routes context]]
             [compojure.route :refer [resources]]
             [compojure.handler :as handler]
             [net.cgrand.enlive-html :refer [deftemplate]]
@@ -8,6 +8,7 @@
             [ring.middleware.reload :as reload]
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
+            [ring.middleware.json :refer [wrap-json-params]]
             [ring.handler.dump :refer [handle-dump]]
             [prone.middleware :refer [wrap-exceptions]]
             [environ.core :refer [env]]
@@ -53,10 +54,15 @@
 (defroutes db-routes
   (GET "/corpus" [code] (transit-response (db/get-corpus code))))
 
+(defroutes search-routes
+  (POST "/search" [queries]
+    (transit-response* queries)))
+
 (def http-handler
-  (let [r (routes #'db-routes #'app-routes)
+  (let [r (routes #'db-routes #'search-routes #'app-routes)
         r (if (:is-dev env) (-> r reload/wrap-reload wrap-exceptions) r)]
     (-> r
+        wrap-json-params
         wrap-keyword-params
         wrap-params)))
 

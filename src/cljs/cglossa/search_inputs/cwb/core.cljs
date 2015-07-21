@@ -105,9 +105,9 @@
 ; Components
 ;;;;;;;;;;;;;
 
-(defn- search-button [margin-left]
+(defn- search-button [queries corpus margin-left]
   [:button.btn.btn-success {:style    {:marginLeft margin-left}
-                            :on-click search!} "Search"])
+                            :on-click #(search! queries corpus)} "Search"])
 
 (defn- add-language-button []
   [:button.btn {:style {:marginLeft 20} :on-click #()} "Add language"])
@@ -136,7 +136,7 @@
                                        :type        "text"
                                        :value       displayed-query
                                        :on-change   #(on-text-changed % wrapped-query phonetic?)
-                                       :on-key-down #(on-key-down % wrapped-query)}]]]
+                                       :on-key-down #(on-key-down % wrapped-query corpus)}]]]
      (when show-checkboxes?
        [:div.table-row
         [:div.table-cell]
@@ -225,7 +225,7 @@
                     :title    "CQP expressions"
                     :on-click #(set-view :cqp %)}
                 "CQP query"])
-             [search-button (if (= @search-view :extended) 75 233)]
+             [search-button search-queries corpus (if (= @search-view :extended) 75 233)]
              (when multilingual? [add-language-button])]
 
             ; Now create a cursor into the search-queries ratom for each search expression

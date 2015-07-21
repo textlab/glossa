@@ -1,12 +1,28 @@
-(ns cglossa.search-inputs.cwb.shared)
+(ns cglossa.search-inputs.cwb.shared
+  (:require [clojure.string :as str]
+            [cljs-http.client :as http]))
 
-(defn- search! [wrapped-query]
-  (.log js/console "soker"))
+(defn- search! [queries corpus]
+  (let [queries*    @queries
+        first-query (:query (first queries*))]
+    (when (and first-query
+               (not= first-query "\"\""))
+      (let [q             (if (= (:lang corpus) "zh")
+                            ;; For Chinese: If the tone number is missing, add a pattern
+                            ;; that matches all tones
+                            (for [query queries*]
+                              (update query :query
+                                      str/replace #"\bphon=\"([^0-9\"]+)\"" "phon=\"$1[1-4]?\""))
+                            ;; For other languages, leave the queries unmodified
+                            queries*)
+            search-engine (:search-engine corpus "cwb")]
+        (http/post "/search"
+                   {:json-params {:queries q}})))))
 
-(defn on-key-down [event wrapped-query]
+(defn on-key-down [event wrapped-query corpus]
   (when (= "Enter" (.-key event))
     (.preventDefault event)
-    (search! wrapped-query)))
+    (search! wrapped-query corpus)))
 
 (defn remove-row-btn [show? wrapped-query]
   [:button.btn.btn-danger.btn-xs {:type     "button"
