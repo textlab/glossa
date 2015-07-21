@@ -17,7 +17,8 @@
                             queries*)
             search-engine (:search-engine corpus "cwb")]
         (http/post "/search"
-                   {:json-params {:queries q}})))))
+                   {:json-params {:corpus-rid (:rid @corpus)
+                                  :queries q}})))))
 
 (defn on-key-down [event wrapped-query corpus]
   (when (= "Enter" (.-key event))

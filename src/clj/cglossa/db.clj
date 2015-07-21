@@ -1,7 +1,6 @@
 (ns cglossa.db
   (:require [clojure.string :as str]
-            [clojure.walk :as walk]
-            [clojurewerkz.ogre.core :as q])
+            [clojure.walk :as walk])
   (:import [com.tinkerpop.blueprints.impls.orient OrientGraphFactory]
            [com.orientechnologies.orient.core.sql OCommandSQL]
            [com.orientechnologies.orient.core.db.record OIdentifiable]))
@@ -41,6 +40,13 @@
     (walk/walk (fn [[k v]] [k (xform-val v)]) identity $)
     (walk/keywordize-keys $)))
 
+(defn run-sql
+  ([sql] (run-sql sql []))
+  ([sql sql-params]
+   (let [graph (get-graph)
+         cmd   (OCommandSQL. sql)]
+     (.. graph (command cmd) (execute sql-params)))))
+
 (defn sql-query
   "Takes an SQL query and optionally a map of parameters, runs it against the
   OrientDB database, and returns the query result as a lazy seq of hash maps.
@@ -61,15 +67,14 @@
   in the SQL query through OrientDB's normal parameterization process.
 
   A full example:
-  (query \"select out('&out') from #TARGETS where code = ?\"
-         {:targets    [\"#12:0\" \"#12:1\"]
-          :sql-params [\"bokmal\"]
-          :strings    {:out \"HasMetadataCategory\"}})"
+  (sql-query \"select out('&out') from #TARGETS where code = ?\"
+             {:targets    [\"#12:0\" \"#12:1\"]
+              :sql-params [\"bokmal\"]
+              :strings    {:out \"HasMetadataCategory\"}})"
   ([sql]
    (sql-query sql {}))
   ([sql params]
-   (let [graph      (get-graph)
-         t          (or (:target params) (:targets params))
+   (let [t          (or (:target params) (:targets params))
          targets    (if t (flatten [t]) [])
          _          (doseq [target targets] (assert (re-matches #"#\d+:\d+" target)
                                                     (str "Invalid target: " target)))
@@ -82,8 +87,7 @@
          sql*       (-> sql
                         (str/replace #"\&(\w+)" #(get strings (keyword (second %))))
                         (str/replace #"#TARGETS?" (str "[" (str/join ", " targets) "]")))
-         cmd        (OCommandSQL. sql*)
-         results    (.. graph (command cmd) (execute sql-params))]
+         results    (run-sql sql* sql-params)]
      (map vertex->map results))))
 
 (defn- vertex-name [name code]

@@ -15,7 +15,8 @@
             [org.httpkit.server :refer [run-server]]
             [clojure.tools.logging :as log]
             [cognitect.transit :as transit]
-            [cglossa.db :as db])
+            [cglossa.db :as db]
+            [cglossa.search :as search])
   (:import [java.io ByteArrayOutputStream])
   (:gen-class))
 
@@ -37,8 +38,8 @@
         (response/content-type "application/transit+json")
         (response/charset "utf-8"))))
 
-(defmacro transit-response [db-call]
-  `(try (let [res# ~db-call]
+(defmacro transit-response [fn-call]
+  `(try (let [res# ~fn-call]
           (transit-response* res#))
         (catch Exception e#
           {:status 500
@@ -52,11 +53,12 @@
   (GET "/" req (page)))
 
 (defroutes db-routes
-  (GET "/corpus" [code] (transit-response (db/get-corpus code))))
+  (GET "/corpus" [code]
+    (transit-response (db/get-corpus code))))
 
 (defroutes search-routes
-  (POST "/search" [queries]
-    (transit-response* queries)))
+  (POST "/search" [corpus-rid queries]
+    (transit-response (search/search corpus-rid queries))))
 
 (def http-handler
   (let [r (routes #'db-routes #'search-routes #'app-routes)
