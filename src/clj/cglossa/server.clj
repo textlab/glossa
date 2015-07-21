@@ -46,12 +46,12 @@
 (deftemplate page (io/resource "index.html") [])
 
 (defroutes app-routes
-           (resources "/")
-           (GET "/request" [] handle-dump)
-           (GET "/" req (page)))
+  (resources "/")
+  (GET "/request" [] handle-dump)
+  (GET "/" req (page)))
 
 (defroutes db-routes
-           (GET "/corpus" [code] (transit-response (db/get-corpus code))))
+  (GET "/corpus" [code] (transit-response (db/get-corpus code))))
 
 (def http-handler
   (let [r (routes #'db-routes #'app-routes)
