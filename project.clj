@@ -8,7 +8,7 @@
 
             :test-paths ["spec/clj"]
 
-            :dependencies [[org.clojure/clojure "1.7.0-RC1"]
+            :dependencies [[org.clojure/clojure "1.7.0"]
                            [org.clojure/clojurescript "0.0-3308" :scope "provided"]
                            [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                            [ring "1.3.2"]
