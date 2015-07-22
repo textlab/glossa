@@ -11,7 +11,8 @@
                     ["CONNECT remote:localhost/Glossa admin admin;"
                      "TRUNCATE CLASS MetadataValue UNSAFE;"
                      "TRUNCATE CLASS MetadataCategory UNSAFE;"
-                     "TRUNCATE CLASS Corpus UNSAFE;"]}}]
+                     "TRUNCATE CLASS Corpus UNSAFE;"
+                     "TRUNCATE CLASS Search UNSAFE;"]}}]
    :source       {:file {:path "###TSV-PATH###"}}
    :extractor    {:row {}}
    :transformers [{:csv {:separator "\t"}}
@@ -21,7 +22,8 @@
                    :dbType              "graph"
                    :wal                 false
                    :useLightweightEdges true
-                   :classes             [{:name "Corpus" :extends "V"}]
+                   :classes             [{:name "Corpus" :extends "V"}
+                                         {:name "Search" :extends "V"}]
                    :indexes             [{:class "Corpus" :fields ["code:string"] :type "UNIQUE"}]}}})
 
 (defn- create-config! [config-path tsv-path]
