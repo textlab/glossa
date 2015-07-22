@@ -65,8 +65,8 @@
   (let [r (routes #'db-routes #'search-routes #'app-routes)
         r (if (:is-dev env) (-> r reload/wrap-reload wrap-exceptions) r)]
     (-> r
-        wrap-json-params
         wrap-keyword-params
+        wrap-json-params
         wrap-params)))
 
 (defn run [& [port]]
