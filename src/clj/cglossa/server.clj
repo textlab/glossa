@@ -42,6 +42,7 @@
   `(try (let [res# ~fn-call]
           (transit-response* res#))
         (catch Exception e#
+          (log/error e#)
           {:status 500
            :body   (.toString e#)})))
 
