@@ -42,11 +42,13 @@
     (walk/keywordize-keys $)))
 
 (defn run-sql
-  ([sql] (run-sql sql []))
+  ([sql]
+   (run-sql sql []))
   ([sql sql-params]
-   (let [graph (get-graph)
-         cmd   (OCommandSQL. sql)]
-     (.. graph (command cmd) (execute sql-params)))))
+   (let [graph  (get-graph)
+         cmd    (OCommandSQL. sql)
+         params (into-array sql-params)]
+     (.. graph (command cmd) (execute params)))))
 
 (defn sql-query
   "Takes an SQL query and optionally a map of parameters, runs it against the
@@ -84,7 +86,7 @@
                             "String params should be provided in a map")
          _          (doseq [s (vals strings)] (assert (not (re-find #"[\W]" s))
                                                       (str "Invalid string param: " s)))
-         sql-params (into-array (:sql-params params))
+         sql-params (:sql-params params)
          sql*       (-> sql
                         (str/replace #"\&(\w+)" #(get strings (keyword (second %))))
                         (str/replace #"#TARGETS?" (str "[" (str/join ", " targets) "]")))
