@@ -15,15 +15,16 @@
 (defn db-record? [o]
   (instance? OIdentifiable o))
 
-(defn stringify-rid [rid]
-  "When we ask for @rid in an SQL query, the value we get for the 'rid'
-  property is actually the entire record object. This function converts it into
-  the string representation of the record's @rid (e.g. 12:0)"
-  (.. rid getIdentity toString))
+(defn stringify-rid [record]
+  "Returns the ID of record as a string."
+  (.. record getIdentity toString))
 
 (defn- xform-val [val]
   "Transform the values of vertex properties retrieved via SQL as needed."
   (cond
+    ;; When we ask for @rid in an SQL query, the value we get for the 'rid'
+    ;; property is actually the entire record object. Convert it into
+    ;; the string representation of the record's @rid (e.g. 12:0).
     (db-record? val) (stringify-rid val)
     (instance? Iterable val) (map xform-val val)
     :else val))
