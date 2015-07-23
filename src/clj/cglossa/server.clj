@@ -2,7 +2,6 @@
   (:require [clojure.java.io :as io]
             [compojure.core :refer [GET POST defroutes routes context]]
             [compojure.route :refer [resources]]
-            [compojure.handler :as handler]
             [net.cgrand.enlive-html :refer [deftemplate]]
             [ring.util.response :as response]
             [ring.middleware.reload :as reload]
