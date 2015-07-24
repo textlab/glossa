@@ -13,6 +13,11 @@
       (str uc-code "_" (-> queries first :lang str/upper-case))
       uc-code)))
 
+(defn- cwb-query-name [corpus search-id]
+  "Constructs a name for the saved query in CQP, e.g. MYCORPUS11."
+  (str (str/upper-case (:code corpus))
+       (last (str/split search-id #":"))))
+
 (defn- build-monolingual-query [queries]
   ;; For monolingual queries, the query expressions should be joined together with '|' (i.e., "or")
   (let [queries* (map :query queries)]
@@ -26,6 +31,17 @@
   ;; TODO
   )
 
+(defn- construct-query-commands [corpus queries named-query search-id cut]
+  (let [query-str          (if (:multilingual? corpus)
+                             (build-multilingual-query queries)
+                             (build-monolingual-query queries))
+        positions-filename (str (fs/tmpdir) "positions_" search-id)
+        init-cmds          (if (:metadata-value-ids queries)
+                             [(str "undump " named-query " < '" positions-filename \')
+                              named-query]
+                             [])]
+    (conj init-cmds (str named-query " = " query-str " cut " cut))))
+
 (defn- run-cqp-commands [commands]
   (let [cmdfile   (str (fs/tmpdir) (fs/temp-name "cglossa-cqp-cmd"))
         commands* (->> commands
@@ -36,28 +52,20 @@
                                            (cqp "-c" "-f" cmdfile {:seq true}))
                       ;; Throw away the first line with the CQP version
                       rest)]
-      (fs/delete cmdfile)
-      results)))
+      (if (re-find #"PARSE ERROR|CQP Error" (first results))
+        (throw (str "CQP error: " results))
+        results))))
 
-(defn search [corpus-rid queries]
+(defn search [corpus-id queries]
   (let [search         (db/run-sql "create vertex Search")
         search-id      (db/stringify-rid search)
-        corpus         (first (db/sql-query "select from #TARGET" {:target corpus-rid}))
-        ;; name of saved query in CQP, e.g. MYCORPUS11
-        named-query    (str (str/upper-case (:code corpus))
-                            (last (str/split search-id #":")))
-        query-str      (if (:multilingual? corpus)
-                         (build-multilingual-query queries)
-                         (build-monolingual-query queries))
-        query-commands (if (:metadata-value-ids queries)
-                         ""                                 ; TODO
-                         (str named-query " = " query-str))
+        corpus         (first (db/sql-query "select from #TARGET" {:target corpus-id}))
+        named-query    (cwb-query-name corpus search-id)
         commands       [(str "set DataDirectory \"" (fs/tmpdir) \")
                         (cwb-corpus-name corpus queries)
-                        query-commands
-                        (str "save " named-query)
-                        "size Last"]
-        num-hits       (run-cqp-commands commands)]
+                        (construct-query-commands corpus queries named-query search-id 100)
+                        "cat Last"]
+        results        (run-cqp-commands (flatten commands))]
     (-> search
         db/vertex->map
-        (assoc :num-hits num-hits))))
+        (assoc :results results))))
