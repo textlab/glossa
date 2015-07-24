@@ -17,19 +17,19 @@
       (str/replace #"\{\{(<s_id\s+.+?>)" "$1{{")
       (str/replace #"(</s_id>)\}\}" "}}$1")))
 
-(defn- search! [queries corpus]
-  (let [queries*    @queries
-        first-query (:query (first queries*))]
+(defn- search! [{:keys [search-queries]} {:keys [corpus search-results]}]
+  (let [queries    @search-queries
+        first-query (:query (first queries))]
     (when (and first-query
                (not= first-query "\"\""))
       (let [q             (if (= (:lang corpus) "zh")
                             ;; For Chinese: If the tone number is missing, add a pattern
                             ;; that matches all tones
-                            (for [query queries*]
+                            (for [query queries]
                               (update query :query
                                       str/replace #"\bphon=\"([^0-9\"]+)\"" "phon=\"$1[1-4]?\""))
                             ;; For other languages, leave the queries unmodified
-                            queries*)
+                            queries)
             search-engine (:search-engine corpus "cwb")]
         (go (let [{:keys [status success] :as response}
                   (<! (http/post "/search"
@@ -37,7 +37,7 @@
                                                 :queries   q}}))]
               (if success
                 (let [results (get-in response [:body :results])]
-                  (.log js/console (str (map cleanup-result results))))
+                  (reset! search-results (map cleanup-result results)))
                 (.log js/console status))))))))
 
 (defn on-key-down [event wrapped-query corpus]

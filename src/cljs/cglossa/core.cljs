@@ -16,7 +16,8 @@
                                #_{:query "[word=\"hun\" %c] [word=\"vet\" %c]"}]})
 
 (def data {:corpus              nil
-           :metadata-categories nil})
+           :metadata-categories nil
+           :search-results      nil})
 
 (defonce app-state (into {} (map (fn [[k v]] [k (reagent/atom v)]) state)))
 (defonce model-state (into {} (map (fn [[k v]] [k (reagent/atom v)]) data)))

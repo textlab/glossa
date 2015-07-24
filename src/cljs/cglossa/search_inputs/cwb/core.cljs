@@ -105,9 +105,9 @@
 ; Components
 ;;;;;;;;;;;;;
 
-(defn- search-button [queries corpus margin-left]
+(defn- search-button [a m margin-left]
   [:button.btn.btn-success {:style    {:marginLeft margin-left}
-                            :on-click #(search! queries corpus)} "Search"])
+                            :on-click #(search! a m)} "Search"])
 
 (defn- add-language-button []
   [:button.btn {:style {:marginLeft 20} :on-click #()} "Add language"])
@@ -185,7 +185,7 @@
 (defn search-inputs
   "Component that lets the user select a search view (simple, extended
   or CQP query view) and displays it."
-  [{:keys [search-view search-queries]} {:keys [corpus]}]
+  [{:keys [search-view search-queries] :as a} {:keys [corpus search-results] :as m}]
   (let [query-ids (atom nil)]
     (reagent/create-class
       {:display-name
@@ -195,7 +195,7 @@
        focus-text-input
 
        :reagent-render
-       (fn [{:keys [search-view search-queries]} {:keys [corpus]}]
+       (fn [{:keys [search-view search-queries] :as a} {:keys [corpus search-results] :as m}]
          (let [view          (case @search-view
                                :extended extended
                                :cqp cqp
@@ -225,7 +225,7 @@
                     :title    "CQP expressions"
                     :on-click #(set-view :cqp %)}
                 "CQP query"])
-             [search-button search-queries corpus (if (= @search-view :extended) 75 233)]
+             [search-button a m (if (= @search-view :extended) 75 233)]
              (when multilingual? [add-language-button])]
 
             ; Now create a cursor into the search-queries ratom for each search expression
