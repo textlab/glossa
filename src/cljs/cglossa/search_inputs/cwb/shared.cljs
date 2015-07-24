@@ -1,6 +1,8 @@
 (ns cglossa.search-inputs.cwb.shared
+  (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [clojure.string :as str]
-            [cljs-http.client :as http]))
+            [cljs-http.client :as http]
+            [cljs.core.async :refer [<!]]))
 
 (defn- search! [queries corpus]
   (let [queries*    @queries
@@ -16,9 +18,14 @@
                             ;; For other languages, leave the queries unmodified
                             queries*)
             search-engine (:search-engine corpus "cwb")]
-        (http/post "/search"
-                   {:json-params {:corpus-id (:rid @corpus)
-                                  :queries q}})))))
+        (go (let [{:keys [status success] :as response}
+                  (<! (http/post "/search"
+                                 {:json-params {:corpus-id (:rid @corpus)
+                                                :queries   q}}))]
+              (if success
+                (let [results (get-in response [:body :results])]
+                  (.log js/console (str results)))
+                (.log js/console status))))))))
 
 (defn on-key-down [event wrapped-query corpus]
   (when (= "Enter" (.-key event))
