@@ -185,7 +185,7 @@
 (defn search-inputs
   "Component that lets the user select a search view (simple, extended
   or CQP query view) and displays it."
-  [{:keys [search-view search-queries] :as a} {:keys [corpus search-results] :as m}]
+  [{:keys [search-view search-queries] :as a} {:keys [corpus] :as m}]
   (let [query-ids (atom nil)]
     (reagent/create-class
       {:display-name
@@ -195,7 +195,7 @@
        focus-text-input
 
        :reagent-render
-       (fn [{:keys [search-view search-queries] :as a} {:keys [corpus search-results] :as m}]
+       (fn [{:keys [search-view search-queries] :as a} {:keys [corpus] :as m}]
          (let [view          (case @search-view
                                :extended extended
                                :cqp cqp
