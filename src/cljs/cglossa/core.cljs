@@ -35,7 +35,7 @@
 (get-models "/corpus" {:code "scandiasyn"})
 
 (defn ^:export main []
-  (reagent/render-component
+  (reagent/render
     [app app-state model-state]
     (. js/document (getElementById "app"))))
 
