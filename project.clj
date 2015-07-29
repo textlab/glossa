@@ -19,6 +19,7 @@
                            [enlive "1.1.5"]
                            [reagent "0.5.1-SNAPSHOT" :exclusions [cljsjs/react]]
                            [cljsjs/react "0.13.3-0"]
+                           [cljsjs/react-bootstrap "0.23.7-0"]
                            [environ "1.0.0"]
                            [http-kit "2.1.19"]
                            [cljs-http "0.1.35"]
