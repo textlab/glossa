@@ -7,7 +7,7 @@
 ;; components and resulting from running reagent.core/adapt-react-class
 ;; on the component. The Var names will be lower-cased, for instance `button` for
 ;; js/ReactBootstrap.Button.
-(defmacro adapt [components]
+(defmacro adapt! [components]
   `(do ~@(for [c components]
            `(def ~(symbol (str/lower-case c))
               (reagent.core/adapt-react-class ~(symbol "js" (str "ReactBootstrap." c)))))))
