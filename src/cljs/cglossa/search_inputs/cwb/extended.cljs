@@ -4,7 +4,7 @@
   (:require [clojure.string :as str]
             [cglossa.search-inputs.cwb.shared :refer [headword-search-checkbox
                                                       on-key-down remove-row-btn]]
-            [reagent.core :as reagent]))
+            [reagent.core :as r]))
 
 (defn- combine-regexes [regexes]
   "Since there is no way to concatenate regexes directly, we convert
@@ -232,7 +232,7 @@
           [:div.table-display
            [:div.table-row
             (map-indexed (fn [index term]
-                           (let [wrapped-term          (reagent/wrap term
+                           (let [wrapped-term          (r/wrap term
                                                                      wrapped-term-changed
                                                                      wrapped-query terms index
                                                                      query-term-ids)

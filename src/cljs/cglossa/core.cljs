@@ -1,5 +1,5 @@
 (ns cglossa.core
-  (:require [reagent.core :as reagent]
+  (:require [reagent.core :as r]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
             [cglossa.app :refer [app]])
@@ -19,8 +19,8 @@
            :metadata-categories nil
            :search-results      nil})
 
-(defonce app-state (into {} (map (fn [[k v]] [k (reagent/atom v)]) state)))
-(defonce model-state (into {} (map (fn [[k v]] [k (reagent/atom v)]) data)))
+(defonce app-state (into {} (map (fn [[k v]] [k (r/atom v)]) state)))
+(defonce model-state (into {} (map (fn [[k v]] [k (r/atom v)]) data)))
 
 (defn- get-models
   ([url] (get-models url {}))
@@ -35,7 +35,7 @@
 (get-models "/corpus" {:code "scandiasyn"})
 
 (defn ^:export main []
-  (reagent/render
+  (r/render
     [app app-state model-state]
     (. js/document (getElementById "app"))))
 

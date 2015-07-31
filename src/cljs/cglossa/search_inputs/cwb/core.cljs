@@ -1,6 +1,6 @@
 (ns cglossa.search-inputs.cwb.core
   (:require [clojure.string :as str]
-            [reagent.core :as reagent]
+            [reagent.core :as r]
             [goog.dom :as dom]
             [cglossa.search-inputs.cwb.shared :refer [headword-search-checkbox
                                                       on-key-down search!
@@ -64,7 +64,7 @@
       p2)))
 
 (defn- focus-text-input [c]
-  (.focus (dom/findNode (reagent/dom-node c) #(= "text" (.-type %)))))
+  (.focus (dom/findNode (r/dom-node c) #(= "text" (.-type %)))))
 
 (defn- wrapped-query-changed [queries index query-ids query]
   "Takes a changed query, performs some cleanup on it, and swaps it into
@@ -187,7 +187,7 @@
   or CQP query view) and displays it."
   [{:keys [search-view search-queries] :as a} {:keys [corpus] :as m}]
   (let [query-ids (atom nil)]
-    (reagent/create-class
+    (r/create-class
       {:display-name
        "search-inputs"
 
@@ -257,7 +257,7 @@
                        ;; (which only re-renders the view that derefs it) and explicitly call the
                        ;; query processing function before updating the cursor, but then we would
                        ;; have to make sure to do that every time we change a query...
-                       (let [wrapped-query     (reagent/wrap
+                       (let [wrapped-query     (r/wrap
                                                  (nth @search-queries index)
                                                  wrapped-query-changed search-queries
                                                  index query-ids)
