@@ -13,7 +13,7 @@
                            [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                            [ring "1.3.2"]
                            [ring/ring-defaults "0.1.5"]
-                           [ring/ring-json "0.3.1"]
+                           [ring/ring-json "0.4.0"]
                            [com.cognitect/transit-clj "0.8.275"]
                            [compojure "1.3.4"]
                            [enlive "1.1.5"]
