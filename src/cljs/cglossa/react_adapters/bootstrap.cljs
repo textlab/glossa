@@ -8,4 +8,11 @@
 ;; on the component. The Var names will be lower-cased, for instance `button` for
 ;; js/ReactBootstrap.Button, so they should be referred like this in other namespaces:
 ;; (:require [cglossa.react-adapters.bootstrap :refer [button modal label])
-(adapt! "Button" "Label" "Modal" "ModalBody" "ModalFooter" "ModalHeader" "ModalTitle")
+(adapt! "Button"
+        "Label"
+        "Modal"
+        "ModalBody"
+        "ModalFooter"
+        "ModalHeader"
+        "ModalTitle"
+        "Navbar")

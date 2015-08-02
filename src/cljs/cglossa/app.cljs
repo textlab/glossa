@@ -1,9 +1,10 @@
 (ns cglossa.app
   (:require [cglossa.start :refer [start]]
-            [cglossa.results :refer [results]]))
+            [cglossa.results :refer [results]]
+            [cglossa.react-adapters.bootstrap :refer [navbar]]))
 
 (defn- header []
-  [:nav.navbar.navbar-default.navbar-fixed-top>div.container>span.navbar-brand "Glossa"])
+  [navbar {:fixedTop true :brand "Glossa"}])
 
 (defn app [{:keys [showing-results?] :as a} {:keys [corpus] :as m}]
   (let [cls (if (empty? (:metadata-categories @corpus)) "span12" "span9")]
