@@ -8,8 +8,9 @@
 ; avoid "not resolved" messages in Cursive
 (declare getElementById)
 
-(def state {:showing-results? false
-            :showing-sidebar? false
+(def state {:showing-sidebar? false
+            :showing-results? false
+            :showing-freqs?   false
             :search-view      :simple
             :search-queries   [#_{:query "[word=\"han\" %c] []{1,2} [word=\"er\" %c]"}
                                {:query "[word=\"de\" %c] [word=\"sa\" %c]"}
