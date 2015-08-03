@@ -61,14 +61,14 @@
            :output-to "resources/public/css/style.css"}]
   :auto {"sassc" {:file-pattern #"\.(scss)$"}}
 
-  :profiles {:dev     {:dependencies [[figwheel "0.3.3"]
+  :profiles {:dev     {:dependencies [[figwheel "0.3.7"]
                                       [com.cemerick/piggieback "0.2.1"]
                                       [org.clojure/tools.nrepl "0.2.10"]]
 
                        :repl-options {:init-ns          cglossa.server
                                       :nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
 
-                       :plugins      [[lein-figwheel "0.3.3"]]
+                       :plugins      [[lein-figwheel "0.3.7"]]
 
                        :figwheel     {:css-dirs          ["resources/public/css"]
                                       :open-file-command "idea-opener"}
