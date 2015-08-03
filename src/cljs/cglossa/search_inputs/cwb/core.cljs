@@ -65,7 +65,9 @@
       p2)))
 
 (defn- focus-text-input [c]
-  (.focus (dom/findNode (r/dom-node c) #(= "text" (.-type %)))))
+  ;; Use (aget % "type") instead of (.-type %) simply because the latter makes the syntax
+  ;; checker in Cursive Clojure go bananas for some reason...
+  (.focus (dom/findNode (r/dom-node c) #(= "text" (aget % "type")))))
 
 (defn- wrapped-query-changed [queries index query-ids query]
   "Takes a changed query, performs some cleanup on it, and swaps it into
