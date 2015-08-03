@@ -63,7 +63,8 @@
 
   :profiles {:dev     {:dependencies [[figwheel "0.3.7"]
                                       [com.cemerick/piggieback "0.2.1"]
-                                      [org.clojure/tools.nrepl "0.2.10"]]
+                                      [org.clojure/tools.nrepl "0.2.10"]
+                                      [leiningen "2.5.1"]]
 
                        :repl-options {:init-ns          cglossa.server
                                       :nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}

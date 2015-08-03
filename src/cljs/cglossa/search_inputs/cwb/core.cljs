@@ -2,6 +2,7 @@
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [goog.dom :as dom]
+            [cglossa.react-adapters.bootstrap :refer [button input]]
             [cglossa.search-inputs.cwb.shared :refer [headword-search-checkbox
                                                       on-key-down search!
                                                       remove-row-btn]]
@@ -132,15 +133,19 @@
      [:div.table-row {:style {:margin-bottom 10}}
       [:div.table-cell.remove-row-btn-container
        [remove-row-btn show-remove-row-btn? wrapped-query]]
-      [:div.form-group.table-cell
-       [:input.form-control.col-md-12 {:style       {:width 500}
-                                       :type        "text"
-                                       :value       displayed-query
-                                       :on-change   #(on-text-changed % wrapped-query phonetic?)
-                                       :on-key-down #(on-key-down % wrapped-query corpus)}]]]
+      [input {:style            {:width 500}
+              :class-name       "col-md-12"
+              :group-class-name "table-cell"
+              :type             "text"
+              :value            displayed-query
+              :on-change        #(on-text-changed % wrapped-query phonetic?)
+              :on-key-down      #(on-key-down % wrapped-query corpus)}]]
      (when show-checkboxes?
        [:div.table-row
         [:div.table-cell]
+        ;; ReactBootstrap doesn't seem to allow several checkboxes within the same
+        ;; div.checkbox, since each [input {:type "checkbox"}] generates its own div.checkbox
+        ;; wrapper (or is it possible somehow?), so we create the markup manually instead.
         [:div.checkbox {:style {:display "table-cell"}}
          (when (:has-phonetic corpus)
            [:label {:style {:margin-top 7}}

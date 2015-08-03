@@ -10,6 +10,7 @@
 ;; (:require [cglossa.react-adapters.bootstrap :refer [button modal label])
 (adapt! "Button"
         "ButtonToolbar"
+        "Input"
         "Label"
         "Modal"
         "ModalBody"
