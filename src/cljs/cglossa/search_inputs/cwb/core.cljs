@@ -106,15 +106,16 @@
 ;;;;;;;;;;;;;
 
 (defn- search-button [a m margin-left]
-  [:button.btn.btn-success {:style    {:marginLeft margin-left}
-                            :on-click #(search! a m)} "Search"])
+  [button {:bs-style "success"
+           :style    {:marginLeft margin-left}
+           :on-click #(search! a m)} "Search"])
 
 (defn- add-language-button []
-  [:button.btn {:style {:marginLeft 20} :on-click #()} "Add language"])
+  [button {:style {:marginLeft 20} :on-click #()} "Add language"])
 
 (defn- add-phrase-button [view]
-  [:button.btn.btn-default {:style    {:margin-top (if (= view extended) -15 0)}
-                            :on-click #()} "Or..."])
+  [button {:style    {:margin-top (if (= view extended) -15 0)}
+           :on-click #()} "Or..."])
 
 (defn- language-select [languages selected-language]
   [:select {:value selected-language}
