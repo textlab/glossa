@@ -1,9 +1,11 @@
 (ns cglossa.start
-  (:require [cglossa.search-inputs.core :refer [search-interface-for-corpus]]))
+  (:require [cglossa.search-inputs.core :refer [search-interface-for-corpus]]
+            [cglossa.react-adapters.bootstrap :refer [button buttontoolbar]]))
 
 (defn- top []
-  [:div.row>div.col-md-3.top-toolbar
-   [:button#new-search-button.btn.btn-xs.btn-primary {:title "Reset form"} "Reset form"]])
+  [:div.row>div.col-md-3
+   [buttontoolbar {:style {:margin-bottom 20}}
+    [button {:bs-style "primary" :bs-size "xsmall" :title "Reset form"} "Reset form"]]])
 
 (defn- corpus-info [_ {:keys [corpus]}]
   ;; Remove the background image (gradient, really) set by bootstrap-theme,

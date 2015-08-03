@@ -9,6 +9,7 @@
 ;; js/ReactBootstrap.Button, so they should be referred like this in other namespaces:
 ;; (:require [cglossa.react-adapters.bootstrap :refer [button modal label])
 (adapt! "Button"
+        "ButtonToolbar"
         "Label"
         "Modal"
         "ModalBody"
