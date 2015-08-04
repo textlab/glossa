@@ -48,14 +48,14 @@
 
 (defn remove-row-btn [show? wrapped-query]
   [b/button {:bs-style "danger"
-           :bs-size  "xsmall"
-           :title    "Remove row"
-           :on-click #(reset! wrapped-query nil)
-           :style    {:margin-right 5
-                      :padding-top  3
-                      :visibility   (if show?
-                                      "visible"
-                                      "hidden")}}
+             :bs-size  "xsmall"
+             :title    "Remove row"
+             :on-click #(reset! wrapped-query nil)
+             :style    {:margin-right 5
+                        :padding-top  3
+                        :visibility   (if show?
+                                        "visible"
+                                        "hidden")}}
    [b/glyphicon {:glyph "remove"}]])
 
 (defn- on-headword-search-changed [event wrapped-query]

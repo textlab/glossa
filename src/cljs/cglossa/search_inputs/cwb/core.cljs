@@ -110,15 +110,15 @@
 
 (defn- search-button [a m margin-left]
   [b/button {:bs-style "success"
-           :style    {:marginLeft margin-left}
-           :on-click #(search! a m)} "Search"])
+             :style    {:marginLeft margin-left}
+             :on-click #(search! a m)} "Search"])
 
 (defn- add-language-button []
   [b/button {:style {:marginLeft 20} :on-click #()} "Add language"])
 
 (defn- add-phrase-button [view]
   [b/button {:style    {:margin-top (if (= view extended) -15 0)}
-           :on-click #()} "Or..."])
+             :on-click #()} "Or..."])
 
 (defn- language-select [languages selected-language]
   [:select {:value selected-language}
@@ -136,12 +136,12 @@
       [:div.table-cell.remove-row-btn-container
        [remove-row-btn show-remove-row-btn? wrapped-query]]
       [b/input {:style            {:width 500}
-              :class-name       "col-md-12"
-              :group-class-name "table-cell"
-              :type             "text"
-              :value            displayed-query
-              :on-change        #(on-text-changed % wrapped-query phonetic?)
-              :on-key-down      #(on-key-down % wrapped-query corpus)}]]
+                :class-name       "col-md-12"
+                :group-class-name "table-cell"
+                :type             "text"
+                :value            displayed-query
+                :on-change        #(on-text-changed % wrapped-query phonetic?)
+                :on-key-down      #(on-key-down % wrapped-query corpus)}]]
      (when show-checkboxes?
        [:div.table-row
         [:div.table-cell]
