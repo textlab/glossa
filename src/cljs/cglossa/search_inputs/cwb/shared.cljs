@@ -3,7 +3,7 @@
   (:require [clojure.string :as str]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
-            [cglossa.react-adapters.bootstrap :refer [button glyphicon]]))
+            [cglossa.react-adapters.bootstrap :as b]))
 
 (defn- cleanup-result [result]
   (-> result
@@ -47,7 +47,7 @@
     (search! wrapped-query corpus)))
 
 (defn remove-row-btn [show? wrapped-query]
-  [button {:bs-style "danger"
+  [b/button {:bs-style "danger"
            :bs-size  "xsmall"
            :title    "Remove row"
            :on-click #(reset! wrapped-query nil)
@@ -56,7 +56,7 @@
                       :visibility   (if show?
                                       "visible"
                                       "hidden")}}
-   [glyphicon {:glyph "remove"}]])
+   [b/glyphicon {:glyph "remove"}]])
 
 (defn- on-headword-search-changed [event wrapped-query]
   (swap! wrapped-query assoc :headword-search (.-target.checked event)))

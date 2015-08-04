@@ -1,21 +1,20 @@
 (ns cglossa.results
   (:require [cglossa.search-inputs.core :refer [search-interface-for-corpus]]
             cljsjs.react-bootstrap
-            [cglossa.react-adapters.bootstrap :refer [button modal modalheader modaltitle
-                                                      modalbody modalfooter]]
+            [cglossa.react-adapters.bootstrap :as b]
             [reagent.core :as r]))
 
 (defn- top []
   [:div.col-md-9 "No matches found"])
 
 (defn- freq-modal [{:keys [showing-freqs?] :as a} m]
-  [modal {:show @showing-freqs?
+  [b/modal {:show @showing-freqs?
           :on-hide #(.log js/console "lukker")}
-   [modalheader {:close-button true}
-    [modaltitle "Frequencies"]]
-   [modalbody "Some text will be here"]
-   [modalfooter
-    [button "Close"]]])
+   [b/modalheader {:close-button true}
+    [b/modaltitle "Frequencies"]]
+   [b/modalbody "Some text will be here"]
+   [b/modalfooter
+    [b/button "Close"]]])
 
 (defn results [a {:keys [corpus] :as m}]
   (let [search-interface (search-interface-for-corpus corpus)]

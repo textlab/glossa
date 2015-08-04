@@ -2,7 +2,7 @@
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [goog.dom :as dom]
-            [cglossa.react-adapters.bootstrap :refer [button input]]
+            [cglossa.react-adapters.bootstrap :as b]
             [cglossa.search-inputs.cwb.shared :refer [headword-search-checkbox
                                                       on-key-down search!
                                                       remove-row-btn]]
@@ -109,15 +109,15 @@
 ;;;;;;;;;;;;;
 
 (defn- search-button [a m margin-left]
-  [button {:bs-style "success"
+  [b/button {:bs-style "success"
            :style    {:marginLeft margin-left}
            :on-click #(search! a m)} "Search"])
 
 (defn- add-language-button []
-  [button {:style {:marginLeft 20} :on-click #()} "Add language"])
+  [b/button {:style {:marginLeft 20} :on-click #()} "Add language"])
 
 (defn- add-phrase-button [view]
-  [button {:style    {:margin-top (if (= view extended) -15 0)}
+  [b/button {:style    {:margin-top (if (= view extended) -15 0)}
            :on-click #()} "Or..."])
 
 (defn- language-select [languages selected-language]
@@ -135,7 +135,7 @@
      [:div.table-row {:style {:margin-bottom 10}}
       [:div.table-cell.remove-row-btn-container
        [remove-row-btn show-remove-row-btn? wrapped-query]]
-      [input {:style            {:width 500}
+      [b/input {:style            {:width 500}
               :class-name       "col-md-12"
               :group-class-name "table-cell"
               :type             "text"
