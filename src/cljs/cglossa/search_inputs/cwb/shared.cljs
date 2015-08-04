@@ -2,7 +2,8 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [clojure.string :as str]
             [cljs-http.client :as http]
-            [cljs.core.async :refer [<!]]))
+            [cljs.core.async :refer [<!]]
+            [cglossa.react-adapters.bootstrap :refer [button glyphicon]]))
 
 (defn- cleanup-result [result]
   (-> result
@@ -46,15 +47,16 @@
     (search! wrapped-query corpus)))
 
 (defn remove-row-btn [show? wrapped-query]
-  [:button.btn.btn-danger.btn-xs {:type     "button"
-                                  :title    "Remove row"
-                                  :on-click #(reset! wrapped-query nil)
-                                  :style    {:margin-right 5
-                                             :padding-top  3
-                                             :visibility   (if show?
-                                                             "visible"
-                                                             "hidden")}}
-   [:span.glyphicon.glyphicon-remove]])
+  [button {:bs-style "danger"
+           :bs-size  "xsmall"
+           :title    "Remove row"
+           :on-click #(reset! wrapped-query nil)
+           :style    {:margin-right 5
+                      :padding-top  3
+                      :visibility   (if show?
+                                      "visible"
+                                      "hidden")}}
+   [glyphicon {:glyph "remove"}]])
 
 (defn- on-headword-search-changed [event wrapped-query]
   (swap! wrapped-query assoc :headword-search (.-target.checked event)))
