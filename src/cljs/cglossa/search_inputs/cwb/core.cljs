@@ -110,7 +110,7 @@
 
 (defn- search-button [a m margin-left]
   [b/button {:bs-style "success"
-             :style    {:marginLeft margin-left}
+             :style    {:margin-left margin-left}
              :on-click #(search! a m)} "Search"])
 
 (defn- add-language-button []
@@ -233,7 +233,7 @@
                     :title    "CQP expressions"
                     :on-click #(set-view :cqp %)}
                 "CQP query"])
-             [search-button a m (if (= @search-view :extended) 75 233)]
+             [search-button a m (if (= @search-view :extended) 72 233)]
              (when multilingual? [add-language-button])]
 
             ; Now create a cursor into the search-queries ratom for each search expression
