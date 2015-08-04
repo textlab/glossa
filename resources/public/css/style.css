@@ -77,11 +77,6 @@ div.interval {
   .multiword-search-form .multiword-term .control-group div.word {
     display: table-cell;
     vertical-align: bottom; }
-  .multiword-search-form .multiword-term .control-group div.add-search-word {
-    display: table-cell;
-    vertical-align: bottom;
-    padding-left: 20px;
-    padding-bottom: 2px; }
   .multiword-search-form .multiword-term .control-group div.word-checkboxes {
     margin-top: 5px; }
 .multiword-search-form button.search {
@@ -100,6 +95,7 @@ div.interval {
     margin-top: 0; }
 
 .remove-row-btn-container {
+  width: 40px;
   vertical-align: middle; }
 
 .row-fluid {

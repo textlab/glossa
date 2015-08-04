@@ -131,7 +131,7 @@
   [corpus wrapped-query displayed-query show-remove-row-btn? show-checkboxes? on-text-changed]
   (let [query     (:query @wrapped-query)
         phonetic? (not= -1 (.indexOf query "phon="))]
-    [:form.table-display {:style {:margin "10px 0px 15px -30px"}}
+    [:form.table-display {:style {:margin "10px 0px 15px -40px"}}
      [:div.table-row {:style {:margin-bottom 10}}
       [:div.table-cell.remove-row-btn-container
        [remove-row-btn show-remove-row-btn? wrapped-query]]

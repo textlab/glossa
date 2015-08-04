@@ -10,7 +10,7 @@
   (let [cls (if (empty? (:metadata-categories @corpus)) "span12" "span9")]
     [:div
      [header]
-     [:div.container-fluid {:style {:padding-left 45}}
+     [:div.container-fluid {:style {:padding-left 50}}
       [:div.row>div#main-content.col-md-12
        (if @showing-results?
          [results a m]

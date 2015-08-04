@@ -247,7 +247,7 @@
         (when (nil? @query-term-ids)
           (reset! query-term-ids (range (count terms))))
         [:div.multiword-container
-         [:form.form-inline.multiword-search-form {:style {:margin-left -30}}
+         [:form.form-inline.multiword-search-form {:style {:margin-left -40}}
           [:div.table-display
            [:div.table-row
             (map-indexed (fn [index term]

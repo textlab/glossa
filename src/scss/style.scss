@@ -104,13 +104,6 @@ div.interval {
         vertical-align: bottom;
       }
 
-      div.add-search-word {
-        display: table-cell;
-        vertical-align: bottom;
-        padding-left: 20px;
-        padding-bottom: 2px;
-      }
-
     div.word-checkboxes {
       margin-top: 5px;
     }
@@ -137,6 +130,7 @@ div.interval {
 }
 
 .remove-row-btn-container {
+  width: 40px;
   vertical-align: middle;
 }
 
