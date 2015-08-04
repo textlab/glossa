@@ -46,7 +46,7 @@
 
   :clean-targets ^{:protect false} ["resources/public/js/out"]
 
-  :cljsbuild {:builds {:app {:source-paths ["src/cljs" "target/classes"]
+  :cljsbuild {:builds {:app {:source-paths ["src/cljs"]
                              :compiler     {:output-to            "resources/public/js/out/app.js"
                                             :output-dir           "resources/public/js/out"
                                             :source-map           "resources/public/js/out/out.js.map"
