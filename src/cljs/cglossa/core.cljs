@@ -14,7 +14,7 @@
             :search-view      :simple
             :search-queries   [#_{:query "[word=\"han\" %c] []{1,2} [word=\"er\" %c]"}
                                {:query "[word=\"de\" %c] [word=\"sa\" %c]"}
-                               #_{:query "[word=\"hun\" %c] [word=\"vet\" %c]"}]})
+                               {:query "[word=\"hun\" %c] [word=\"vet\" %c]"}]})
 
 (def data {:corpus              nil
            :metadata-categories nil

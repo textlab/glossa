@@ -2,9 +2,10 @@
   "Implementation of search view component with text inputs, checkboxes
   and menus for easily building complex and grammatically specified queries."
   (:require [clojure.string :as str]
+            [reagent.core :as r]
             [cglossa.search-inputs.cwb.shared :refer [headword-search-checkbox
                                                       on-key-down remove-row-btn]]
-            [reagent.core :as r]))
+            [cglossa.react-adapters.bootstrap :as b]))
 
 (defn- combine-regexes [regexes]
   "Since there is no way to concatenate regexes directly, we convert
@@ -115,56 +116,74 @@
 (defn wrapped-term-changed [wrapped-query terms index query-term-ids term]
   (swap! wrapped-query assoc :query (construct-cqp-query (assoc terms index term) query-term-ids)))
 
-(defn- interval-input [wrapped-query wrapped-term index]
-  [:input.form-control.interval {:type        "text"
-                                 :value       (get-in @wrapped-term [:interval index])
-                                 :on-change   #(swap! wrapped-term
-                                                      assoc-in [:interval index] (.-target.value %))
-                                 :on-key-down #(on-key-down % wrapped-query)}])
+(defn- interval-input [wrapped-query wrapped-term corpus index]
+  [b/input {:type        "text"
+            :class-name  "interval"
+            :value       (get-in @wrapped-term [:interval index])
+            :on-change   #(swap! wrapped-term
+                                 assoc-in [:interval index] (.-target.value %))
+            :on-key-down #(on-key-down % wrapped-query corpus)}])
 
-(defn interval [wrapped-query wrapped-term]
+(defn interval [wrapped-query wrapped-term corpus]
   [:div.interval.table-cell
-   [interval-input wrapped-query wrapped-term 0] "min"
+   [interval-input wrapped-query wrapped-term corpus 0] "min"
    [:br]
-   [interval-input wrapped-query wrapped-term 1] "max"])
+   [interval-input wrapped-query wrapped-term corpus 1] "max"])
+
+(defn- menu-button []
+  [b/dropdownbutton
+   [b/menuitem "Hei"]])
+
+(defn- remove-term-button [wrapped-term]
+  [b/button {:on-click #(reset! wrapped-term nil)}
+   [b/glyphicon {:glyph "minus"}]])
 
 (defn multiword-term [wrapped-query wrapped-term query-term-ids
-                      first? last? has-phonetic?
-                      show-remove-row-btn? show-remove-term-btn?]
+                      first? last? has-phonetic? show-remove-row-btn?
+                      show-remove-term-btn? corpus]
   (let [term-val @wrapped-term]
     [:div.table-cell>div.multiword-term>div.control-group
-     [:div.dropdown.table-row
+     [:div.table-row
       (when first?
         [:div.table-cell.remove-row-btn-container
          [remove-row-btn show-remove-row-btn? wrapped-query]])
-      [:div.table-cell>div.input-group
-       [:span.input-group-addon.dropdown-toggle {:data-toggle "dropdown"
-                                                 :style       {:cursor "pointer"}}
-        [:span.glyphicon.glyphicon-menu-hamburger]]
-       [:input.form-control.multiword-field
-        {:ref           "searchfield"
-         :type          "text"
-         :default-value (str/replace (:form term-val) #"^\.\*$" "")
-         :on-change     #(swap! wrapped-term assoc :form (.-target.value %))
-         :on-key-down   #(on-key-down % wrapped-query)}]
-       (when show-remove-term-btn?
-         [:span.input-group-addon {:title    " Remove word "
-                                   :style    {:cursor "pointer"}
-                                   :on-click #(reset! wrapped-term nil)}
-          [:span.glyphicon.glyphicon-minus]])
-       (when last?
-         [:div.add-search-word
-          [:button.btn.btn-info.btn-sm {:type     "button"
-                                        :title    "Add search word"
-                                        :on-click (fn []
-                                                    ; Append greatest-current-id-plus-one to the
-                                                    ; query-term-ids vector
-                                                    (swap! query-term-ids
-                                                           #(conj % (inc (max %))))
-                                                    ; Append [] to the CQP query expression
-                                                    (swap! wrapped-query
-                                                           update :query str " []"))}
-           [:span.glyphicon.glyphicon-plus]]])]]
+      [:div.table-cell
+       [b/input {:type          "text"
+                 :class-name    "multiword-field"
+                 :button-before (r/as-element (menu-button))
+                 :button-after  (when show-remove-term-btn?
+                                  (r/as-element (remove-term-button wrapped-term)))
+                 :default-value (str/replace (:form term-val) #"^\.\*$" "")
+                 :on-change     #(swap! wrapped-term assoc :form (.-target.value %))
+                 :on-key-down   #(on-key-down % wrapped-query corpus)}]]
+      #_[:div.table-cell>div.input-group
+         [:span.input-group-addon.dropdown-toggle {:data-toggle "dropdown"
+                                                   :style       {:cursor "pointer"}}
+          [:span.glyphicon.glyphicon-menu-hamburger]]
+         [:input.form-control.multiword-field
+          {:ref           "searchfield"
+           :type          "text"
+           :default-value (str/replace (:form term-val) #"^\.\*$" "")
+           :on-change     #(swap! wrapped-term assoc :form (.-target.value %))
+           :on-key-down   #(on-key-down % wrapped-query corpus)}]
+         (when show-remove-term-btn?
+           [:span.input-group-addon {:title    " Remove word "
+                                     :style    {:cursor "pointer"}
+                                     :on-click #(reset! wrapped-term nil)}
+            [:span.glyphicon.glyphicon-minus]])
+         (when last?
+           [:div.add-search-word
+            [:button.btn.btn-info.btn-sm {:type     "button"
+                                          :title    "Add search word"
+                                          :on-click (fn []
+                                                      ; Append greatest-current-id-plus-one to the
+                                                      ; query-term-ids vector
+                                                      (swap! query-term-ids
+                                                             #(conj % (inc (max %))))
+                                                      ; Append [] to the CQP query expression
+                                                      (swap! wrapped-query
+                                                             update :query str " []"))}
+             [:span.glyphicon.glyphicon-plus]]])]]
      [:div.table-row
       (when first?
         [:div.table-cell])
@@ -233,9 +252,9 @@
            [:div.table-row
             (map-indexed (fn [index term]
                            (let [wrapped-term          (r/wrap term
-                                                                     wrapped-term-changed
-                                                                     wrapped-query terms index
-                                                                     query-term-ids)
+                                                               wrapped-term-changed
+                                                               wrapped-query terms index
+                                                               query-term-ids)
                                  term-id               (nth @query-term-ids index)
                                  first?                (zero? index)
                                  last?                 (= index last-term-index)
@@ -244,11 +263,11 @@
                                  has-phonetic?         (:has-phonetic corpus)]
                              (list (when-not first?
                                      ^{:key (str "interval" term-id)}
-                                     [interval wrapped-query wrapped-term])
+                                     [interval wrapped-query wrapped-term corpus])
                                    ^{:key (str "term" term-id)}
                                    [multiword-term wrapped-query wrapped-term query-term-ids
                                     first? last? has-phonetic? show-remove-row-btn?
-                                    show-remove-term-btn?])))
+                                    show-remove-term-btn? corpus])))
                          terms)]
            (when (:has-headword-search corpus)
              [headword-search-checkbox wrapped-query 2])]]]))))
