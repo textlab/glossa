@@ -18,7 +18,7 @@
       (str/replace #"(</s_id>)\}\}" "}}$1")))
 
 (defn- search! [{:keys [search-queries]} {:keys [corpus search-results]}]
-  (let [queries    @search-queries
+  (let [queries     @search-queries
         first-query (:query (first queries))]
     (when (and first-query
                (not= first-query "\"\""))
