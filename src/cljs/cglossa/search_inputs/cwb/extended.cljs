@@ -116,6 +116,41 @@
 (defn wrapped-term-changed [wrapped-query terms index query-term-ids term]
   (swap! wrapped-query assoc :query (construct-cqp-query (assoc terms index term) query-term-ids)))
 
+;;;;;;;;;;;;;;;;
+;;;; Components
+;;;;;;;;;;;;;;;;
+
+(defn- menu-button []
+  [b/dropdownbutton
+   [b/menuitem "Hei"]])
+
+(defn- text-input [wrapped-term wrapped-query show-remove-term-btn? corpus]
+  [:div.table-cell
+   [b/input {:type          "text"
+             :class-name    "multiword-field"
+             :button-before (r/as-element (menu-button))
+             :button-after  (when show-remove-term-btn?
+                              (r/as-element [b/button {:on-click #(reset! wrapped-term nil)}
+                                             [b/glyphicon {:glyph "minus"}]]))
+             :default-value (str/replace (:form @wrapped-term) #"^\.\*$" "")
+             :on-change     #(swap! wrapped-term assoc :form (.-target.value %))
+             :on-key-down   #(on-key-down % wrapped-query corpus)}]])
+
+(defn- add-term-btn [wrapped-query query-term-ids]
+  [:div.table-cell {:style {:vertical-align "bottom" :padding-left 14 :padding-bottom 5}}
+   [b/button {:bs-style "info"
+              :bs-size  "xsmall"
+              :title    "Add search word"
+              :on-click (fn []
+                          ; Append greatest-current-id-plus-one to the
+                          ; query-term-ids vector
+                          (swap! query-term-ids
+                                 #(conj % (inc (max %))))
+                          ; Append [] to the CQP query expression
+                          (swap! wrapped-query
+                                 update :query str " []"))}
+    [b/glyphicon {:glyph "plus"}]]])
+
 (defn- interval-input [wrapped-query wrapped-term corpus index]
   [b/input {:type        "text"
             :class-name  "interval"
@@ -130,93 +165,62 @@
    [:br]
    [interval-input wrapped-query wrapped-term corpus 1] "max"])
 
-(defn- menu-button []
-  [b/dropdownbutton
-   [b/menuitem "Hei"]])
+(defn- checkboxes [wrapped-term has-phonetic?]
+  (let [term-val @wrapped-term]
+    [:div.table-cell
+     [:div.word-checkboxes
+      [:label.checkbox-inline
+       [:input {:type      "checkbox"
+                :checked   (:lemma? term-val)
+                :on-change #(swap! wrapped-term assoc :lemma? (.-target.checked %))
+                }] "Lemma"]
+      [:label.checkbox-inline
+       [:input {:type      "checkbox"
+                :title     "Start of word"
+                :checked   (:start? term-val)
+                :on-change #(swap! wrapped-term assoc :start? (.-target.checked %))
+                }] "Start"]
+      [:label.checkbox-inline
+       [:input {:type      "checkbox"
+                :title     "End of word"
+                :checked   (:end? term-val)
+                :on-change #(swap! wrapped-term assoc :end? (.-target.checked %))
+                }] "End"]]
+     (when has-phonetic?
+       [:div>label.checkbox-inline
+        [:input {:type      "checkbox"
+                 :checked   (:phonetic? term-val)
+                 :on-change #(swap! wrapped-term assoc :phonetic? (.-target.checked %))
+                 }] "Phonetic form"])]))
 
-(defn- remove-term-button [wrapped-term]
-  [b/button {:on-click #(reset! wrapped-term nil)}
-   [b/glyphicon {:glyph "minus"}]])
+(defn- taglist []
+  [:div.tag-list.table-cell {:ref "taglist"}
+   [:div.tags]])
 
 (defn multiword-term [wrapped-query wrapped-term query-term-ids
                       first? last? has-phonetic? show-remove-row-btn?
                       show-remove-term-btn? corpus]
-  (let [term-val @wrapped-term]
-    [:div.table-cell>div.multiword-term>div.control-group
-     [:div.table-row
-      (when first?
-        [:div.table-cell.remove-row-btn-container
-         [remove-row-btn show-remove-row-btn? wrapped-query]])
-      [:div.table-cell
-       [b/input {:type          "text"
-                 :class-name    "multiword-field"
-                 :button-before (r/as-element (menu-button))
-                 :button-after  (when show-remove-term-btn?
-                                  (r/as-element (remove-term-button wrapped-term)))
-                 :default-value (str/replace (:form term-val) #"^\.\*$" "")
-                 :on-change     #(swap! wrapped-term assoc :form (.-target.value %))
-                 :on-key-down   #(on-key-down % wrapped-query corpus)}]]
-      #_[:div.table-cell>div.input-group
-         [:span.input-group-addon.dropdown-toggle {:data-toggle "dropdown"
-                                                   :style       {:cursor "pointer"}}
-          [:span.glyphicon.glyphicon-menu-hamburger]]
-         [:input.form-control.multiword-field
-          {:ref           "searchfield"
-           :type          "text"
-           :default-value (str/replace (:form term-val) #"^\.\*$" "")
-           :on-change     #(swap! wrapped-term assoc :form (.-target.value %))
-           :on-key-down   #(on-key-down % wrapped-query corpus)}]
-         (when show-remove-term-btn?
-           [:span.input-group-addon {:title    " Remove word "
-                                     :style    {:cursor "pointer"}
-                                     :on-click #(reset! wrapped-term nil)}
-            [:span.glyphicon.glyphicon-minus]])
-         (when last?
-           [:div.add-search-word
-            [:button.btn.btn-info.btn-sm {:type     "button"
-                                          :title    "Add search word"
-                                          :on-click (fn []
-                                                      ; Append greatest-current-id-plus-one to the
-                                                      ; query-term-ids vector
-                                                      (swap! query-term-ids
-                                                             #(conj % (inc (max %))))
-                                                      ; Append [] to the CQP query expression
-                                                      (swap! wrapped-query
-                                                             update :query str " []"))}
-             [:span.glyphicon.glyphicon-plus]]])]]
-     [:div.table-row
-      (when first?
-        [:div.table-cell])
-      [:div.table-cell
-       [:div.word-checkboxes
-        [:label.checkbox-inline
-         [:input {:type      "checkbox"
-                  :checked   (:lemma? term-val)
-                  :on-change #(swap! wrapped-term assoc :lemma? (.-target.checked %))
-                  }] "Lemma"]
-        [:label.checkbox-inline
-         [:input {:type      "checkbox"
-                  :title     "Start of word"
-                  :checked   (:start? term-val)
-                  :on-change #(swap! wrapped-term assoc :start? (.-target.checked %))
-                  }] "Start"]
-        [:label.checkbox-inline
-         [:input {:type      "checkbox"
-                  :title     "End of word"
-                  :checked   (:end? term-val)
-                  :on-change #(swap! wrapped-term assoc :end? (.-target.checked %))
-                  }] "End"]]
-       (when has-phonetic?
-         [:div>label.checkbox-inline
-          [:input {:type      "checkbox"
-                   :checked   (:phonetic? term-val)
-                   :on-change #(swap! wrapped-term assoc :phonetic? (.-target.checked %))
-                   }] "Phonetic form"])]]
-     [:div.table-row
-      (when first?
-        [:div.table-cell])
-      [:div.tag-list.table-cell {:ref "taglist"}
-       [:div.tags]]]]))
+  [:div.table-cell>div.multiword-term>div.control-group
+   [:div.table-row
+    (when first?
+      [remove-row-btn show-remove-row-btn? wrapped-query])
+    [text-input wrapped-term wrapped-query show-remove-term-btn? corpus]
+    (when last?
+      [add-term-btn wrapped-query query-term-ids])]
+
+   [:div.table-row
+    (when first?
+      [:div.table-cell])
+    [checkboxes wrapped-term has-phonetic?]
+    (when last?
+      [:div.table-cell])]
+
+   [:div.table-row
+    (when first?
+      [:div.table-cell])
+    [taglist]
+    (when last?
+      [:div.table-cell])]])
 
 (defn extended
   "Search view component with text inputs, checkboxes and menus

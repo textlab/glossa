@@ -133,8 +133,7 @@
         phonetic? (not= -1 (.indexOf query "phon="))]
     [:form.table-display {:style {:margin "10px 0px 15px -40px"}}
      [:div.table-row {:style {:margin-bottom 10}}
-      [:div.table-cell.remove-row-btn-container
-       [remove-row-btn show-remove-row-btn? wrapped-query]]
+      [remove-row-btn show-remove-row-btn? wrapped-query]
       [b/input {:style            {:width 500}
                 :class-name       "col-md-12"
                 :group-class-name "table-cell"
