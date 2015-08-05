@@ -222,6 +222,7 @@
     (when last?
       [:div.table-cell])]])
 
+
 (defn extended
   "Search view component with text inputs, checkboxes and menus
   for easily building complex and grammatically specified queries."
