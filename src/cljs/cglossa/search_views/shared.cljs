@@ -1,5 +1,5 @@
-(ns cglossa.search-inputs.core
-  (:require [cglossa.search-inputs.cwb.core :as cwb]))
+(ns cglossa.search-views.shared
+  (:require [cglossa.search-views.cwb.core :as cwb]))
 
 ; Maps search engine to search interface component. Looks like we need this
 ; since CLJS doesn't support ns-resolve.

@@ -1,9 +1,9 @@
-(ns cglossa.search-inputs.cwb.extended
+(ns cglossa.search-views.cwb.extended
   "Implementation of search view component with text inputs, checkboxes
   and menus for easily building complex and grammatically specified queries."
   (:require [clojure.string :as str]
             [reagent.core :as r]
-            [cglossa.search-inputs.cwb.shared :refer [headword-search-checkbox
+            [cglossa.search-views.cwb.shared :refer [headword-search-checkbox
                                                       on-key-down remove-row-btn]]
             [cglossa.react-adapters.bootstrap :as b]))
 

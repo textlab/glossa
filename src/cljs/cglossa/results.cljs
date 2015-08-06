@@ -1,5 +1,5 @@
 (ns cglossa.results
-  (:require [cglossa.search-inputs.core :refer [search-interface-for-corpus]]
+  (:require [cglossa.search-views.shared :refer [search-interface-for-corpus]]
             cljsjs.react-bootstrap
             [cglossa.react-adapters.bootstrap :as b]
             [reagent.core :as r]))

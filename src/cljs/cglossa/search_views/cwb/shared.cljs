@@ -1,4 +1,4 @@
-(ns cglossa.search-inputs.cwb.shared
+(ns cglossa.search-views.cwb.shared
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [clojure.string :as str]
             [cljs-http.client :as http]

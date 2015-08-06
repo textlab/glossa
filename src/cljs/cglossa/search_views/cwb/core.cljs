@@ -1,12 +1,12 @@
-(ns cglossa.search-inputs.cwb.core
+(ns cglossa.search-views.cwb.core
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [goog.dom :as dom]
             [cglossa.react-adapters.bootstrap :as b]
-            [cglossa.search-inputs.cwb.shared :refer [headword-search-checkbox
+            [cglossa.search-views.cwb.shared :refer [headword-search-checkbox
                                                       on-key-down search!
                                                       remove-row-btn]]
-            [cglossa.search-inputs.cwb.extended :refer [extended]]))
+            [cglossa.search-views.cwb.extended :refer [extended]]))
 
 (def ^:private headword-query-prefix "<headword>")
 (def ^:private headword-query-suffix-more-words "[]{0,}")

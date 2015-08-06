@@ -1,5 +1,5 @@
 (ns cglossa.start
-  (:require [cglossa.search-inputs.core :refer [search-interface-for-corpus]]
+  (:require [cglossa.search-views.shared :refer [search-interface-for-corpus]]
             [cglossa.react-adapters.bootstrap :as b]))
 
 (defn- top []
