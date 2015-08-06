@@ -30,8 +30,7 @@
                               (update query :query
                                       str/replace #"\bphon=\"([^0-9\"]+)\"" "phon=\"$1[1-4]?\""))
                             ;; For other languages, leave the queries unmodified
-                            queries)
-            search-engine (:search-engine corpus "cwb")]
+                            queries)]
         (go (let [{:keys [status success] :as response}
                   (<! (http/post "/search"
                                  {:json-params {:corpus-id (:rid @corpus)
