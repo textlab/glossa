@@ -129,7 +129,8 @@
 (defn- single-input-view
   "HTML that is shared by the search views that only show a single text input,
   i.e., the simple and CQP views."
-  [corpus wrapped-query displayed-query show-remove-row-btn? show-checkboxes? on-text-changed]
+  [a {:keys [corpus] :as m} wrapped-query displayed-query
+   show-remove-row-btn? show-checkboxes? on-text-changed]
   (let [query     (:query @wrapped-query)
         phonetic? (not= -1 (.indexOf query "phon="))]
     [:form.table-display {:style {:margin "10px 0px 15px -40px"}}
@@ -141,7 +142,7 @@
                 :type             "text"
                 :value            displayed-query
                 :on-change        #(on-text-changed % wrapped-query phonetic?)
-                :on-key-down      #(on-key-down % wrapped-query corpus)}]]
+                :on-key-down      #(on-key-down % a m)}]]
      (when show-checkboxes?
        (list ^{:key 1}
              [:div.table-row
@@ -167,7 +168,7 @@
 
 (defn- simple
   "Simple search view component"
-  [corpus wrapped-query show-remove-row-btn?]
+  [a m wrapped-query show-remove-row-btn?]
   (let [query           (:query @wrapped-query)
         displayed-query (-> query
                             (->non-headword-query)
@@ -179,20 +180,20 @@
                           (let [value (.-target.value event)
                                 query (if (= value "") "" (phrase->cqp value phonetic?))]
                             (swap! wrapped-query assoc :query query)))]
-    [single-input-view corpus wrapped-query displayed-query show-remove-row-btn?
+    [single-input-view a m wrapped-query displayed-query show-remove-row-btn?
      true on-text-changed]))
 
 
 (defn- cqp
   "CQP query view component"
-  [corpus wrapped-query show-remove-row-btn?]
+  [a m wrapped-query show-remove-row-btn?]
   (let [displayed-query (:query @wrapped-query)
         on-text-changed (fn [event wrapped-query _]
                           (let [value      (.-target.value event)
                                 query      (->non-headword-query value)
                                 hw-search? (= (->headword-query query) value)]
                             (swap! wrapped-query assoc :query query :headword-search hw-search?)))]
-    [single-input-view corpus wrapped-query displayed-query show-remove-row-btn?
+    [single-input-view a m wrapped-query displayed-query show-remove-row-btn?
      false on-text-changed]))
 
 (defmethod search-inputs :cwb [_ _]
@@ -279,5 +280,5 @@
                           [:div.col-md-12
                            (when multilingual?
                              [language-select languages selected-language])
-                           [view @corpus wrapped-query show-remove-row-btn?]]]))))
+                           [view a m wrapped-query show-remove-row-btn?]]]))))
             (when-not multilingual? [add-phrase-button view])]))})))

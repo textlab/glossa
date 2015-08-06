@@ -41,10 +41,10 @@
                   (reset! search-results (map cleanup-result results)))
                 (.log js/console status))))))))
 
-(defn on-key-down [event wrapped-query corpus]
+(defn on-key-down [event a m]
   (when (= "Enter" (.-key event))
     (.preventDefault event)
-    (search! wrapped-query corpus)))
+    (search! a m)))
 
 (defn remove-row-btn [show? wrapped-query]
   [:div.table-cell.remove-row-btn-container

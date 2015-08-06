@@ -124,7 +124,7 @@
   [b/dropdownbutton
    [b/menuitem "Hei"]])
 
-(defn- text-input [wrapped-term wrapped-query show-remove-term-btn? corpus]
+(defn- text-input [a m wrapped-term show-remove-term-btn?]
   [:div.table-cell
    [b/input {:type          "text"
              :class-name    "multiword-field"
@@ -134,7 +134,7 @@
                                              [b/glyphicon {:glyph "minus"}]]))
              :default-value (str/replace (:form @wrapped-term) #"^\.\*$" "")
              :on-change     #(swap! wrapped-term assoc :form (.-target.value %))
-             :on-key-down   #(on-key-down % wrapped-query corpus)}]])
+             :on-key-down   #(on-key-down % a m)}]])
 
 (defn- add-term-btn [wrapped-query query-term-ids]
   [:div.table-cell {:style {:vertical-align "bottom" :padding-left 14 :padding-bottom 5}}
@@ -151,19 +151,19 @@
                                  update :query str " []"))}
     [b/glyphicon {:glyph "plus"}]]])
 
-(defn- interval-input [wrapped-query wrapped-term corpus index]
+(defn- interval-input [a m wrapped-term index]
   [b/input {:type        "text"
             :class-name  "interval"
             :value       (get-in @wrapped-term [:interval index])
             :on-change   #(swap! wrapped-term
                                  assoc-in [:interval index] (.-target.value %))
-            :on-key-down #(on-key-down % wrapped-query corpus)}])
+            :on-key-down #(on-key-down % a m)}])
 
-(defn interval [wrapped-query wrapped-term corpus]
+(defn interval [a m wrapped-term]
   [:div.interval.table-cell
-   [interval-input wrapped-query wrapped-term corpus 0] "min"
+   [interval-input a m wrapped-term 0] "min"
    [:br]
-   [interval-input wrapped-query wrapped-term corpus 1] "max"])
+   [interval-input a m wrapped-term 1] "max"])
 
 (defn- checkboxes [wrapped-term has-phonetic?]
   (let [term-val @wrapped-term]
@@ -197,14 +197,14 @@
   [:div.tag-list.table-cell {:ref "taglist"}
    [:div.tags]])
 
-(defn multiword-term [wrapped-query wrapped-term query-term-ids
+(defn multiword-term [a m wrapped-query wrapped-term query-term-ids
                       first? last? has-phonetic? show-remove-row-btn?
-                      show-remove-term-btn? corpus]
+                      show-remove-term-btn?]
   [:div.table-cell>div.multiword-term>div.control-group
    [:div.table-row
     (when first?
       [remove-row-btn show-remove-row-btn? wrapped-query])
-    [text-input wrapped-term wrapped-query show-remove-term-btn? corpus]
+    [text-input a m wrapped-term show-remove-term-btn?]
     (when last?
       [add-term-btn wrapped-query query-term-ids])]
 
@@ -226,7 +226,7 @@
 (defn extended
   "Search view component with text inputs, checkboxes and menus
   for easily building complex and grammatically specified queries."
-  [corpus wrapped-query show-remove-row-btn?]
+  [_ _ _ _]
   (let [;; This will hold a unique ID for each query term component. React wants a
         ;; unique key for each component in a sequence, such as the set of search inputs
         ;; in the multiword interface, and it will mess up the text in the search boxes
@@ -245,7 +245,7 @@
         ;; removed. This is the kind of ugly state manipulation that React normally saves
         ;; us from, but in cases like this it seems unavoidable...
         query-term-ids (atom nil)]
-    (fn [corpus wrapped-query show-remove-row-btn?]
+    (fn [a {:keys [corpus] :as m} wrapped-query show-remove-row-btn?]
       (let [parts           (split-query (:query @wrapped-query))
             terms           (construct-query-terms parts)
             last-term-index (dec (count terms))]
@@ -268,11 +268,11 @@
                                  has-phonetic?         (:has-phonetic corpus)]
                              (list (when-not first?
                                      ^{:key (str "interval" term-id)}
-                                     [interval wrapped-query wrapped-term corpus])
+                                     [interval a m wrapped-term corpus])
                                    ^{:key (str "term" term-id)}
-                                   [multiword-term wrapped-query wrapped-term query-term-ids
+                                   [multiword-term a m wrapped-query wrapped-term query-term-ids
                                     first? last? has-phonetic? show-remove-row-btn?
-                                    show-remove-term-btn? corpus])))
+                                    show-remove-term-btn?])))
                          terms)]
            (when (:has-headword-search corpus)
              [:div.table-row
