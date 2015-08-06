@@ -58,7 +58,7 @@
 
 (defroutes search-routes
   (POST "/search" [corpus-id queries]
-    (transit-response (search/search corpus-id queries)))
+    (transit-response (search/search corpus-id queries))))
 
 (def http-handler
   (let [r (routes #'db-routes #'search-routes #'app-routes)
