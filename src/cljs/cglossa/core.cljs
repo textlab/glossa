@@ -2,11 +2,9 @@
   (:require [reagent.core :as r]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
+            [cglossa.search-engines]                        ; just to pull in implementations
             [cglossa.app :refer [app]])
   (:require-macros [cljs.core.async.macros :refer [go]]))
-
-; avoid "not resolved" messages in Cursive
-(declare getElementById)
 
 (def state {:showing-sidebar? false
             :showing-results? false

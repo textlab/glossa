@@ -1,10 +1,8 @@
-(ns cglossa.search-views.shared
-  (:require [cglossa.search-views.cwb.core :as cwb]))
+(ns cglossa.search-views.shared)
 
-; Maps search engine to search interface component. Looks like we need this
-; since CLJS doesn't support ns-resolve.
-(def search-interfaces {:cwb cwb/search-inputs})
-
-(defn search-interface-for-corpus [corpus]
-  (let [search-engine (get @corpus :search-engine :cwb)]
-    (get search-interfaces search-engine)))
+(defmulti search-inputs
+  "Multimethod that accepts two arguments - an app state map and a
+  model/domain state map - and dispatches to the correct method based
+  on the value of :search-engine in the corpus map found in the
+  model/domain state map."
+  (fn [_ {corpus :corpus}] (:search-engine @corpus)))

@@ -3,6 +3,7 @@
             [reagent.core :as r]
             [goog.dom :as dom]
             [cglossa.react-adapters.bootstrap :as b]
+            [cglossa.search-views.shared :refer [search-inputs]]
             [cglossa.search-views.cwb.shared :refer [headword-search-checkbox
                                                      on-key-down search!
                                                      remove-row-btn]]
@@ -189,10 +190,9 @@
     [single-input-view corpus wrapped-query displayed-query show-remove-row-btn?
      false on-text-changed]))
 
-(defn search-inputs
+(defmethod search-inputs :cwb [_ _]
   "Component that lets the user select a search view (simple, extended
   or CQP query view) and displays it."
-  [{:keys [search-view search-queries] :as a} {:keys [corpus] :as m}]
   (let [query-ids (atom nil)]
     (r/create-class
       {:display-name

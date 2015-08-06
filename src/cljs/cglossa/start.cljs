@@ -1,5 +1,5 @@
 (ns cglossa.start
-  (:require [cglossa.search-views.shared :refer [search-interface-for-corpus]]
+  (:require [cglossa.search-views.shared :refer [search-inputs]]
             [cglossa.react-adapters.bootstrap :as b]))
 
 (defn- top []
@@ -17,9 +17,8 @@
      (when-let [logo (:logo @corpus)]
        [:img.corpus-logo {:src (str "img/" logo)}])]]])
 
-(defn start [a {:keys [corpus] :as m}]
-  (let [search-interface (search-interface-for-corpus corpus)]
-    [:div
-     [top]
-     [corpus-info a m]
-     [search-interface a m]]))
+(defn start [a m]
+  [:div
+   [top]
+   [corpus-info a m]
+   [search-inputs a m]])

@@ -1,5 +1,5 @@
 (ns cglossa.results
-  (:require [cglossa.search-views.shared :refer [search-interface-for-corpus]]
+  (:require [cglossa.search-views.shared :refer [search-inputs]]
             cljsjs.react-bootstrap
             [cglossa.react-adapters.bootstrap :as b]
             [reagent.core :as r]))
@@ -16,21 +16,20 @@
    [b/modalfooter
     [b/button "Close"]]])
 
-(defn results [a {:keys [corpus] :as m}]
-  (let [search-interface (search-interface-for-corpus corpus)]
-    [:div
-     [top]
-     [search-interface a m]
-     #_[results-toolbar]
-     #_[results-table]
-     [freq-modal a m]
-     #_[dialog {:data-frequency-dialog true :title "Frequencies"}
-        [:table.table.table-striped.table-condensed
-         [:thead
-          [:td "Form"]] [:td "Frequency"]
-         [:tbody
-          (frequency-list)]]]
-     #_[dialog {:data-distr-map   true
-                :extra-class-name "distr-map"
-                :title            "Geographical distribution of results"}
-        #_[geo-distribution-map-window {:data geo-distribution}]]]))
+(defn results [a m]
+  [:div
+   [top]
+   [search-inputs a m]
+   #_[results-toolbar]
+   #_[results-table]
+   [freq-modal a m]
+   #_[dialog {:data-frequency-dialog true :title "Frequencies"}
+      [:table.table.table-striped.table-condensed
+       [:thead
+        [:td "Form"]] [:td "Frequency"]
+       [:tbody
+        (frequency-list)]]]
+   #_[dialog {:data-distr-map   true
+              :extra-class-name "distr-map"
+              :title            "Geographical distribution of results"}
+      #_[geo-distribution-map-window {:data geo-distribution}]]])
