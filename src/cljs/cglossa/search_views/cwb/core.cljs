@@ -143,20 +143,25 @@
                 :on-change        #(on-text-changed % wrapped-query phonetic?)
                 :on-key-down      #(on-key-down % wrapped-query corpus)}]]
      (when show-checkboxes?
-       [:div.table-row
-        [:div.table-cell]
-        ;; ReactBootstrap doesn't seem to allow several checkboxes within the same
-        ;; div.checkbox, since each [input {:type "checkbox"}] generates its own div.checkbox
-        ;; wrapper (or is it possible somehow?), so we create the markup manually instead.
-        [:div.checkbox {:style {:display "table-cell"}}
-         (when (:has-phonetic corpus)
-           [:label {:style {:margin-top 7}}
-            [:input {:name      "phonetic"
-                     :type      "checkbox"
-                     :checked   phonetic?
-                     :on-change #(on-phonetic-changed % wrapped-query)}] " Phonetic form"])
-         (when (:has-headword-search corpus)
-           [headword-search-checkbox wrapped-query 20])]])]))
+       (list ^{:key 1}
+             [:div.table-row
+              [:div.table-cell]
+              ;; ReactBootstrap doesn't seem to allow several checkboxes within the same
+              ;; div.checkbox, since each [input {:type "checkbox"}] generates its own div.checkbox
+              ;; wrapper (or is it possible somehow?), so we create the markup manually instead.
+              [:div.checkbox {:style {:display "table-cell"}}
+               (when (:has-phonetic corpus)
+                 [:label {:style {:margin-top 7}}
+                  [:input {:name      "phonetic"
+                           :type      "checkbox"
+                           :checked   phonetic?
+                           :on-change #(on-phonetic-changed % wrapped-query)}] " Phonetic form"])]]
+             (when (:has-headword-search corpus)
+               ^{:key 2}
+               [:div.table-row
+                [:div.table-cell]
+                [:div.table-cell {:style {:padding-left 20}}
+                 [headword-search-checkbox wrapped-query]]])))]))
 
 ;;; The three different CWB interfaces: simple, extended and cqp
 

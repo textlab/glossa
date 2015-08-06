@@ -275,4 +275,6 @@
                                     show-remove-term-btn? corpus])))
                          terms)]
            (when (:has-headword-search corpus)
-             [headword-search-checkbox wrapped-query 2])]]]))))
+             [:div.table-row
+              [:div.table-cell {:style {:padding-left 40 :padding-top 10}}
+               [headword-search-checkbox wrapped-query]]])]]]))))

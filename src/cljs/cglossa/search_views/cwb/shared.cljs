@@ -59,11 +59,10 @@
                                          "hidden")}}
     [b/glyphicon {:glyph "remove"}]]])
 
-(defn headword-search-checkbox [wrapped-query margin-left]
-  [:label {:style {:margin-left margin-left}}
-   [:input {:type      "checkbox"
+(defn headword-search-checkbox [wrapped-query]
+  [b/input {:type      "checkbox"
             :value     "1"
             :checked   (:headword-search @wrapped-query)
             :on-change #(swap! wrapped-query assoc :headword-search (.-target.checked %))
             :id        "headword_search"
-            :name      "headword_search"} " Headword search"]])
+            :name      "headword_search"} " Headword search"])
