@@ -4,8 +4,8 @@
             [goog.dom :as dom]
             [cglossa.react-adapters.bootstrap :as b]
             [cglossa.search-views.cwb.shared :refer [headword-search-checkbox
-                                                      on-key-down search!
-                                                      remove-row-btn]]
+                                                     on-key-down search!
+                                                     remove-row-btn]]
             [cglossa.search-views.cwb.extended :refer [extended]]))
 
 (def ^:private headword-query-prefix "<headword>")
