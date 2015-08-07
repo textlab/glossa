@@ -19,16 +19,24 @@
        (str/join \|)
        re-pattern))
 
+;; An interval, e.g. []{1,2}
 (def interval-rx #"\[\]\{(.+?)\}")
+
+;; An attribute/value expression such as [lemma="car" %c] or [(lemma="car" & pos="n")].
 ;; Treat quoted strings separately; they may contain right brackets
 (def attribute-value-rx #"\[\(?([^\"]+?(?:\"[^\"]*\"[^\]\"]*?)*?)(?:\s+%c)?\)?\]")
+
+;; A quoted string or a single unspecified token
 (def quoted-or-empty-term-rx #"\".*?\"|\[\]")
+
 (def terms-rx (combine-regexes [interval-rx quoted-or-empty-term-rx attribute-value-rx]))
 
 (defn split-query [query]
-  (let [terms (re-seq terms-rx query)]
+  (let [terms (if (str/blank? query)
+                query
+                (re-seq terms-rx query))]
     (if (str/blank? terms)
-      ["[]"]
+      [["[]"]]
       terms)))
 
 (defn- process-attr [term attr]

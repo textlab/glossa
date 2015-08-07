@@ -9,7 +9,7 @@
                :bs-size  "xsmall"
                :title    "Reset form"
                :on-click (fn []
-                           (reset! search-queries [{:query "[]"}])
+                           (reset! search-queries [{:query ""}])
                            (swap! num-resets inc))}         ; see comments in the start component
      "Reset form"]]])
 

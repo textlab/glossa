@@ -176,7 +176,7 @@
                             (str/replace #"\[\(?\w+=\"(.*?)\"(?:\s+%c)?\)?\]" "$1")
                             (str/replace #"\"([^\s=]+)\"" "$1")
                             (str/replace #"\s*\[\]\s*" " .* ")
-                            (str/replace #"^\.\*$" ""))
+                            (str/replace #"^\s*\.\*\s*$" ""))
         on-text-changed (fn [event wrapped-query phonetic?]
                           (let [value (.-target.value event)
                                 query (if (= value "") "" (phrase->cqp value phonetic?))]
