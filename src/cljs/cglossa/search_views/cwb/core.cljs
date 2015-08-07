@@ -140,7 +140,7 @@
                 :class-name       "col-md-12"
                 :group-class-name "table-cell"
                 :type             "text"
-                :value            displayed-query
+                :default-value    displayed-query
                 :on-change        #(on-text-changed % wrapped-query phonetic?)
                 :on-key-down      #(on-key-down % a m)}]]
      (when show-checkboxes?
