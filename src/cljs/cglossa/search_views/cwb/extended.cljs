@@ -248,7 +248,8 @@
     (fn [a {:keys [corpus] :as m} wrapped-query show-remove-row-btn?]
       (let [parts           (split-query (:query @wrapped-query))
             terms           (construct-query-terms parts)
-            last-term-index (dec (count terms))]
+            last-term-index (dec (count terms))
+            corpus*         @corpus]
         (when (nil? @query-term-ids)
           (reset! query-term-ids (range (count terms))))
         [:div.multiword-container
@@ -265,7 +266,7 @@
                                  last?                 (= index last-term-index)
                                  ;; Show buttons to remove terms if there is more than one term
                                  show-remove-term-btn? (pos? last-term-index)
-                                 has-phonetic?         (:has-phonetic corpus)]
+                                 has-phonetic?         (:has-phonetic corpus*)]
                              (list (when-not first?
                                      ^{:key (str "interval" term-id)}
                                      [interval a m wrapped-term corpus])
@@ -274,7 +275,7 @@
                                     first? last? has-phonetic? show-remove-row-btn?
                                     show-remove-term-btn?])))
                          terms)]
-           (when (:has-headword-search corpus)
+           (when (:has-headword-search corpus*)
              [:div.table-row
               [:div.table-cell {:style {:padding-left 40 :padding-top 10}}
                [headword-search-checkbox wrapped-query]]])]]]))))

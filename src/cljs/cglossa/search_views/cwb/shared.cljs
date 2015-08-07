@@ -20,10 +20,11 @@
 
 (defn- search! [{:keys [search-queries]} {:keys [corpus search-results]}]
   (let [queries     @search-queries
+        corpus* @corpus
         first-query (:query (first queries))]
     (when (and first-query
                (not= first-query "\"\""))
-      (let [q             (if (= (:lang corpus) "zh")
+      (let [q             (if (= (:lang corpus*) "zh")
                             ;; For Chinese: If the tone number is missing, add a pattern
                             ;; that matches all tones
                             (for [query queries]
@@ -33,7 +34,7 @@
                             queries)]
         (go (let [{:keys [status success] :as response}
                   (<! (http/post "/search"
-                                 {:json-params {:corpus-id (:rid @corpus)
+                                 {:json-params {:corpus-id (:rid corpus*)
                                                 :queries   q}}))]
               (if success
                 (let [results (get-in response [:body :results])]
