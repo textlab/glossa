@@ -8,32 +8,47 @@
 (defn- results-info []
   [:div.col-sm-9 "No matches found"])
 
-(defn- results-toolbar [{:keys [sort-results-by] :as a} m]
+(defn- sort-button [{:keys [sort-results-by] :as a} m]
   (let [sort-by   @sort-results-by
         on-select (fn [event-key _ _]
                     (reset! sort-results-by (keyword event-key))
                     (search! a m))]
-    [:div.row {:style {:margin-top 15}}
-     [:div.col-sm-12
-      [b/buttontoolbar
-       [b/dropdownbutton {:title "Sort"}
-        [b/menuitem {:event-key :position, :on-select on-select}
-         (when (= sort-by :position) [b/glyphicon {:glyph "ok"}]) "  By corpus position"]
-        [b/menuitem {:event-key :match, :on-select on-select}
-         (when (= sort-by :match) [b/glyphicon {:glyph "ok"}]) "  By match"]
-        [b/menuitem {:event-key :left, :on-select on-select}
-         (when (= sort-by :left) [b/glyphicon {:glyph "ok"}]) "  By left context"]
-        [b/menuitem {:event-key :right, :on-select on-select}
-         (when (= sort-by :right) [b/glyphicon {:glyph "ok"}]) "  By right context"]]]]]))
+    [b/dropdownbutton {:title "Sort"}
+     [b/menuitem {:event-key :position, :on-select on-select}
+      (when (= sort-by :position) [b/glyphicon {:glyph "ok"}]) "  By corpus position"]
+     [b/menuitem {:event-key :match, :on-select on-select}
+      (when (= sort-by :match) [b/glyphicon {:glyph "ok"}]) "  By match"]
+     [b/menuitem {:event-key :left, :on-select on-select}
+      (when (= sort-by :left) [b/glyphicon {:glyph "ok"}]) "  By left context"]
+     [b/menuitem {:event-key :right, :on-select on-select}
+      (when (= sort-by :right) [b/glyphicon {:glyph "ok"}]) "  By right context"]]))
 
-(defn- freq-modal [{:keys [showing-freqs?] :as a} m]
-  [b/modal {:show    @showing-freqs?
-            :on-hide #(.log js/console "lukker")}
-   [b/modalheader {:close-button true}
-    [b/modaltitle "Frequencies"]]
-   [b/modalbody "Some text will be here"]
-   [b/modalfooter
-    [b/button "Close"]]])
+(defn- statistics-button [{:keys [freq-attr]} m]
+  (let [on-select #(reset! freq-attr (keyword %1))]
+    [b/dropdownbutton {:title "Statistics"}
+     [b/menuitem {:header true} "Frequencies"]
+     [b/menuitem {:event-key :word, :on-select on-select} "Word forms"]
+     [b/menuitem {:event-key :lemma, :on-select on-select} "Lemmas"]
+     [b/menuitem {:event-key :pos, :on-select on-select} "Parts-of-speech"]]))
+
+(defn- results-toolbar [a m]
+  [:div.row {:style {:margin-top 15}}
+   [:div.col-sm-12
+    [b/buttontoolbar
+     [sort-button a m]
+     [statistics-button a m]]]])
+
+(defn- freq-modal [{:keys [freq-attr] :as a} m]
+  (let [attr @freq-attr
+        on-hide #(reset! freq-attr nil)]
+    [b/modal {:show    (some? attr)
+              :on-hide on-hide}
+     [b/modalheader {:close-button true}
+      [b/modaltitle "Frequencies"]]
+     [b/modalbody (when attr
+                    (name attr))]
+     [b/modalfooter
+      [b/button {:on-click on-hide} "Close"]]]))
 
 (defn results [{:keys [num-resets] :as a} m]
   [:div
