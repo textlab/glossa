@@ -4,7 +4,7 @@
             [cglossa.react-adapters.bootstrap :as b]
             [reagent.core :as r]))
 
-(defn- top []
+(defn- result-info []
   [:div.col-sm-9 "No matches found"])
 
 (defn- freq-modal [{:keys [showing-freqs?] :as a} m]
@@ -18,7 +18,9 @@
 
 (defn results [a m]
   [:div
-   [top]
+   [:div.row
+    [top-toolbar]
+    [result-info]]
    [search-inputs a m]
    #_[results-toolbar]
    #_[results-table]

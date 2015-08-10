@@ -18,7 +18,7 @@
       (str/replace #"\{\{(<s_id\s+.+?>)" "$1{{")
       (str/replace #"(</s_id>)\}\}" "}}$1")))
 
-(defn- search! [{:keys [search-queries]} {:keys [corpus search-results]}]
+(defn- search! [{:keys [search-queries showing-results?]} {:keys [corpus search-results]}]
   (let [queries     @search-queries
         corpus*     @corpus
         first-query (:query (first queries))]
@@ -32,6 +32,7 @@
                           str/replace #"\bphon=\"([^0-9\"]+)\"" "phon=\"$1[1-4]?\""))
                 ;; For other languages, leave the queries unmodified
                 queries)]
+        (reset! showing-results? true)
         (go (let [{:keys [status success] :as response}
                   (<! (http/post "/search"
                                  {:json-params {:corpus-id (:rid corpus*)
