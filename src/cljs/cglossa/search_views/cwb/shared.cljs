@@ -18,7 +18,8 @@
       (str/replace #"\{\{(<s_id\s+.+?>)" "$1{{")
       (str/replace #"(</s_id>)\}\}" "}}$1")))
 
-(defn- search! [{:keys [search-queries showing-results?]} {:keys [corpus search-results]}]
+(defn- search! [{:keys [search-queries showing-results? sort-results-by]}
+                {:keys [corpus search-results]}]
   (let [queries     @search-queries
         corpus*     @corpus
         first-query (:query (first queries))]
@@ -36,7 +37,8 @@
         (go (let [{:keys [status success] :as response}
                   (<! (http/post "/search"
                                  {:json-params {:corpus-id (:rid corpus*)
-                                                :queries   q}}))]
+                                                :queries   q
+                                                :sort-by   @sort-results-by}}))]
               (if success
                 (let [results (get-in response [:body :results])]
                   (reset! search-results (map cleanup-result results)))

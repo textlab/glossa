@@ -8,6 +8,7 @@
 
 (def state {:showing-sidebar? false
             :showing-results? false
+            :sort-results-by  :position
             :showing-freqs?   false
             :search-view      :simple
             :search-queries   [#_{:query "[word=\"han\" %c] []{1,2} [word=\"er\" %c]"}
