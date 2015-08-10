@@ -16,12 +16,12 @@
    [b/modalfooter
     [b/button "Close"]]])
 
-(defn results [a m]
+(defn results [{:keys [num-resets] :as a} m]
   [:div
    [:div.row
-    [top-toolbar]
+    [top-toolbar a]
     [result-info]]
-   [search-inputs a m]
+   ^{:key @num-resets} [search-inputs a m]                  ; See comments in cglossa.start
    #_[results-toolbar]
    #_[results-table]
    [freq-modal a m]
