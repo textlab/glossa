@@ -16,9 +16,7 @@
 (defn start [{:keys [num-resets] :as a} m]
   [:div
    [:div.row
-    [top-toolbar a]
-    [:div.col-sm-9
-     [:span "haoi"]]]
+    [top-toolbar a]]
    [corpus-info a m]
    ;; Using num-resets as key is a hackish way to force reagent to
    ;; re-mount the currently selected search inputs each time the form

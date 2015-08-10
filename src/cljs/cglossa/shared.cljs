@@ -3,8 +3,7 @@
 
 (defn top-toolbar [{:keys [search-queries num-resets]}]
   [:div.col-sm-3
-   [:span "aa"]
-   #_[b/buttontoolbar {:style {:margin-bottom 20}}
+   [b/buttontoolbar {:style {:margin-bottom 20}}
     [b/button {:bs-style "primary"
                :bs-size  "xsmall"
                :title    "Reset form"
