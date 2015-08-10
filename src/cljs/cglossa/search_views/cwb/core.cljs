@@ -138,7 +138,7 @@
      [:div.table-row {:style {:margin-bottom 10}}
       [remove-row-btn show-remove-row-btn? wrapped-query]
       [b/input {:style            {:width 500}
-                :class-name       "col-md-12"
+                :class-name       "col-sm-12"
                 :group-class-name "table-cell"
                 :type             "text"
                 :default-value    displayed-query
@@ -218,7 +218,7 @@
                multilingual? (> (count languages) 1)
                set-view      (fn [view e] (reset! search-view view) (.preventDefault e))]
            [:span
-            [:div.row.search-input-links>div.col-md-12
+            [:div.row.search-input-links>div.col-sm-12
              (if (= view simple)
                [:b "Simple"]
                [:a {:href     ""
@@ -278,7 +278,7 @@
                              selected-language (-> @wrapped-query :query :lang)]
                          ^{:key query-id}
                          [:div.row
-                          [:div.col-md-12
+                          [:div.col-sm-12
                            (when multilingual?
                              [language-select languages selected-language])
                            [view a m wrapped-query show-remove-row-btn?]]]))))

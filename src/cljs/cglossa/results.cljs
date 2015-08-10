@@ -1,11 +1,11 @@
 (ns cglossa.results
   (:require [cglossa.search-views.shared :refer [search-inputs]]
-            cljsjs.react-bootstrap
+            [cglossa.shared :refer [top-toolbar]]
             [cglossa.react-adapters.bootstrap :as b]
             [reagent.core :as r]))
 
 (defn- top []
-  [:div.col-md-9 "No matches found"])
+  [:div.col-sm-9 "No matches found"])
 
 (defn- freq-modal [{:keys [showing-freqs?] :as a} m]
   [b/modal {:show    @showing-freqs?

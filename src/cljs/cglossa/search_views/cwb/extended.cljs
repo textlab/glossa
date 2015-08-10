@@ -168,14 +168,14 @@
             :on-key-down #(on-key-down % a m)}])
 
 (defn interval [a m wrapped-term]
-  [:div.interval.table-cell
+  [:div.interval.table-cell {:style {:min-width 85}}
    [interval-input a m wrapped-term 0] "min"
    [:br]
    [interval-input a m wrapped-term 1] "max"])
 
 (defn- checkboxes [wrapped-term has-phonetic?]
   (let [term-val @wrapped-term]
-    [:div.table-cell
+    [:div.table-cell {:style {:min-width 182}}
      [:div.word-checkboxes
       [:label.checkbox-inline
        [:input {:type      "checkbox"

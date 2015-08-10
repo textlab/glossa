@@ -8,7 +8,7 @@
 
 (defn- main-area [{:keys [showing-results?] :as a} m]
   [:div.container-fluid {:style {:padding-left 50}}
-      [:div.row>div#main-content.col-md-12
+      [:div.row>div#main-content.col-sm-12
        (if @showing-results?
          [results a m]
          [start a m])]])
