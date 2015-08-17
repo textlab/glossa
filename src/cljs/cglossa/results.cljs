@@ -13,7 +13,7 @@
         on-select (fn [event-key _ _]
                     (reset! sort-results-by (keyword event-key))
                     (search! a m))]
-    [b/dropdownbutton {:title "Sort"}
+    [b/dropdownbutton {:title "Sort" :bs-size "small"}
      [b/menuitem {:event-key :position, :on-select on-select}
       (when (= sort-by :position) [b/glyphicon {:glyph "ok"}]) "  By corpus position"]
      [b/menuitem {:event-key :match, :on-select on-select}

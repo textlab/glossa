@@ -118,7 +118,8 @@
   [b/button {:style {:marginLeft 20} :on-click #()} "Add language"])
 
 (defn- add-phrase-button [view]
-  [b/button {:style    {:margin-top (if (= view extended) -15 0)}
+  [b/button {:bs-size  "small"
+             :style    {:margin-top (if (= view extended) -15 0)}
              :on-click #()} "Or..."])
 
 (defn- language-select [languages selected-language]
