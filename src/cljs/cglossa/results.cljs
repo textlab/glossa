@@ -31,24 +31,24 @@
      [b/menuitem {:event-key :lemma, :on-select on-select} "Lemmas"]
      [b/menuitem {:event-key :pos, :on-select on-select} "Parts-of-speech"]]))
 
-(defn- results-toolbar [a m]
-  [:div.row {:style {:margin-top 15}}
+(defn- concordance-toolbar [a m]
+  [:div.row {:style {:margin-top 15 :margin-bottom 15}}
    [:div.col-sm-12
     [b/buttontoolbar
-     [sort-button a m]
-     [statistics-button a m]]]])
+     [sort-button a m]]]])
 
-(defn- freq-modal [{:keys [freq-attr] :as a} m]
-  (let [attr @freq-attr
-        on-hide #(reset! freq-attr nil)]
-    [b/modal {:show    (some? attr)
-              :on-hide on-hide}
-     [b/modalheader {:close-button true}
-      [b/modaltitle "Frequencies"]]
-     [b/modalbody (when attr
-                    (name attr))]
-     [b/modalfooter
-      [b/button {:on-click on-hide} "Close"]]]))
+(defn- concordance-table [a m]
+  [:div.row>div.col-sm-12
+   [b/table {:striped true :bordered true}
+    [:tbody
+     [:tr
+      [:td "AAA"]
+      [:td "BBB"]]]]])
+
+(defn- concordances [a m]
+  [:div.container-fluid {:style {:padding-left 0 :padding-right 0}}
+   [concordance-toolbar a m]
+   [concordance-table a m]])
 
 (defn results [{:keys [num-resets] :as a} m]
   [:div
@@ -56,9 +56,13 @@
     [top-toolbar a]
     [results-info]]
    ^{:key @num-resets} [search-inputs a m]                  ; See comments in cglossa.start
-   [results-toolbar a m]
-   #_[results-table]
-   [freq-modal a m]
+   [b/tabbedarea {:style {:margin-top 15}
+                  :animation false
+                  :default-active-key :concordance}
+    [b/tabpane {:tab "Concordance" :event-key :concordance}
+     [concordances a m]]
+    [b/tabpane {:tab "Statistics" :event-key :statistics}]]
+
    #_[dialog {:data-frequency-dialog true :title "Frequencies"}
       [:table.table.table-striped.table-condensed
        [:thead

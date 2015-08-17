@@ -20,4 +20,7 @@
         "ModalFooter"
         "ModalHeader"
         "ModalTitle"
-        "Navbar")
+        "Navbar"
+        "TabbedArea"
+        "Table"
+        "TabPane")
