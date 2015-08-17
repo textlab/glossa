@@ -57,15 +57,20 @@
         results))))
 
 (defn search [corpus-id queries]
-  (let [search         (db/run-sql "create vertex Search")
-        search-id      (db/stringify-rid search)
-        corpus         (first (db/sql-query "select from #TARGET" {:target corpus-id}))
-        named-query    (cwb-query-name corpus search-id)
-        commands       [(str "set DataDirectory \"" (fs/tmpdir) \")
-                        (cwb-corpus-name corpus queries)
-                        (construct-query-commands corpus queries named-query search-id 100)
-                        "cat Last"]
-        results        (run-cqp-commands (flatten commands))]
+  (let [search      (db/run-sql "create vertex Search")
+        search-id   (db/stringify-rid search)
+        corpus      (first (db/sql-query "select from #TARGET" {:target corpus-id}))
+        named-query (cwb-query-name corpus search-id)
+        s-tag       (:s_tag corpus "s")
+        commands    [(str "set DataDirectory \"" (fs/tmpdir) \")
+                     (cwb-corpus-name corpus queries)
+                     (construct-query-commands corpus queries named-query search-id 100)
+                     (str "set Context 1 " s-tag)
+                     "set LD \"{{\""
+                     "set RD \"}}\""
+                     (str "show +" s-tag "_id")
+                     "cat Last"]
+        results     (run-cqp-commands (flatten commands))]
     (-> search
         db/vertex->map
         (assoc :results results))))
