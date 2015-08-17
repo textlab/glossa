@@ -18,8 +18,8 @@
       (str/replace #"\{\{(<s_id\s+.+?>)" "$1{{")
       (str/replace #"(</s_id>)\}\}" "}}$1")))
 
-(defn- search! [{:keys [search-queries showing-results? sort-results-by]}
-                {:keys [corpus search-results]}]
+(defn- search! [{:keys [search-queries search-results showing-results? sort-results-by]}
+                {:keys [corpus]}]
   (let [queries     @search-queries
         corpus*     @corpus
         first-query (:query (first queries))]

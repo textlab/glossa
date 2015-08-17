@@ -14,11 +14,11 @@
             :search-queries   [#_{:query "[word=\"han\" %c] []{1,2} [word=\"er\" %c]"}
                                #_{:query "[word=\"de\" %c] [word=\"sa\" %c]"}
                                {:query "[word=\"hun\" %c] [word=\"vet\" %c]"}]
+            :search-results   nil
             :num-resets       0})
 
 (def data {:corpus              nil
-           :metadata-categories nil
-           :search-results      nil})
+           :metadata-categories nil})
 
 (defonce app-state (into {} (map (fn [[k v]] [k (r/atom v)]) state)))
 (defonce model-state (into {} (map (fn [[k v]] [k (r/atom v)]) data)))
