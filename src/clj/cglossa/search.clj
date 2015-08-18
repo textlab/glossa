@@ -73,4 +73,4 @@
         results     (run-cqp-commands (flatten commands))]
     (-> search
         db/vertex->map
-        (assoc :results results))))
+        (assoc :results (map (fn [r] {:text r}) results)))))

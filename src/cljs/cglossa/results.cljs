@@ -37,13 +37,12 @@
     [b/buttontoolbar
      [sort-button a m]]]])
 
-(defn- concordance-table [a m]
-  [:div.row>div.col-sm-12
-   [b/table {:striped true :bordered true}
-    [:tbody
-     [:tr
-      [:td "AAA"]
-      [:td "BBB"]]]]])
+(defmulti concordance-table
+  "Multimethod that accepts two arguments - an app state map and a
+  model/domain state map - and dispatches to the correct method based
+  on the value of :search-engine in the corpus map found in the
+  model/domain state map."
+  (fn [_ {corpus :corpus}] (:search-engine @corpus)))
 
 (defn- concordances [a m]
   [:div.container-fluid {:style {:padding-left 0 :padding-right 0}}

@@ -6,16 +6,19 @@
             [cglossa.app :refer [app]])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
-(def state {:showing-sidebar? false
-            :showing-results? false
-            :sort-results-by  :position
-            :freq-attr        nil
-            :search-view      :simple
-            :search-queries   [#_{:query "[word=\"han\" %c] []{1,2} [word=\"er\" %c]"}
-                               #_{:query "[word=\"de\" %c] [word=\"sa\" %c]"}
-                               {:query "[word=\"hun\" %c] [word=\"vet\" %c]"}]
-            :search-results   nil
-            :num-resets       0})
+(def state {:showing-sidebar?    false
+            :showing-results?    false
+            :sort-results-by     :position
+            :freq-attr           nil
+            :search-view         :simple
+            :search-queries      [#_{:query "[word=\"han\" %c] []{1,2} [word=\"er\" %c]"}
+                                  #_{:query "[word=\"de\" %c] [word=\"sa\" %c]"}
+                                  {:query "[word=\"hun\" %c] [word=\"vet\" %c]"}]
+            :search-results      nil
+            :player-row-index    nil
+            :current-player-type nil
+            :current-media-type  nil
+            :num-resets          0})
 
 (def data {:corpus              nil
            :metadata-categories nil})
