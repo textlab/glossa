@@ -29,7 +29,7 @@
 
 (defn- transit-response* [body]
   (let [baos   (ByteArrayOutputStream. 2000)
-        writer (transit/writer baos :json)
+        writer (transit/writer baos (if (:is-dev env) :json-verbose :json))
         _      (transit/write writer body)
         res    (.toString baos)]
     (.reset baos)
