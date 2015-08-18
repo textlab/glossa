@@ -62,13 +62,14 @@
         corpus      (first (db/sql-query "select from #TARGET" {:target corpus-id}))
         named-query (cwb-query-name corpus search-id)
         s-tag       (:s_tag corpus "s")
+        s-tag-id    (:s_tag_id corpus (str s-tag "_id"))
         commands    [(str "set DataDirectory \"" (fs/tmpdir) \")
                      (cwb-corpus-name corpus queries)
                      (construct-query-commands corpus queries named-query search-id 100)
                      (str "set Context 1 " s-tag)
                      "set LD \"{{\""
                      "set RD \"}}\""
-                     (str "show +" s-tag "_id")
+                     (str "show +" s-tag-id)
                      "cat Last"]
         results     (run-cqp-commands (flatten commands))]
     (-> search
