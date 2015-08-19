@@ -150,7 +150,7 @@
                         [:WFplayer {:media-obj (:media-obj res-info)}]]]))]
     (flatten [main extras media-row])))
 
-(defmethod concordance-table :cwb [{:keys [search-results] :as a} m]
+(defmethod concordance-table :default [{:keys [search-results] :as a} m]
   (let [results @search-results]
     [:div.row>div.col-sm-12 {:style {:height 320 :overflow "auto"}}
      [b/table {:striped true :bordered true}

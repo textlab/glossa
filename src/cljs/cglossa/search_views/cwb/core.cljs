@@ -198,7 +198,7 @@
     [single-input-view a m wrapped-query displayed-query show-remove-row-btn?
      false on-text-changed]))
 
-(defmethod search-inputs :cwb [_ _]
+(defmethod search-inputs :default [_ _]
   "Component that lets the user select a search view (simple, extended
   or CQP query view) and displays it."
   (let [query-ids (atom nil)]
