@@ -1,11 +1,11 @@
-(ns cglossa.search.cwb
+(ns cglossa.search.cwb.shared
+  "Shared code for all types of corpora encoded with the IMS Open Corpus Workbench."
   (:require [clojure.string :as str]
             [me.raynes.fs :as fs]
             [me.raynes.conch :as conch]
-            [cglossa.db :as db]
-            [cglossa.search.core :refer [run-queries]]))
+            [cglossa.search.core :refer [run-queries transform-results]]))
 
-(defn- cwb-corpus-name [corpus queries]
+(defn cwb-corpus-name [corpus queries]
   (let [uc-code (str/upper-case (:code corpus))]
     (if (:multilingual? corpus)
       ;; The CWB corpus we select before running our query will be the one named by the
@@ -14,7 +14,7 @@
       (str uc-code "_" (-> queries first :lang str/upper-case))
       uc-code)))
 
-(defn- cwb-query-name [corpus search-id]
+(defn cwb-query-name [corpus search-id]
   "Constructs a name for the saved query in CQP, e.g. MYCORPUS11."
   (str (str/upper-case (:code corpus))
        (last (str/split search-id #":"))))
@@ -32,7 +32,7 @@
   ;; TODO
   )
 
-(defn- construct-query-commands [corpus queries named-query search-id cut]
+(defn construct-query-commands [corpus queries named-query search-id cut]
   (let [query-str          (if (:multilingual? corpus)
                              (build-multilingual-query queries)
                              (build-monolingual-query queries))
@@ -43,7 +43,7 @@
                              [])]
     (conj init-cmds (str named-query " = " query-str " cut " cut))))
 
-(defn- run-cqp-commands [commands]
+(defn run-cqp-commands [commands]
   (let [cmdfile   (str (fs/tmpdir) (fs/temp-name "cglossa-cqp-cmd"))
         commands* (->> commands
                        (map #(str % \;))
@@ -56,21 +56,3 @@
       (if (re-find #"PARSE ERROR|CQP Error" (first results))
         (throw (str "CQP error: " results))
         results))))
-
-(defmethod run-queries :default [corpus search queries]
-  (let [search-id   (db/stringify-rid search)
-        named-query (cwb-query-name corpus search-id)
-        s-tag       (:s_tag corpus "s")
-        s-tag-id    (:s_tag_id corpus (str s-tag "_id"))
-        commands    [(str "set DataDirectory \"" (fs/tmpdir) \")
-                     (cwb-corpus-name corpus queries)
-                     (construct-query-commands corpus queries named-query search-id 100)
-                     (str "set Context 1 " s-tag)
-                     "set LD \"{{\""
-                     "set RD \"}}\""
-                     (str "show +" s-tag-id)
-                     "cat Last"]
-        results     (run-cqp-commands (flatten commands))]
-    (-> search
-        db/vertex->map
-        (assoc :results (map (fn [r] {:text r}) results)))))
