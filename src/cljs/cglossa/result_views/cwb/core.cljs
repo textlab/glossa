@@ -27,21 +27,22 @@
 (defn- process-field
   "Processes a pre-match, match, or post-match field."
   [field]
-  (-> field
-      ;; Extract any speaker IDs and put them in front of their segments
-      (str/replace #"<who_name\s*(.+?)>"
-                   "<span class=\"speaker-id\">&lt;$1&gt;</span>")
-      (str/replace #"</who_name>" "")
-      (str/replace #"span class=" "span_class=")
-      (str/split #"\s+")
-      (map (fn [token]
-             (if (.contains token "span_class=")
-               token                                        ; Don't touch HTML spans
-               (str/split token #"/")                       ; The slash separates CWB attributes
-               ;; TODO: Handle Opentip jQuery attributes, or use something else?
-               )))
-      (#(str/join \space %))
-      (str/replace #"span_class=" "span class=")))
+  (as-> field $
+        ;; Extract any speaker IDs and put them in front of their segments
+        (str/replace $ #"<who_name\s*(.+?)>"
+                     "<span class=\"speaker-id\">&lt;$1&gt;</span>")
+        (str/replace $ #"</who_name>" "")
+        (str/replace $ #"span class=" "span_class=")
+        (str/split $ #"\s+")
+        (map (fn [token]
+               (if (re-find #"span_class=" token)
+                 token                                      ; Don't touch HTML spans
+                 (str/split token #"/")                     ; The slash separates CWB attributes
+                 ;; TODO: Handle Opentip jQuery attributes, or use something else?
+                 ))
+             $)
+        (str/join \space $)
+        (str/replace $ #"span_class=" "span class=")))
 
 (defn- id-column [result]
   ;; If the 'match' property is defined, we know that we have a result from a monolingual
@@ -96,9 +97,9 @@
            [b/glyphicon {:glyph "volume-up"}]]
           [b/button {:bs-size  "xsmall" :title "Show waveform" :style {:width "100%"}
                      :on-click #(toggle-player index "wfplayer" "audio" a)}
-           [:img {:src "img/waveform.png"}]])]
-       (id-column result)
-       (text-columns result))]))
+           [:img {:src "img/waveform.png"}]])])
+     (id-column result)
+     (text-columns result)]))
 
 (defn- extra-row [result attr {:keys [corpus]}]
   (let [sound?       (:has-sound corpus)
@@ -148,7 +149,8 @@
                       [:tr
                        [:td {:col-span 10}
                         [:WFplayer {:media-obj (:media-obj res-info)}]]]))]
-    (flatten [main extras media-row])))
+    #_(flatten [main extras media-row])
+    main))
 
 (defmethod concordance-table :default [{:keys [search-results] :as a} m]
   (let [results @search-results]
@@ -156,7 +158,7 @@
      [b/table {:striped true :bordered true}
       [:tbody
        (map result-rows
-            results
-            (range (count results))
-            (repeat a)
-            (repeat m))]]]))
+             results
+             (range (count results))
+             (repeat a)
+             (repeat m))]]]))
