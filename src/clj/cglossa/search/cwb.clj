@@ -1,8 +1,9 @@
-(ns cglossa.search
-  (:require [cglossa.db :as db]
-            [clojure.string :as str]
+(ns cglossa.search.cwb
+  (:require [clojure.string :as str]
             [me.raynes.fs :as fs]
-            [me.raynes.conch :as conch]))
+            [me.raynes.conch :as conch]
+            [cglossa.db :as db]
+            [cglossa.search.core :refer [run-queries]]))
 
 (defn- cwb-corpus-name [corpus queries]
   (let [uc-code (str/upper-case (:code corpus))]
@@ -56,10 +57,8 @@
         (throw (str "CQP error: " results))
         results))))
 
-(defn search [corpus-id queries]
-  (let [search      (db/run-sql "create vertex Search")
-        search-id   (db/stringify-rid search)
-        corpus      (first (db/sql-query "select from #TARGET" {:target corpus-id}))
+(defmethod run-queries :default [corpus search queries]
+  (let [search-id   (db/stringify-rid search)
         named-query (cwb-query-name corpus search-id)
         s-tag       (:s_tag corpus "s")
         s-tag-id    (:s_tag_id corpus (str s-tag "_id"))

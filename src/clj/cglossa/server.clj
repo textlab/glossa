@@ -15,7 +15,8 @@
             [clojure.tools.logging :as log]
             [cognitect.transit :as transit]
             [cglossa.db :as db]
-            [cglossa.search :as search])
+            [cglossa.search.core :as search]
+            [cglossa.search_engines])
   (:import [java.io ByteArrayOutputStream])
   (:gen-class))
 
