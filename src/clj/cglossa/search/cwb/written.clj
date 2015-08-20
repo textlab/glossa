@@ -1,5 +1,5 @@
-(ns cglossa.search.cwb.mono
-  "Support for monolingual written corpora encoded with the IMS Open Corpus Workbench."
+(ns cglossa.search.cwb.written
+  "Support for written corpora encoded with the IMS Open Corpus Workbench."
   (:require [me.raynes.fs :as fs]
             [cglossa.db :as db]
             [cglossa.search.core :refer [run-queries transform-results]]
