@@ -40,27 +40,69 @@
 (defn- find-timestamps [result]
   (for [[segment start end] (re-seq #"<sync_time\s+([\d\.]+)><sync_end\s+([\d\.]+)>.*?</sync_time>"
                                     result)
-        num-speakers (count (re-seq #"<who_name" segment))]
+        :let [num-speakers (count (re-seq #"<who_name" segment))]]
     ;; Repeat the start and end time for each speaker within the same segment
     [(repeat num-speakers start) (repeat num-speakers end)]))
 
+(defn- build-annotation [index line speaker starttime endtime]
+  (let [match? (re-find #"\{\{" line)
+        line*  (str/replace line #"\{\{|\}\}" "")
+        tokens (re-seq #"\s+" line*)]
+    [index {:speaker  speaker
+            :line     (into {} (map-indexed (fn [index token]
+                                              (let [attr-values (str/split token #"/")]
+                                                [index (zipmap (cons "word" display-attrs)
+                                                               attr-values)]))
+                                            tokens))
+            :from     starttime
+            :to       endtime
+            :is_match match?}]))
+
+(defn- create-media-object
+  "Creates the data structure that is needed by jPlayer for a single search result."
+  [overall-starttime overall-endtime starttimes endtimes lines speakers corpus line-key]
+  (let [annotations         (into {} (map build-annotation
+                                          (range) lines speakers
+                                          starttimes endtimes))
+        matching-line-index (first (keep-indexed #(when (re-find #"\{\{" %2) %1) lines))
+        last-line-index     (dec (count lines))]
+    {:title             ""
+     :last_line         last-line-index
+     :display_attribute "word"
+     :corpus_id         (get corpus (keyword "@rid"))
+     :mov               {:supplied "m4v"
+                         :path     (str "media/" (:code corpus))
+                         :line_key line-key
+                         :start    overall-starttime
+                         :stop     overall-endtime}
+     :divs              {:annotation annotations}
+     :start_at          matching-line-index
+     :end_at            matching-line-index
+     :min_start         0
+     :max_end           last-line-index}))
+
 (defmethod transform-results :cwb_speech [corpus results]
   (for [result results
-        :let [text              (fix-brace-positions result)
-              [starttimes endtimes] (find-timestamps result)
+        :let [result*           (fix-brace-positions result)
+              [starttimes endtimes] (find-timestamps result*)
               overall-starttime (ffirst starttimes)
               overall-endtime   (last (last endtimes))
-              speakers          (map second (re-seq #"<who_name\s+(.+?)>" result))
+              speakers          (map second (re-seq #"<who_name\s+(.+?)>" result*))
               ;; All line keys within the same result should point to the same media file,
               ;; so just find the first one. Note that corpora are only marked with line
               ;; keys if they do in fact have media files, so line-key might be nil.
-              line-key          (second (re-find #"<who_line_key\s+(\d+)>" result))
+              line-key          (second (re-find #"<who_line_key\s+(\d+)>" result*))
               lines             (map second (re-seq (if line-key
                                                       #"<who_line_key.+?>(.*?)</who_line_key>"
                                                       #"<who_name.+?>(.*?)</who_name>")
-                                                    result))
+                                                    result*))
               ;; We asked for a context of several units to the left and right of the unit
               ;; containing the matching word or phrase, but only the unit with the match (marked
               ;; by braces) should be included in the search result shown in the result table.
               displayed-line    (first (filter (partial re-find #"\{\{.+\}\}") lines))]]
-    {:text text}))
+    (if-not line-key
+      {:text displayed-line}
+      {:text      displayed-line
+       :media-obj (create-media-object overall-starttime overall-endtime
+                                       starttimes endtimes lines speakers corpus line-key)
+       :line-key  line-key})))
