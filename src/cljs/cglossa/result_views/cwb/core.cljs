@@ -84,6 +84,7 @@
 (defn- main-row [result index a {:keys [corpus] :as m}]
   (let [sound? (:has-sound corpus)
         video? (:has-video corpus)]
+    ^{:key (str "main-" (:s-id result))}
     [:tr
      (if (or sound? video?)
        [:td.span1
@@ -158,5 +159,5 @@
      [b/table {:striped true :bordered true}
       [:tbody
        (map (partial result-rows a m)
-             results
-             (range (count results)))]]]))
+            results
+            (range (count results)))]]]))

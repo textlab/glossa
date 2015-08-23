@@ -92,17 +92,19 @@
               ;; so just find the first one. Note that corpora are only marked with line
               ;; keys if they do in fact have media files, so line-key might be nil.
               line-key          (second (re-find #"<who_line_key\s+(\d+)>" result*))
-              lines             (map second (re-seq (if line-key
-                                                      #"<who_line_key.+?>(.*?)</who_line_key>"
-                                                      #"<who_name.+?>(.*?)</who_name>")
-                                                    result*))
-              ;; We asked for a context of several units to the left and right of the unit
-              ;; containing the matching word or phrase, but only the unit with the match (marked
-              ;; by braces) should be included in the search result shown in the result table.
-              displayed-line    (first (filter (partial re-find #"\{\{.+\}\}") lines))]]
+              segments          (map second (re-seq #"<sync_end.+?>(.+)</sync_end" result*))
+              ;; We asked for a context of several segments to the left and right of the one
+              ;; containing the matching word or phrase in order to be able to show them in the
+              ;; media player display. However, only the segment with the match (marked by braces)
+              ;; should be included in the search result shown in the result table.
+              displayed-line    (first (filter (partial re-find #"\{\{.+\}\}") segments))]]
     (if-not line-key
       {:text displayed-line}
-      {:text      displayed-line
-       :media-obj (create-media-object overall-starttime overall-endtime
-                                       starttimes endtimes lines speakers corpus line-key)
-       :line-key  line-key})))
+      (let [media-obj-lines (map second (re-seq (if line-key
+                                                  #"<who_line_key.+?>(.*?)</who_line_key>"
+                                                  #"<who_name.+?>(.*?)</who_name>")
+                                                result*))]
+        {:text      displayed-line
+         :media-obj (create-media-object overall-starttime overall-endtime starttimes endtimes
+                                         media-obj-lines speakers corpus line-key)
+         :line-key  line-key}))))
