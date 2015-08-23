@@ -35,8 +35,6 @@
     (.getProperties v) $
     ;; Convert them to a Clojure hash map
     (into {} $)
-    ;; @rid is just a temporary key for the result object, so remove it
-    (dissoc $ "@rid")
     ;; Transform values as needed
     (walk/walk (fn [[k v]] [k (xform-val v)]) identity $)
     (walk/keywordize-keys $)))
