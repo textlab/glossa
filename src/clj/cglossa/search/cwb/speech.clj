@@ -93,7 +93,7 @@
               ;; keys if they do in fact have media files, so line-key might be nil.
               line-key          (second (re-find #"<who_line_key\s+(\d+)>" result*))
               segments          (->> result*
-                                     (re-seq #"<sync_end.+?>(.+)</sync_end")
+                                     (re-seq #"<sync_end.+?>(.+?)</sync_end")
                                      (map second)
                                      ;; Remove line key attribute tags, since they would only
                                      ;; confuse the client code
