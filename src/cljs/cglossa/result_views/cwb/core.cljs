@@ -34,11 +34,11 @@
         (str/replace $ #"</who_name>" "")
         (str/replace $ #"span class=" "span_class=")
         (str/split $ #"\s+")
-        (map (fn [token]
+        ;; TODO: Handle Opentip jQuery attributes, or use something else?
+        #_(map (fn [token]
                (if (re-find #"span_class=" token)
                  token                                      ; Don't touch HTML spans
                  (str/split token #"/")                     ; The slash separates CWB attributes
-                 ;; TODO: Handle Opentip jQuery attributes, or use something else?
                  ))
              $)
         (str/join \space $)
