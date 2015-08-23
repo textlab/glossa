@@ -7,17 +7,21 @@
             [cglossa.search.cwb.shared :refer [cwb-query-name cwb-corpus-name
                                                construct-query-commands run-cqp-commands]]))
 
+;; TODO: Fetch these from the definition of the tag set for the tagger that is being used
+(def ^:private display-attrs [:lemma :phon :pos :gender :num :type :defn
+                              :temp :pers :case :degr :descr :nlex :mood :voice])
+
 (defmethod run-queries :cwb_speech [corpus search queries]
   (let [search-id   (db/stringify-rid search)
         named-query (cwb-query-name corpus search-id)
         commands    [(str "set DataDirectory \"" (fs/tmpdir) \")
                      (cwb-corpus-name corpus queries)
-                     (str "set Context 7 s")
                      (construct-query-commands corpus queries named-query search-id 100
                                                :s-tag "sync_time")
+                     (str "set Context 7 sync_time")
                      "set LD \"{{\""
                      "set RD \"}}\""
-                     "show +sync_time"
+                     "show +sync_time +sync_end +who_name +who_line_key"
                      "cat Last"]]
     (run-cqp-commands (flatten commands))))
 
