@@ -116,9 +116,9 @@
      [:td {:col-span 3}
       row-contents]]))
 
-(defn- result-rows [res index
-                    {:keys [player-row-index current-player-type current-media-type] :as a}
-                    {:keys [corpus] :as m}]
+(defn- result-rows [{:keys [player-row-index current-player-type current-media-type] :as a}
+                    {:keys [corpus] :as m}
+                    res index]
   "Returns one or more rows representing a single search result."
   (let [[s-id fields] (if (re-find #"\{\{" (:text res))
                         ;; The result contains {{, which  is the left delimiter of a
@@ -157,8 +157,6 @@
     [:div.row>div.col-sm-12 {:style {:height 320 :overflow "auto"}}
      [b/table {:striped true :bordered true}
       [:tbody
-       (map result-rows
+       (map (partial result-rows a m)
              results
-             (range (count results))
-             (repeat a)
-             (repeat m))]]]))
+             (range (count results)))]]]))
