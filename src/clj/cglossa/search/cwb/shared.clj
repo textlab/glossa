@@ -19,23 +19,24 @@
   (str (str/upper-case (:code corpus))
        (last (str/split search-id #":"))))
 
-(defn- build-monolingual-query [queries]
+(defn- build-monolingual-query [queries s-tag]
   ;; For monolingual queries, the query expressions should be joined together with '|' (i.e., "or")
   (let [queries* (map :query queries)]
     (if (> (count queries*) 1)
       (->> queries*
-           (map #(str "(" % ")"))
+           (map #(str "(" % ") within " s-tag))
            (str/join " | "))
-      (first queries*))))
+      (str (first queries*) " within " s-tag))))
 
-(defn- build-multilingual-query [queries]
+(defn- build-multilingual-query [queries s-tag]
   ;; TODO
   )
 
-(defn construct-query-commands [corpus queries named-query search-id cut]
+(defn construct-query-commands [corpus queries named-query search-id cut
+                                & {:keys [s-tag] :or {s-tag "s"}}]
   (let [query-str          (if (:multilingual? corpus)
-                             (build-multilingual-query queries)
-                             (build-monolingual-query queries))
+                             (build-multilingual-query queries s-tag)
+                             (build-monolingual-query queries s-tag))
         positions-filename (str (fs/tmpdir) "positions_" search-id)
         init-cmds          (if (:metadata-value-ids queries)
                              [(str "undump " named-query " < '" positions-filename \')

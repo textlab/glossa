@@ -12,8 +12,9 @@
         named-query (cwb-query-name corpus search-id)
         commands    [(str "set DataDirectory \"" (fs/tmpdir) \")
                      (cwb-corpus-name corpus queries)
-                     (construct-query-commands corpus queries named-query search-id 100)
                      (str "set Context 7 s")
+                     (construct-query-commands corpus queries named-query search-id 100
+                                               :s-tag "sync_time")
                      "set LD \"{{\""
                      "set RD \"}}\""
                      "show +sync_time"
