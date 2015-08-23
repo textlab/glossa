@@ -92,7 +92,12 @@
               ;; so just find the first one. Note that corpora are only marked with line
               ;; keys if they do in fact have media files, so line-key might be nil.
               line-key          (second (re-find #"<who_line_key\s+(\d+)>" result*))
-              segments          (map second (re-seq #"<sync_end.+?>(.+)</sync_end" result*))
+              segments          (->> result*
+                                     (re-seq #"<sync_end.+?>(.+)</sync_end")
+                                     (map second)
+                                     ;; Remove line key attribute tags, since they would only
+                                     ;; confuse the client code
+                                     (map #(str/replace % #"</?who_line_key.*?>" "")))
               ;; We asked for a context of several segments to the left and right of the one
               ;; containing the matching word or phrase in order to be able to show them in the
               ;; media player display. However, only the segment with the match (marked by braces)
