@@ -60,15 +60,4 @@
                   :default-active-key :concordance}
     [b/tabpane {:tab "Concordance" :event-key :concordance}
      [concordances a m]]
-    [b/tabpane {:tab "Statistics" :event-key :statistics}]]
-
-   #_[dialog {:data-frequency-dialog true :title "Frequencies"}
-      [:table.table.table-striped.table-condensed
-       [:thead
-        [:td "Form"]] [:td "Frequency"]
-       [:tbody
-        (frequency-list)]]]
-   #_[dialog {:data-distr-map   true
-              :extra-class-name "distr-map"
-              :title            "Geographical distribution of results"}
-      #_[geo-distribution-map-window {:data geo-distribution}]]])
+    [b/tabpane {:tab "Statistics" :event-key :statistics}]]])
