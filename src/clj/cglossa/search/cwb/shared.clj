@@ -45,15 +45,16 @@
     (conj init-cmds (str named-query " = " query-str " cut " cut))))
 
 (defn run-cqp-commands [corpus commands]
-  (let [cmdfile   (str (fs/tmpdir) (fs/temp-name "cglossa-cqp-cmd"))
-        commands* (->> commands
+  (let [commands* (->> commands
                        (map #(str % \;))
                        (str/join \newline))]
-    (spit cmdfile commands*)
-    (let [cqp      (sh/proc "cqp" "-c" "-f" cmdfile)
+    (let [cqp      (sh/proc "cqp" "-c")
           encoding (:encoding corpus "UTF-8")
           ;; Run the CQP commands and capture the output
-          out      (sh/stream-to-string cqp :out :encoding encoding)
+          out      (do
+                     (sh/feed-from-string cqp commands*)
+                     (sh/done cqp)
+                     (sh/stream-to-string cqp :out :encoding encoding))
           ;; Split into lines and throw away the first line, which contains the CQP version
           results  (rest (str/split-lines out))]
       (if (re-find #"PARSE ERROR|CQP Error" (first results))
