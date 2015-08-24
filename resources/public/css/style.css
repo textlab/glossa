@@ -37,6 +37,9 @@ h5.category-header {
   margin-top: 10px;
   margin-bottom: 30px; }
 
+.speaker-id {
+  color: #777; }
+
 .spinner-searching-large {
   background-image: url(spinner-large.gif);
   width: 66px;
@@ -79,6 +82,7 @@ div.interval {
     vertical-align: bottom; }
   .multiword-search-form .multiword-term .control-group div.word-checkboxes {
     margin-top: 5px; }
+
 .multiword-search-form button.search {
   margin-left: 20px;
   margin-bottom: 22px; }
@@ -122,8 +126,6 @@ div.interval {
     font-style: italic; }
     .search-result-table-container table td.aligned-text span.aligned-id {
       color: #999; }
-  .search-result-table-container table span.speaker-id {
-    color: #777; }
   .search-result-table-container table td.match {
     font-weight: bold; }
 
