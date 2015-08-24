@@ -33,9 +33,9 @@
   ;; start of the segment text instead. Similarly if the match is at the end of a segment.
   (-> result
       (str/replace #"\{\{((?:<\S+?\s+?\S+?>\s*)+)"          ; Find start tags with attributes
-                   "\1{{")                                  ; (i.e., not the match)
+                   "$1{{")                                  ; (i.e., not the match)
       (str/replace #"((?:</\S+?>\s*)+)\}\}"                 ; Find end tags
-                   "}}\1")))
+                   "}}$1")))
 
 (defn- find-timestamps [result]
   (for [[segment start end] (re-seq #"<sync_time\s+([\d\.]+)><sync_end\s+([\d\.]+)>.*?</sync_time>"
