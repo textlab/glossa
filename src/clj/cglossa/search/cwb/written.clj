@@ -17,7 +17,7 @@
                      "set RD \"}}\""
                      (str "show +s_id")
                      "cat Last"]]
-    (run-cqp-commands (flatten commands))))
+    (run-cqp-commands corpus (flatten commands))))
 
 (defmethod transform-results :default [_ results]
   (map (fn [r] {:text r}) results))

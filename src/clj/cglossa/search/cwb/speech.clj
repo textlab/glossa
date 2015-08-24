@@ -23,7 +23,7 @@
                      "set RD \"}}\""
                      "show +sync_time +sync_end +who_name +who_line_key"
                      "cat Last"]]
-    (run-cqp-commands (flatten commands))))
+    (run-cqp-commands corpus (flatten commands))))
 
 (defn- fix-brace-positions [result]
   ;; If the matching word/phrase is at the beginning of the segment, CQP puts the braces

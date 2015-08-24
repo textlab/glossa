@@ -2,7 +2,7 @@
   "Shared code for all types of corpora encoded with the IMS Open Corpus Workbench."
   (:require [clojure.string :as str]
             [me.raynes.fs :as fs]
-            [me.raynes.conch :as conch]
+            [me.raynes.conch.low-level :as sh]
             [cglossa.search.core :refer [run-queries transform-results]]))
 
 (defn cwb-corpus-name [corpus queries]
@@ -44,16 +44,18 @@
                              [])]
     (conj init-cmds (str named-query " = " query-str " cut " cut))))
 
-(defn run-cqp-commands [commands]
+(defn run-cqp-commands [corpus commands]
   (let [cmdfile   (str (fs/tmpdir) (fs/temp-name "cglossa-cqp-cmd"))
         commands* (->> commands
                        (map #(str % \;))
                        (str/join \newline))]
     (spit cmdfile commands*)
-    (let [results (-> (conch/with-programs [cqp]
-                                           (cqp "-c" "-f" cmdfile {:seq true}))
-                      ;; Throw away the first line with the CQP version
-                      rest)]
+    (let [cqp      (sh/proc "cqp" "-c" "-f" cmdfile)
+          encoding (:encoding corpus "UTF-8")
+          ;; Run the CQP commands and capture the output
+          out      (sh/stream-to-string cqp :out :encoding encoding)
+          ;; Split into lines and throw away the first line, which contains the CQP version
+          results  (rest (str/split-lines out))]
       (if (re-find #"PARSE ERROR|CQP Error" (first results))
         (throw (str "CQP error: " results))
         results))))
