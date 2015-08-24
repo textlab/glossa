@@ -29,7 +29,8 @@
                  [me.raynes/conch "0.8.0"]
                  [me.raynes/fs "1.4.6"]
                  [cheshire "5.5.0"]
-                 [org.clojure/tools.logging "0.3.1"]]
+                 [org.clojure/tools.logging "0.3.1"]
+                 [binaryage/devtools "0.3.0"]]
 
   :plugins [[lein-cljsbuild "1.0.6"]
             [lein-environ "1.0.0"]

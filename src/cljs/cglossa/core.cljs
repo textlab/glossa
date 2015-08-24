@@ -2,9 +2,12 @@
   (:require [reagent.core :as r]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
+            [devtools.core :as devtools]
             [cglossa.search-engines]                        ; just to pull in implementations
             [cglossa.app :refer [app]])
   (:require-macros [cljs.core.async.macros :refer [go]]))
+
+(devtools/install!)
 
 (def state {:showing-sidebar?    false
             :showing-results?    false
