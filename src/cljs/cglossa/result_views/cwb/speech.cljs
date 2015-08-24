@@ -22,8 +22,9 @@
       [(str/trim s-id) [pre match post]])))
 
 (defn- main-row [result index a {:keys [corpus] :as m}]
-  (let [sound? (:has-sound corpus)
-        video? (:has-video corpus)]
+  (let [corpus* @corpus
+        sound?  (:has-sound corpus*)
+        video?  (:has-video corpus*)]
     ^{:key (hash result)}
     [:tr
      (if (or sound? video?)
@@ -43,8 +44,9 @@
      (shared/text-columns result)]))
 
 (defn- extra-row [result attr {:keys [corpus]}]
-  (let [sound?       (:has-sound corpus)
-        video?       (:has-video corpus)
+  (let [corpus*      @corpus
+        sound?       (:has-sound corpus*)
+        video?       (:has-video corpus*)
         match        (first (filter (fn [_ v] (:is-match v))
                                     (get-in result [:media-obj :divs :annotation])))
         row-contents (str/join " " (for [[_ v] (:line match)]
