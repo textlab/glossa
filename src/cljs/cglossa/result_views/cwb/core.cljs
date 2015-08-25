@@ -12,6 +12,6 @@
     [:div.row>div.col-sm-12.search-result-table-container {:style {:height 320 :overflow "auto"}}
      [b/table {:striped true :bordered true}
       [:tbody
-       (map (partial concordance-rows a m)
-            results
-            (range (count results)))]]]))
+       (doall (map (partial concordance-rows a m)
+                   results
+                   (range (count results))))]]]))
