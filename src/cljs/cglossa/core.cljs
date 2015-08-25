@@ -5,11 +5,16 @@
             [devtools.core :as devtools]
             [cglossa.search-engines]                        ; just to pull in implementations
             [cglossa.app :refer [app]])
-  (:require-macros [cljs.core.async.macros :refer [go]]))
+  (:require-macros [cljs.core.async.macros :refer [go]])
+  (:import [goog Throttle]))
 
 (devtools/install!)
 
-(def state {:showing-sidebar?    false
+(defn narrow-view? []
+  (< (.-innerWidth js/window) 768))
+
+(def state {:narrow-view?        (narrow-view?)
+            :showing-sidebar?    false
             :showing-results?    false
             :sort-results-by     :position
             :freq-attr           nil
@@ -28,6 +33,10 @@
 
 (defonce app-state (into {} (map (fn [[k v]] [k (r/atom v)]) state)))
 (defonce model-state (into {} (map (fn [[k v]] [k (r/atom v)]) data)))
+
+;; Set :narrow-view in app-state whenever the window is resized (throttled to 200ms)
+(def on-resize-throttle (Throttle. #(reset! (:narrow-view? app-state) (narrow-view?)) 200))
+(.addEventListener js/window "resize" #(.fire on-resize-throttle))
 
 (defn- get-models
   ([url] (get-models url {}))
