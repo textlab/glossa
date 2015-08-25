@@ -57,6 +57,7 @@
                      (sh/stream-to-string cqp :out :encoding encoding))
           ;; Split into lines and throw away the first line, which contains the CQP version
           results  (rest (str/split-lines out))]
-      (if (re-find #"PARSE ERROR|CQP Error" (first results))
+      (if (and (pos? (count results))
+               (re-find #"PARSE ERROR|CQP Error" (first results)))
         (throw (str "CQP error: " results))
         results))))
