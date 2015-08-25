@@ -31,11 +31,44 @@
      [b/menuitem {:event-key :lemma, :on-select on-select} "Lemmas"]
      [b/menuitem {:event-key :pos, :on-select on-select} "Parts-of-speech"]]))
 
-(defn- concordance-toolbar [a m]
-  [:div.row {:style {:margin-top 15 :margin-bottom 15}}
+(defn- pagination []
+  [:div.pull-right
+   [:nav
+    [:ul.pagination.pagination-sm
+     [:li
+      [:a
+       {:href "#", :aria-label "First"}
+       [:span {:aria-hidden "true"} "«"]]]
+     [:li
+      [:a
+       {:href "#", :aria-label "Previous"}
+       [:span {:aria-hidden "true"} "‹"]]]
+     [:li [:select.form-control.input-sm {:style {:width 60
+                                                  :float "left"
+                                                  :border-radius 0
+                                                  :height 27
+                                                  :line-height 27
+                                                  :border 0
+                                                  :outline "1px solid #ddd"
+                                                  :margin-top 1
+                                                  :background-color "white"}}
+           (for [i (range 1 101)]
+             [:option {:value i} i])]]
+     [:li
+      [:a
+       {:href "#", :aria-label "Next"}
+       [:span {:aria-hidden "true"} "›"]]]
+     [:li
+      [:a
+       {:href "#", :aria-label "Last"}
+       [:span {:aria-hidden "true"} "»"]]]]]])
+
+(defn- concordance-toolbar [{{page-no :page-no} :results-view :as a} m]
+  [:div.row {:style {:margin-top 15}}
    [:div.col-sm-12
     [b/buttontoolbar
-     [sort-button a m]]]])
+     [sort-button a m]
+     [pagination]]]])
 
 (defmulti concordance-table
   "Multimethod that accepts two arguments - an app state map and a

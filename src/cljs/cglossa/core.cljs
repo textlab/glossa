@@ -16,9 +16,10 @@
 (defonce app-state {:narrow-view?     (r/atom (narrow-view?))
                     :showing-sidebar? (r/atom false)
                     :results-view     {:show?     (r/atom false)
+                                       :results   (r/atom nil)
+                                       :page-no   (r/atom 1)
                                        :sort-by   (r/atom :position)
                                        :freq-attr (r/atom nil)
-                                       :results   (r/atom nil)
                                        :media     {:player-row-index    (r/atom nil)
                                                    :current-player-type (r/atom nil)
                                                    :current-media-type  (r/atom nil)}}
