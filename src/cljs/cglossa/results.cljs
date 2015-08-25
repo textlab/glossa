@@ -8,10 +8,10 @@
 (defn- results-info []
   [:div.col-sm-9 "No matches found"])
 
-(defn- sort-button [{:keys [sort-results-by] :as a} m]
-  (let [sort-by   @sort-results-by
+(defn- sort-button [{{sb :sort-by} :results-view :as a} m]
+  (let [sort-by   @sb
         on-select (fn [event-key _ _]
-                    (reset! sort-results-by (keyword event-key))
+                    (reset! sb (keyword event-key))
                     (search! a m))]
     [b/dropdownbutton {:title "Sort" :bs-size "small"}
      [b/menuitem {:event-key :position, :on-select on-select}
@@ -23,7 +23,7 @@
      [b/menuitem {:event-key :right, :on-select on-select}
       (when (= sort-by :right) [b/glyphicon {:glyph "ok"}]) "  By right context"]]))
 
-(defn- statistics-button [{:keys [freq-attr]} m]
+(defn- statistics-button [{{freq-attr :freq-attr} :results-view} m]
   (let [on-select #(reset! freq-attr (keyword %1))]
     [b/dropdownbutton {:title "Statistics"}
      [b/menuitem {:header true} "Frequencies"]

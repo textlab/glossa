@@ -210,14 +210,14 @@
        focus-text-input
 
        :reagent-render
-       (fn [{:keys [search-view search-queries] :as a} {:keys [corpus] :as m}]
-         (let [view          (case @search-view
+       (fn [{{:keys [view-type queries]} :search-view :as a} {:keys [corpus] :as m}]
+         (let [view          (case @view-type
                                :extended extended
                                :cqp cqp
                                simple)
                languages     (:langs @corpus)
                multilingual? (> (count languages) 1)
-               set-view      (fn [view e] (reset! search-view view) (.preventDefault e))]
+               set-view      (fn [view e] (reset! view-type view) (.preventDefault e))]
            [:span
             [:div.row.search-input-links>div.col-sm-12
              (if (= view simple)
@@ -240,13 +240,13 @@
                     :title    "CQP expressions"
                     :on-click #(set-view :cqp %)}
                 "CQP query"])
-             [search-button a m (if (= @search-view :extended) 72 233)]
+             [search-button a m (if (= @view-type :extended) 72 233)]
              (when multilingual? [add-language-button])]
 
-            ; Now create a cursor into the search-queries ratom for each search expression
+            ; Now create a cursor into the queries ratom for each search expression
             ; and display a row of search inputs for each of them. The doall call is needed
             ; because ratoms cannot be derefed inside lazy seqs.
-            (let [nqueries             (count @search-queries)
+            (let [nqueries             (count @queries)
                   query-range          (range nqueries)
                   show-remove-row-btn? (> nqueries 1)]
               ;; See explanation of query-term-ids in the extended view - query-ids is used
@@ -259,13 +259,13 @@
                        ;; child components (and in the extended view, we do the same for
                        ;; individual terms). When a query (or query term) changes, the wrap
                        ;; callbacks are called all the way up to the one setting the top-level
-                       ;; search-queries ratom, and all query views (potentially) re-render.
+                       ;; queries ratom, and all query views (potentially) re-render.
                        ;;
                        ;; By using cursors we could have restricted re-rendering to smaller
                        ;; sub-views, but we need to do some processing of the query (such as
-                       ;; changing " .* " to []) before updating it in the search-queries ratom.
+                       ;; changing " .* " to []) before updating it in the queries ratom.
                        ;; We could do this with a getter/setter-style cursor, but then we would
-                       ;; have to update the search-queries ratom anyway, causing the same
+                       ;; have to update the queries ratom anyway, causing the same
                        ;; potential re-rendering of all query views.
                        ;;
                        ;; Probably the most efficient approach would be to use a standard cursor
@@ -273,8 +273,8 @@
                        ;; query processing function before updating the cursor, but then we would
                        ;; have to make sure to do that every time we change a query...
                        (let [wrapped-query     (r/wrap
-                                                 (nth @search-queries index)
-                                                 wrapped-query-changed search-queries
+                                                 (nth @queries index)
+                                                 wrapped-query-changed queries
                                                  index query-ids)
                              selected-language (-> @wrapped-query :query :lang)]
                          ^{:key query-id}

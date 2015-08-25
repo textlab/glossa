@@ -19,30 +19,31 @@
             (str/replace #"\{\{(<s_id\s+.+?>)" "$1{{")
             (str/replace #"(</s_id>)\}\}" "}}$1"))))
 
-(defn- search! [{:keys [search-queries search-results showing-results? sort-results-by]}
+(defn- search! [{{queries :queries}              :search-view
+                 {:keys [show? results sort-by]} :results-view}
                 {:keys [corpus]}]
-  (let [queries     @search-queries
+  (let [queries*    @queries
         corpus*     @corpus
-        first-query (:query (first queries))]
+        first-query (:query (first queries*))]
     (when (and first-query
                (not= first-query "\"\""))
       (let [q (if (= (:lang corpus*) "zh")
                 ;; For Chinese: If the tone number is missing, add a pattern
                 ;; that matches all tones
-                (for [query queries]
+                (for [query queries*]
                   (update query :query
                           str/replace #"\bphon=\"([^0-9\"]+)\"" "phon=\"$1[1-4]?\""))
                 ;; For other languages, leave the queries unmodified
-                queries)]
-        (reset! showing-results? true)
+                queries*)]
+        (reset! show? true)
         (go (let [{:keys [status success] :as response}
                   (<! (http/post "/search"
                                  {:json-params {:corpus-id (:rid corpus*)
                                                 :queries   q
-                                                :sort-by   @sort-results-by}}))]
+                                                :sort-by   @sort-by}}))]
               (if success
-                (let [results (get-in response [:body :results])]
-                  (reset! search-results (map cleanup-result results)))
+                (let [res (get-in response [:body :results])]
+                  (reset! results (map cleanup-result res)))
                 (.log js/console status))))))))
 
 (defn on-key-down [event a m]

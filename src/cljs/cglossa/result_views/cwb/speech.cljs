@@ -5,7 +5,7 @@
             [cglossa.result-views.cwb.shared :as shared]))
 
 (defn- toggle-player [index player-type media-type
-                      {:keys [player-row-index current-player-type current-media-type]}]
+                      {{:keys [player-row-index current-player-type current-media-type]} :media}]
   (let [row-no         (when-not (and (= index @player-row-index)
                                       (= player-type @current-player-type)
                                       (= media-type @current-media-type))

@@ -7,11 +7,12 @@
   "Multimethod that returns one or more rows representing a single search result."
   (fn [_ {corpus :corpus} _ _] (keyword (:search-engine @corpus))))
 
-(defmethod concordance-table :default [{:keys [search-results] :as a} {:keys [corpus] :as m}]
-  (let [results @search-results]
+(defmethod concordance-table :default [{{results :results} :results-view :as a}
+                                       {:keys [corpus] :as m}]
+  (let [res @results]
     [:div.row>div.col-sm-12.search-result-table-container {:style {:height 320 :overflow "auto"}}
      [b/table {:striped true :bordered true}
       [:tbody
        (doall (map (partial concordance-rows a m)
-                   results
-                   (range (count results))))]]]))
+                   res
+                   (range (count res))))]]]))

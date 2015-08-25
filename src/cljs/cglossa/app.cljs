@@ -6,10 +6,10 @@
 (defn- header []
   [b/navbar {:fixedTop true :brand "Glossa"}])
 
-(defn- main-area [{:keys [showing-results?] :as a} m]
+(defn- main-area [{{:keys [show?]} :results-view :as a} m]
   [:div.container-fluid {:style {:padding-left 50}}
       [:div.row>div#main-content.col-sm-12
-       (if @showing-results?
+       (if @show?
          [results a m]
          [start a m])]])
 
