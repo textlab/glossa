@@ -40,8 +40,9 @@
         init-cmds          (if (:metadata-value-ids queries)
                              [(str "undump " named-query " < '" positions-filename \')
                               named-query]
-                             [])]
-    (conj init-cmds (str named-query " = " query-str " cut " cut))))
+                             [])
+        cut-str            (when cut (str " cut " cut))]
+    (conj init-cmds (str named-query " = " query-str cut-str))))
 
 (defn run-cqp-commands [corpus commands]
   (let [commands* (->> commands

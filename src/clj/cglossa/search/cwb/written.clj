@@ -6,7 +6,7 @@
             [cglossa.search.cwb.shared :refer [cwb-query-name cwb-corpus-name run-cqp-commands
                                                construct-query-commands]]))
 
-(defmethod run-queries :default [corpus search queries]
+(defmethod run-queries :default [corpus search queries step cut sort-by]
   (let [search-id   (db/stringify-rid search)
         named-query (cwb-query-name corpus search-id)
         commands    [(str "set DataDirectory \"" (fs/tmpdir) \")
