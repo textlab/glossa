@@ -17,6 +17,7 @@
                     :showing-sidebar? (r/atom false)
                     :results-view     {:show?     (r/atom false)
                                        :results   (r/atom nil)
+                                       :total     (r/atom 0)
                                        :page-no   (r/atom 1)
                                        :sort-by   (r/atom :position)
                                        :freq-attr (r/atom nil)
@@ -27,6 +28,7 @@
                                        :queries   (r/atom [#_{:query "[word=\"han\" %c] []{1,2} [word=\"er\" %c]"}
                                                            #_{:query "[word=\"de\" %c] [word=\"sa\" %c]"}
                                                            {:query "[word=\"hun\" %c] [word=\"vet\" %c]"}])}
+                    :searching?       (r/atom false)
                     :num-resets       (r/atom 0)})
 
 (defonce model-state {:corpus              (r/atom nil)

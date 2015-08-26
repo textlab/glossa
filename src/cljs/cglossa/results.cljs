@@ -5,8 +5,15 @@
             [cglossa.react-adapters.bootstrap :as b]
             [reagent.core :as r]))
 
-(defn- results-info []
-  [:div.col-sm-9 "No matches found"])
+(defn- results-info [{{total :total} :results-view searching? :searching?}]
+  (let [total*      @total
+        searching?* @searching?]
+    [:div.col-sm-9
+     (if (pos? total*)
+       (if searching?*
+         (str "Showing the first " total* " matches; searching for more...")
+         (str "Found " total* " matches"))
+       (when searching?* "Searching..."))]))
 
 (defn- sort-button [{{sb :sort-by} :results-view :as a} m]
   (let [sort-by   @sb
@@ -91,7 +98,7 @@
   [:div
    [:div.row
     [top-toolbar a]
-    [results-info]]
+    [results-info a]]
    ^{:key @num-resets} [search-inputs a m]                  ; See comments in cglossa.start
    [b/tabbedarea {:style              {:margin-top 15}
                   :animation          false

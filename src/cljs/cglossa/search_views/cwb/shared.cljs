@@ -19,32 +19,83 @@
                (str/replace #"\{\{(<s_id\s+.+?>)" "$1{{")
                (str/replace #"(</s_id>)\}\}" "}}$1"))))
 
-(defn- search! [{{queries :queries}              :search-view
-                 {:keys [show? results sort-by]} :results-view}
+;; TODO: Make this configurable?
+(def ^:private page-size 100)
+
+(defn- search-step3 [url params total searching?]
+  "Performs an unrestricted search."
+  (go
+    (let [results-ch (http/post url {:json-params (merge params {:step 3 :cut nil})})
+          {:keys [status success] {res :result} :body} (<! results-ch)]
+      (if-not success
+        (.log js/console status)
+        (do
+          ;; The results from the third request should be the number of results found so far.
+          ;; Just set the total ratom (we'll postpone fetching any results until the user switches
+          ;; to a different result page) and mark searching as finished.
+          (reset! total res)
+          (reset! searching? false))))))
+
+(defn- search-step2 [url params total searching?]
+  "Performs a search restricted to 20 pages of search results."
+  (go
+    (let [results-ch (http/post url {:json-params (merge params {:step 2 :cut (* 20 page-size)})})
+          {:keys [status success] {res :result} :body} (<! results-ch)]
+      (if-not success
+        (.log js/console status)
+        (do
+          ;; The response from the second request should be the number of results found so far.
+          ;; Just set the total ratom - we'll postpone fetching any results until the user switches
+          ;; to a different result page.
+          (reset! total res)
+          (if (< res (* 20 page-size))
+            ;; We found less than 20 search pages of results, so stop searching
+            (reset! searching? false)
+            (search-step3 url params total searching?)))))))
+
+(defn- search-step1 [url params total searching? results]
+  "Performs a search restricted to one page of search results."
+  (go
+    (let [results-ch (http/post url {:json-params (merge params {:step 1 :cut page-size})})
+          {:keys [status success] {res :result} :body} (<! results-ch)]
+      (if-not success
+        (.log js/console status)
+        (do
+          ;; The response from the first request should be (at most) one page of search results.
+          ;; Set the results ratom to those results and the total ratom to the number of results.
+          (reset! results (map cleanup-result res))
+          (reset! total (count res))
+          (if (< (count res) page-size)
+            ;; We found less than one search page of results, so stop searching
+            (reset! searching? false)
+            (search-step2 url params total searching?)))))))
+
+(defn- search! [{{queries :queries}                    :search-view
+                 {:keys [show? results total sort-by]} :results-view
+                 searching?                            :searching?}
                 {:keys [corpus]}]
   (let [queries*    @queries
         corpus*     @corpus
+        total*      @total
         first-query (:query (first queries*))]
     (when (and first-query
                (not= first-query "\"\""))
-      (let [q (if (= (:lang corpus*) "zh")
-                ;; For Chinese: If the tone number is missing, add a pattern
-                ;; that matches all tones
-                (for [query queries*]
-                  (update query :query
-                          str/replace #"\bphon=\"([^0-9\"]+)\"" "phon=\"$1[1-4]?\""))
-                ;; For other languages, leave the queries unmodified
-                queries*)]
+      (let [q      (if (= (:lang corpus*) "zh")
+                     ;; For Chinese: If the tone number is missing, add a pattern
+                     ;; that matches all tones
+                     (for [query queries*]
+                       (update query :query
+                               str/replace #"\bphon=\"([^0-9\"]+)\"" "phon=\"$1[1-4]?\""))
+                     ;; For other languages, leave the queries unmodified
+                     queries*)
+            url    "/search"
+            params {:corpus-id (:rid corpus*)
+                    :queries   q
+                    :sort-by   @sort-by}]
         (reset! show? true)
-        (go (let [{:keys [status success] :as response}
-                  (<! (http/post "/search"
-                                 {:json-params {:corpus-id (:rid corpus*)
-                                                :queries   q
-                                                :sort-by   @sort-by}}))]
-              (if success
-                (let [res (get-in response [:body :results])]
-                  (reset! results (map cleanup-result res)))
-                (.log js/console status))))))))
+        (reset! searching? true)
+        (reset! total 0)
+        (search-step1 url params total searching? results)))))
 
 (defn on-key-down [event a m]
   (when (= "Enter" (.-key event))

@@ -18,11 +18,19 @@
                      (cwb-corpus-name corpus queries)
                      (construct-query-commands corpus queries named-query search-id cut
                                                :s-tag "sync_time")
+                     (when (> step 1)
+                       (str "save " named-query))
                      (str "set Context 7 sync_time")
                      "set LD \"{{\""
                      "set RD \"}}\""
                      "show +sync_time +sync_end +who_name +who_line_key"
-                     "cat Last"]]
+                     (if (= step 1)
+                       ;; When we do the first search, which has been cut to a single page of
+                       ;; search results, we return all those results
+                       "cat Last"
+                       ;; When we are retrieving more results, we just tell the browser how
+                       ;; many results we have found (so far)
+                       "size Last")]]
     (run-cqp-commands corpus (flatten commands))))
 
 (defn- fix-brace-positions [result]
