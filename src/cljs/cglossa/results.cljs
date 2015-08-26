@@ -82,7 +82,10 @@
 (defn- concordances [a m]
   [:div.container-fluid {:style {:padding-left 0 :padding-right 0}}
    [concordance-toolbar a m]
-   [concordance-table a m]])
+   [concordance-table a m]
+   [:div.row
+    [:div.col-sm-12
+     [pagination]]]])
 
 (defn results [{:keys [num-resets] :as a} m]
   [:div
