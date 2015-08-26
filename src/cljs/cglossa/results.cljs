@@ -43,17 +43,19 @@
       [:a
        {:href "#", :aria-label "Previous"}
        [:span {:aria-hidden "true"} "‹"]]]
-     [:li [:select.form-control.input-sm {:style {:width 60
-                                                  :float "left"
-                                                  :border-radius 0
-                                                  :height 27
-                                                  :line-height 27
-                                                  :border 0
-                                                  :outline "1px solid #ddd"
-                                                  :margin-top 1
-                                                  :background-color "white"}}
-           (for [i (range 1 101)]
-             [:option {:value i} i])]]
+     [:li
+      [:select.form-control.input-sm {:style {:direction        "rtl"
+                                              :width            60
+                                              :float            "left"
+                                              :border-radius    0
+                                              :height           27
+                                              :line-height      27
+                                              :border           0
+                                              :outline          "1px solid #ddd"
+                                              :margin-top       1
+                                              :background-color "white"}}
+       (for [i (range 1 101)]
+         ^{:key i} [:option {:value i} i])]]
      [:li
       [:a
        {:href "#", :aria-label "Next"}
