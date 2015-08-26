@@ -10,7 +10,7 @@
 (defmethod concordance-table :default [{{results :results} :results-view :as a}
                                        {:keys [corpus] :as m}]
   (let [res @results]
-    [:div.row>div.col-sm-12.search-result-table-container {:style {:height 320 :overflow "auto"}}
+    [:div.row>div.col-sm-12.search-result-table-container
      [b/table {:striped true :bordered true}
       [:tbody
        (doall (map (partial concordance-rows a m)

@@ -114,20 +114,20 @@ div.interval {
 .search-input-links {
   margin-bottom: 10px; }
 
-.search-result-table-container {
-  height: 500px;
-  overflow: auto; }
-  .search-result-table-container table td.left-context {
-    width: 50%;
-    text-align: right; }
-  .search-result-table-container table td.right-context {
-    width: 50%; }
-  .search-result-table-container table td.aligned-text {
-    font-style: italic; }
-    .search-result-table-container table td.aligned-text span.aligned-id {
-      color: #999; }
-  .search-result-table-container table td.match {
-    font-weight: bold; }
+.search-result-table-container table td.left-context {
+  width: 50%;
+  text-align: right; }
+
+.search-result-table-container table td.right-context {
+  width: 50%; }
+
+.search-result-table-container table td.aligned-text {
+  font-style: italic; }
+  .search-result-table-container table td.aligned-text span.aligned-id {
+    color: #999; }
+
+.search-result-table-container table td.match {
+  font-weight: bold; }
 
 .sidebar {
   transition: width 0.1s; }
