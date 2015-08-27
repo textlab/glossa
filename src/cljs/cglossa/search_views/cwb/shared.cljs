@@ -70,9 +70,9 @@
             (reset! searching? false)
             (search-step2 url params total searching?)))))))
 
-(defn- search! [{{queries :queries}                    :search-view
-                 {:keys [show? results total sort-by]} :results-view
-                 searching?                            :searching?}
+(defn- search! [{{queries :queries}                            :search-view
+                 {:keys [show? results total page-no sort-by]} :results-view
+                 searching?                                    :searching?}
                 {:keys [corpus]}]
   (let [queries*    @queries
         corpus*     @corpus
@@ -93,8 +93,10 @@
                     :queries   q
                     :sort-by   @sort-by}]
         (reset! show? true)
+        (reset! results nil)
         (reset! searching? true)
         (reset! total 0)
+        (reset! page-no 1)
         (search-step1 url params total searching? results)))))
 
 (defn on-key-down [event a m]
