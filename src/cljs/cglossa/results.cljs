@@ -15,12 +15,13 @@
          (str "Found " total* " matches"))
        (when searching?* "Searching..."))]))
 
-(defn- sort-button [{{sb :sort-by} :results-view :as a} m]
+(defn- sort-button [{{sb :sort-by total :total} :results-view searching? :searching? :as a} m]
   (let [sort-by   @sb
         on-select (fn [event-key _ _]
                     (reset! sb (keyword event-key))
                     (search! a m))]
-    [b/dropdownbutton {:title "Sort" :bs-size "small"}
+    [b/dropdownbutton {:title "Sort" :bs-size "small" :disabled (or @searching?
+                                                                    (zero? @total))}
      [b/menuitem {:event-key :position, :on-select on-select}
       (when (= sort-by :position) [b/glyphicon {:glyph "ok"}]) "  By corpus position"]
      [b/menuitem {:event-key :match, :on-select on-select}
