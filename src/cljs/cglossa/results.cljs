@@ -24,7 +24,7 @@
                        :bs-size  "small"
                        :disabled (or @searching?
                                      (zero? @total))
-                       :style {:margin-bottom 10}}
+                       :style    {:margin-bottom 10}}
      [b/menuitem {:event-key :position, :on-select on-select}
       (when (= sort-by :position) [b/glyphicon {:glyph "ok"}]) "  By corpus position"]
      [b/menuitem {:event-key :match, :on-select on-select}
@@ -42,40 +42,53 @@
      [b/menuitem {:event-key :lemma, :on-select on-select} "Lemmas"]
      [b/menuitem {:event-key :pos, :on-select on-select} "Parts-of-speech"]]))
 
-(defn- pagination [{{total :total} :results-view}]
-  (when (> @total page-size)
-    [:div.pull-right
-     [:nav
-      [:ul.pagination.pagination-sm
-       [:li
-        [:a
-         {:href "#", :aria-label "First"}
-         [:span {:aria-hidden "true"} "«"]]]
-       [:li
-        [:a
-         {:href "#", :aria-label "Previous"}
-         [:span {:aria-hidden "true"} "‹"]]]
-       [:li
-        [:select.form-control.input-sm {:style {:direction        "rtl"
-                                                :width            60
-                                                :float            "left"
-                                                :border-radius    0
-                                                :height           27
-                                                :line-height      27
-                                                :border           0
-                                                :outline          "1px solid #ddd"
-                                                :margin-top       1
-                                                :background-color "white"}}
-         (for [i (range 1 101)]
-           ^{:key i} [:option {:value i} i])]]
-       [:li
-        [:a
-         {:href "#", :aria-label "Next"}
-         [:span {:aria-hidden "true"} "›"]]]
-       [:li
-        [:a
-         {:href "#", :aria-label "Last"}
-         [:span {:aria-hidden "true"} "»"]]]]]]))
+(defn- pagination [{{:keys [total page-no]} :results-view}]
+  (let [set-page (fn [n]
+                   (let [n* (js/parseInt n)]
+                     (reset! page-no n*)))]
+    (when (> @total page-size)
+      [:div.pull-right
+       [:nav
+        [:ul.pagination.pagination-sm
+         [:li
+          [:a {:href       "#"
+               :aria-label "First"
+               :title      "First"
+               :on-click   #(set-page 1)}
+           [:span {:aria-hidden "true"} "«"]]]
+         [:li
+          [:a {:href       "#"
+               :aria-label "Previous"
+               :title      "Previous"
+               :on-click   #(set-page (dec @page-no))}
+           [:span {:aria-hidden "true"} "‹"]]]
+         [:li
+          [:select.form-control.input-sm {:style     {:direction        "rtl"
+                                                      :width            60
+                                                      :float            "left"
+                                                      :border-radius    0
+                                                      :height           27
+                                                      :line-height      27
+                                                      :border           0
+                                                      :outline          "1px solid #ddd"
+                                                      :margin-top       1
+                                                      :background-color "white"}
+                                          :value     @page-no
+                                          :on-change #(set-page (.-target.value %))}
+           (for [i (range 1 101)]
+             ^{:key i} [:option {:value i} i])]]
+         [:li
+          [:a {:href       "#"
+               :aria-label "Next"
+               :title      "Next"
+               :on-click   #(set-page (inc @page-no))}
+           [:span {:aria-hidden "true"} "›"]]]
+         [:li
+          [:a {:href       "#"
+               :aria-label "Last"
+               :title      "Last"
+               :on-click   #(set-page (inc (quot @total page-size)))}
+           [:span {:aria-hidden "true"} "»"]]]]]])))
 
 (defn- concordance-toolbar [{{page-no :page-no} :results-view :as a} m]
   [:div.row {:style {:margin-top 15}}
