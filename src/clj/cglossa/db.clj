@@ -15,6 +15,13 @@
 (defn db-record? [o]
   (instance? OIdentifiable o))
 
+(defn valid-rid? [rid]
+  (re-matches #"#\d+:\d+" rid))
+
+(defn get-rid [record-map]
+  "Gets the record ID from a hash map representation of a db record."
+  (get record-map (keyword "@rid")))
+
 (defn stringify-rid [record]
   "Returns the ID of record as a string."
   (.. record getIdentity toString))
@@ -64,7 +71,7 @@
   specification of attribute values on edges and vertices, e.g. in()[name = &name],
   with {:name 'John'} given as the value of the strings key).
 
-  * sql-params: parameters (positioned or named) that will replace question marks
+  * sql-params: sequence of parameters (positioned or named) that will replace question marks
   in the SQL query through OrientDB's normal parameterization process.
 
   A full example:
@@ -77,7 +84,7 @@
   ([sql params]
    (let [t          (or (:target params) (:targets params))
          targets    (if t (flatten [t]) [])
-         _          (doseq [target targets] (assert (re-matches #"#\d+:\d+" target)
+         _          (doseq [target targets] (assert (valid-rid? target)
                                                     (str "Invalid target: " target)))
          strings    (:strings params)
          _          (assert (or (nil? strings) (map? strings))

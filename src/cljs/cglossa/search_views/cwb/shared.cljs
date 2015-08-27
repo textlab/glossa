@@ -22,10 +22,12 @@
 ;; TODO: Make this configurable?
 (def page-size 100)
 
-(defn- search-step3 [url params total searching?]
+(defn- search-step3 [url params total searching? search-id]
   "Performs an unrestricted search."
   (go
-    (let [results-ch (http/post url {:json-params (merge params {:step 3 :cut nil})})
+    (let [results-ch (http/post url {:json-params (merge params {:step      3
+                                                                 :cut       nil
+                                                                 :search-id search-id})})
           {:keys [status success] {res :result} :body} (<! results-ch)]
       (if-not success
         (.log js/console status)
@@ -36,10 +38,12 @@
           (reset! total res)
           (reset! searching? false))))))
 
-(defn- search-step2 [url params total searching?]
+(defn- search-step2 [url params total searching? search-id]
   "Performs a search restricted to 20 pages of search results."
   (go
-    (let [results-ch (http/post url {:json-params (merge params {:step 2 :cut (* 20 page-size)})})
+    (let [results-ch (http/post url {:json-params (merge params {:step      2
+                                                                 :cut       (* 20 page-size)
+                                                                 :search-id search-id})})
           {:keys [status success] {res :result} :body} (<! results-ch)]
       (if-not success
         (.log js/console status)
@@ -51,13 +55,13 @@
           (if (< res (* 20 page-size))
             ;; We found less than 20 search pages of results, so stop searching
             (reset! searching? false)
-            (search-step3 url params total searching?)))))))
+            (search-step3 url params total searching? search-id)))))))
 
 (defn- search-step1 [url params total searching? results]
   "Performs a search restricted to one page of search results."
   (go
     (let [results-ch (http/post url {:json-params (merge params {:step 1 :cut page-size})})
-          {:keys [status success] {res :result} :body} (<! results-ch)]
+          {:keys [status success] {res :result search-id (keyword "@rid")} :body} (<! results-ch)]
       (if-not success
         (.log js/console status)
         (do
@@ -68,7 +72,7 @@
           (if (< (count res) page-size)
             ;; We found less than one search page of results, so stop searching
             (reset! searching? false)
-            (search-step2 url params total searching?)))))))
+            (search-step2 url params total searching? search-id)))))))
 
 (defn- search! [{{queries :queries}                            :search-view
                  {:keys [show? results total page-no sort-by]} :results-view

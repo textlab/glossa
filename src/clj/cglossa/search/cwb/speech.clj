@@ -12,7 +12,7 @@
                               :temp :pers :case :degr :descr :nlex :mood :voice])
 
 (defmethod run-queries :cwb_speech [corpus search queries step cut sort-by]
-  (let [search-id   (db/stringify-rid search)
+  (let [search-id   (db/get-rid search)
         named-query (cwb-query-name corpus search-id)
         commands    [(str "set DataDirectory \"" (fs/tmpdir) \")
                      (cwb-corpus-name corpus queries)

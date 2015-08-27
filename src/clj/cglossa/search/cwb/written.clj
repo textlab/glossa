@@ -7,7 +7,7 @@
                                                construct-query-commands]]))
 
 (defmethod run-queries :default [corpus search queries step cut sort-by]
-  (let [search-id   (db/stringify-rid search)
+  (let [search-id   (db/get-rid search)
         named-query (cwb-query-name corpus search-id)
         commands    [(str "set DataDirectory \"" (fs/tmpdir) \")
                      (cwb-corpus-name corpus queries)
