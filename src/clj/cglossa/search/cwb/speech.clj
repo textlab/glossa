@@ -3,7 +3,7 @@
   (:require [clojure.string :as str]
             [me.raynes.fs :as fs]
             [cglossa.db :as db]
-            [cglossa.search.core :refer [run-queries transform-results]]
+            [cglossa.search.core :refer [run-queries get-results transform-results]]
             [cglossa.search.cwb.shared :refer [cwb-query-name cwb-corpus-name
                                                construct-query-commands run-cqp-commands]]))
 
@@ -31,6 +31,17 @@
                        ;; When we are retrieving more results, we just tell the browser how
                        ;; many results we have found (so far)
                        "size Last")]]
+    (run-cqp-commands corpus (flatten commands))))
+
+(defmethod get-results :cwb_speech [corpus search-id start end sort-by]
+  (let [named-query (cwb-query-name corpus search-id)
+        commands    [(str "set DataDirectory \"" (fs/tmpdir) \")
+                     (str/upper-case (:code corpus))
+                     (str "set Context 7 sync_time")
+                     "set LD \"{{\""
+                     "set RD \"}}\""
+                     "show +sync_time +sync_end +who_name +who_line_key"
+                     (str "cat " named-query " " start " " end)]]
     (run-cqp-commands corpus (flatten commands))))
 
 (defn- fix-brace-positions [result]

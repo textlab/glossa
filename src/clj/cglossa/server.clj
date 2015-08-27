@@ -60,6 +60,8 @@
 (defroutes search-routes
   (POST "/search" [corpus-id search-id queries step cut sort-by]
     (transit-response (search/search corpus-id search-id queries step cut sort-by)))
+  (GET "/results" [search-id start end sort-by]
+    (transit-response (search/results search-id start end sort-by))))
 
 (def http-handler
   (let [r (routes #'db-routes #'search-routes #'app-routes)

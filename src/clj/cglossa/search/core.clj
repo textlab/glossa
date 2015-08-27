@@ -6,6 +6,9 @@
   appropriate for the search engine of the corpus in question."
   (fn [corpus _ _ _ _ _] (keyword (:search_engine corpus))))
 
+(defmulti get-results
+  (fn [corpus _ _ _ _] (keyword (:search_engine corpus))))
+
 (defmulti transform-results
   "Multimethod for transforming search results in a way that is
   appropriate for the search engine of the corpus in question."
@@ -29,3 +32,8 @@
                             ;; On subsequent searches, which just retrieve more results from
                             ;; the same query, we just get the number of results found (so far)
                             (first results-or-count)))))
+
+(defn results [search-id start end sort-by]
+  (let [corpus (first (db/sql-query "select expand(out('InCorpus')) from #TARGET"
+                                    {:target (str "#" search-id)}))]
+    (get-results corpus search-id start end sort-by)))
