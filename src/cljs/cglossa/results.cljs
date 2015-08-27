@@ -1,7 +1,7 @@
 (ns cglossa.results
   (:require [cglossa.search-views.shared :refer [search-inputs]]
             [cglossa.shared :refer [top-toolbar]]
-            [cglossa.search-views.cwb.shared :refer [search!]]
+            [cglossa.search-views.cwb.shared :refer [page-size search!]]
             [cglossa.react-adapters.bootstrap :as b]
             [reagent.core :as r]))
 
@@ -20,8 +20,11 @@
         on-select (fn [event-key _ _]
                     (reset! sb (keyword event-key))
                     (search! a m))]
-    [b/dropdownbutton {:title "Sort" :bs-size "small" :disabled (or @searching?
-                                                                    (zero? @total))}
+    [b/dropdownbutton {:title    "Sort"
+                       :bs-size  "small"
+                       :disabled (or @searching?
+                                     (zero? @total))
+                       :style {:margin-bottom 10}}
      [b/menuitem {:event-key :position, :on-select on-select}
       (when (= sort-by :position) [b/glyphicon {:glyph "ok"}]) "  By corpus position"]
      [b/menuitem {:event-key :match, :on-select on-select}
@@ -39,46 +42,47 @@
      [b/menuitem {:event-key :lemma, :on-select on-select} "Lemmas"]
      [b/menuitem {:event-key :pos, :on-select on-select} "Parts-of-speech"]]))
 
-(defn- pagination []
-  [:div.pull-right
-   [:nav
-    [:ul.pagination.pagination-sm
-     [:li
-      [:a
-       {:href "#", :aria-label "First"}
-       [:span {:aria-hidden "true"} "«"]]]
-     [:li
-      [:a
-       {:href "#", :aria-label "Previous"}
-       [:span {:aria-hidden "true"} "‹"]]]
-     [:li
-      [:select.form-control.input-sm {:style {:direction        "rtl"
-                                              :width            60
-                                              :float            "left"
-                                              :border-radius    0
-                                              :height           27
-                                              :line-height      27
-                                              :border           0
-                                              :outline          "1px solid #ddd"
-                                              :margin-top       1
-                                              :background-color "white"}}
-       (for [i (range 1 101)]
-         ^{:key i} [:option {:value i} i])]]
-     [:li
-      [:a
-       {:href "#", :aria-label "Next"}
-       [:span {:aria-hidden "true"} "›"]]]
-     [:li
-      [:a
-       {:href "#", :aria-label "Last"}
-       [:span {:aria-hidden "true"} "»"]]]]]])
+(defn- pagination [{{total :total} :results-view}]
+  (when (> @total page-size)
+    [:div.pull-right
+     [:nav
+      [:ul.pagination.pagination-sm
+       [:li
+        [:a
+         {:href "#", :aria-label "First"}
+         [:span {:aria-hidden "true"} "«"]]]
+       [:li
+        [:a
+         {:href "#", :aria-label "Previous"}
+         [:span {:aria-hidden "true"} "‹"]]]
+       [:li
+        [:select.form-control.input-sm {:style {:direction        "rtl"
+                                                :width            60
+                                                :float            "left"
+                                                :border-radius    0
+                                                :height           27
+                                                :line-height      27
+                                                :border           0
+                                                :outline          "1px solid #ddd"
+                                                :margin-top       1
+                                                :background-color "white"}}
+         (for [i (range 1 101)]
+           ^{:key i} [:option {:value i} i])]]
+       [:li
+        [:a
+         {:href "#", :aria-label "Next"}
+         [:span {:aria-hidden "true"} "›"]]]
+       [:li
+        [:a
+         {:href "#", :aria-label "Last"}
+         [:span {:aria-hidden "true"} "»"]]]]]]))
 
 (defn- concordance-toolbar [{{page-no :page-no} :results-view :as a} m]
   [:div.row {:style {:margin-top 15}}
    [:div.col-sm-12
     [b/buttontoolbar
      [sort-button a m]
-     [pagination]]]])
+     [pagination a]]]])
 
 (defmulti concordance-table
   "Multimethod that accepts two arguments - an app state map and a
@@ -93,7 +97,7 @@
    [concordance-table a m]
    [:div.row
     [:div.col-sm-12
-     [pagination]]]])
+     [pagination a]]]])
 
 (defn results [{:keys [num-resets] :as a} m]
   [:div

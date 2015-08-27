@@ -20,7 +20,7 @@
                (str/replace #"(</s_id>)\}\}" "}}$1"))))
 
 ;; TODO: Make this configurable?
-(def ^:private page-size 100)
+(def page-size 100)
 
 (defn- search-step3 [url params total searching?]
   "Performs an unrestricted search."
