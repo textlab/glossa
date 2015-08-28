@@ -1,0 +1,75 @@
+description:  Oromo tags developed by the Ethiopian Languages Research Center at Addis Ababa University
+displayAttrs: [part-of-speech]
+
+tags:
+  attr: pos
+  name: part-of-speech
+  options:
+    - name: N
+      value: N
+    - name: V
+      value: V
+    - name: PRON
+      value: PRON
+    - name: ADJ
+      value: ADJ
+    - name: DET
+      value: DET
+    - name: POSTP
+      value: POSTP
+    - name: PREP
+      value: PREP
+    - name: COP
+      value: COP
+    - name: RELT
+      value: RELT
+    - name: CONJ
+      value: CONJ
+    - name: PARTICLE
+      value: PARTICLE
+    - name: NEG
+      value: NEG
+    - name: NUM
+      value: NUM
+    - name: ADV
+      value: ADV
+    - name: RELAT
+      value: RELAT
+    - name: POST
+      value: POST
+    - name: NUMB
+      value: NUMB
+    - name: QUANT
+      value: QUANT
+    - name: PROP
+      value: PROP
+    - name: PRO
+      value: PRO
+    - name: POETP
+      value: POETP
+    - name: POS
+      value: POS
+    - name: OSTP
+      value: OSTP
+    - name: RON
+      value: RON
+    - name: DEM
+      value: DEM
+    - name: SDV
+      value: SDV
+    - name: ADN
+      value: ADN
+    - name: NRG
+      value: NRG
+    - name: RRON
+      value: RRON
+    - name: ET
+      value: ET
+    - name: DJ
+      value: DJ
+    - name: POSP
+      value: POSP
+    - name: ONJ
+      value: ONJ
+    - name: OP
+      value: OP
