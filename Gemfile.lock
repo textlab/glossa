@@ -197,6 +197,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
+    rserve-client (0.3.1)
     rspec (3.2.0)
       rspec-core (~> 3.2.0)
       rspec-expectations (~> 3.2.0)
@@ -298,6 +299,7 @@ DEPENDENCIES
   rb-fsevent (~> 0.9.1)
   react-rails
   rglossa-fcs!
+  rserve-client (~> 0.3.1)
   rspec-rails
   ruby-saml
   rubyzip

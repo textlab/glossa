@@ -33,6 +33,12 @@ scope module: 'rglossa' do
     end
   end
 
+  namespace :r do
+    namespace :search_engines do
+      match 'cwb/query_freq', to: 'cwb#query_freq'
+    end
+  end
+
   resources :saml, only: [] do
     collection do
       get :sso

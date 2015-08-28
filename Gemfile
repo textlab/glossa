@@ -53,6 +53,7 @@ gem 'headless'
 gem 'daemon_controller'
 gem 'rubyzip'
 gem 'ruby-saml'
+gem "rserve-client", "~> 0.3.1"
 
 group :development do
   gem 'thin'
