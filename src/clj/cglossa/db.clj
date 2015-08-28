@@ -18,10 +18,6 @@
 (defn valid-rid? [rid]
   (re-matches #"#\d+:\d+" rid))
 
-(defn get-rid [record-map]
-  "Gets the record ID from a hash map representation of a db record."
-  (get record-map (keyword "@rid")))
-
 (defn stringify-rid [record]
   "Returns the ID of record as a string."
   (.. record getIdentity toString))
@@ -43,7 +39,13 @@
     ;; Convert them to a Clojure hash map
     (into {} $)
     ;; Transform values as needed
-    (walk/walk (fn [[k v]] [k (xform-val v)]) identity $)
+    (walk/walk (fn [[k v]]
+                 ;; Remove @ from the beginning of attributes like @rid and @class since
+                 ;; keyword literals starting with a @ (such as :@rid) are invalid in Clojure
+                 ;; (calling (keyword "@rid") is possible but inconvenient)
+                 (let [k* (str/replace-first k #"^@" "")
+                       v* (xform-val v)]
+                   [k* v*])) identity $)
     (walk/keywordize-keys $)))
 
 (defn run-sql

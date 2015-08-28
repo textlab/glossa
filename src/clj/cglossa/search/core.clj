@@ -16,8 +16,7 @@
 
 (defn- create-search [corpus queries]
   (let [search (db/vertex->map (db/run-sql "create vertex Search set queries = ?" [(str queries)]))]
-    (db/vertex->map (first (db/run-sql (str "create edge InCorpus from " (db/get-rid search)
-                                            " to " (db/get-rid corpus)))))
+    (db/run-sql (str "create edge InCorpus from " (:rid search) " to " (:rid corpus)))
     search))
 
 (defn search [corpus-id search-id queries step cut sort-by]

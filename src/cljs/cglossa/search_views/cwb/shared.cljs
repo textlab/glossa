@@ -72,7 +72,7 @@
           (if (< (count res) page-size)
             ;; We found less than one search page of results, so stop searching
             (reset! searching? false)
-            (search-step2 url params total searching? search-id)))))))
+            (search-step2 url params total searching? (:rid search))))))))
 
 (defn- search! [{{queries :queries}                            :search-view
                  {:keys [show? results total page-no sort-by]} :results-view
