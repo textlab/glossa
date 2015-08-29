@@ -20,19 +20,23 @@
     search))
 
 (defn search [corpus-id search-id queries step cut sort-by]
-  (let [corpus           (first (db/sql-query "select from #TARGET" {:target corpus-id}))
+  (let [corpus           (first (db/sql-query (str "select @rid, code, search_engine, encoding "
+                                                   "from #TARGET") {:target corpus-id}))
         search           (if (= step 1)
                            (create-search corpus queries)
                            (first (db/sql-query "select from #TARGET" {:target search-id})))
-        results-or-count (run-queries corpus search queries step cut sort-by)]
-    (assoc search :result (if (= step 1)
-                            ;; On the first search, we get actual search results back
-                            (transform-results corpus results-or-count)
-                            ;; On subsequent searches, which just retrieve more results from
-                            ;; the same query, we just get the number of results found (so far)
-                            (first results-or-count)))))
+        results-or-count (run-queries corpus search queries step cut sort-by)
+        result           (if (= step 1)
+                           ;; On the first search, we get actual search results back
+                           (transform-results corpus results-or-count)
+                           ;; On subsequent searches, which just retrieve more results from
+                           ;; the same query, we just get the number of results found (so far)
+                           (first results-or-count))]
+    {:search search
+     :result result}))
 
 (defn results [search-id start end sort-by]
   (let [corpus (first (db/sql-query "select expand(out('InCorpus')) from #TARGET"
-                                    {:target (str "#" search-id)}))]
-    (get-results corpus search-id start end sort-by)))
+                                    {:target search-id}))
+        results (get-results corpus search-id start end sort-by)]
+    (transform-results corpus results)))

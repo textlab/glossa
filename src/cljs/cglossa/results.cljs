@@ -1,9 +1,12 @@
 (ns cglossa.results
-  (:require [cglossa.search-views.shared :refer [search-inputs]]
+  (:require-macros [cljs.core.async.macros :refer [go]])
+  (:require [reagent.core :as r]
+            [cljs-http.client :as http]
+            [cljs.core.async :refer [<!]]
+            [cglossa.search-views.shared :refer [search-inputs]]
             [cglossa.shared :refer [top-toolbar]]
             [cglossa.search-views.cwb.shared :refer [page-size search!]]
-            [cglossa.react-adapters.bootstrap :as b]
-            [reagent.core :as r]))
+            [cglossa.react-adapters.bootstrap :as b]))
 
 (defn- results-info [{{total :total} :results-view searching? :searching?}]
   (let [total*      @total
@@ -42,25 +45,56 @@
      [b/menuitem {:event-key :lemma, :on-select on-select} "Lemmas"]
      [b/menuitem {:event-key :pos, :on-select on-select} "Parts-of-speech"]]))
 
-(defn- pagination [{{:keys [total page-no]} :results-view}]
-  (let [set-page (fn [n]
-                   (let [n* (js/parseInt n)]
-                     (reset! page-no n*)))]
+(defn- fetch-results! [search-id current-results page-no new-page-no sort-by]
+  (go
+    (let [start      (* (dec new-page-no) page-size)
+          end        (+ start (dec page-size))
+          results-ch (http/get "/results" {:query-params {:search-id search-id
+                                                          :start     start
+                                                          :end       end
+                                                          :sort-by   sort-by}})
+          {:keys [status success] results :body} (<! results-ch)]
+      (if-not success
+        (.log js/console status)
+        (do
+          (swap! current-results assoc new-page-no results)
+          (reset! page-no new-page-no))))))
+
+(defn- pagination [{{:keys [results total page-no paginator-page-no sort-by]} :results-view}
+                   {search :search}]
+  (let [last-page-no #(inc (quot @total page-size))
+        set-page     (fn [n]
+                       (let [new-page-no (js/parseInt n)]
+                         (when (<= 1 new-page-no (last-page-no))
+                           ;; Set the value of the page number shown in the paginator; it may
+                           ;; differ from the page shown in the result table until we have
+                           ;; actually fetched the data from the server
+                           (reset! paginator-page-no new-page-no)
+                           (if (get @results new-page-no)
+                             ;; The selected result page has already been fetched from the
+                             ;; server and can be shown in the result table immediately
+                             (reset! page-no new-page-no)
+                             ;; Otherwise, we need to fetch the results from the server
+                             ;; before setting page-no in the top-level app-data structure
+                             (fetch-results! (:rid @search) results
+                                             page-no new-page-no sort-by)))))]
     (when (> @total page-size)
       [:div.pull-right
        [:nav
         [:ul.pagination.pagination-sm
-         [:li
+         [:li {:class-name (when (= @paginator-page-no 1)
+                             "disabled")}
           [:a {:href       "#"
                :aria-label "First"
                :title      "First"
                :on-click   #(set-page 1)}
            [:span {:aria-hidden "true"} "«"]]]
-         [:li
+         [:li {:class-name (when (= @paginator-page-no 1)
+                             "disabled")}
           [:a {:href       "#"
                :aria-label "Previous"
                :title      "Previous"
-               :on-click   #(set-page (dec @page-no))}
+               :on-click   #(set-page (dec @paginator-page-no))}
            [:span {:aria-hidden "true"} "‹"]]]
          [:li
           [:select.form-control.input-sm {:style     {:direction        "rtl"
@@ -73,29 +107,31 @@
                                                       :outline          "1px solid #ddd"
                                                       :margin-top       1
                                                       :background-color "white"}
-                                          :value     @page-no
+                                          :value     @paginator-page-no
                                           :on-change #(set-page (.-target.value %))}
-           (for [i (range 1 101)]
+           (for [i (range 1 (inc (last-page-no)))]
              ^{:key i} [:option {:value i} i])]]
-         [:li
+         [:li {:class-name (when (= @paginator-page-no (last-page-no))
+                             "disabled")}
           [:a {:href       "#"
                :aria-label "Next"
                :title      "Next"
-               :on-click   #(set-page (inc @page-no))}
+               :on-click   #(set-page (inc @paginator-page-no))}
            [:span {:aria-hidden "true"} "›"]]]
-         [:li
+         [:li {:class-name (when (= @paginator-page-no (last-page-no))
+                             "disabled")}
           [:a {:href       "#"
                :aria-label "Last"
                :title      "Last"
-               :on-click   #(set-page (inc (quot @total page-size)))}
+               :on-click   #(set-page (last-page-no))}
            [:span {:aria-hidden "true"} "»"]]]]]])))
 
-(defn- concordance-toolbar [{{page-no :page-no} :results-view :as a} m]
+(defn- concordance-toolbar [a m]
   [:div.row {:style {:margin-top 15}}
    [:div.col-sm-12
     [b/buttontoolbar
      [sort-button a m]
-     [pagination a]]]])
+     [pagination a m]]]])
 
 (defmulti concordance-table
   "Multimethod that accepts two arguments - an app state map and a

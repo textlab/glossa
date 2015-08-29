@@ -15,15 +15,16 @@
 
 (defonce app-state {:narrow-view?     (r/atom (narrow-view?))
                     :showing-sidebar? (r/atom false)
-                    :results-view     {:show?     (r/atom false)
-                                       :results   (r/atom nil)
-                                       :total     (r/atom 0)
-                                       :page-no   (r/atom 1)
-                                       :sort-by   (r/atom :position)
-                                       :freq-attr (r/atom nil)
-                                       :media     {:player-row-index    (r/atom nil)
-                                                   :current-player-type (r/atom nil)
-                                                   :current-media-type  (r/atom nil)}}
+                    :results-view     {:show?             (r/atom false)
+                                       :results           (r/atom nil)
+                                       :total             (r/atom 0)
+                                       :page-no           (r/atom 1)
+                                       :paginator-page-no (r/atom 1)
+                                       :sort-by           (r/atom :position)
+                                       :freq-attr         (r/atom nil)
+                                       :media             {:player-row-index    (r/atom nil)
+                                                           :current-player-type (r/atom nil)
+                                                           :current-media-type  (r/atom nil)}}
                     :search-view      {:view-type (r/atom :simple)
                                        :queries   (r/atom [#_{:query "[word=\"han\" %c] []{1,2} [word=\"er\" %c]"}
                                                            #_{:query "[word=\"de\" %c] [word=\"sa\" %c]"}
@@ -32,7 +33,8 @@
                     :num-resets       (r/atom 0)})
 
 (defonce model-state {:corpus              (r/atom nil)
-                      :metadata-categories (r/atom nil)})
+                      :metadata-categories (r/atom nil)
+                      :search              (atom nil)})
 
 ;; Set :narrow-view in app-state whenever the window is resized (throttled to 200ms)
 (def on-resize-throttle (Throttle. #(reset! (:narrow-view? app-state) (narrow-view?)) 200))

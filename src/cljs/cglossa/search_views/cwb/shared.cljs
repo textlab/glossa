@@ -20,7 +20,7 @@
                (str/replace #"(</s_id>)\}\}" "}}$1"))))
 
 ;; TODO: Make this configurable?
-(def page-size 100)
+(def page-size 50)
 
 (defn- search-step3 [url params total searching? search-id]
   "Performs an unrestricted search."
@@ -57,43 +57,42 @@
             (reset! searching? false)
             (search-step3 url params total searching? search-id)))))))
 
-(defn- search-step1 [url params total searching? results]
+(defn- search-step1 [url params total searching? current-search current-results]
   "Performs a search restricted to one page of search results."
   (go
     (let [results-ch (http/post url {:json-params (merge params {:step 1 :cut page-size})})
-          {:keys [status success] {res :result search-id (keyword "@rid")} :body} (<! results-ch)]
+          {:keys [status success] {:keys [search result]} :body :as response} (<! results-ch)]
       (if-not success
         (.log js/console status)
         (do
+          (reset! current-search search)
           ;; The response from the first request should be (at most) one page of search results.
           ;; Set the results ratom to those results and the total ratom to the number of results.
-          (reset! results (map cleanup-result res))
-          (reset! total (count res))
-          (if (< (count res) page-size)
+          (reset! current-results {1 (map cleanup-result result)})
+          (reset! total (count result))
+          (if (< (count result) page-size)
             ;; We found less than one search page of results, so stop searching
             (reset! searching? false)
             (search-step2 url params total searching? (:rid search))))))))
 
-(defn- search! [{{queries :queries}                            :search-view
-                 {:keys [show? results total page-no sort-by]} :results-view
-                 searching?                                    :searching?}
-                {:keys [corpus]}]
-  (let [queries*    @queries
-        corpus*     @corpus
-        total*      @total
-        first-query (:query (first queries*))]
+(defn- search! [{{queries :queries}                  :search-view
+                 {:keys [show? results total page-no
+                         paginator-page-no sort-by]} :results-view
+                 searching?                          :searching?}
+                {:keys [corpus search]}]
+  (let [first-query (:query (first @queries))]
     (when (and first-query
                (not= first-query "\"\""))
-      (let [q      (if (= (:lang corpus*) "zh")
+      (let [q      (if (= (:lang @corpus) "zh")
                      ;; For Chinese: If the tone number is missing, add a pattern
                      ;; that matches all tones
-                     (for [query queries*]
+                     (for [query @queries]
                        (update query :query
                                str/replace #"\bphon=\"([^0-9\"]+)\"" "phon=\"$1[1-4]?\""))
                      ;; For other languages, leave the queries unmodified
-                     queries*)
+                     @queries)
             url    "/search"
-            params {:corpus-id (:rid corpus*)
+            params {:corpus-id (:rid @corpus)
                     :queries   q
                     :sort-by   @sort-by}]
         (reset! show? true)
@@ -101,7 +100,8 @@
         (reset! searching? true)
         (reset! total 0)
         (reset! page-no 1)
-        (search-step1 url params total searching? results)))))
+        (reset! paginator-page-no 1)
+        (search-step1 url params total searching? search results)))))
 
 (defn on-key-down [event a m]
   (when (= "Enter" (.-key event))
