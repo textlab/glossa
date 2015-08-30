@@ -50,7 +50,7 @@
              (reset! (get model-state model-name) data)
              (.error js/console (str "Error: " body))))))))
 
-(get-models "/corpus" {:code "scandiasyn"})
+(get-models "/corpus" {:code "bokmal"})
 
 (defn ^:export main []
   (r/render

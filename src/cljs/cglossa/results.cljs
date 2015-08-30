@@ -11,7 +11,7 @@
 (defn- results-info [{{total :total} :results-view searching? :searching?}]
   (let [total*      @total
         searching?* @searching?]
-    [:div.col-sm-9
+    [:div.col-sm-5
      (if (pos? total*)
        (if searching?*
          (str "Showing the first " total* " matches; searching for more...")
