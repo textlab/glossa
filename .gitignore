@@ -12,3 +12,4 @@ pom.xml.asc
 /.repl
 .sass-cache
 figwheel_server.log
+node_modules

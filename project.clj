@@ -18,7 +18,6 @@
                  [compojure "1.3.4"]
                  [enlive "1.1.5"]
                  [reagent "0.5.1-SNAPSHOT" :exclusions [cljsjs/react]]
-                 [cljsjs/react "0.13.3-0"]
                  [cljsjs/react-bootstrap "0.23.7-0"]
                  [environ "1.0.0"]
                  [http-kit "2.1.19"]
@@ -47,16 +46,22 @@
 
   :clean-targets ^{:protect false} ["resources/public/js/out"]
 
-  :cljsbuild {:builds {:app {:source-paths ["src/cljs"]
-                             :compiler     {:output-to            "resources/public/js/out/app.js"
-                                            :output-dir           "resources/public/js/out"
-                                            :source-map           "resources/public/js/out/out.js.map"
-                                            :source-map-timestamp true
-                                            :optimizations        :none
-                                            :cache-analysis       true
-                                            :main                 "cglossa.core"
-                                            :asset-path           "js/out"
-                                            :pretty-print         true}}}}
+  :cljsbuild
+  {:builds
+   {:app
+    {:source-paths ["src/cljs"]
+     :compiler     {:output-to            "resources/public/js/out/app.js"
+                    :output-dir           "resources/public/js/out"
+                    :source-map           "resources/public/js/out/out.js.map"
+                    :source-map-timestamp true
+                    :optimizations        :none
+                    :cache-analysis       true
+                    :main                 "cglossa.core"
+                    :asset-path           "js/out"
+                    :foreign-libs         [;; npm modules required in entry.js and bundled by webpack
+                                           {:file     "resources/public/js/bundle.js"
+                                            :provides ["npm"]}]
+                    :pretty-print         true}}}}
 
   :sassc [{:src       "src/scss/style.scss"
            :output-to "resources/public/css/style.css"}]
