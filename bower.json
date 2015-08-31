@@ -1,0 +1,18 @@
+{
+  "name": "cglossa",
+  "version": "0.0.0",
+  "authors": [
+    "Anders Nøklestad <anders.noklestad@iln.uio.no>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "react-select": "~0.6.7"
+  }
+}

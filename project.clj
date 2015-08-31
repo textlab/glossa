@@ -58,9 +58,13 @@
                     :cache-analysis       true
                     :main                 "cglossa.core"
                     :asset-path           "js/out"
-                    :foreign-libs         [;; npm modules required in entry.js and bundled by webpack
-                                           {:file     "resources/public/js/bundle.js"
-                                            :provides ["npm"]}]
+                    :foreign-libs         [{:file     "bower_components/classnames/index.js"
+                                            :provides ["classnames"]}
+                                           {:file     "bower_components/react-input-autosize/dist/react-input-autosize.js"
+                                            :provides ["react-input-autosize"]}
+                                           {:file     "bower_components/react-select/dist/react-select.js"
+                                            :provides ["react-select"]
+                                            :requires ["classnames" "react-input-autosize"]}]
                     :pretty-print         true}}}}
 
   :sassc [{:src       "src/scss/style.scss"

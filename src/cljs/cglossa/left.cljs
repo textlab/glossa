@@ -1,4 +1,5 @@
-(ns cglossa.left)
+(ns cglossa.left
+  (:require react-select))
 
 (defn metadata-list [_ {:keys [metadata-categories]}]
   [:div#sidebar-wrapper
