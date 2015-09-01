@@ -50,7 +50,9 @@
              (reset! (get model-state model-name) data)
              (.error js/console (str "Error: " body))))))))
 
-(get-models "/corpus" {:code "bokmal"})
+(if-let [corpus (second (re-find #"corpus=(\w+)" (.-location.search js/window)))]
+  (get-models "/corpus" {:code corpus})
+  (js/alert "Please provide a corpus in the query string (on the form corpus=mycorpus)"))
 
 (defn ^:export main []
   (r/render
