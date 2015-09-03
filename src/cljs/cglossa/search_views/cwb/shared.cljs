@@ -65,7 +65,7 @@
       (if-not success
         (.log js/console status)
         (do
-          (reset! current-search search)
+          (swap! current-search merge search)
           ;; The response from the first request should be (at most) one page of search results.
           ;; Set the results ratom to those results and the total ratom to the number of results.
           (reset! current-results {1 (map cleanup-result result)})

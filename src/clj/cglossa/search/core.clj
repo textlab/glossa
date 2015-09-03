@@ -32,7 +32,7 @@
                            ;; On subsequent searches, which just retrieve more results from
                            ;; the same query, we just get the number of results found (so far)
                            (first results-or-count))]
-    {:search search
+    {:search (dissoc search :class)
      :result result}))
 
 (defn results [search-id start end sort-by]

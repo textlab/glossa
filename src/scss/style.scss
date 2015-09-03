@@ -97,6 +97,11 @@ div.interval {
   }
 }
 
+.metadata-category {
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
 .multiword-search-form {
   .multiword-term .control-group {
       display: table;
@@ -248,8 +253,12 @@ div.interval {
   }
 }
 
-// Override select2.css
+.metadata-category {
+    .select2-container {
+      margin-top: 5px;
+    }
 
-.select2-container {
-  margin-top: 10px;
+    .close-cat-btn {
+      margin-left: 10px;
+    }
 }

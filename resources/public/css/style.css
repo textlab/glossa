@@ -75,6 +75,10 @@ div.interval {
     margin-top: 0;
     margin-bottom: 2px; }
 
+.metadata-category {
+  margin-top: 10px;
+  margin-left: 10px; }
+
 .multiword-search-form .multiword-term .control-group {
   display: table; }
   .multiword-search-form .multiword-term .control-group div.word {
@@ -177,14 +181,8 @@ div.interval {
     vertical-align: top;
     text-align: right; }
 
-.icon-cog:before {
-  color: #666; }
+.metadata-category .select2-container {
+  margin-top: 5px; }
 
-.icon-minus:before {
-  color: #666; }
-
-.icon-plus:before {
-  color: #666; }
-
-.select2-container {
-  margin-top: 10px; }
+.metadata-category .close-cat-btn {
+  margin-left: 10px; }
