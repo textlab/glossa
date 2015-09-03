@@ -186,5 +186,5 @@ div.interval {
 .icon-plus:before {
   color: #666; }
 
-.select2-container-multi .select2-choices .select2-search-choice {
-  margin-top: 6px; }
+.select2-container {
+  margin-top: 10px; }

@@ -1,11 +1,11 @@
 (ns cglossa.left
   (:require [reagent.core :as r]
-            react-select))
+            [cglossa.select2 :refer [select2]]))
 
 (defn metadata-list [_ {:keys [metadata-categories]}]
-  (let [select (r/adapt-react-class js/Select)]
-    [:div#sidebar-wrapper
-     (for [cat @metadata-categories]
-       [select {:multi true
-                :options   [{:value "one" :label "One"} {:value "two" :label "Two"}]
-                :on-change #(.log js/console "endret")}])]))
+  [:div#sidebar-wrapper
+   (for [cat @metadata-categories]
+     ^{:key (:rid cat)}
+     [select2 (r/atom {:a "A" :b "B"}) (r/atom nil) {:placeholder (:name cat)}
+      [:div
+       [:select.list {:style {:width "100%"} :multiple true}]]])])

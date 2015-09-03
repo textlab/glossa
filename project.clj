@@ -19,6 +19,7 @@
                  [enlive "1.1.5"]
                  [reagent "0.5.1-rc" :exclusions [cljsjs/react]]
                  [cljsjs/react-bootstrap "0.23.7-0"]
+                 [cljsjs/jquery "1.9.0-0"]
                  [environ "1.0.0"]
                  [http-kit "2.1.19"]
                  [cljs-http "0.1.35"]
@@ -58,13 +59,11 @@
                     :cache-analysis       true
                     :main                 "cglossa.core"
                     :asset-path           "js/out"
-                    :foreign-libs         [{:file     "bower_components/classnames/index.js"
-                                            :provides ["classnames"]}
-                                           {:file     "bower_components/react-input-autosize/dist/react-input-autosize.js"
-                                            :provides ["react-input-autosize"]}
-                                           {:file     "bower_components/react-select/dist/react-select.js"
-                                            :provides ["react-select"]
-                                            :requires ["classnames" "react-input-autosize"]}]
+                    :foreign-libs         [{:file     "resources/public/js/select2.js"
+                                            :file-min "resources/public/js/select2-min.js"
+                                            :provides ["js-select2"]
+                                            :requires ["cljsjs.jquery"]}]
+                    :externs              ["resources/public/js/externs/select2.ext.js"]
                     :pretty-print         true}}}}
 
   :sassc [{:src       "src/scss/style.scss"
