@@ -1,5 +1,3 @@
-$mellow-icon-color: #666;
-
 body {
   padding-top: 70px;
   padding-bottom: 40px;
@@ -248,20 +246,6 @@ div.interval {
     vertical-align: top;
     text-align: right;
   }
-}
-
-// Override font-awesome.css
-
-.icon-cog:before {
-  color: $mellow-icon-color;
-}
-
-.icon-minus:before {
-  color: $mellow-icon-color;
-}
-
-.icon-plus:before {
-  color: $mellow-icon-color;
 }
 
 // Override select2.css
