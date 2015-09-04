@@ -43,6 +43,7 @@ gem 'jquery-rails'
 gem "rglossa-fcs", :github => 'textlab/rglossa-fcs'
 #gem "rglossa-r", :github => 'textlab/rglossa-r'
 gem 'devise', '~> 2.2.3'
+gem 'cancan'
 
 gem 'oj'  # more efficient parsing and generation of JSON
 gem 'turbo-sprockets-rails3'  # faster precompilation of assets
