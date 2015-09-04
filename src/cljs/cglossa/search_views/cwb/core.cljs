@@ -135,7 +135,7 @@
   (let [query     (:query @wrapped-query)
         corpus*   @corpus
         phonetic? (not= -1 (.indexOf query "phon="))]
-    [:form.table-display {:style {:margin "10px 0px 15px -40px"}}
+    [:form.table-display {:style {:margin "10px 0px 15px -35px"}}
      [:div.table-row {:style {:margin-bottom 10}}
       [remove-row-btn show-remove-row-btn? wrapped-query]
       [b/input {:style            {:width 500}

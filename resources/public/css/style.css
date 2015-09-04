@@ -103,7 +103,7 @@ div.interval {
     margin-top: 0; }
 
 .remove-row-btn-container {
-  width: 40px;
+  width: 35px;
   vertical-align: middle; }
 
 .row-fluid {
@@ -185,4 +185,5 @@ div.interval {
   margin-top: 5px; }
 
 .metadata-category .close-cat-btn {
-  margin-left: 10px; }
+  margin-left: 10px;
+  padding-top: 3px; }
