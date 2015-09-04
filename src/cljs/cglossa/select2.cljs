@@ -9,14 +9,19 @@
   [obj]
   (if (satisfies? IDeref obj) @obj obj))
 
+(defn- get-select-el [component]
+  (js/$ "select.list" (r/dom-node component)))
+
+(defn trigger-event [component event-name]
+  (.select2 (get-select-el component) event-name))
+
 (defn select2 [data value options render-body]
   "Creates a select box using the select2 jQuery plugin. options should
   be a hash map that will be converted to JS and provided as options to the
   plugin, while render-body should be a hiccup form that will be returned
   from the render function. The hiccup form should contain a select element
   with the CSS class 'list'; this is where the select2 box will be instantiated."
-  (let [get-select-el #(js/$ "select.list" (r/dom-node %))
-        sort-data     #(clj->js (sort-by (fn [e] (aget e "text")) %))
+  (let [sort-data     #(clj->js (sort-by (fn [e] (aget e "text")) %))
         prev-data     (atom [])
         prev-value    (atom nil)
 
