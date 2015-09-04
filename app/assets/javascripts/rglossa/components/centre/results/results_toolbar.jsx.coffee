@@ -23,7 +23,7 @@ window.ResultsToolbar = React.createClass
     {store, statechart, corpus, results, currentResultPageNo, sortBy,
       handleSortByChanged, showFrequencies} = @props
 
-    `<div className="row-fluid search-result-toolbar" style={{marginTop: 15}}>
+    `<div className="row-fluid search-result-toolbar" style={{marginTop: 15, position: 'relative'}}>
       <div className="pull-left">
         <div className="dropdown pull-left" style={{marginRight: 10, marginBottom: 15}}>
           <a className="btn dropdown-toggle" data-toggle="dropdown" href="#">

@@ -87,7 +87,8 @@ window.ResultsMain = React.createClass
     ResultTable = window["#{capSearchEngine}ResultsTable"]
 
     `<span style={{position: 'relative'}}>
-      {corpus.logo ? <img className="corpus-logo" src={corpus.logo} style={{height: '250px'}} /> : ''}
+      <div className="row-fluid">
+      <div className="span9">
       <SearchInputs
         store={store}
         corpus={corpus}
@@ -101,6 +102,11 @@ window.ResultsMain = React.createClass
         handleAddPhrase={handleAddPhrase}
         handleRemoveRow={handleRemoveRow}
         initialSearchInput={initialSearchInput} />
+      </div>
+      <div className="span3" style={{position: 'relative'}}>
+      {corpus.config.logo_results ? <img className="corpus-logo" src={corpus.config.logo_results} style={{height: '180px'}} /> : ''}
+      </div>
+      </div>
       <ResultsToolbar
         store={store}
         statechart={statechart}
