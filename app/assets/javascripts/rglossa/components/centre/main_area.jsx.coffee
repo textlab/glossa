@@ -204,8 +204,10 @@ window.MainArea = React.createClass
       search = res[searchModel]
       id = search.id
 
-      if !@state.maxHits or (search.num_hits and search.num_hits < @state.maxHits)
-        # There were fewer than maxHits occurrences in the corpus
+      if !@state.maxHits or (search.num_hits and search.num_hits < (@state.maxHits - 10))
+        # There were fewer than (maxHits - 10) occurrences in the corpus. We subtract
+        # 10 because CQP might return a bit fewer results than we ask for (for internal
+        # technical reasons according to the CQP manual).
         search.total = search.num_hits
       else
         # Either there were at least maxHits occurrences in the corpus, or num_hits
