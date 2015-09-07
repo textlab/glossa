@@ -104,7 +104,7 @@ window.ResultsMain = React.createClass
         initialSearchInput={initialSearchInput} />
       </div>
       <div className="span3" style={{position: 'relative'}}>
-      {corpus.config.logo_results ? <img className="corpus-logo" src={corpus.config.logo_results} style={{height: '180px'}} /> : ''}
+      {corpus.config.logo_results ? <img className="corpus-logo" src={corpus.config.logo_results} style={{top: '-70px'}} /> : ''}
       </div>
       </div>
       <ResultsToolbar
