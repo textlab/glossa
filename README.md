@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Glossa
 
 This is the the **Glossa search system**, implemented in Ruby on Rails.
@@ -88,10 +89,12 @@ The easiest way to make an application is to clone our application template:
 
     git clone https://github.com/textlab/glossa
 
-The following commands install the required gems and initialise the database:
+The following commands install the required gems and modules, and initialise the database:
 
     cd glossa
     bundle
+    npm install -g bower
+    bower install
     rake db:migrate
 
 Finally, you can start Glossa:
@@ -331,6 +334,20 @@ disable branch checking:
 
     bundle config --local disable_local_branch_check true
 
+### Quick start:
+The first time:
+```sh
+npm install -g bower
+bower install
+```
+
+Start the figwheel REPL: `lein figwheel` (if you have rlwrap installed, run
+`rlwrap lein figwheel` to get line editing, persistent history and completion).
+
+When you see the line `Successfully compiled "resources/public/app.js"
+in 21.36 seconds.`, you're ready to go. Browse to
+`http://localhost:61054` and enjoy.
+
 ## Upgrade
 ### Docker image
 
@@ -355,3 +372,9 @@ with the following commands:
 ## More information
 
 For more information, see the [RGlossa wiki](http://github.com/textlab/rglossa/wiki).
+
+## License
+
+Copyright © 2015 The Text Laboratory, University of Oslo
+
+Distributed under the <a href="http://www.opensource.org/licenses/MIT">MIT License</a>.
