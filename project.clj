@@ -4,10 +4,6 @@
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
 
-  :source-paths ["src/clj"]
-
-  :test-paths ["spec/clj"]
-
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [org.clojure/clojurescript "1.7.48" :scope "provided"]
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
@@ -39,21 +35,15 @@
 
   :min-lein-version "2.5.0"
 
-  :uberjar-name "cglossa.jar"
-
-  :jvm-opts ^:replace ["-Xmx1g" "-server"]
-
-  :main cglossa.server
-
-  :clean-targets ^{:protect false} ["resources/public/js/out"]
+  :clean-targets ^{:protect false} ["lib/assets/javascripts/cljs"]
 
   :cljsbuild
   {:builds
    {:app
-    {:source-paths ["src/cljs"]
-     :compiler     {:output-to            "resources/public/js/out/app.js"
-                    :output-dir           "resources/public/js/out"
-                    :source-map           "resources/public/js/out/out.js.map"
+    {:source-paths ["lib/assets/cljs"]
+     :compiler     {:output-to            "lib/assets/javascripts/cljs/app.js"
+                    :output-dir           "lib/assets/javascripts/cljs"
+                    :source-map           "lib/assets/javascripts/cljs/out.js.map"
                     :source-map-timestamp true
                     :optimizations        :none
                     :cache-analysis       true
@@ -65,10 +55,6 @@
                                             :requires ["cljsjs.jquery"]}]
                     :externs              ["resources/public/js/externs/select2.ext.js"]
                     :pretty-print         true}}}}
-
-  :sassc [{:src       "src/scss/style.scss"
-           :output-to "resources/public/css/style.css"}]
-  :auto {"sassc" {:file-pattern #"\.(scss)$"}}
 
   :profiles {:dev     {:dependencies [[figwheel "0.3.9"]
                                       [com.cemerick/piggieback "0.2.1"]
