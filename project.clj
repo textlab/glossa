@@ -48,9 +48,9 @@
                     :optimizations        :none
                     :cache-analysis       true
                     :main                 "cglossa.core"
-                    :asset-path           "js/out"
-                    :foreign-libs         [{:file     "resources/public/js/select2.js"
-                                            :file-min "resources/public/js/select2-min.js"
+                    :asset-path           "assets/cljs"
+                    :foreign-libs         [{:file     "vendor/assets/javascripts/select2.js"
+                                            :file-min "vendor/assets/javascripts/select2-min.js"
                                             :provides ["js-select2"]
                                             :requires ["cljsjs.jquery"]}]
                     :externs              ["resources/public/js/externs/select2.ext.js"]
@@ -66,7 +66,7 @@
 
                        :plugins      [[lein-figwheel "0.3.9"]]
 
-                       :figwheel     {:css-dirs          ["resources/public/css"]
+                       :figwheel     {:css-dirs          ["lib/assets/stylesheets"]
                                       :open-file-command "idea-opener"}
 
                        :env          {:is-dev true}

@@ -9,7 +9,8 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require rglossa/application
- *= require rglossa/speech/application
- *= require_tree .
+ *= require bootstrap-3.3.4/bootstrap.min
+ *= require bootstrap-3.3.4/bootstrap-theme.min
+ *= require simple-sidebar
+ *= require style
  */

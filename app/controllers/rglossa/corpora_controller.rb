@@ -132,7 +132,8 @@ module Rglossa
                   methods: [:langs, :display_attrs, :extra_row_attrs,
                             :parts, :has_sound, :has_video, :has_phonetic, :has_map,
                             :metadata_categories, :initial_context_size, :headword_search]
-              )
+              ),
+              "metadata-categories" => @metadata_categories.as_json
           }
         end
 
