@@ -38,3 +38,7 @@ public/media/
 /.lein-*
 figwheel_server.log
 bower_components
+
+# Ignore JavaScript files generated from ClojureScript
+/lib/assets/javascripts/
+/target/
