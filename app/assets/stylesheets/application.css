@@ -12,5 +12,6 @@
  *= require bootstrap-3.3.4/bootstrap.min
  *= require bootstrap-3.3.4/bootstrap-theme.min
  *= require simple-sidebar
+ *= require select2
  *= require style
  */
