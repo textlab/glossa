@@ -13,7 +13,7 @@
                  [com.cognitect/transit-clj "0.8.275"]
                  [compojure "1.3.4"]
                  [enlive "1.1.5"]
-                 [reagent "0.5.1-rc" :exclusions [cljsjs/react]]
+                 [reagent "0.5.1" :exclusions [cljsjs/react]]
                  [cljsjs/react-bootstrap "0.23.7-0"]
                  [cljsjs/jquery "1.9.0-0"]
                  [environ "1.0.0"]
