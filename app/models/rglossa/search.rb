@@ -20,9 +20,8 @@ module Rglossa
       self.num_hits = 0
       self.corpus_part_counts = []
     }
-    after_create :run_queries
 
-    # This is run automatically after the search record has been created. It
+    # This is run after the search record has been created. It
     # should set num_hits on the model and store either the actual search
     # results or the search itself in some way that makes it possible to
     # retrieve results using get_result_page (which also needs to be
@@ -49,7 +48,7 @@ module Rglossa
       pages
     end
 
-    def get_result_page(page_no, options = {})
+    def get_results(start, stop, options = {})
       raise "Implement in subclasses"
     end
 

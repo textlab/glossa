@@ -23,39 +23,35 @@ module Rglossa
     end
 
     def create
-      @search = create_search(params[model_param].except(:sortBy))
-      corpus = get_corpus_from_query
-      parts = corpus.config[:parts]
+      # Search is performed in three steps. In the first step, we create a new
+      # search object in the database and search for a single page of search
+      # results (as defined by the cut parameter sent by the client) so as to
+      # be able to display some results very quickly. In the second step, we
+      # retrieve the previously saved search object from the database and
+      # search for a larger number of search result pages (e.g. 20, but again
+      # defined by the cut parameter). In the final step, we do the same, but
+      # this time the cut parameter will be nil, causing the search to be
+      # unrestricted.
+      if params[:step] == 1
+        @search = create_search(params[model_param].except(:sortBy))
+      else
+        @search = model_class.find(params[:search_id])
+      end
+      @search.run_queries(params[:cut])
 
       respond_to do |format|
         format.any(:json, :xml) do
-          # With certain search engines, the number of hits is not determined
-          # until we actually fetch a result page, so we do that explicitly
-          # before creating the response
-          pages = transform_result_pages(@search.first_two_result_pages(sort_by: params[:sortBy]))
+          if params[:step] == 1
+            # With certain search engines, the number of hits is not determined
+            # until we actually fetch a result page, so we do that explicitly
+            # before creating the response
+            page = @search.get_results(params[:start], params[:end],
+                                       sort_by: params[:sortBy]).map { |r| {text: r} }
 
-          # If the corpus does not contain any subparts, we will have figured out the total number
-          # of hits when we found our first two result pages. Alternatively, if the corpus contains
-          # subparts and we have already searched all subparts in order to gather the two result
-          # pages, we also know the total number of hits. Otherwise, we leave num_hits as nil to
-          # force the client to send a separate +count+ request to get the total number.
-          num_hits = if parts.nil? || parts.size == @search.current_corpus_part + 1
-                       @search.num_hits
-                     else
-                       nil
-                     end
-
-          root = @search.class.to_s.demodulize.underscore
-          s = {}
-
-          s[root] = {
-              id: @search.id,
-              num_hits: num_hits,
-              first_two_result_pages: pages,
-              current_corpus_part: @search.current_corpus_part
-            }
-
-          render request.format.to_sym => s.to_json
+            render request.format.to_sym => { search: @search, result: page }
+          else
+            render request.format.to_sym => { search: @search }
+          end
         end
       end
     end

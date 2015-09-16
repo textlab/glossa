@@ -17,7 +17,7 @@ module Rglossa
       end
 
 
-      def run_queries
+      def run_queries(cut = nil)
         named_query = query_info[:named_query]
 
         cwb_corpus_name = get_cwb_corpus_name
@@ -44,7 +44,8 @@ module Rglossa
             "#{named_query};",
             "#{named_query} = #{query_str};"].join("\n")
         end
-        query_commands += " cut #{max_hits}" if max_hits.present?
+        step_cut = cut || max_hits
+        query_commands += " cut #{step_cut}" if step_cut
 
         commands = [
           %Q{set DataDirectory "#{Dir.tmpdir}"},
@@ -53,20 +54,15 @@ module Rglossa
           "save #{named_query}",
           "size Last"
         ]
-
-        num_hits = run_cqp_commands(commands)
-        update_attribute(:num_hits, num_hits.to_i)
+        result_size = run_cqp_commands(commands)
+        update_attribute(:num_hits, result_size.to_i)
       end
 
 
-      # Returns a single page of results from CQP
-      def get_result_page(page_no, options = {})
+      def get_results(start, stop, options = {})
         extra_attributes = options[:extra_attributes] || %w(lemma pos type)
         corpus = query_info[:corpus]
 
-        # NOTE: page_no is 1-based while cqp uses 0-based numbering of hits
-        start = (page_no - 1) * page_size
-        stop  = start + page_size - 1
         s_tag = corpus.s_tag || 's'
         s_tag_id = corpus.s_tag_id || "#{s_tag}_id"
         context_size = corpus.context_size || default_context_size
