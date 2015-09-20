@@ -56,15 +56,14 @@
                     :externs              ["resources/public/js/externs/select2.ext.js"]
                     :pretty-print         true}}}}
 
-  :profiles {:dev     {:dependencies [[figwheel "0.3.9"]
+  :profiles {:dev     {:dependencies [[figwheel "0.4.0"]
                                       [com.cemerick/piggieback "0.2.1"]
                                       [org.clojure/tools.nrepl "0.2.10"]
                                       [leiningen "2.5.1"]]
 
-                       :repl-options {:init-ns          cglossa.server
-                                      :nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
+                       :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
 
-                       :plugins      [[lein-figwheel "0.3.9"]]
+                       :plugins      [[lein-figwheel "0.4.0"]]
 
                        :figwheel     {:css-dirs          ["lib/assets/stylesheets"]
                                       :open-file-command "idea-opener"}

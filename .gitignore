@@ -42,3 +42,4 @@ bower_components
 # Ignore JavaScript files generated from ClojureScript
 /lib/assets/javascripts/
 /target/
+.nrepl-port
