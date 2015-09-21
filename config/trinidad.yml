@@ -1,0 +1,7 @@
+---
+  port: 61054
+  address: 0.0.0.0
+  web_apps:
+    default:
+      root_dir: '.'
+      context_path: <%= ENV['RAILS_RELATIVE_URL_ROOT'] %>

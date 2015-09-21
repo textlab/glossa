@@ -68,7 +68,7 @@ gem 'ting'
 
 group :development do
   gem 'thin', :platform => :ruby
-  gem 'mizuno', :platform => :jruby
+  gem 'trinidad', :platform => :jruby
   gem 'pry'
   gem 'table_print'
   gem 'awesome_print'
