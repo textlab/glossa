@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-ruby '1.9.3', engine: 'jruby', engine_version: '1.7.19'
-#ruby=jruby-1.7.19
+ruby '2.2.2', engine: 'jruby', engine_version: '9.0.1.0'
+#ruby=jruby-9.0.1.0
 
 gem 'rails', '3.2.19'
 
@@ -49,6 +49,7 @@ gem 'jquery-rails'
 
 gem "rglossa-fcs", :github => 'textlab/rglossa-fcs'
 #gem "rglossa-r", :github => 'textlab/rglossa-r'
+gem 'nokogiri', '= 1.6.1'
 gem 'devise', '~> 2.2.3'
 gem 'cancan'
 
