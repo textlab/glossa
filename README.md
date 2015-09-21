@@ -51,24 +51,26 @@ Most important prerequisites:
 * Ruby >= 1.9.2 (>= 1.9.3 is recommended)
 * [The IMS Open Corpus Workbench (CWB)](http://cwb.sourceforge.net/)
 
+### Branches
+
+The GitHub repository contains two branches:
+
+* `coffeescript` is a stable version of Glossa that uses Ruby on Rails, CoffeeScript and an SQL database,
+* `master` is an early development version of Glossa that uses JRuby on Rails, ClojureScript and the OrientDB database.
+
 ### Install Ruby and Rails
 
 Unless you have Ruby >= 1.9.2 installed, you need to install it. The easiest
 way is to use the [Ruby Version Manager (RVM)](https://rvm.io/), which lets you
 install Ruby without root access to the server and run several Ruby versions
 side by side. Installation instructions can be found
-[here](https://rvm.io/rvm/install/). After installing RVM, get the latest Ruby
-version (2.2 at the time of writing):
+[here](https://rvm.io/rvm/install/). After installing RVM, get Ruby
+(version 2.2 at the time of writing):
 
-    rvm install 2.2
+    rvm install `cat .ruby-version`
 
-Set this version to be your default Ruby version:
-
-    rvm use 2.2 --default
-
-(or see [the RVM documentation](https://rvm.io/workflow/rvmrc/) about how to
-create an *.rvmrc* file in your application directory that will automatically
-switch to this version when you enter the directory).
+Note that other Ruby versions than the one indicated in `.ruby-version` may
+or may not work.
 
 ### Install the IMS Open Corpus Workbench (CWB)
 
@@ -86,12 +88,14 @@ UTF-8-encoded corpora.
 
 The easiest way to make an application is to clone our application template:
 
-    git clone https://github.com/textlab/glossa
+    git clone -b coffeescript https://github.com/textlab/glossa
 
-The following commands install the required gems and initialise the database:
+The following commands install the required gems and modules, and initialise the database:
 
     cd glossa
     bundle
+    npm install -g bower
+    bower install
     rake db:migrate
 
 Finally, you can start Glossa:
@@ -315,21 +319,28 @@ at some subpath within the application. See the
 
 ## Development of Glossa
 
-The core of Glossa is in the `rglossa` gem. If you want to develop `rglossa`,
-it should be checked out in a separate directory, and you need to set up an
-override in the application directory, so that your checked-out version is used
-instead of the version from the Gemfile. Assuming that you are in the
-application directory named `glossa`, you need to do the following:
+If you want to develop Glossa, you probably want to use the `master` branch,
+not the `coffeescript` branch.  You should follow the instructions from the
+section [Standard installation from GitHub](#standard-installation-from-github),
+with the following modifications:
 
-    cd ..
-    git clone https://github.com/textlab/rglossa
-    cd glossa
-    bundle config --local local.rglossa ../rglossa
+* As of September 2015, only the head version of RVM can install JRuby 9. Run
+  the following command after installing RVM and before installing Ruby:
 
-If you want to work on a branch other than the default one, you may need to
-disable branch checking:
+    rvm get head
 
-    bundle config --local disable_local_branch_check true
+* Don't specify any branch when cloning Glossa (`master` is the default):
+
+    git clone https://github.com/textlab/glossa
+
+* Apart from the Rails server, also run:
+
+    lein figwheel
+
+  If you have `rlwrap` installed, run `rlwrap lein figwheel` instead; you will
+  get line editing, persistent history and completion. Figwheel detects
+  modified ClojureScript files, compiles them and sends them to the client in
+  real time; no page reload is needed.
 
 ## Upgrade
 ### Docker image
@@ -355,3 +366,9 @@ with the following commands:
 ## More information
 
 For more information, see the [RGlossa wiki](http://github.com/textlab/rglossa/wiki).
+
+## License
+
+Copyright © 2015 The Text Laboratory, University of Oslo
+
+Distributed under the <a href="http://www.opensource.org/licenses/MIT">MIT License</a>.
