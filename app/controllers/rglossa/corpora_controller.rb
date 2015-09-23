@@ -127,12 +127,12 @@ module Rglossa
           @metadata_categories = @corpus.metadata_categories.includes(:translations)
 
           render json: {
-              corpus: @corpus.as_json(
+              corpus: Hash[@corpus.as_json(
                   only: [:id, :name, :logo, :short_name, :search_engine, :config],
                   methods: [:langs, :display_attrs, :extra_row_attrs,
                             :parts, :has_sound, :has_video, :has_phonetic, :has_map,
                             :metadata_categories, :initial_context_size, :headword_search]
-              ),
+              ).map{|k,v| [k.to_s.gsub('_', '-'), v]}],
               "metadata-categories" => @metadata_categories.as_json
           }
         end
