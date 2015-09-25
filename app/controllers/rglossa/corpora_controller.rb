@@ -1,5 +1,8 @@
+require './lib/orientdb'
+
 module Rglossa
   class CorporaController < ApplicationController
+    include OrientDb
     respond_to :json, :xml
 
     def index
@@ -66,15 +69,32 @@ module Rglossa
       end
     end
 
-    def show
-      @corpus = @corpus.find(params[:id])
-      create_response
-    end
-
     def find_by
       raise "No short_name provided" unless params[:short_name]
-      @corpus = Corpus.where(short_name: params[:short_name]).first
-      create_response
+      #@corpus = Corpus.where(short_name: params[:short_name]).first
+      res = sql_query("SELECT @rid as corpus_rid, name as corpus_name, " +
+                      "logo, search_engine, has_phonetic, has_headword_search, " +
+                      "$cats.@rid as cat_rids, $cats.code as cat_codes, " +
+                      "$cats.name as cat_names " +
+                      "FROM Corpus " +
+                      "LET $cats = out('HasMetadataCategory') " +
+                      "WHERE code = ?",
+                      {sql_params: [params[:short_name]]}).first
+
+      metadata_cats = res[:cat_rids].zip(res[:cat_names]).map do |(rid, name)|
+        {id: rid, name: name }
+      end
+
+      resp = {
+        "corpus" => {
+          "id"                  => res[:corpus_rid],
+          "name"                => res[:corpus_name],
+          "logo"                => res[:logo],
+          "search_engine"       => res[:search_engine] || "cwb",
+          "has-phonetic"        => res[:has_phonetic],
+          "has-headword-search" => res[:has_headword_search]},
+        "metadata-categories" => metadata_cats}
+      render json: resp
     end
 
     def destroy
