@@ -89,7 +89,7 @@ module OrientDb
   #             strings:    {out: "HasMetadataCategory"}})
   def sql_query(sql, params={})
     t = params[:target] || params[:targets]
-    targets = t ? t.flatten : []
+    targets = t ? [t].flatten : []
     targets.each { |target| raise("Invalid target: " + target) unless valid_rid?(target) }
 
     strings = params[:strings]
