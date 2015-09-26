@@ -6,14 +6,7 @@ module Rglossa
     respond_to :json, :xml
 
     def index
-      @corpora = Corpus.scoped
-      set_query_params
-
-      respond_with @corpora
-    end
-
-    def list
-      @corpora = Corpus.all
+      @corpora = sql_query("SELECT FROM Corpus").map { |h| Corpus.new(h) }
     end
 
     def upload
@@ -66,6 +59,12 @@ module Rglossa
       respond_to do |format|
         format.html { redirect_to action: 'list' }
         format.xml  { head :ok }
+      end
+    end
+
+    def show
+      if params[:id]
+        @corpus = sql_query("SELECT FROM #TARGET", {target: params[:id]})
       end
     end
 
@@ -130,35 +129,6 @@ module Rglossa
                        "/corpora/media/#{corpus_name}",
                        *Dir.glob("/corpora/import/#{corpus_name.upcase}*")]
       Corpus.where(short_name: corpus_name).destroy_all
-    end
-
-    def set_query_params
-      query = params[:query]
-      if query
-        query.each_pair do |key, value|
-          @corpora = @corpora.where(key.underscore.to_sym => value)
-        end
-      end
-    end
-
-    def create_response
-      respond_to do |format|
-        format.json do
-          @metadata_categories = @corpus.metadata_categories.includes(:translations)
-
-          render json: {
-              corpus: Hash[@corpus.as_json(
-                  only: [:id, :name, :logo, :short_name, :search_engine, :config],
-                  methods: [:langs, :display_attrs, :extra_row_attrs,
-                            :parts, :has_sound, :has_video, :has_phonetic, :has_map,
-                            :metadata_categories, :initial_context_size, :headword_search]
-              ).map{|k,v| [k.to_s.gsub('_', '-'), v]}],
-              "metadata-categories" => @metadata_categories.as_json
-          }
-        end
-
-        format.xml { render @corpus }  # don't include metadata in XML
-      end
     end
 
   end

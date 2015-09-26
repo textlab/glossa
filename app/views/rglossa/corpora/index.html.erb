@@ -25,8 +25,8 @@ Upload corpus:
 Available corpora:
 <ul>
 <% @corpora.each do |c| %>
-<li><%= link_to c.name, controller: 'home', corpus: c.short_name %>
-<%= link_to 'Delete', corpus_path(c.short_name), :confirm => 'Are you sure?', :method => :delete %>
+<li><%= link_to c.name, controller: 'home', corpus: c.code %>
+<%= link_to 'Delete', "corpora/#{c.rid}", :confirm => 'Are you sure?', :method => :delete %>
 <% end %>
 </ul>
 </body>

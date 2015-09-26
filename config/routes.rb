@@ -4,7 +4,7 @@ scope module: 'rglossa' do
   devise_for :users, :class_name => "Rglossa::User", module: :devise
 
   root :to => 'home#index'
-  get 'admin', to: 'corpora#list'
+  get 'admin', to: 'corpora#index'
 
   resources :corpora do
     collection do
