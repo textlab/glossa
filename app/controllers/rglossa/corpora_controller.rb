@@ -81,12 +81,12 @@ module Rglossa
                       {sql_params: [params[:short_name]]}).first
 
       metadata_cats = res[:cat_rids].zip(res[:cat_names]).map do |(rid, name)|
-        {id: rid, name: name }
+        {rid: rid, name: name }
       end
 
       resp = {
         "corpus" => {
-          "id"                  => res[:corpus_rid],
+          "rid"                 => res[:corpus_rid],
           "name"                => res[:corpus_name],
           "logo"                => res[:logo],
           "search_engine"       => res[:search_engine] || "cwb",
