@@ -123,4 +123,10 @@ module OrientDb
     sql_query(sql, params).each { |h| model.new(h) }
   end
 
+  # Runs the given SQL, which should create a vertex, converts the returned
+  # OrientDB Vertex object to a Ruby hash, and wraps it in the given model class.
+  def create_model(model, sql, params=[])
+    model.new(vertex_to_hash(run_sql(sql, params)))
+  end
+
 end
