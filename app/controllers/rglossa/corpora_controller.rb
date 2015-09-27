@@ -6,7 +6,7 @@ module Rglossa
     respond_to :json, :xml
 
     def index
-      @corpora = sql_query("SELECT FROM Corpus").map { |h| Corpus.new(h) }
+      @corpora = many(Corpus, "SELECT FROM Corpus")
     end
 
     def upload
@@ -64,7 +64,7 @@ module Rglossa
 
     def show
       if params[:id]
-        @corpus = sql_query("SELECT FROM #TARGET", {target: params[:id]})
+        @corpus = one(Corpus, "SELECT FROM #TARGET", {target: params[:id]})
       end
     end
 
