@@ -108,4 +108,19 @@ module OrientDb
   def vertex_name(name, code)
     name || code.humanize
   end
+
+  # Runs the given SQL (with optional params; see `sql_query`) and wraps the
+  # first returned object in the model class, which should be a class derived
+  # from OpenStruct.
+  def one(model, sql, params={})
+    model.new(sql_query(sql, params).first)
+  end
+
+  # Runs the given SQL (with optional params; see `sql_query`), wraps each
+  # returned object in the model class, which should be a class derived
+  # from OpenStruct, and returns an array of those models.
+  def many(model, sql, params={})
+    sql_query(sql, params).each { |h| model.new(h) }
+  end
+
 end
