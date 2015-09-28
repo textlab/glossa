@@ -80,8 +80,8 @@ module Rglossa
                       "WHERE code = ?",
                       {sql_params: [params[:short_name]]}).first
 
-      metadata_cats = res[:cat_rids].zip(res[:cat_names]).map do |(rid, name)|
-        {rid: rid, name: name }
+      metadata_cats = res[:cat_rids].zip(res[:cat_codes], res[:cat_names]).map do |(rid, code, name)|
+        {rid: rid, name: vertex_name(name, code) }
       end
 
       resp = {
