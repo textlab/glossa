@@ -122,7 +122,7 @@ module OrientDb
   # returned object in the model class, which should be a class derived
   # from OpenStruct, and returns an array of those models.
   def many(model, sql, params={})
-    sql_query(sql, params).each { |h| model.new(h) }
+    sql_query(sql, params).map { |h| model.new(h) }
   end
 
   # Runs the given SQL, which should create a vertex, converts the returned
