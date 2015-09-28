@@ -1,25 +1,17 @@
+require 'ostruct'
+require './lib/orientdb'
+
 module Rglossa
-  class Search < ActiveRecord::Base
-    self.table_name = "rglossa_searches"
-    attr_accessible :corpus_short_name, :queries, :metadata_value_ids, :num_hits, :max_hits, :current_corpus_part
+  class Search < OpenStruct
+    include OrientDb
 
-    # Non-persisted attribute that is only used for keeping track of the
-    # corpus part currently being searched (only relevant for multi-part corpora)
-    attr_accessor :current_corpus_part
+    def corpus
+      @corpus ||= one(Corpus, "SELECT expand(out('inCorpus')) FROM #TARGET", {target: rid})
+    end
 
-    belongs_to :user
-    has_many :deleted_hits, dependent: :destroy
-
-    serialize :queries, Array
-    serialize :search_options, Hash
-    serialize :metadata_value_ids, Hash
-    serialize :corpus_part_counts, Array
-
-    before_create -> {
-      self.current_corpus_part = 0
-      self.num_hits = 0
-      self.corpus_part_counts = []
-    }
+    def query_array
+      @query_array ||= JSON.parse(queries)
+    end
 
     # This is run after the search record has been created. It
     # should set num_hits on the model and store either the actual search

@@ -7,12 +7,11 @@ module Rglossa
 
       def query_info
         @query_info ||= {
-          cwb_corpus_name: corpus_short_name.upcase,
-          corpus: Corpus.find_by_short_name(corpus_short_name.downcase),
+          cwb_corpus_name: corpus.code.upcase,
 
           # The query will be saved under a name composed of the name of the
           # corpus followed by the database ID of the search object
-          named_query: corpus_short_name.upcase + id.to_s
+          named_query: corpus.code.upcase + rid.to_s.split(":").last
         }
       end
 
@@ -22,7 +21,7 @@ module Rglossa
 
         cwb_corpus_name = get_cwb_corpus_name
 
-        query_str = query_info[:corpus].multilingual? ? build_multilingual_query : build_monolingual_query
+        query_str = corpus.multilingual? ? build_multilingual_query : build_monolingual_query
 
         if metadata_value_ids.empty?
           query_commands = "#{named_query} = #{query_str}"
@@ -30,7 +29,7 @@ module Rglossa
           # Print corpus positions of texts matching the metadata selection to a file marked with
           # the database ID of the search object
           positions_filename = "#{Dir.tmpdir}/positions_#{id}"
-          text_class = if query_info[:corpus].speech_corpus?
+          text_class = if corpus.speech_corpus?
                          Rglossa::Speech::Speaker
                        else
                          Rglossa::CorpusText
@@ -54,14 +53,13 @@ module Rglossa
           "save #{named_query}",
           "size Last"
         ]
-        result_size = run_cqp_commands(commands)
-        update_attribute(:num_hits, result_size.to_i)
+        self.num_hits = run_cqp_commands(commands).to_i
+        run_sql("UPDATE #{rid} SET num_hits = ?", num_hits)
       end
 
 
       def get_results(start, stop, options = {})
         extra_attributes = options[:extra_attributes] || %w(lemma pos type)
-        corpus = query_info[:corpus]
 
         s_tag = corpus.s_tag || 's'
         s_tag_id = corpus.s_tag_id || "#{s_tag}_id"
@@ -74,10 +72,11 @@ module Rglossa
           'set RD "}}"',
           "show +#{s_tag_id}"]
 
-        if corpus.multilingual? && queries.size > 1
+        if corpus.multilingual? && query_array.size > 1
           # Add commands to show aligned text for each additional language included in the search
           short_name = corpus_short_name.downcase
-          commands << "show " + queries.drop(1).map { |q| "+#{short_name}_#{q[:lang]}" }.join(' ')
+          commands << "show " +
+            query_array.drop(1).map { |q| "+#{short_name}_#{q[:lang]}" }.join(' ')
         end
 
         if extra_attributes.present?
@@ -124,7 +123,7 @@ module Rglossa
 
 
       def count
-        query_str = query_info[:corpus].multilingual? ? build_multilingual_query : build_monolingual_query
+        query_str = corpus.multilingual? ? build_multilingual_query : build_monolingual_query
         commands = [
           get_cwb_corpus_name,
           query_str,
@@ -143,15 +142,13 @@ module Rglossa
       end
 
       def run_cqp_commands(commands)
-        encoding = query_info[:corpus].encoding
-
-        Tempfile.open('cqp', encoding: encoding) do |command_file|
+        Tempfile.open('cqp', encoding: corpus.encoding) do |command_file|
           commands.map! { |cmd| cmd.end_with?(';') ? cmd : cmd + ';' }
           command_file.puts commands
           command_file.rewind
           puts commands
 
-          cqp_pipe = open("| cqp -c -f#{command_file.path}", external_encoding: encoding)
+          cqp_pipe = open("| cqp -c -f#{command_file.path}", external_encoding: corpus.encoding)
           cqp_pipe.readline  # throw away the first line with the CQP version
 
           result = cqp_pipe.read
@@ -167,11 +164,11 @@ module Rglossa
 
 
       def get_cwb_corpus_name
-        if query_info[:corpus].multilingual?
+        if corpus.multilingual?
           # The CWB corpus we select before running our query will be the one named by the
           # short_name attribute of the corpus plus the name of the language of the first
           # submitted query row (e.g. RUN_EN).
-          "#{query_info[:cwb_corpus_name]}_#{queries.first[:lang].upcase}"
+          "#{query_info[:cwb_corpus_name]}_#{query_array.first[:lang].upcase}"
         else
           query_info[:cwb_corpus_name]
         end
@@ -180,7 +177,7 @@ module Rglossa
 
       def build_monolingual_query
         # For monolingual queries, the query expressions are joined together with '|' (i.e., "or")
-        q = queries.map { |q| q[:query] }
+        q = query_array.map { |q| q["query"] }
         if q.size > 1
           q = q.map { |part| "(#{part})"}.join(' | ')
         else
@@ -191,18 +188,18 @@ module Rglossa
 
 
       def build_multilingual_query
-        if queries.size > 1
+        if query_array.size > 1
           # Add any queries in aligned languages to the first one. For instance, a search for "she"
           # in RUN_EN aligned with "hun" in RUN_NO and also aligned with RUN_RU (without any query string)
           # will result in the following query:
           # "she" :RUN_NO "hun" :RUN_RU [];
-          queries.drop(1).reduce(queries.first[:query]) do |accumulated_query, aligned_query|
+          query_array.drop(1).reduce(query_array.first[:query]) do |accumulated_query, aligned_query|
             aq = aligned_query[:query]
             q = if aq.present? and aq != '""' then aq else '[]' end
             "#{accumulated_query} :#{query_info[:cwb_corpus_name]}_#{aligned_query[:lang].upcase} #{q}"
           end
         else
-          queries.first[:query]
+          query_array.first[:query]
         end
       end
 

@@ -1,7 +1,10 @@
 require 'builder'
+require './lib/orientdb'
 
 module Rglossa
   class SearchesController < ApplicationController
+    include OrientDb
+
     respond_to :json, :xml
 
     def index
@@ -35,7 +38,7 @@ module Rglossa
       if params[:step] == 1
         @search = create_search(params[model_param].except(:sortBy))
       else
-        @search = model_class.find(params[:search_id])
+        @search = one(model_class, 'SELECT FROM #TARGET', {target: params[:search_id]})
       end
       @search.run_queries(params[:cut])
 
@@ -107,16 +110,15 @@ module Rglossa
     end
 
     def create_search(search_params)
-      # Run inside a transaction so that no search record is created if
-      # running queries throws an exception
-      ActiveRecord::Base.transaction do
-        search = model_class.new(search_params)
-        #search.user_id = (Rails.env == 'development' && !current_user) ? 1 : current_user.id
-        # FIXME: Associate searches with real users!
-        search.user_id = 1
-        search.save
-        search
-      end
+      corpus = one(Corpus, 'SELECT @rid, code, search_engine, encoding FROM #TARGET',
+                   {target: search_params[:corpus_id]})
+
+      search = create_model(model_class,
+                            'CREATE VERTEX Search SET queries = ?, metadata_value_ids = ?',
+                            [JSON.dump(search_params[:queries]),
+                             search_params[:metadata_value_ids] || []])
+      run_sql("CREATE EDGE InCorpus FROM #{search.rid} TO #{corpus.rid}")
+      search
     end
 
     def get_corpus_from_query(search = nil)
