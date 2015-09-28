@@ -40,7 +40,7 @@ module Rglossa
       else
         @search = one(model_class, 'SELECT FROM #TARGET', {target: params[:search_id]})
       end
-      @search.run_queries(params[:cut])
+      @search.run_queries(params[:step], params[:cut])
 
       respond_to do |format|
         format.any(:json, :xml) do
@@ -80,8 +80,7 @@ module Rglossa
 
     def count
       @search = model_class.find(params[:id])
-      corpus = get_corpus_from_query
-      parts = corpus.config[:parts]
+      parts = @search.corpus.config[:parts]
 
       num_hits = parts ? @search.get_total_corpus_part_count(parts) : @search.count
 
@@ -118,11 +117,6 @@ module Rglossa
                              search_params[:metadata_value_ids] || []])
       run_sql("CREATE EDGE InCorpus FROM #{search.rid} TO #{corpus.rid}")
       search
-    end
-
-    def get_corpus_from_query(search = nil)
-      search ||= @search || model_class.find(params[:id])
-      Corpus.find_by_short_name(search.corpus_short_name.downcase)
     end
 
     def transform_result_pages(pages)
