@@ -118,7 +118,7 @@ module Rglossa
         # in CQP). We need to fix that.
         res.map! { |r| r.sub(/\{\{(<#{s_tag_id}\s+.+?>)/, '\1{{').sub(/(<\/#{s_tag_id}>)\}\}/, '}}\1')}
 
-        res
+        transform_results(res)
       end
 
 
@@ -203,6 +203,10 @@ module Rglossa
         end
       end
 
+
+      def transform_results(res)
+        res.map { |r| {text: r } }
+      end
     end
   end
 end

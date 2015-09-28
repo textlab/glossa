@@ -48,10 +48,9 @@ module Rglossa
             # With certain search engines, the number of hits is not determined
             # until we actually fetch a result page, so we do that explicitly
             # before creating the response
-            page = @search.get_results(params[:start], params[:end],
-                                       sort_by: params[:sortBy]).map { |r| {text: r} }
+            res = @search.get_results(params[:start], params[:end], sort_by: params[:sortBy])
 
-            render request.format.to_sym => { search: @search, result: page }
+            render request.format.to_sym => { search: @search, result: res }
           else
             render request.format.to_sym => { search: @search }
           end
