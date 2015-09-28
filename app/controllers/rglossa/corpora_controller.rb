@@ -89,7 +89,7 @@ module Rglossa
           "rid"                 => res[:corpus_rid],
           "name"                => res[:corpus_name],
           "logo"                => res[:logo],
-          "search_engine"       => res[:search_engine] || "cwb",
+          "search-engine"       => res[:search_engine] || "cwb",
           "has-phonetic"        => res[:has_phonetic],
           "has-headword-search" => res[:has_headword_search]},
         "metadata-categories" => metadata_cats}
