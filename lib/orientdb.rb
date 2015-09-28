@@ -13,12 +13,14 @@ java_import com.orientechnologies.orient.core.db.record.OIdentifiable
 java_import com.orientechnologies.orient.core.sql.OCommandSQL
 
 module OrientDb
+
+  @@factory = OrientGraphFactory.new('remote:localhost/Glossa', 'admin', 'admin').setupPool(1, 10)
+
   def get_graph(transactional = true)
-    f = OrientGraphFactory.new('remote:localhost/Glossa', 'admin', 'admin')
     if transactional
-      f.getTx
+      @@factory.getTx
     else
-      f.getNoTx
+      @@factory.getNoTx
     end
   end
 
