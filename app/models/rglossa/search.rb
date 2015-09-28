@@ -18,7 +18,7 @@ module Rglossa
     # results or the search itself in some way that makes it possible to
     # retrieve results using get_result_page (which also needs to be
     # implemented by each subclass).
-    def run_queries
+    def run_queries(step, cut = nil, options = {})
       raise "Implement this method in subclasses and throw an " +
         "Rglossa::QueryError if running queries produces an error."
     end

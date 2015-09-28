@@ -8,12 +8,13 @@ module Rglossa
     respond_to :json, :xml
 
     def index
-      @searches = current_user.searches
+      @searches = many(Search, 'SELECT FROM Search')
       respond_with(@searches)
     end
 
+
     def show
-      @search = model_class.find(params[:id])
+      @search = one(model_class, 'SELECT FROM #TARGET', {target: params[:id]})
 
       respond_to do |format|
         format.any(:json, :xml) do
@@ -24,6 +25,7 @@ module Rglossa
         end
       end
     end
+
 
     def create
       # Search is performed in three steps. In the first step, we create a new
@@ -36,53 +38,44 @@ module Rglossa
       # this time the cut parameter will be nil, causing the search to be
       # unrestricted.
       if params[:step] == 1
-        @search = create_search(params[model_param].except(:sortBy))
+        search = create_search(params[model_param].except(:sortBy))
       else
-        @search = one(model_class, 'SELECT FROM #TARGET', {target: params[:search_id]})
+        search = one(model_class, 'SELECT FROM #TARGET', {target: params[:search_id]})
       end
-      @search.run_queries(params[:step], params[:cut])
+      res = search.run_queries(params[:step], params[:cut], sort_by: params[:sortBy])
 
       respond_to do |format|
         format.any(:json, :xml) do
           if params[:step] == 1
-            # With certain search engines, the number of hits is not determined
-            # until we actually fetch a result page, so we do that explicitly
-            # before creating the response
-            res = @search.get_results(params[:start], params[:end], sort_by: params[:sortBy])
-
-            render request.format.to_sym => { search: @search, result: res }
+            render request.format.to_sym => { search: search, result: res }
           else
-            render request.format.to_sym => { search: @search }
+            render request.format.to_sym => { search: search }
           end
         end
       end
     end
 
+
     def results
-      # FIXME: USE current_user!!
-      # search = current_user.searches.find(model_param_id)
-      search = model_class.find(params[:id])
+      search = one(model_class, 'SELECT FROM #TARGET', {target: params[:search_id]})
+      res = search.get_results(params[:start], params[:end], sort_by: params[:sortBy])
+      search.current_corpus_part = params[:current_corpus_part].to_i
 
-      if search
-        search.current_corpus_part = params[:current_corpus_part].to_i
-        pages = transform_result_pages(search.get_result_pages(params[:pages],
-                                                               sort_by: params[:sortBy]))
-
-        @results = {
-          search_results: {
-            search_id: search.id,
-            pages: pages
-          }
+      @results = {
+        search_results: {
+          search_id: search.id,
+          result: res
         }
-      end
+      }
       respond_with(@results)
     end
 
-    def count
-      @search = model_class.find(params[:id])
-      parts = @search.corpus.config[:parts]
 
-      num_hits = parts ? @search.get_total_corpus_part_count(parts) : @search.count
+    def count
+      search = one(model_class, 'SELECT FROM #TARGET', {target: params[:search_id]})
+      parts = search.corpus.config[:parts]
+
+      num_hits = parts ? search.get_total_corpus_part_count(parts) : search.count
 
       respond_to do |format|
         format.any(:json, :xml) do
@@ -117,14 +110,6 @@ module Rglossa
                              search_params[:metadata_value_ids] || []])
       run_sql("CREATE EDGE InCorpus FROM #{search.rid} TO #{corpus.rid}")
       search
-    end
-
-    def transform_result_pages(pages)
-      new_pages = {}
-      pages.each do |page_no, page|
-        new_pages[page_no] = page.map { |result|  {text: result} }
-      end
-      new_pages
     end
 
   end
