@@ -10,9 +10,9 @@ module Rglossa
         def geo_distr
           named_query = query_info[:named_query]
           commands = [
-              "set PrettyPrint off",
-              %Q{set DataDirectory "#{Dir.tmpdir}"},
-              "group #{named_query} match who_name by match phon"]
+            "set PrettyPrint off",
+            %Q{set DataDirectory "#{Dir.tmpdir}"},
+            "group #{named_query} match who_name by match phon"]
 
           table = run_cqp_commands(commands).split("\n").map { |line| line.split("\t") }
           speaker_tids = table.map { |row| row[1] }
@@ -32,8 +32,8 @@ module Rglossa
           end
 
           {
-              place_totals: place_totals,
-              phons_per_place: phons_per_place
+            place_totals: place_totals,
+            phons_per_place: phons_per_place
           }
         end
 
