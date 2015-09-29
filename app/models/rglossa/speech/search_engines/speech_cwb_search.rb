@@ -3,9 +3,69 @@ module Rglossa
     module SearchEngines
       class SpeechCwbSearch < ::Rglossa::SearchEngines::CwbSearch
 
-        def default_context_size
-          7
+        def get_results(start, stop, options = {})
+          extra_attributes = options[:extra_attributes] || %w(lemma pos type)
+
+          s_tag = corpus.s_tag || 's'
+          s_tag_id = corpus.s_tag_id || "#{s_tag}_id"
+          context_size = corpus.context_size || default_context_size
+          commands = [
+            %Q{set DataDirectory "#{Dir.tmpdir}"},
+            get_cwb_corpus_name,  # necessary for the display of id tags to work
+            "set Context #{context_size} #{s_tag}",
+            'set LD "{{"',
+            'set RD "}}"',
+            "show +#{s_tag_id}"]
+
+          if corpus.multilingual? && query_array.size > 1
+            # Add commands to show aligned text for each additional language included in the search
+            short_name = corpus_short_name.downcase
+            commands << "show " +
+              query_array.drop(1).map { |q| "+#{short_name}_#{q[:lang]}" }.join(' ')
+          end
+
+          if extra_attributes.present?
+            # TODO: Handle multilingual corpora - here we just take the first language
+            if corpus.multilingual?
+              pos_attr = corpus.langs.first[:tags]['attr']
+              commands << "show " + extra_attributes.map { |a| "+#{a == 'pos' ? pos_attr : a}" }.join(' ')
+            else
+              commands << "show " + extra_attributes.map { |a| "+#{a}" }.join(' ')
+            end
+          end
+
+          if corpus.extra_cwb_attrs.present?
+            commands << "show " + corpus.extra_cwb_attrs.join(' ')
+          end
+
+          if options[:sort_by] && options[:sort_by] != 'position'
+            sort_attr = options[:sort_by] == 'headword_len' ? 'headword_len' : 'word'
+            sort_by = case options[:sort_by]
+                      when 'match' then 'match'
+                      when 'left' then 'match[-1]'
+                      when 'right' then 'matchend[1]'
+                      when 'headword_len' then 'match'
+                      end
+            commands << "sort #{query_info[:named_query]} by #{sort_attr} on #{sort_by}"
+          end
+
+          commands << "cat #{query_info[:named_query]} #{start} #{stop}"
+
+          res = run_cqp_commands(commands).split("\n")
+
+          # Remove the beginning of the search result, which will be a position number in the
+          # case of a monolingual result or the first language of a multilingual result, or
+          # an arrow in the case of subsequent languages in a multilingual result.
+          res.map! { |r| r.sub(/^\s*\d+:\s*/, '').sub(/^-->.+?:\s*/, '') }
+
+          # When the match includes the first or last token of the s unit, the XML tag surrounding
+          # the s unit is included inside the match braces (this should probably be considered a bug
+          # in CQP). We need to fix that.
+          res.map! { |r| r.sub(/\{\{(<#{s_tag_id}\s+.+?>)/, '\1{{').sub(/(<\/#{s_tag_id}>)\}\}/, '}}\1')}
+
+          transform_results(res)
         end
+
 
         def geo_distr
           named_query = query_info[:named_query]
@@ -41,6 +101,179 @@ module Rglossa
         private
         ########
 
+        def default_context_size
+          7
+        end
+
+        def s_attr
+          "sync_time"
+        end
+
+        def result_attrs
+          "+sync_time +sync_end +who_name +who_line_key"
+        end
+
+        # Creates the data structure that is needed by jPlayer for a single search result
+        def create_media_obj(overall_starttime, overall_endtime,
+                             starttimes, endtimes, lines, speakers, line_key)
+          word_attr = 'word' # TODO: make configurable?
+          obj = {
+            title: '',
+            last_line: lines.size - 1,
+            display_attribute: word_attr,
+            corpus_id: corpus.id,
+            mov: {
+              supplied: 'm4v',
+              path: corpus.media_path || "media/#{corpus.code}",
+              line_key: line_key,
+              start: overall_starttime,
+              stop: overall_endtime
+            },
+            divs: {
+              annotation: {
+              }
+            }
+          }
+          matching_line_index = nil
+          lines.each_with_index do |line, index|
+            token_no = -1
+            is_match = false
+            obj[:divs][:annotation][index] = {
+              speaker: speakers.shift || '',
+              line: line.split(/\s+/).reduce({}) do |acc, token|
+                token_no += 1
+
+                # Note: when matching a phrase, left and right braces will be on different
+                # tokens!
+                if token.match(/^{{(.*)/) || token.match(/(.*)}}$/)
+                  is_match = true
+                  matching_line_index = index
+                  token.sub!(/^{{/, '')
+                  token.sub!(/}}$/, '')
+                end
+                attr_values = token.split('/')
+                display_attrs = corpus.display_attrs || []
+                langs = corpus.languages || []
+                acc[token_no] = Hash[[word_attr].concat(display_attrs).zip(attr_values)]
+                if langs.map{|h|h[:lang]} == [:zh] && acc[token_no]["phon"]
+                  acc[token_no]["phon"] = Ting.pretty_tones(acc[token_no]["phon"]) rescue
+                  acc[token_no]["phon"]
+                end
+                acc
+              end,
+              from: starttimes.shift,
+              to: endtimes.shift
+            }
+            obj[:divs][:annotation][index][:is_match] = is_match
+          end
+          obj[:start_at] = matching_line_index
+          obj[:end_at]   = matching_line_index
+          obj[:min_start] = 0
+          obj[:max_end] = lines.size - 1
+          obj
+        end
+
+
+        def transform_results(res)
+          line_keys = Set.new
+
+          transformed = res.map do |result|
+            lines = []
+            starttimes = []
+            endtimes = []
+            displayed_lines = []
+            speakers = []
+            overall_starttime = nil
+            overall_endtime = nil
+            line_key = nil
+
+            # If the matching word/phrase is at the beginning of the segment, CQP puts the braces
+            # marking the start of the match before the starting segment tag
+            # (e.g. {{<turn_endtime 38.26><turn_starttime 30.34>went/go/PAST>...). Probably a
+            # bug in CQP? In any case we have to fix it by moving the braces to the
+            # start of the segment text instead. Similarly if the match is at the end of a segment.
+            result.gsub!(/{{((?:<\S+?\s+?\S+?>\s*)+)/, '\1{{') # find start tags with attributes (i.e., not the match)
+            result.gsub!(/((?:<\/\S+?>\s*)+)}}/, '}}\1')        # find end tags
+
+            result.scan(/<sync_time\s+([\d\.]+)><sync_end\s+([\d\.]+)>(.*?)<\/sync_end><\/sync_time>/) do |m|
+              starttime, endtime, line = m
+
+              overall_starttime ||= starttime
+              overall_endtime     = endtime
+
+              line.scan(/<who_name\s+(.+?)>(.*?)<\/who_name>/) do |m2|
+                speakers << m2[0]
+
+                l = m2[1]
+                l.sub!(/^<who_line_key\s+(\d+)>(.*)<\/who_line_key>/, '\2')
+                # All line keys within the same result should point to the same media file,
+                # so it doesn't matter if we assign this several times for the same result
+                line_key = $1
+                lines << l
+                # Repeat the start and end time for each speaker within the same segment
+                starttimes << starttime
+                endtimes   << endtime
+              end
+              # Add the line key found for this result to the set of line keys for this result page
+              line_keys << line_key if line_key
+
+              # We asked for a context of several units to the left and right of the unit containing
+              # the matching word or phrase, but only the unit with the match (marked by angle
+              # brackets) should be included in the search result shown in the result table.
+              if line =~ /{{.+}}/
+                # Remove line key attribute tags, since they would only confuse the client code
+                displayed_lines << line.gsub(/<\/?who_line_key.*?>/, '')
+              end
+            end
+
+            displayed_lines_str = displayed_lines.join
+            if line_key
+              # Only add a media object to the data returned to the client if the corpus contains
+              # line keys that we can use to determine which media file to show for each result
+              media_obj = create_media_obj(overall_starttime, overall_endtime,
+                                           starttimes, endtimes, lines, speakers, line_key)
+              {
+                text: displayed_lines_str,
+                media_obj: media_obj,
+                line_key: line_key
+              }
+            else
+              {
+                text: displayed_lines_str
+              }
+            end
+          end
+
+          # Now that all results in this page have been processed, we have a set of line keys
+          # (one for each result). Find out how they map to media file names and put the name
+          # as a property on the media object that is returned to the client.
+=begin
+          if line_keys.present?
+            conn = ActiveRecord::Base.connection
+
+            ActiveRecord::Base.transaction do
+              conn.execute("CREATE TEMPORARY TABLE line_keys (line_key INTEGER)")
+              conn.execute("INSERT INTO line_keys " + line_keys.map{|i| "SELECT %d" % i}.join(" UNION "))
+              basenames = conn.execute("SELECT line_key, basename FROM line_keys LEFT JOIN rglossa_media_files
+                                          ON line_key_begin <= line_key AND line_key <= line_key_end
+                                          WHERE corpus_id = %d" % corpus.id).reduce({}) do |m, f|
+                m[f[0]] = f[1]
+                m
+              end
+              conn.execute("DROP TABLE line_keys")
+
+              new_pages[page_no].map! do |result|
+                result[:media_obj][:mov][:movie_loc] = URI.encode basenames[result[:line_key].to_i]
+                result
+              end
+            end
+          end
+=end
+
+          transformed
+        end
+
+
         # Takes a list of text IDs ("tid"s), which for speech corpora are actually speaker
         # IDs, and finds, for each tid, the place name that is associated with the same
         # corpus text as the tid in the corpus that the current search belongs to.
@@ -60,7 +293,7 @@ module Rglossa
           AND tid.metadata_category_id = t_cat.id AND place.metadata_category_id = p_cat.id
           AND tid.id   = j1.rglossa_metadata_value_id AND texts.id = j1.rglossa_corpus_text_id
           AND place.id = j2.rglossa_metadata_value_id AND texts.id = j2.rglossa_corpus_text_id
-          AND texts.corpus_id = #{query_info[:corpus].id}
+          AND texts.corpus_id = #{corpus.id}
           AND tid.text_value IN (#{tid_list})
           SQL
 
