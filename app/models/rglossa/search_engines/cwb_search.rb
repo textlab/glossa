@@ -104,9 +104,9 @@ module Rglossa
         # For monolingual queries, the query expressions are joined together with '|' (i.e., "or")
         q = query_array.map { |q| q["query"] }
         if q.size > 1
-          q = q.map { |part| "(#{part})"}.join(' | ')
+          q = q.map { |part| "(#{part}) within #{s_attr}"}.join(' | ')
         else
-          q = q.first.to_s
+          q = q.first.to_s + " within #{s_attr}"
         end
         q
       end
