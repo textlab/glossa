@@ -5,74 +5,6 @@ module Rglossa
   module SearchEngines
     class CwbSearch < Search
 
-      def query_info
-        @query_info ||= {
-          cwb_corpus_name: corpus.code.upcase,
-
-          # The query will be saved under a name composed of the name of the
-          # corpus followed by the database ID of the search object
-          named_query: corpus.code.upcase + rid.to_s.split(":").last
-        }
-      end
-
-
-      def construct_query_commands(cut)
-        query_str = corpus.multilingual? ? build_multilingual_query : build_monolingual_query
-        named_query = query_info[:named_query]
-
-        if metadata_value_ids.empty?
-          query_commands = "#{named_query} = #{query_str}"
-        else
-          # Print corpus positions of texts matching the metadata selection to a file marked with
-          # the database ID of the search object
-          positions_filename = "#{Dir.tmpdir}/positions_#{id}"
-          text_class = if corpus.speech_corpus?
-                         Rglossa::Speech::Speaker
-                       else
-                         Rglossa::CorpusText
-                       end
-          text_class.print_positions_matching_metadata(metadata_value_ids, positions_filename)
-
-          raise Rglossa::IncompatibleMetadataError unless File.size?(positions_filename)
-
-          query_commands = [
-            "undump #{named_query} < '#{positions_filename}';",
-            "#{named_query};",
-            "#{named_query} = #{query_str};"].join("\n")
-        end
-        step_cut = cut || max_hits
-        query_commands += " cut #{step_cut}" if step_cut
-        query_commands
-      end
-
-
-      def display_commands(options)
-        cmds = ["set Context #{corpus.context_size || default_context_size} s",
-                'set LD "{{"',
-                'set RD "}}"',
-                "show +s_id"]
-
-        if corpus.multilingual? && query_array.size > 1
-          # Add commands to show aligned text for each additional language included in the search
-          short_name = corpus.code.downcase
-          cmds << "show " +
-            query_array.drop(1).map { |q| "+#{short_name}_#{q[:lang]}" }.join(' ')
-        end
-
-        if options[:sort_by] && options[:sort_by] != 'position'
-          sort_attr = options[:sort_by] == 'headword_len' ? 'headword_len' : 'word'
-          sort_by = case options[:sort_by]
-                      when 'match' then 'match'
-                      when 'left' then 'match[-1]'
-                      when 'right' then 'matchend[1]'
-                      when 'headword_len' then 'match'
-                    end
-          cmds << "sort #{query_info[:named_query]} by #{sort_attr} on #{sort_by}"
-        end
-        cmds
-      end
-
-
       def run_queries(step, cut = nil, options = {})
         query_commands = construct_query_commands(cut)
         cwb_corpus_name = get_cwb_corpus_name
@@ -86,7 +18,6 @@ module Rglossa
           step == 1 ? 'cat Last' : 'size Last'
         ]
         commands = commands.flatten.compact
-        puts commands
 
         res = run_cqp_commands(commands).split("\n")
         self.num_hits = step == 1 ? res.size : res[0].to_i
@@ -138,25 +69,22 @@ module Rglossa
         1
       end
 
-      def run_cqp_commands(commands)
-        Tempfile.open('cqp', encoding: corpus.encoding) do |command_file|
-          commands.map! { |cmd| cmd.end_with?(';') ? cmd : cmd + ';' }
-          command_file.puts commands
-          command_file.rewind
-          puts commands
+      def s_attr
+        "s"
+      end
 
-          cqp_pipe = open("| cqp -c -f#{command_file.path}", external_encoding: corpus.encoding)
-          cqp_pipe.readline  # throw away the first line with the CQP version
+      def result_attrs
+        "+s_id"
+      end
 
-          result = cqp_pipe.read
-          cqp_pipe.close
-          if result.include?('PARSE ERROR') || result.include?('CQP Error')
-            raise Rglossa::QueryError, result
-          end
+      def query_info
+        @query_info ||= {
+          cwb_corpus_name: corpus.code.upcase,
 
-          command_file.unlink
-          result
-        end
+          # The query will be saved under a name composed of the name of the
+          # corpus followed by the database ID of the search object
+          named_query: corpus.code.upcase + rid.to_s.split(":").last
+        }
       end
 
 
@@ -197,6 +125,85 @@ module Rglossa
           end
         else
           query_array.first[:query]
+        end
+      end
+
+
+      def construct_query_commands(cut)
+        query_str = corpus.multilingual? ? build_multilingual_query : build_monolingual_query
+        named_query = query_info[:named_query]
+
+        if metadata_value_ids.empty?
+          query_commands = "#{named_query} = #{query_str}"
+        else
+          # Print corpus positions of texts matching the metadata selection to a file marked with
+          # the database ID of the search object
+          positions_filename = "#{Dir.tmpdir}/positions_#{id}"
+          text_class = if corpus.speech_corpus?
+                         Rglossa::Speech::Speaker
+                       else
+                         Rglossa::CorpusText
+                       end
+          text_class.print_positions_matching_metadata(metadata_value_ids, positions_filename)
+
+          raise Rglossa::IncompatibleMetadataError unless File.size?(positions_filename)
+
+          query_commands = [
+            "undump #{named_query} < '#{positions_filename}';",
+            "#{named_query};",
+            "#{named_query} = #{query_str};"].join("\n")
+        end
+        step_cut = cut || max_hits
+        query_commands += " cut #{step_cut}" if step_cut
+        query_commands
+      end
+
+
+      def display_commands(options)
+        cmds = ["set Context #{corpus.context_size || default_context_size} #{s_attr}",
+                'set LD "{{"',
+                'set RD "}}"',
+                "show #{result_attrs}"]
+
+        if corpus.multilingual? && query_array.size > 1
+          # Add commands to show aligned text for each additional language included in the search
+          short_name = corpus.code.downcase
+          cmds << "show " +
+            query_array.drop(1).map { |q| "+#{short_name}_#{q[:lang]}" }.join(' ')
+        end
+
+        if options[:sort_by] && options[:sort_by] != 'position'
+          sort_attr = options[:sort_by] == 'headword_len' ? 'headword_len' : 'word'
+          sort_by = case options[:sort_by]
+                      when 'match' then 'match'
+                      when 'left' then 'match[-1]'
+                      when 'right' then 'matchend[1]'
+                      when 'headword_len' then 'match'
+                    end
+          cmds << "sort #{query_info[:named_query]} by #{sort_attr} on #{sort_by}"
+        end
+        cmds
+      end
+
+
+      def run_cqp_commands(commands)
+        Tempfile.open('cqp', encoding: corpus.encoding) do |command_file|
+          commands.map! { |cmd| cmd.end_with?(';') ? cmd : cmd + ';' }
+          command_file.puts commands
+          command_file.rewind
+          puts commands
+
+          cqp_pipe = open("| cqp -c -f#{command_file.path}", external_encoding: corpus.encoding)
+          cqp_pipe.readline  # throw away the first line with the CQP version
+
+          result = cqp_pipe.read
+          cqp_pipe.close
+          if result.include?('PARSE ERROR') || result.include?('CQP Error')
+            raise Rglossa::QueryError, result
+          end
+
+          command_file.unlink
+          result
         end
       end
 
