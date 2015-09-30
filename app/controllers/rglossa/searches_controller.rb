@@ -38,11 +38,11 @@ module Rglossa
       # this time the cut parameter will be nil, causing the search to be
       # unrestricted.
       if params[:step] == 1
-        search = create_search(params[model_param].except(:sortBy))
+        search = create_search(params[model_param].except(:sort_by))
       else
         search = one(model_class, 'SELECT FROM #TARGET', {target: params[:search_id]})
       end
-      res = search.run_queries(params[:step], params[:cut], sort_by: params[:sortBy])
+      res = search.run_queries(params[:step], params[:cut], sort_by: params[:sort_by])
 
       respond_to do |format|
         format.any(:json, :xml) do
@@ -58,7 +58,7 @@ module Rglossa
 
     def results
       search = one(model_class, 'SELECT FROM #TARGET', {target: params[:search_id]})
-      res = search.get_results(params[:start], params[:end], sort_by: params[:sortBy])
+      res = search.get_results(params[:start], params[:end], sort_by: params[:sort_by])
       search.current_corpus_part = params[:current_corpus_part].to_i
 
       @results = {
