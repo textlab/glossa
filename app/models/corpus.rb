@@ -6,6 +6,14 @@ class Corpus < OpenStruct
     languages.class == Array && languages.size > 1
   end
 
+  def has_sound?
+    has_media?('audio')
+  end
+
+  def has_video?
+    has_media?('video')
+  end
+
   def speech_corpus?
     has_sound || has_video
   end
@@ -31,5 +39,12 @@ class Corpus < OpenStruct
     else
       []
     end
+  end
+
+  private
+
+  def has_media?(type)
+    path = "public/media/#{code}/#{type}"
+    Dir.exist?(path) && !Dir.entries(path).empty?
   end
 end

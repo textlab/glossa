@@ -72,7 +72,7 @@ module Rglossa
       raise "No short_name provided" unless params[:short_name]
       #@corpus = Corpus.where(short_name: params[:short_name]).first
       corpus = one(Corpus,
-                "SELECT @rid as rid, name, logo, search_engine, has_phonetic, " +
+                "SELECT @rid as rid, code, name, logo, search_engine, has_phonetic, " +
                 "has_headword_search, $cats.@rid as cat_rids, $cats.code as cat_codes, " +
                 "$cats.name as cat_names " +
                 "FROM Corpus " +
@@ -92,7 +92,9 @@ module Rglossa
           "logo"                => corpus.logo,
           "search-engine"       => corpus.search_engine || "cwb",
           "has-phonetic"        => corpus.has_phonetic,
-          "has-headword-search" => corpus.has_headword_search},
+          "has-headword-search" => corpus.has_headword_search,
+          "has-sound"           => corpus.has_sound?,
+          "has-video"           => corpus.has_video?},
         "metadata-categories" => metadata_cats}
       render json: resp
     end
