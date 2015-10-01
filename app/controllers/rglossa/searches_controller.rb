@@ -57,13 +57,13 @@ module Rglossa
 
 
     def results
-      search = one(model_class, 'SELECT FROM #TARGET', {target: params[:search_id]})
+      search = one(model_class, 'SELECT FROM #TARGET', {target: "#" + params[:id]})
       res = search.get_results(params[:start], params[:end], sort_by: params[:sort_by])
       search.current_corpus_part = params[:current_corpus_part].to_i
 
       @results = {
         search_results: {
-          search_id: search.id,
+          search_rid: search.rid,
           result: res
         }
       }

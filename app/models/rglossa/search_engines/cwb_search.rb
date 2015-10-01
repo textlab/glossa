@@ -28,18 +28,9 @@ module Rglossa
 
 
       def get_results(start, stop, options = {})
-        extra_attributes = options[:extra_attributes] || %w(lemma pos type)
-
-        s_tag = corpus.s_tag || 's'
-        s_tag_id = corpus.s_tag_id || "#{s_tag}_id"
-        context_size = corpus.context_size || default_context_size
         commands = [
           %Q{set DataDirectory "#{Dir.tmpdir}"},
           get_cwb_corpus_name,  # necessary for the display of id tags to work
-          "set Context #{context_size} #{s_tag}",
-          'set LD "{{"',
-          'set RD "}}"',
-          "show +#{s_tag_id}",
           display_commands(options)
         ]
         commands << "cat #{query_info[:named_query]} #{start} #{stop}"
@@ -217,7 +208,7 @@ module Rglossa
         # When the match includes the first or last token of the s unit, the XML tag surrounding
         # the s unit is included inside the match braces (this should probably be considered a bug
         # in CQP). We need to fix that.
-        res.map! { |r| r.sub(/\{\{(<#{s_tag_id}\s+.+?>)/, '\1{{').sub(/(<\/#{s_tag_id}>)\}\}/, '}}\1')}
+        res.map! { |r| r.sub(/\{\{(<#{s_attr}_id\s+.+?>)/, '\1{{').sub(/(<\/#{s_attr}_id>)\}\}/, '}}\1')}
 
         res.map! { |r| {text: r } }
       end
