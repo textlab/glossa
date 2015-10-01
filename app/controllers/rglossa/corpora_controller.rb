@@ -71,27 +71,28 @@ module Rglossa
     def find_by
       raise "No short_name provided" unless params[:short_name]
       #@corpus = Corpus.where(short_name: params[:short_name]).first
-      res = sql_query("SELECT @rid as corpus_rid, name as corpus_name, " +
-                      "logo, search_engine, has_phonetic, has_headword_search, " +
-                      "$cats.@rid as cat_rids, $cats.code as cat_codes, " +
-                      "$cats.name as cat_names " +
-                      "FROM Corpus " +
-                      "LET $cats = out('HasMetadataCategory') " +
-                      "WHERE code = ?",
-                      {sql_params: [params[:short_name]]}).first
+      corpus = one(Corpus,
+                "SELECT @rid as rid, name, logo, search_engine, has_phonetic, " +
+                "has_headword_search, $cats.@rid as cat_rids, $cats.code as cat_codes, " +
+                "$cats.name as cat_names " +
+                "FROM Corpus " +
+                "LET $cats = out('HasMetadataCategory') " +
+                "WHERE code = ?",
+                {sql_params: [params[:short_name]]})
 
-      metadata_cats = res[:cat_rids].zip(res[:cat_codes], res[:cat_names]).map do |(rid, code, name)|
-        {rid: rid, name: vertex_name(name, code) }
-      end
+      metadata_cats =
+        corpus.cat_rids.zip(corpus.cat_codes, corpus.cat_names).map do |rid, code, name|
+          {rid: rid, name: vertex_name(name, code) }
+        end
 
       resp = {
         "corpus" => {
-          "rid"                 => res[:corpus_rid],
-          "name"                => res[:corpus_name],
-          "logo"                => res[:logo],
-          "search-engine"       => res[:search_engine] || "cwb",
-          "has-phonetic"        => res[:has_phonetic],
-          "has-headword-search" => res[:has_headword_search]},
+          "rid"                 => corpus.rid,
+          "name"                => corpus.name,
+          "logo"                => corpus.logo,
+          "search-engine"       => corpus.search_engine || "cwb",
+          "has-phonetic"        => corpus.has_phonetic,
+          "has-headword-search" => corpus.has_headword_search},
         "metadata-categories" => metadata_cats}
       render json: resp
     end
