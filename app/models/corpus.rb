@@ -7,11 +7,15 @@ class Corpus < OpenStruct
   end
 
   def has_sound?
-    has_media?('audio')
+    # Cannot use ||= since the value may be false
+    @has_sound = has_media?('audio') if @has_sound.nil?
+    @has_sound
   end
 
   def has_video?
-    has_media?('video')
+    # Cannot use ||= since the value may be false
+    @has_video = has_media?('video') if @has_video.nil?
+    @has_video
   end
 
   def speech_corpus?
