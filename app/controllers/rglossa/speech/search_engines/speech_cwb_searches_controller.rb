@@ -114,7 +114,7 @@ module Rglossa
                 basenames = conn.execute("SELECT line_key, basename FROM line_keys LEFT JOIN rglossa_media_files
                                           ON line_key_begin <= line_key AND line_key <= line_key_end
                                           WHERE corpus_id = %d" % corpus.id).reduce({}) do |m, f|
-                  m[f[0]] = f[1]
+                  m[f['line_key']] = f['basename']
                   m
                 end
                 conn.execute("DROP TABLE line_keys")
