@@ -8,7 +8,7 @@ class WaveformPlayerController < ActionController::Base
       height = @conf['total_height']
       # The display number is the same as the port number
       opts = {:display => @conf['listen_port'], :dimensions => "#{width}x#{height}x16",
-              :destroy_at_exit => false}
+              :destroy_at_exit => true}
 
       # Start Xvfb again if it already exists, as the dimensions may have changed
       headless = begin
@@ -51,11 +51,10 @@ class WaveformPlayerController < ActionController::Base
           :identifier => 'Waveform server',
           :before_start => method(:before_start),
           :start_command =>
-            'cd %s && exec %s %s %s >>%s 2>&1' %
+            'cd %s && exec %s %s %s >>%s 2>&1 &' %
               [Rails.public_path, Rails.root.join('lib/waveforms/genwaveform.py').to_s,
                WaveformPlayer.conf_path, pid_file, log_file].
               map {|s| Shellwords.escape s },
-          :daemonize_for_me => true,
           :ping_command => [:tcp, '127.0.0.1', @conf['listen_port']],
           :pid_file => pid_file,
           :log_file => log_file
