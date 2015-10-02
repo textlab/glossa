@@ -5,8 +5,8 @@
   "output_dir": "tmp_waveforms",
   "pid_file": "tmp/pids/genwaveform.pid",
   "log_file": "log/genwaveform.log",
-  "sock_file": "tmp/sockets/genwaveform.sock",
   "pixels_per_second": 216,
   "waveform_height": 72,
-  "total_height": 216
+  "total_height": 216,
+  "listen_port": 32146
 }
