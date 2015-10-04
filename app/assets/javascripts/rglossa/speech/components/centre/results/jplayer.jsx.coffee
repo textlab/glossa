@@ -42,7 +42,7 @@ window.TextBox = React.createClass
             data-end_timecode={end_timecode}
             style={getStyle()}
             >
-         <div className="waveformBtnDiv"><button title="Show waveform" className="btn btn-mini" style={{width: '100%'}} onClick={this.toggleWFplayer.bind(this, lineNo)}><img src="assets/rglossa/speech/waveform.png" /></button></div>
+         <div className="waveformBtnDiv"><button title="Show waveform" className="btn btn-mini" style={{width: 24, marginRight: 10}} onClick={this.toggleWFplayer.bind(this, lineNo)}><img src="assets/rglossa/speech/waveform.png" /></button></div>
          <div className="speakerDiv"><a className="speaker" title={speaker}>{speaker_brev}</a></div>
          <div className="segmentDiv">{segment}</div>
        </div>
