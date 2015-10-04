@@ -3,6 +3,10 @@
   address: 0.0.0.0
   jruby_min_runtimes: 3
   jruby_max_runtimes: 3
+  default_servlet:
+    mapping:
+      - /assets/*
+      - /media/*
   web_apps:
     default:
       root_dir: '.'
