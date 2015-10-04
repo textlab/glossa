@@ -1,8 +1,9 @@
 ---
   port: 61054
   address: 0.0.0.0
-  jruby_min_runtimes: 3
-  jruby_max_runtimes: 3
+  jruby_min_runtimes: 1
+  jruby_max_runtimes: 1
+  threadsafe: true
   default_servlet:
     mapping:
       - /assets/*
