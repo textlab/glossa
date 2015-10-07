@@ -77,7 +77,7 @@ class WaveformPlayerController < ActionController::Base
                                                          database_configuration["oldglossa"]).connection
     res = conn.execute("SELECT audio_file FROM %ssegments WHERE id=%d LIMIT 1" %
                        [corpus_id.upcase, line_key.to_i])
-    basename = res.first.first
+    basename = res.first['audio_file']
     ActiveRecord::Base.establish_connection(Rails.configuration.database_configuration[ENV["RAILS_ENV"] ||
                                                                                        "development"])
     path = "rtmp://stream-prod01.uio.no/vod/mp4:uio/hf/ilf/#{corpus_id}/"
