@@ -83,30 +83,38 @@ class WaveformPlayerController < ActionController::Base
     path = "rtmp://stream-prod01.uio.no/vod/mp4:uio/hf/ilf/#{corpus_id}/"
     glossa_fn = old_glossa_filename(basename, corpus_id)
     movie_loc = "mp4:uio/hf/ilf/#{corpus_id}/audio/#{glossa_fn}.mp4"
-    if (!File.exists?("#{fname}.flv") || File.size("#{fname}.flv") == 0)
-      Process.wait spawn("rtmpdump", "-r", path, "-y", movie_loc, "-A", start,
-                         "-B", stop, "-o", "#{fname}.flv")
-    end
-    if !File.exists? "#{fname}.wav"
-      Process.wait spawn("ffmpeg", "-i", "#{fname}.flv", "-ac", "1", "#{fname}.wav", {:in => :close})
-    end
     if !File.exists? "#{fname}.mp3"
-      Process.wait spawn("lame", "--quiet", "#{fname}.wav", "#{fname}.mp3")
+      File.symlink("/var/www/html/glossa_media/#{corpus_id}/audio/#{glossa_fn}.mp3", "#{fname}.mp3")
     end
   end
 
-  def new_glossa_generate_audio(corpus_id, line_key, start, stop, output_path, file, fname)
-    corpus = Corpus.find_by_id(corpus_id)
-    movie_loc = "%s.mp3" % corpus.media_files.where("line_key_begin <= ? AND ? <= line_key_end",
-                                                    line_key, line_key).limit(1).first.basename.rstrip
-    local_path = Rails.root.join(Rails.public_path, corpus.media_path || "media/#{corpus.short_name}", "audio")
+  def glossa_generate_audio(corpus_id, line_key, start, stop, output_path, file, fname)
+    if corpus_id.match(/^\d+$/)
+      corpus = Corpus.find_by_id(corpus_id)
+      movie_loc = "%s.mp3" % corpus.media_files.where("line_key_begin <= ? AND ? <= line_key_end",
+                                                      line_key, line_key).limit(1).first.basename.rstrip
+      local_path = Rails.root.join(Rails.public_path, corpus.media_path || "media/#{corpus.short_name}", "audio")
+    elsif corpus_id.match(/^[a-z]+$/)
+      conn = ActiveRecord::Base.establish_connection(Rails.configuration.
+                                                           database_configuration["oldglossa"]).connection
+      res = conn.execute("SELECT audio_file FROM %ssegments WHERE id=%d LIMIT 1" %
+                         [corpus_id.upcase, line_key.to_i])
+      basename = res.first['audio_file']
+      ActiveRecord::Base.establish_connection(Rails.configuration.database_configuration[ENV["RAILS_ENV"] ||
+                                                                                         "development"])
+      glossa_fn = old_glossa_filename(basename, corpus_id)
+      local_path = "/var/www/html/glossa_media/#{corpus_id}/audio"
+      movie_loc = "#{glossa_fn}.mp3"
+    else
+      raise "Wrong corpus_id: #{corpus_id}"
+    end
 
-    start_time = sprintf("%d.%02d.%d", start.to_i / 60, start.to_i % 60, start.gsub(/^[^.]*(\.|$)/, "").to_i)
-    stop_time = sprintf("%d.%02d.%d", stop.to_i / 60, stop.to_i % 60, stop.gsub(/^[^.]*(\.|$)/, "").to_i)
-    Process.wait spawn("mp3splt", Rails.root.join(local_path, URI.decode(movie_loc)).to_s, start_time, stop_time,
-                       "-d", output_path.to_s, "-o", file, {:in => :close})
+    start_time = sprintf("%d.%02d.%d", start.to_i / 60, start.to_i % 60, start.gsub(/^[^.]*(\.|$)/, "")[0..1].to_i)
+    stop_time = sprintf("%d.%02d.%d", stop.to_i / 60, stop.to_i % 60, stop.gsub(/^[^.]*(\.|$)/, "")[0..1].to_i)
+    system("mp3splt", "-q", Rails.root.join(local_path, URI.decode(movie_loc)).to_s, start_time, stop_time,
+                       "-d", output_path.to_s, "-o", file)
     if !File.exists? "#{fname}.wav"
-      Process.wait spawn("ffmpeg", "-i", "#{fname}.mp3", "-ac", "1", "#{fname}.wav", {:in => :close})
+      system("ffmpeg", "-nostdin", "-i", "#{fname}.mp3", "-ac", "1", "#{fname}.wav")
     end
   end
 
@@ -135,13 +143,7 @@ class WaveformPlayerController < ActionController::Base
     @file = Digest::SHA256.hexdigest("#{corpus_id}@#{line_key}@#{start}@#{stop}");
     fname = Rails.root.join(output_path, @file)
     if (!File.exists?("#{fname}-0-wave.jpg"))
-      if corpus_id.match(/^\d+$/)
-        new_glossa_generate_audio(corpus_id, line_key, start, stop, output_path, @file, fname)
-      elsif corpus_id.match(/^[a-z]+$/)
-        old_glossa_generate_audio(corpus_id, line_key, start, stop, output_path, @file, fname)
-      else
-        raise "Wrong corpus_id: #{corpus_id}"
-      end
+      glossa_generate_audio(corpus_id, line_key, start, stop, output_path, @file, fname)
       request_waveform("#{@file}.wav")
     end
 
