@@ -26,7 +26,7 @@ module Rglossa
           'ON j2.rglossa_corpus_text_id = t.id ' +
           'WHERE metadata_category_id = %s AND j2.rglossa_metadata_value_id IN (%s)',
           category_id, *constraining_values])).to_a
-        find(ids)
+        find(ids.map { |h| h.values.first })
       end
 
       def with_type_and_value(value_type, value)
