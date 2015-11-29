@@ -51,7 +51,7 @@ module Rglossa
           tid_list = tids.map { |tid| "'#{tid}'" }.join(',')
 
           pairs = connection.select_rows <<-SQL
-          SELECT DISTINCT tid.text_value, place.text_value
+          SELECT DISTINCT tid.text_value AS tv, place.text_value AS pv
           FROM rglossa_metadata_categories t_cat, rglossa_metadata_categories p_cat,
                   rglossa_metadata_values tid, rglossa_metadata_values place,
                   rglossa_corpus_texts_metadata_values j1, rglossa_corpus_texts_metadata_values j2,
