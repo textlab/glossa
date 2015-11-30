@@ -17,6 +17,10 @@ window.Navbar = React.createClass
         <div className="container">
           <span className="brand">Glossa</span>
           {login_status}
+          <div className="pull-right">
+            <img src="assets/clarino_duo-219.png" style={{marginTop: 10, width: 80}}></img>
+            <img src="assets/logo.png" style={{marginTop: 2}}></img>
+            </div>
         </div>
       </div>
     </div>`
