@@ -94,13 +94,18 @@ The following commands install the required gems and modules, and initialise the
 
     cd glossa
     bundle
+    rake db:migrate
+
+If you are using the (unstable) master branch, you also need [Node.js](https://nodejs.org/en/), 
+which in turn enables you to install a few [bower](http://bower.io/) components using the
+following commands: 
+
     npm install -g bower
     bower install
-    rake db:migrate
 
 Finally, you can start Glossa:
 
-    rails server
+    bundle exec rails server
 
 With the default settings, Glossa will be available at
 `http://127.0.0.1:61054/admin` in your browser. You may add `-p <port_name>` to
