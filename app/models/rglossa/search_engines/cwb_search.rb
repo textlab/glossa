@@ -73,7 +73,8 @@ module Rglossa
         commands = [
           %Q{set DataDirectory "#{Dir.tmpdir}"},
           get_cwb_corpus_name,  # necessary for the display of id tags to work
-          "set Context #{context_size} #{s_tag}",
+          #"set Context #{context_size} #{s_tag}",
+          'set Context 20 words',
           'set LD "{{"',
           'set RD "}}"',
           "show +#{s_tag_id}"]
