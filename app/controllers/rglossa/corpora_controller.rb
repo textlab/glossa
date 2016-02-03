@@ -1,3 +1,5 @@
+require 'zip'
+
 module Rglossa
   class CorporaController < ApplicationController
     respond_to :json, :xml
