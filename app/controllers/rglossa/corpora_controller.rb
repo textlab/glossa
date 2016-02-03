@@ -33,20 +33,31 @@ module Rglossa
                       f.name =~ %r{\Acwb_reg/#{corpus_name}\z} ||
                       f.name =~ %r{\Amedia/#{corpus_name}/} ||
                       f.name =~ %r{\Aimport/#{corpus_name.upcase}}
-          puts f.name
-          f_path = File.join('/corpora', f.name)
+          f_path = File.join(corpus_path, f.name)
           FileUtils.mkdir_p(File.dirname(f_path))
           f.extract(f_path)
         end
       end
-      corpus_params = YAML.load(File.open("/corpora/cwb_reg/#{corpus_name}").
+      corpus_params = YAML.load(File.open("#{corpus_path}/cwb_reg/#{corpus_name}").
                            readline.gsub(/^\s*#\s*/, ""))
-      c = Corpus.create(name: corpus_params['name'], short_name: corpus_name,
-                        encoding: corpus_params['encoding'],
-                        config: JSON.parse(JSON.dump(corpus_params['config']), symbolize_names: true),
-                        search_engine: corpus_params['search_engine'])
+      if corpus_params.class == Hash
+        # The registry file contained database config data at the top
+        config = if corpus_params['config']
+                   JSON.parse(JSON.dump(corpus_params['config']), symbolize_names: true)
+                 else
+                   {}
+                 end
+      else
+        # No database config data found
+        corpus_params = {'name' => corpus_name.capitalize}
+        config = {}
+      end
+      c = Corpus.create!(name: corpus_params['name'], short_name: corpus_name,
+                         encoding: corpus_params['encoding'],
+                         config: config,
+                         search_engine: corpus_params['search_engine'])
       c.cimdi = corpus_params['cimdi']
-      c.save
+      c.save!
       if File.exists? "tmp/dumps/#{corpus_name.upcase}segments_line_keys.tsv"
         Process.wait2(spawn("bundle", "exec", "thor", "rglossa:line_keys:import", "--corpus", corpus_name, "--remove-existing"))[1] == 0 or
           raise "rglossa:line_keys:import failed"
@@ -106,11 +117,15 @@ module Rglossa
     private
     ########
 
+    def corpus_path
+      @corpus_path ||= (ENV["GLOSSA_CORPUS_PATH"] || '/corpora')
+    end
+
     def do_delete(corpus_name)
-      FileUtils.rm_rf ["/corpora/cwb_dat/#{corpus_name.upcase}",
-                       "/corpora/cwb_reg/#{corpus_name}",
-                       "/corpora/media/#{corpus_name}",
-                       *Dir.glob("/corpora/import/#{corpus_name.upcase}*")]
+      FileUtils.rm_rf ["#{corpus_path}/cwb_dat/#{corpus_name.upcase}",
+                       "#{corpus_path}/cwb_reg/#{corpus_name}",
+                       "#{corpus_path}/media/#{corpus_name}",
+                       *Dir.glob("#{corpus_path}/import/#{corpus_name.upcase}*")]
       Corpus.where(short_name: corpus_name).destroy_all
     end
 

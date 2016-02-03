@@ -148,6 +148,7 @@ module Rglossa
 
       def run_cqp_commands(commands)
         encoding = query_info[:corpus].encoding
+        reg = ENV['CORPUS_REGISTRY'] ? "-r #{ENV['CORPUS_REGISTRY']}" : ''
 
         Tempfile.open('cqp', encoding: encoding) do |command_file|
           commands.map! { |cmd| cmd.end_with?(';') ? cmd : cmd + ';' }
@@ -155,7 +156,7 @@ module Rglossa
           command_file.rewind
           puts commands
 
-          cqp_pipe = open("| cqp -c -f#{command_file.path}", external_encoding: encoding)
+          cqp_pipe = open("| cqp #{reg} -c -f#{command_file.path}", external_encoding: encoding)
           result = cqp_pipe.read
           # throw away the first line with the CQP version:
           result.gsub!(/\ACQP version[^\n]*\n/, '')
